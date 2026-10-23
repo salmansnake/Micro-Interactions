@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tone Thermometer</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .tn so they never affect the rest of your page. */
+.tn {
+  --duration-reduced: 120ms;
+  --duration-slower: 480ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --press-scale: 0.97;
+  --press-scale-sm: 0.94;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-small: 13px;
+  --ai: var(--orange);
+  --ai-foreground: #000000;
+  --ai-text: var(--orange-700);
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-100: #CFF8F6;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand-strong: var(--aqua-700);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --foreground: var(--black);
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --orange-700: #B5481A;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --warning: var(--amber-9);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .tn, .dark .tn {
+  --ai: var(--orange);
+  --ai-foreground: #000000;
+  --ai-text: var(--orange-700);
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-100: #0E2E2D;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand-strong: var(--aqua);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --foreground: #F3F2EE;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --orange-700: #FE8C5F;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --warning: var(--amber-9);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .tn {
+    --ai: var(--orange);
+    --ai-foreground: #000000;
+    --ai-text: var(--orange-700);
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-100: #0E2E2D;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand-strong: var(--aqua);
+    --card: var(--white);
+    --chart-1: var(--aqua);
+    --foreground: #F3F2EE;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-color: #ffffff;
+    --orange: #FE8C5F;
+    --orange-700: #FE8C5F;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --warning: var(--amber-9);
+    --white: #161817;
+  }
+}
+
+/* Tone Thermometer — passive-aggressive phrases drop the temperature and frost the message. Warm It Up thaws it.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.tn {
+  --tn-bg: var(--card);
+  --tn-fg: var(--foreground);
+  --tn-muted: var(--muted-foreground);
+  --tn-line: var(--border);
+  --tn-sunken: var(--subtle);
+  --tn-fill: var(--muted);
+  --tn-accent: var(--primary);
+  --tn-on-accent: var(--primary-foreground);
+  --tn-c: var(--warning);
+  --tn-cold: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--tn-bg);
+  color: var(--tn-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.tn p { margin: 0; }
+.tn-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tn-title { font-weight: 600; }
+.tn-temp { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px 0 6px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--tn-c) 16%, transparent); color: color-mix(in srgb, var(--tn-c) 72%, var(--tn-fg)); font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; transition: background-color var(--duration-slower), color var(--duration-slower); }
+.tn-temp svg { width: 20px; height: 20px; }
+.tn-mercury { transition: d var(--duration-slower); }
+.tn-deg { font-weight: 700; }
+.tn-temp.is-drop { animation: tn-shiver var(--duration-slower) linear; }
+@keyframes tn-shiver { 20%, 60% { transform: translateX(-1.5px); } 40%, 80% { transform: translateX(1.5px); } }
+
+/* The field frosts over as it gets colder */
+.tn-field { position: relative; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--chart-1) calc(var(--tn-cold) * 16%), var(--tn-sunken)); box-shadow: inset 0 0 0 calc(var(--tn-cold) * 1.5px) color-mix(in srgb, var(--chart-1) 70%, transparent), inset 0 0 calc(var(--tn-cold) * 26px) color-mix(in srgb, var(--on-color) 70%, var(--chart-1)); transition: background-color 0.8s, box-shadow 0.8s; overflow: hidden; }
+.tn-input { position: relative; z-index: 1; display: block; width: 100%; min-height: 118px; box-sizing: border-box; padding: 12px 14px; border: 0; background: none; color: inherit; font: inherit; line-height: 21px; resize: none; }
+.tn-input:focus { outline: none; }
+.tn-field:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tn-frost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--tn-cold);
+  background:
+    radial-gradient(circle at 0 0, color-mix(in srgb, var(--on-color) 95%, transparent), color-mix(in srgb, var(--aqua-100) 60%, transparent) 18%, transparent 42%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--on-color) 90%, transparent), color-mix(in srgb, var(--aqua-100) 55%, transparent) 16%, transparent 38%),
+    radial-gradient(circle at 100% 0, color-mix(in srgb, var(--aqua-100) 80%, transparent), transparent 26%),
+    repeating-conic-gradient(from 15deg at 6% 10%, color-mix(in srgb, var(--on-color) 50%, transparent) 0 2deg, transparent 2deg 14deg);
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 38%, var(--black) 80%);
+  mask-image: radial-gradient(ellipse at center, transparent 38%, var(--black) 80%);
+  transition: opacity 0.8s;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tn-frost { opacity: calc(var(--tn-cold) * 0.5); } }
+:root[data-theme="dark"] .tn-frost { opacity: calc(var(--tn-cold) * 0.5); }
+.tn-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tn-chips button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--tn-fill); color: var(--tn-fg); font: inherit; font-size: var(--text-small); font-weight: 500; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.tn-chips button::before { content: "+ "; color: var(--tn-muted); }
+.tn-chips button:active { transform: scale(var(--press-scale-sm)); }
+.tn-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tn-fix { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--chart-1) 16%, transparent); animation: tn-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes tn-in { from { opacity: 0; transform: translateY(-6px); } }
+.tn-fix-text { font-size: var(--text-small); line-height: var(--leading-small); }
+.tn-warm { flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ai); color: var(--ai-foreground); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.tn-warm:active, .tn-send:active { transform: scale(var(--press-scale)); }
+.tn-warm:focus-visible, .tn-send:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tn-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tn-status { color: var(--tn-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.tn-send { flex: none; height: 44px; padding: 0 22px; border: 0; border-radius: var(--radius-md); background: var(--tn-accent); color: var(--tn-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tn-temp.is-drop, .tn-fix { animation: none; }
+  .tn-field, .tn-frost { transition-duration: var(--duration-reduced); }
+}
+.tn [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="tn" data-mi="tone-thermometer" data-to="Sam">
+  <div class="tn-head">
+    <p class="tn-title">To: Sam</p>
+    <span class="tn-temp" aria-live="polite">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4.5a2 2 0 0 1 4 0v9.3a4 4 0 1 1-4 0Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="17" r="2" fill="currentColor"/><path class="tn-mercury" d="M12 15V8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <b class="tn-deg">22°</b><span class="tn-word">Warm</span>
+    </span>
+  </div>
+  <div class="tn-field">
+    <textarea class="tn-input" rows="4" aria-label="Message">Hi Sam,
+
+Per my last email, the files are in the shared folder. Going forward, please check there first.</textarea>
+    <span class="tn-frost" aria-hidden="true"></span>
+  </div>
+  <div class="tn-chips" aria-label="Add a phrase">
+    <button type="button">As previously mentioned</button><button type="button">Friendly reminder</button><button type="button">Noted.</button>
+  </div>
+  <div class="tn-fix" hidden>
+    <p class="tn-fix-text"></p>
+    <button type="button" class="tn-warm">Warm It Up</button>
+  </div>
+  <div class="tn-foot">
+    <p class="tn-status" role="status" aria-live="polite"></p>
+    <button type="button" class="tn-send">Send</button>
+  </div>
+</div>
+
+
+<script>
+/* Tone Thermometer — vanilla JS. Auto-initializes every [data-mi="tone-thermometer"].
+   Each cold phrase costs degrees from a 22° start; Warm It Up swaps them for warmer wording.
+   Edit PHRASES for your product's tone. Call window.initToneThermometer(el) for elements added later. */
+(function () {
+  'use strict';
+  var BASE = 22;
+  // [pattern, degrees lost, warmer replacement]
+  var PHRASES = [
+    [/per my (last|previous) (email|message)/gi, 14, 'in case it got buried'],
+    [/as previously mentioned/gi, 10, 'as a quick recap'],
+    [/as i (said|mentioned)/gi, 8, 'like I mentioned'],
+    [/friendly reminder/gi, 7, 'just a nudge'],
+    [/going forward/gi, 5, 'next time'],
+    [/\bnoted\./gi, 6, 'Got it, thank you.'],
+    [/thanks in advance/gi, 4, 'thank you so much'],
+    [/just to clarify/gi, 3, 'to make sure we’re aligned'],
+    [/\bkindly\b/gi, 3, 'please'],
+    [/\bplease advise\b/gi, 4, 'let me know what you think']
+  ];
+  // Thermometer color: Orange (warm) through muted to Aqua (cold), blended in sRGB.
+  var STOPS = [[0, 'ai-text'], [0.5, 'muted-foreground'], [1, 'brand-strong']];
+  // Reads a token as [r, g, b] so the scale follows the theme (Outcraft tokens, never hardcoded colors).
+  function tokenRGB(root, name) {
+    var p = document.createElement('span'); p.style.cssText = 'display:none;color:var(--' + name + ')';
+    root.appendChild(p); var m = getComputedStyle(p).color.match(/[\d.]+/g); root.removeChild(p);
+    return m ? m.slice(0, 3).map(Number) : [128, 128, 128];
+  }
+  // Re-read the tokens when the theme changes.
+  function onTheme(fn) {
+    new MutationObserver(function () { requestAnimationFrame(fn); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+    if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fn);
+  }
+  function colorAt(v, root) {
+    var S = STOPS.map(function (st) { return [st[0], tokenRGB(root, st[1])]; });
+    for (var i = 1; i < S.length; i++) if (v <= S[i][0]) {
+      var a = S[i - 1], b = S[i], t = (v - a[0]) / (b[0] - a[0]);
+      return 'rgb(' + a[1].map(function (x, k) { return Math.round(x + (b[1][k] - x) * t); }).join(', ') + ')';
+    }
+    return 'rgb(' + S[S.length - 1][1].join(', ') + ')';
+  }
+  function word(t) { return t >= 18 ? 'Warm' : t >= 10 ? 'Mild' : t > 0 ? 'Chilly' : t > -10 ? 'Freezing' : 'Arctic'; }
+  function matchCase(found, rep) { return /^[A-Z]/.test(found) ? rep.charAt(0).toUpperCase() + rep.slice(1) : rep; }
+
+  function initToneThermometer(root) {
+    if (!root || root.__miTone) return;
+    root.__miTone = true;
+    var input = root.querySelector('.tn-input'), temp = root.querySelector('.tn-temp'), deg = root.querySelector('.tn-deg');
+    var wordEl = root.querySelector('.tn-word'), mercury = root.querySelector('.tn-mercury');
+    var fix = root.querySelector('.tn-fix'), fixText = root.querySelector('.tn-fix-text'), warm = root.querySelector('.tn-warm');
+    var send = root.querySelector('.tn-send'), status = root.querySelector('.tn-status');
+    var to = root.getAttribute('data-to') || 'They';
+    var last = BASE;
+
+    function measure() {
+      var t = BASE, hits = 0, text = input.value;
+      PHRASES.forEach(function (p) { var m = text.match(p[0]); if (m) { t -= p[1] * m.length; hits += m.length; } });
+      return { t: t, hits: hits };
+    }
+
+    function render() {
+      var r = measure(), t = r.t;
+      var cold = Math.max(0, Math.min(1, (12 - t) / 30));
+      root.style.setProperty('--tn-cold', cold.toFixed(3));
+      root.style.setProperty('--tn-c', colorAt(Math.max(0, Math.min(1, (BASE - t) / 34)), root));
+      deg.textContent = t + '°';
+      wordEl.textContent = word(t);
+      mercury.setAttribute('d', 'M12 15V' + (15 - Math.max(0.5, Math.min(7, (t + 12) / 34 * 7))).toFixed(1));
+      if (t < last) { temp.classList.remove('is-drop'); void temp.offsetWidth; temp.classList.add('is-drop'); }
+      last = t;
+      fix.hidden = r.hits === 0;
+      if (r.hits) fixText.textContent = r.hits + (r.hits === 1 ? ' phrase is' : ' phrases are') + ' making this ' + (t <= 0 ? 'freezing.' : 'chilly.');
+    }
+
+    onTheme(render);
+    input.addEventListener('input', function () { status.textContent = ''; render(); });
+    root.querySelectorAll('.tn-chips button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var add = b.textContent.trim();
+        input.value = input.value.replace(/\s*$/, '') + ' ' + add + (/[.!?]$/.test(add) ? '' : ', the deadline is Friday.');
+        render();
+      });
+    });
+    warm.addEventListener('click', function () {
+      var text = input.value;
+      PHRASES.forEach(function (p) { text = text.replace(p[0], function (m) { return matchCase(m, p[2]); }); });
+      input.value = text;
+      render();
+      status.textContent = 'Thawed. Same message, fewer enemies.';
+      input.focus();
+    });
+    send.addEventListener('click', function () {
+      var t = measure().t;
+      status.textContent = t >= 10 ? 'Sent at ' + t + '°. ' + to + ' will reply today.' : 'Sent at ' + t + '°. ' + to + ' will reply in three to five business days.';
+    });
+    render();
+  }
+
+  window.initToneThermometer = initToneThermometer;
+  function boot() { document.querySelectorAll('[data-mi="tone-thermometer"]').forEach(initToneThermometer); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

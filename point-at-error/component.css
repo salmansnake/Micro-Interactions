@@ -1,0 +1,158 @@
+/* Point-at-Error — the error message draws a line to the exact character that's wrong.
+   Outcraft Design System v2: a filled text field on a grouped card. */
+.pe {
+  --pe-bg: var(--card);
+  --pe-fg: var(--foreground);
+  --pe-muted: var(--muted-foreground);
+  --pe-line: var(--border);
+  --pe-sunken: var(--subtle);
+  --pe-fill: var(--muted);
+  --pe-accent: var(--primary);
+  --pe-danger: var(--danger);
+  --pe-danger-text: var(--danger-text);
+  --pe-danger-soft: var(--danger-subtle);
+  --pe-warn: var(--warning);
+  --pe-warn-text: var(--warning-text);
+  --pe-warn-soft: var(--warning-subtle);
+  --pe-ok: var(--success-text);
+  --pe-tone: var(--pe-danger);
+  --pe-tone-text: var(--pe-danger-text);
+  --pe-tone-soft: var(--pe-danger-soft);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--pe-bg);
+  color: var(--pe-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.pe.is-soft { --pe-tone: var(--pe-warn); --pe-tone-text: var(--pe-warn-text); --pe-tone-soft: var(--pe-warn-soft); }
+.pe-label { padding-left: 4px; color: var(--pe-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.pe-field {
+  position: relative;
+  border-radius: var(--radius-md);
+  background: var(--card); border: 1px solid var(--input);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out);
+}
+.pe-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.pe.has-error .pe-field { border-color: var(--pe-tone); box-shadow: 0 0 0 3px color-mix(in srgb, var(--pe-tone) 20%, transparent); }
+.pe-input {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 44px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  color: var(--pe-fg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  outline: none;
+}
+.pe-input::placeholder { color: var(--pe-muted); opacity: 0.6; }
+/* Highlight behind the offending character */
+.pe-mark {
+  position: absolute;
+  z-index: 0;
+  top: 9px;
+  bottom: 9px;
+  left: 0;
+  width: 0;
+  box-sizing: border-box;
+  border-radius: var(--radius-xs);
+  background: var(--pe-tone-soft);
+  box-shadow: inset 0 -2px 0 var(--pe-tone);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-base), left var(--spring-press-duration) var(--spring-press), width var(--spring-press-duration) var(--spring-press);
+}
+.pe-mark.is-gap { background: transparent; box-shadow: none; border: 1.5px dashed var(--pe-tone); }
+.pe.has-error .pe-mark { opacity: 1; }
+/* Connector line */
+.pe-line {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-base);
+}
+.pe.has-error .pe-line { opacity: 1; }
+.pe-line path { fill: none; stroke: var(--pe-tone); stroke-width: 1.5; stroke-linecap: round; }
+.pe-line circle { fill: var(--pe-tone); }
+.pe-msg {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  min-height: 28px;
+  margin: 14px 0 0;
+  padding-left: 20px;
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  letter-spacing: normal;
+}
+.pe.has-error .pe-msg-text { color: var(--pe-tone-text); font-weight: 500; }
+.pe.is-ok .pe-msg-text { color: var(--pe-ok); }
+.pe.is-ok .pe-msg-text::before { content: "✓ "; }
+.pe-fix {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--pe-tone-soft);
+  color: var(--pe-tone-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.pe-fix:active { transform: scale(var(--press-scale)); }
+.pe-fix:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.pe-try {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--pe-line);
+  color: var(--pe-muted);
+  font-size: var(--text-small);
+}
+.pe-try span { margin-right: 2px; }
+.pe-try button {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--pe-fill);
+  color: var(--pe-fg);
+  font: inherit;
+  white-space: pre;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.pe-try button:active { transform: scale(var(--press-scale)); }
+.pe-try button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .pe-mark, .pe-line { transition-duration: var(--duration-reduced) !important; }
+}
+.pe [hidden] { display: none !important; }

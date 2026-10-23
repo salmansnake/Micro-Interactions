@@ -1,0 +1,96 @@
+/* Access Ladder — choosing who can open a link climbs a ladder and shows the crowd that gets in.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.al {
+  --al-bg: var(--card);
+  --al-fg: var(--foreground);
+  --al-muted: var(--muted-foreground);
+  --al-line: var(--border);
+  --al-sunken: var(--subtle);
+  --al-fill: var(--muted);
+  --al-accent: var(--primary);
+  --al-on-accent: var(--primary-foreground);
+  --al-orange: var(--warning);
+  --al-level: 1;
+  --al-tone: var(--al-accent);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--al-bg);
+  color: var(--al-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.al[data-level="3"] { --al-tone: var(--al-orange); }
+.al-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.al-reach { margin: 2px 0 0; color: var(--al-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.al-reach b { color: var(--al-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+.al-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; align-items: stretch; }
+/* Ladder: bottom rung is most private. The rail fills up to the chosen rung. */
+.al-ladder { position: relative; display: flex; flex-direction: column-reverse; gap: 4px; padding: 6px; border-radius: var(--radius-xl); background: var(--al-sunken); }
+/* The rail runs through the center of every node: ladder padding 6 + rung padding 10 + half the 22px node column, minus half its 3px width */
+.al-rail { position: absolute; left: calc(6px + 10px + 11px - 1.5px); top: 32px; bottom: 32px; width: 3px; border-radius: var(--radius-xs); background: var(--al-fill); }
+.al-rail i { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--al-level) / 3 * 100%); border-radius: var(--radius-xs); background: var(--al-tone); transition: height var(--spring-ui-duration) var(--spring-ui), background-color var(--duration-slow); }
+.al-rung {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+  padding: 8px 12px 8px 10px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: none;
+  color: var(--al-fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--duration-base);
+}
+.al-rung:hover { background: color-mix(in srgb, var(--al-fg) 5%, transparent); }
+.al-rung[aria-checked="true"] { background: var(--al-bg); box-shadow: 0 0 0 1px var(--al-line), var(--shadow-sm); }
+.al-rung:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.al-node { grid-row: span 2; justify-self: center; position: relative; z-index: 1; width: 12px; height: 12px; border-radius: 50%; background: var(--al-bg); box-shadow: inset 0 0 0 2px var(--al-fill); transition: box-shadow var(--duration-base), background-color var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.al-rung.is-reached .al-node { background: var(--al-tone); box-shadow: none; }
+.al-rung[aria-checked="true"] .al-node { transform: scale(1.35); box-shadow: 0 0 0 4px color-mix(in srgb, var(--al-tone) 22%, transparent); background: var(--al-tone); }
+.al-rung b { font-weight: 600; font-size: var(--text-ui); line-height: var(--leading-ui); }
+.al-rung small { grid-column: 2; color: var(--al-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+/* The crowd: one dot per person who can open it, up to a field of 48, then the whole world */
+/* A tight grid: 'You' takes a 2x2 cell so the other dots pack around it with no gap */
+.al-crowd { position: relative; display: grid; grid-template-columns: repeat(auto-fit, 14px); grid-auto-rows: 14px; grid-auto-flow: row dense; align-content: center; justify-content: center; gap: 4px; padding: 12px; border-radius: var(--radius-xl); background: var(--al-sunken); overflow: hidden; min-height: 176px; box-sizing: border-box; }
+.al-p { width: 14px; height: 14px; border-radius: 50%; background: var(--c, var(--al-accent)); animation: al-in var(--spring-pop-duration) var(--spring-pop) both; }
+.al-p.is-you { grid-column: span 2; grid-row: span 2; width: 32px; height: 32px; display: grid; place-items: center; color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+/* A crowd that fits in one row sits centered beside You instead of hugging its top edge */
+.al-crowd.is-few .al-p.is-you { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+.al-crowd.is-few .al-p:not(.is-you) { grid-row: 1 / span 2; align-self: center; }
+.al-p.is-out { animation: al-out var(--duration-base) var(--ease-in) forwards; }
+@keyframes al-in { from { transform: scale(0); } }
+@keyframes al-out { to { transform: scale(0); opacity: 0; } }
+.al-globe { grid-column: 1 / -1; grid-row: span 5; justify-self: center; align-self: center; width: 86px; height: 86px; color: var(--al-orange); animation: al-in var(--spring-pop-duration) var(--spring-pop) both; }
+.al-globe svg { width: 100%; height: 100%; }
+.al-warn { margin: 0; padding: 10px 12px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--al-orange) 14%, transparent); color: var(--warning-text); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; animation: al-warn var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes al-warn { from { opacity: 0; transform: translateY(-4px); } }
+.al-foot { display: flex; align-items: center; gap: 10px; }
+.al-link { flex: 1; min-width: 0; overflow: hidden; padding: 9px 12px; border-radius: var(--radius-md); background: var(--al-sunken); font: 500 var(--text-small)/var(--leading-small) var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+.al-copy { flex: none; height: 38px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--al-accent); color: var(--al-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-base); }
+.al-copy:active { transform: scale(var(--press-scale)); }
+.al-copy.is-done, .al-copy.is-done:active { background: var(--primary); color: var(--primary-foreground); transform: none; }
+[data-theme="dark"] .al-copy.is-done, [data-theme="dark"] .al-copy.is-done:active { background: var(--foreground); color: var(--background); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .al-copy.is-done { background: var(--foreground); color: var(--background); } }
+.al-copy:disabled { opacity: 0.35; cursor: default; }
+.al-copy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (max-width: 440px) { .al-body { grid-template-columns: minmax(0, 1fr); } .al-crowd { min-height: 96px; } }
+@media (prefers-reduced-motion: reduce) {
+  .al-p, .al-p.is-out, .al-globe, .al-warn { animation: none; }
+  .al-rail i { transition-duration: var(--duration-reduced); }
+}
+.al [hidden] { display: none !important; }

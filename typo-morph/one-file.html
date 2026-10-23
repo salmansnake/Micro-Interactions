@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typo Morph</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .tm so they never affect the rest of your page. */
+.tm {
+  --duration-base: 200ms;
+  --duration-slower: 480ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale: 0.97;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --chart-5: var(--olive);
+  --danger-text: #ca2b30;
+  --foreground: var(--black);
+  --green-11: #218358;
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --on-chart: #000000;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --red-11: #ce2c31;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success-text: #1f7b53;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .tm, .dark .tm {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --chart-5: var(--olive);
+  --danger-text: var(--red-11);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --on-chart: #000000;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --red-11: #ff9592;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success-text: var(--green-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .tm {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --card: var(--white);
+    --chart-1: var(--aqua);
+    --chart-2: var(--pink);
+    --chart-3: var(--orange);
+    --chart-4: var(--sage);
+    --chart-5: var(--olive);
+    --danger-text: var(--red-11);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --olive: #AA9856;
+    --on-chart: #000000;
+    --orange: #FE8C5F;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --red-11: #ff9592;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success-text: var(--green-11);
+    --white: #161817;
+  }
+}
+
+/* Typo Morph — a search with no results morphs your typo, letter by letter, into the closest match.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.tm {
+  --tm-bg: var(--card);
+  --tm-fg: var(--foreground);
+  --tm-muted: var(--muted-foreground);
+  --tm-line: var(--border);
+  --tm-sunken: var(--subtle);
+  --tm-fill: var(--muted);
+  --tm-accent: var(--primary);
+  --tm-red: var(--danger-text);
+  --tm-green: var(--success-text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--tm-bg);
+  color: var(--tm-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.tm-field { position: relative; display: flex; align-items: center; border-radius: var(--radius-md); background: var(--card); border: 1px solid var(--input); transition: box-shadow var(--duration-base); }
+.tm-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.tm-icon { position: absolute; left: 12px; width: 16px; height: 16px; color: var(--tm-muted); pointer-events: none; }
+.tm-input { width: 100%; height: 40px; box-sizing: border-box; padding: 0 12px 0 36px; border: 0; background: transparent; color: var(--tm-fg); font: 400 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans); letter-spacing: var(--tracking-title); outline: none; -webkit-appearance: none; appearance: none; }
+.tm-input::placeholder { color: var(--tm-muted); opacity: 0.8; }
+.tm-input::-webkit-search-cancel-button { display: none; }
+
+/* The morph line */
+.tm-fix { min-height: 0; color: var(--tm-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.tm-fix:empty { display: none; }
+.tm-none { margin: 0 0 6px; }
+.tm-word {
+  display: inline-flex;
+  align-items: baseline;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  color: var(--tm-fg);
+  font: 600 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans);
+  letter-spacing: var(--tracking-title);
+  cursor: pointer;
+}
+.tm-word:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tm-ch { position: relative; display: inline-block; white-space: pre; }
+.tm-ch.is-del { color: var(--tm-red); text-decoration: line-through; animation: tm-del var(--duration-slower) var(--d, 0ms) cubic-bezier(0.5, 0, 0.9, 0.5) forwards; }
+@keyframes tm-del { 60% { opacity: 1; transform: none; max-width: 1em; } 100% { opacity: 0; transform: translateY(10px) rotate(12deg); max-width: 0; } }
+.tm-ch.is-ins { color: var(--tm-green); animation: tm-ins var(--spring-ui-duration) var(--d, 0ms) var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes tm-ins { from { opacity: 0; transform: translateY(-10px); max-width: 0; } }
+.tm-ch.is-sub { color: var(--tm-green); animation: tm-flip var(--duration-slower) var(--d, 0ms) var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes tm-flip { 0% { transform: rotateX(90deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.tm-ch.is-del, .tm-ch.is-ins { max-width: 1em; overflow: hidden; vertical-align: bottom; }
+.tm-hint { margin: 6px 0 0; }
+.tm-hint kbd { padding: 1px 6px; border-radius: var(--radius-xs); background: var(--tm-fill); color: var(--tm-fg); font: 600 calc(var(--text-caption) - 1px) / 16px var(--font-sans); }
+
+/* Results */
+.tm-results { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); overflow: hidden; background: var(--tm-sunken); }
+.tm-results:empty { display: none; }
+.tm-results li { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 6px 14px; box-sizing: border-box; animation: tm-row var(--spring-ui-duration) var(--spring-ui) both; }
+.tm-results li + li::before { content: ""; position: absolute; top: 0; left: 50px; right: 0; height: 1px; background: var(--tm-line); transform: scaleY(0.5); transform-origin: top; }
+@keyframes tm-row { from { opacity: 0; transform: translateY(4px); } }
+.tm-results i { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-caption); font-style: normal; font-weight: 700; }
+.tm-results b { font-weight: 500; }
+.tm-results small { margin-left: auto; color: var(--tm-muted); font-size: var(--text-caption); white-space: nowrap; }
+.tm-results mark { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--brand) 20%, transparent); color: inherit; }
+.tm-try { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--tm-line); color: var(--tm-muted); font-size: var(--text-small); }
+.tm-try button { height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--tm-fill); color: var(--tm-fg); font: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.tm-try button:active { transform: scale(var(--press-scale)); }
+.tm-try button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .tm-ch.is-del, .tm-ch.is-ins, .tm-ch.is-sub, .tm-results li { animation: none; }
+  .tm-ch.is-del { display: none; }
+}
+.tm [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="tm" data-mi="typo-morph">
+  <div class="tm-field">
+    <svg class="tm-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+    <input id="tm-input" class="tm-input" type="search" placeholder="Search settings" autocomplete="off" spellcheck="false" aria-label="Search settings" aria-controls="tm-results" aria-describedby="tm-fix">
+  </div>
+  <div class="tm-fix" id="tm-fix" aria-live="polite"></div>
+  <ul class="tm-results" id="tm-results" aria-label="Results"></ul>
+  <div class="tm-try"><span>Try</span><button type="button" data-try="biling">biling</button><button type="button" data-try="intergrations">intergrations</button><button type="button" data-try="memebrs">memebrs</button><button type="button" data-try="webhoks">webhoks</button></div>
+</div>
+
+
+<script>
+/* Typo Morph — vanilla JS. Auto-initializes every [data-mi="typo-morph"].
+   Pass your own index with root.setIndex([{ name, path, color }]). Call window.initTypoMorph(el) for later elements. */
+(function () {
+  'use strict';
+  var ITEMS = [
+    ['Billing', 'Settings', 'var(--chart-4)'], ['Invoices', 'Billing', 'var(--chart-4)'], ['Plans', 'Billing', 'var(--chart-4)'],
+    ['Usage', 'Billing', 'var(--chart-4)'], ['Members', 'Workspace', 'var(--chart-1)'], ['Teams', 'Workspace', 'var(--chart-1)'],
+    ['Roles', 'Workspace', 'var(--chart-1)'], ['Integrations', 'Apps', 'var(--chart-4)'], ['Webhooks', 'Developers', 'var(--chart-4)'],
+    ['API Keys', 'Developers', 'var(--chart-4)'], ['Notifications', 'Account', 'var(--chart-3)'], ['Profile', 'Account', 'var(--chart-3)'],
+    ['Security', 'Account', 'var(--chart-3)'], ['Single Sign-On', 'Security', 'var(--chart-3)'], ['Audit Log', 'Security', 'var(--chart-3)'],
+    ['Domains', 'Workspace', 'var(--chart-1)'], ['Branding', 'Workspace', 'var(--chart-1)'], ['Exports', 'Data', 'var(--chart-5)'],
+    ['Imports', 'Data', 'var(--chart-5)'], ['Templates', 'Content', 'var(--chart-2)']
+  ].map(function (r) { return { name: r[0], path: r[1], color: r[2] }; });
+
+  // Levenshtein with a traceback: returns the edit steps from a to b.
+  function align(a, b) {
+    var n = a.length, m = b.length, D = [];
+    for (var i = 0; i <= n; i++) { D.push([i]); for (var j = 1; j <= m; j++) D[i].push(i === 0 ? j : 0); }
+    for (i = 1; i <= n; i++) for (j = 1; j <= m; j++) {
+      D[i][j] = Math.min(D[i - 1][j] + 1, D[i][j - 1] + 1, D[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    }
+    var ops = []; i = n; j = m;
+    while (i > 0 || j > 0) {
+      if (i > 0 && j > 0 && D[i][j] === D[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)) {
+        ops.unshift({ t: a[i - 1] === b[j - 1] ? 'keep' : 'sub', a: a[i - 1], b: b[j - 1] }); i--; j--;
+      } else if (i > 0 && D[i][j] === D[i - 1][j] + 1) { ops.unshift({ t: 'del', a: a[i - 1] }); i--; }
+      else { ops.unshift({ t: 'ins', b: b[j - 1] }); j--; }
+    }
+    return { dist: D[n][m], ops: ops };
+  }
+
+  function initTypoMorph(root) {
+    if (!root || root.__miTypo) return;
+    root.__miTypo = true;
+    var items = ITEMS;
+    var input = root.querySelector('.tm-input');
+    var fix = root.querySelector('.tm-fix');
+    var list = root.querySelector('.tm-results');
+    var timer = 0;
+    var suggestion = null;
+
+    function search(q) {
+      q = q.trim().toLowerCase();
+      if (!q) return [];
+      return items.filter(function (it) { return it.name.toLowerCase().indexOf(q) > -1 || it.path.toLowerCase().indexOf(q) > -1; });
+    }
+    function closest(q) {
+      q = q.trim().toLowerCase();
+      var best = null;
+      items.forEach(function (it) {
+        var name = it.name.toLowerCase();
+        var r = align(q, name);
+        var score = r.dist / Math.max(q.length, name.length);
+        if (!best || score < best.score) best = { score: score, term: name, ops: r.ops };
+      });
+      return best && best.score <= 0.45 ? best : null;
+    }
+
+    function showResults(found, q) {
+      list.replaceChildren();
+      found.slice(0, 5).forEach(function (it, k) {
+        var li = document.createElement('li');
+        li.style.animationDelay = (k * 40) + 'ms';
+        var icon = document.createElement('i'); icon.textContent = it.name[0]; icon.style.background = it.color;
+        var b = document.createElement('b');
+        var name = it.name, ix = name.toLowerCase().indexOf(q);
+        if (q && ix > -1) {
+          b.appendChild(document.createTextNode(name.slice(0, ix)));
+          var mk = document.createElement('mark'); mk.textContent = name.slice(ix, ix + q.length); b.appendChild(mk);
+          b.appendChild(document.createTextNode(name.slice(ix + q.length)));
+        } else b.textContent = name;
+        var small = document.createElement('small'); small.textContent = it.path;
+        li.appendChild(icon); li.appendChild(b); li.appendChild(small);
+        list.appendChild(li);
+      });
+    }
+
+    function morph(q, best) {
+      suggestion = best.term;
+      fix.replaceChildren();
+      var none = document.createElement('p'); none.className = 'tm-none';
+      none.textContent = 'No results for “' + q.trim() + '”. Showing results for';
+      var word = document.createElement('button'); word.type = 'button'; word.className = 'tm-word';
+      word.setAttribute('aria-label', 'Search for ' + best.term);
+      var step = 0;
+      best.ops.forEach(function (op) {
+        var s = document.createElement('span');
+        s.className = 'tm-ch';
+        if (op.t === 'keep') s.textContent = op.b;
+        else {
+          s.classList.add(op.t === 'del' ? 'is-del' : op.t === 'ins' ? 'is-ins' : 'is-sub');
+          s.textContent = op.t === 'del' ? op.a : op.b;
+          s.style.setProperty('--d', (250 + step++ * 120) + 'ms');
+        }
+        word.appendChild(s);
+      });
+      word.addEventListener('click', accept);
+      var hint = document.createElement('p'); hint.className = 'tm-hint';
+      var kbd = document.createElement('kbd'); kbd.textContent = 'Tab';
+      hint.append('Press ', kbd, ' to search for it instead.');
+      fix.append(none, word, hint);
+      var found = search(best.term);
+      setTimeout(function () { if (suggestion === best.term) showResults(found, best.term); }, 250 + step * 120);
+    }
+
+    function run() {
+      var q = input.value;
+      suggestion = null;
+      var found = search(q);
+      if (found.length || q.trim().length < 3) { fix.replaceChildren(); showResults(found, q.trim().toLowerCase()); return; }
+      var best = closest(q);
+      list.replaceChildren();
+      if (best) morph(q, best);
+      else { fix.replaceChildren(); var p = document.createElement('p'); p.className = 'tm-none'; p.textContent = 'No results for “' + q.trim() + '”.'; fix.appendChild(p); }
+    }
+
+    function accept() {
+      if (!suggestion) return;
+      var item = items.filter(function (it) { return it.name.toLowerCase() === suggestion; })[0];
+      input.value = item ? item.name : suggestion;
+      input.focus();
+      run();
+    }
+
+    input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(run, 280); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab' && suggestion && !e.shiftKey) { e.preventDefault(); accept(); }
+      if (e.key === 'Enter') { clearTimeout(timer); run(); }
+    });
+    root.querySelectorAll('[data-try]').forEach(function (b) {
+      b.addEventListener('click', function () { input.value = b.getAttribute('data-try'); run(); });
+    });
+    root.setIndex = function (arr) { items = arr; run(); };
+  }
+
+  window.initTypoMorph = initTypoMorph;
+  function boot() { document.querySelectorAll('[data-mi="typo-morph"]').forEach(initTypoMorph); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overtime Fuse · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Overtime Fuse — once a meeting runs past its end, the progress bar becomes a burning fuse.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.of {
+  --of-bg: var(--card);
+  --of-fg: var(--foreground);
+  --of-muted: var(--muted-foreground);
+  --of-sunken: var(--subtle);
+  --of-fill: var(--muted);
+  --of-accent: var(--primary);
+  --of-p: 0.9;
+  --of-left: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--of-bg);
+  color: var(--of-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.of p { margin: 0; }
+.of-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.of-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.of-meta { color: var(--of-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.of-clock { font: 600 var(--text-h3)/1 var(--font-sans); font-variant-numeric: tabular-nums; letter-spacing: var(--tracking-title); transition: color var(--duration-slow); }
+.of.is-over .of-clock { color: var(--danger-text); }
+
+/* Track: a normal progress bar until the end time, then a fuse that burns from right to left */
+.of-track { position: relative; height: 10px; margin: 8px 0 4px; border-radius: var(--radius-xs); background: var(--of-fill); }
+.of-done { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--of-p) * 100%); border-radius: var(--radius-xs); background: var(--of-accent); transition: opacity var(--duration-slow); }
+.of.is-over .of-done { opacity: 0; }
+.of-rope { position: absolute; left: 0; top: 2px; bottom: 2px; width: calc(var(--of-left) * 100%); border-radius: var(--radius-xs); background: repeating-linear-gradient(-60deg, var(--olive) 0 4px, var(--olive-700) 4px 7px); opacity: 0; transition: opacity var(--duration-slow); }
+.of.is-over .of-track { background: linear-gradient(90deg, transparent 0, transparent calc(var(--of-left) * 100%), var(--stone) calc(var(--of-left) * 100%)); background-size: 100% 2px; background-position: 0 50%; background-repeat: no-repeat; }
+.of.is-over .of-rope { opacity: 1; }
+.of-spark { position: absolute; right: -9px; top: 50%; width: 18px; height: 18px; margin-top: -9px; border-radius: 50%; background: radial-gradient(circle, var(--olive-100) 0, var(--warning) 30%, var(--ai) 55%, color-mix(in srgb, var(--danger) 0%, transparent) 72%); opacity: 0; transform: scale(var(--of-heat, 1)); }
+.of.is-over .of-spark { opacity: 1; animation: of-flicker var(--duration-fast) steps(2) infinite; }
+@keyframes of-flicker { 50% { filter: brightness(1.3); transform: scale(calc(var(--of-heat, 1) * 1.12)); } }
+.of-spark i { position: absolute; left: 50%; top: 50%; width: 3px; height: 3px; border-radius: 50%; background: var(--warning); opacity: 0; }
+.of.is-over .of-spark i { animation: of-ember 0.7s var(--ease-out) infinite; }
+.of-spark i:nth-child(1) { --dx: -10px; --dy: -14px; }
+.of-spark i:nth-child(2) { --dx: 8px; --dy: -16px; animation-delay: var(--duration-base) !important; }
+.of-spark i:nth-child(3) { --dx: 14px; --dy: -6px; animation-delay: var(--duration-slow) !important; }
+.of-spark i:nth-child(4) { --dx: -4px; --dy: -20px; animation-delay: var(--duration-slower) !important; }
+@keyframes of-ember { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)); } }
+
+.of-line { min-height: 40px; font-size: var(--text-body); line-height: var(--leading-body); font-weight: 500; font-variant-numeric: tabular-nums; }
+.of.is-over .of-line { color: var(--danger-text); }
+.of-time { display: flex; flex-direction: column; gap: 6px; }
+.of-time-label { color: var(--of-muted); font-size: var(--text-small); }
+.of-range { width: 100%; accent-color: var(--of-accent); }
+.of-range:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: var(--radius-xs); }
+.of-end { height: 44px; border: 0; border-radius: var(--radius-md); background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger-text); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-slow), color var(--duration-slow); }
+.of.is-late .of-end { background: var(--danger); color: var(--danger-foreground); animation: of-nudge 2.4s var(--ease-in-out) infinite; }
+@keyframes of-nudge { 0%, 80%, 100% { transform: none; } 88% { transform: scale(1.03); } }
+.of-end:active { transform: scale(var(--press-scale)); }
+.of-end:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .of.is-over .of-spark, .of.is-over .of-spark i, .of.is-late .of-end { animation: none; }
+}
+.of [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Overtime Fuse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="of" data-mi="overtime-fuse" data-length="30" data-people="6" data-fuse="15">
+  <div class="of-head">
+    <div><p class="of-title">Design Review</p><p class="of-meta">3:00–3:30 PM · 6 people</p></div>
+    <span class="of-clock">27:00</span>
+  </div>
+  <div class="of-track" aria-hidden="true">
+    <span class="of-done"></span>
+    <span class="of-rope"><span class="of-spark"><i></i><i></i><i></i><i></i></span></span>
+  </div>
+  <p class="of-line" role="status" aria-live="polite">On time. 3 minutes left.</p>
+  <label class="of-time">
+    <span class="of-time-label">Move Time Forward</span>
+    <input class="of-range" type="range" min="20" max="47" step="0.25" value="27">
+  </label>
+  <button type="button" class="of-end">End Meeting for All</button>
+</div>
+</div>
+<script>
+/* Overtime Fuse — vanilla JS. Auto-initializes every [data-mi="overtime-fuse"].
+   The range is a pretend clock in minutes since the start; in a real call, call root.setMinutes(n) every second.
+   The fuse is data-fuse minutes long. Call window.initOvertimeFuse(el) for elements added later. */
+(function () {
+  'use strict';
+
+  function initOvertimeFuse(root) {
+    if (!root || root.__miFuse) return;
+    root.__miFuse = true;
+    var length = Number(root.getAttribute('data-length')) || 30;
+    var people = Number(root.getAttribute('data-people')) || 6;
+    var fuse = Number(root.getAttribute('data-fuse')) || 15;
+    var clock = root.querySelector('.of-clock'), line = root.querySelector('.of-line');
+    var range = root.querySelector('.of-range'), end = root.querySelector('.of-end');
+    var ended = false;
+
+    function mmss(min) { var s = Math.round(min * 60); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+    function mins(n) { n = Math.round(n); return n + (n === 1 ? ' minute' : ' minutes'); }
+
+    function setMinutes(m) {
+      if (ended) return;
+      var over = m - length;
+      clock.textContent = mmss(m);
+      root.style.setProperty('--of-p', Math.min(1, m / length).toFixed(4));
+      root.classList.toggle('is-over', over > 0);
+      root.classList.toggle('is-late', over >= 5);
+      if (over <= 0) {
+        var left = -over;
+        line.textContent = left < 1 ? 'On time. Less than a minute left.' : 'On time. ' + mins(left) + ' left.';
+        return;
+      }
+      var left2 = Math.max(0, 1 - over / fuse);
+      root.style.setProperty('--of-left', left2.toFixed(4));
+      root.style.setProperty('--of-heat', (1 + (1 - left2) * 0.7).toFixed(2));
+      if (left2 === 0) line.textContent = mins(over) + ' over. The fuse is out. Everyone is still here, physically.';
+      else line.textContent = mins(over) + ' over · ' + people + ' people · ' + Math.round(over * people) + ' person-minutes';
+    }
+
+    range.addEventListener('input', function () { setMinutes(Number(range.value)); });
+    end.addEventListener('click', function () {
+      var over = Number(range.value) - length;
+      ended = true;
+      root.classList.remove('is-over', 'is-late');
+      line.textContent = over > 0 ? 'Meeting ended. ' + people + ' people just got their afternoon back.' : 'Meeting ended early. A legend.';
+      end.textContent = 'Ended';
+      end.disabled = true;
+    });
+    root.setMinutes = setMinutes;
+    setMinutes(Number(range.value));
+  }
+
+  window.initOvertimeFuse = initOvertimeFuse;
+  function boot() { document.querySelectorAll('[data-mi="overtime-fuse"]').forEach(initOvertimeFuse); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initOvertimeFuse"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

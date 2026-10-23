@@ -1,0 +1,67 @@
+/* Paper Invite — invites fold into paper planes and fly off; the ones that can't go boomerang back with a reason.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.pi {
+  --pi-bg: var(--card);
+  --pi-fg: var(--foreground);
+  --pi-muted: var(--muted-foreground);
+  --pi-line: var(--border);
+  --pi-sunken: var(--subtle);
+  --pi-fill: var(--muted);
+  --pi-accent: var(--primary);
+  --pi-on-accent: var(--primary-foreground);
+  --pi-red: var(--danger);
+  --pi-red-text: var(--danger-text);
+  --pi-red-soft: var(--danger-subtle);
+  --pi-green-text: var(--success-text);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  overflow: hidden;
+  background: var(--pi-bg);
+  color: var(--pi-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.pi-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.pi-sub { margin: 0 0 4px; color: var(--pi-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.pi-box { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 52px; box-sizing: border-box; padding: 8px; border: 1px solid var(--input); border-radius: var(--radius-md); background: var(--card); box-shadow: var(--shadow-xs); cursor: text; transition: box-shadow var(--duration-base), border-color var(--duration-base); }
+.pi-box:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.pi-input { flex: 1 1 140px; min-width: 120px; height: 32px; padding: 0 6px; border: 0; background: transparent; color: var(--pi-fg); font: inherit; font-size: var(--text-body); outline: none; }
+.pi-chip { display: inline-flex; align-items: center; gap: 4px; height: 32px; max-width: 100%; box-sizing: border-box; padding: 0 4px 0 12px; border-radius: var(--radius-full); background: var(--pi-bg); box-shadow: 0 0 0 1px var(--pi-line), var(--shadow-xs); font-size: var(--text-ui); animation: pi-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes pi-in { from { opacity: 0; transform: scale(0.8); } }
+.pi-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pi-chip.is-bad { background: var(--pi-red-soft); color: var(--pi-red-text); box-shadow: 0 0 0 1px color-mix(in srgb, var(--pi-red) 45%, transparent); }
+.pi-chip.is-back { animation: pi-back var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes pi-back { 0% { transform: translate(60px, -40px) rotate(20deg) scale(0.6); opacity: 0.4; } 100% { transform: none; opacity: 1; } }
+.pi-x { display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 50%; background: none; color: inherit; opacity: 0.6; font-size: var(--text-body-lg); line-height: 1; cursor: pointer; }
+.pi-x:hover { background: var(--pi-fill); opacity: 1; }
+.pi-x:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; opacity: 1; }
+.pi-why { display: block; width: 100%; margin: 2px 0 0 4px; color: var(--pi-red-text); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.pi-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; margin-top: 4px; }
+.pi-status { flex: 1; min-width: 0; margin: 0; color: var(--pi-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.pi-status.is-good { color: var(--pi-green-text); font-weight: 600; }
+.pi-send { flex: none; height: 40px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--pi-accent); color: var(--pi-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.pi-send:active { transform: scale(var(--press-scale)); }
+.pi-send:disabled { opacity: 0.35; cursor: default; }
+.pi-send:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.pi-try { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--pi-line); color: var(--pi-muted); font-size: var(--text-small); }
+.pi-try button { height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--pi-fill); color: var(--pi-fg); font: inherit; cursor: pointer; }
+.pi-try button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* A flying plane */
+.pi-plane { position: absolute; z-index: 5; left: 0; top: 0; width: 26px; height: 26px; color: var(--pi-accent); pointer-events: none; }
+.pi-plane.is-bad { color: var(--pi-red); }
+.pi-plane svg { width: 100%; height: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .pi-chip, .pi-chip.is-back { animation: none; }
+}
+.pi [hidden] { display: none !important; }

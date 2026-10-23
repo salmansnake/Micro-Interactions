@@ -1,0 +1,24 @@
+<div class="rd" data-mi="rubber-duck" data-solved="37">
+  <div class="rd-form">
+    <label class="rd-field">
+      <span class="rd-field-label">Title</span>
+      <input class="rd-title" type="text" value="Export button does nothing" autocomplete="off">
+    </label>
+    <label class="rd-field">
+      <span class="rd-field-label rd-desc-label">What happens?</span>
+      <textarea class="rd-desc" rows="3" placeholder="Steps, what you expected, what happened"></textarea>
+    </label>
+  </div>
+  <div class="rd-duck-row" hidden>
+    <span class="rd-duck" aria-hidden="true">
+      <svg viewBox="0 0 64 56"><ellipse cx="30" cy="38" rx="25" ry="15" style="fill: var(--warning)"/><path d="M8 32c-4-6-3-12 1-12 3 0 4 5 6 8" style="fill: var(--warning)"/><circle cx="40" cy="20" r="13" style="fill: var(--warning)"/><path d="M51 21c5-1 10 0 12 2-2 3-7 4-12 3Z" style="fill: var(--ai)"/><circle cx="43" cy="16.5" r="2.2" style="fill: var(--foreground)"/><circle cx="43.8" cy="15.8" r=".7" style="fill: var(--on-color)"/><path d="M18 36c4 5 12 6 18 3" stroke-width="2.5" fill="none" stroke-linecap="round" style="stroke: color-mix(in srgb, var(--amber-9) 80%, var(--black))"/></svg>
+    </span>
+    <p class="rd-say" role="status" aria-live="polite">Before you file it, explain it to me. Step by step.</p>
+  </div>
+  <div class="rd-actions">
+    <button type="button" class="rd-submit">File Bug</button>
+    <button type="button" class="rd-solved" hidden>I Figured It Out</button>
+    <button type="button" class="rd-file" hidden>Still Broken, File It</button>
+  </div>
+  <p class="rd-foot">The duck has closed <b class="rd-pct">37%</b> of bugs before they were filed.</p>
+</div>

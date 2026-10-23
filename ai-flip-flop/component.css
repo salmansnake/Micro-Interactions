@@ -1,0 +1,86 @@
+/* AI Flip-Flop — ask the assistant "Are you sure?" and watch its answer change and its confidence badge sweat.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ff {
+  --ff-bg: var(--card);
+  --ff-fg: var(--foreground);
+  --ff-muted: var(--muted-foreground);
+  --ff-line: var(--border);
+  --ff-sunken: var(--subtle);
+  --ff-fill: var(--muted);
+  --ff-accent: var(--primary);
+  --ff-on-accent: var(--primary-foreground);
+  --ff-c: var(--success);
+  --ff-s: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ff-bg);
+  color: var(--ff-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ff p { margin: 0; }
+.ff-q { align-self: flex-end; max-width: 80%; padding: 8px 13px; border-radius: var(--radius-xl); background: var(--ff-accent); color: var(--ff-on-accent); font-size: var(--text-body-lg); line-height: var(--leading-body-lg); letter-spacing: normal; }
+.ff-a { padding: 14px 16px 16px; border-radius: var(--radius-xl); background: var(--ff-sunken); }
+.ff-a.is-shaky { animation: ff-shiver var(--duration-fast) linear 6; }
+@keyframes ff-shiver { 33% { transform: translateX(-1px); } 66% { transform: translateX(1px); } }
+.ff-a-head { display: flex; align-items: center; gap: 6px; min-height: 30px; margin-bottom: 6px; }
+.ff-spark { display: grid; place-items: center; width: 22px; height: 22px; color: var(--ai-text); }
+.ff-spark svg { width: 18px; height: 18px; }
+.ff-who { flex: 1; font-size: var(--text-small); font-weight: 600; }
+
+/* Confidence badge: shrinks and changes color with confidence, sweats below 60% */
+.ff-conf {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--ff-c) 16%, transparent);
+  color: color-mix(in srgb, var(--ff-c) 70%, var(--ff-fg));
+  font-size: var(--text-small);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transform: scale(var(--ff-s));
+  transform-origin: 100% 50%;
+  transition: transform var(--spring-pop-duration) var(--spring-pop), background-color var(--duration-slower), color var(--duration-slower);
+}
+.ff.is-puff .ff-conf { animation: ff-puff var(--spring-pop-duration) var(--spring-pop); }
+@keyframes ff-puff { 30% { transform: scale(1.3); } }
+.ff-drop { position: absolute; top: -3px; left: 3px; width: 6px; height: 8px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; background: var(--chart-1); opacity: 0; }
+.ff-drop + .ff-drop { left: auto; right: 4px; top: -1px; }
+.ff.is-sweating .ff-drop:first-child { animation: ff-sweat 1.3s var(--ease-in) infinite; }
+.ff.is-panicking .ff-drop + .ff-drop { animation: ff-sweat 0.9s var(--ease-in) var(--duration-slow) infinite; }
+.ff.is-panicking .ff-drop:first-child { animation-duration: 0.8s; }
+@keyframes ff-sweat { 0% { opacity: 0; transform: translateY(-2px) scale(0.6); } 20% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(14px); } }
+
+.ff-text { min-height: 42px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
+.ff-text.is-in { animation: ff-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes ff-in { from { opacity: 0; transform: translateY(4px); filter: blur(3px); } }
+.ff-text.is-thinking { color: transparent; background: linear-gradient(90deg, var(--ff-muted) 0 35%, var(--ff-fg) 50%, var(--ff-muted) 65% 100%); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; animation: ff-shimmer 1.2s linear infinite; }
+@keyframes ff-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+.ff-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ff-count { color: var(--ff-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ff-sure { flex: none; height: 40px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--ff-fill); color: var(--ff-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.ff-sure:active { transform: scale(var(--press-scale)); }
+.ff-sure:disabled { opacity: 0.4; cursor: default; }
+.ff-sure:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ff-a.is-shaky, .ff.is-puff .ff-conf, .ff-text.is-in, .ff-drop { animation: none !important; }
+  .ff-text.is-thinking { animation: none; color: var(--ff-muted); background: none; }
+  .ff-conf { transition-duration: var(--duration-reduced); }
+}
+.ff [hidden] { display: none !important; }

@@ -1,0 +1,268 @@
+/* Blast Radius — previews what a delete removes and what stays.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.br {
+  --br-page: var(--subtle);
+  --br-bg: var(--card);
+  --br-fg: var(--foreground);
+  --br-muted: var(--muted-foreground);
+  --br-line: var(--border);
+  --br-fill: var(--muted);
+  --br-danger: var(--danger);
+  --br-danger-text: var(--danger-text);
+  --br-on-danger: var(--danger-foreground);
+  --br-danger-soft: var(--danger-subtle);
+  --br-safe: var(--success);
+  --br-safe-text: var(--success-text);
+  --br-safe-soft: var(--success-subtle);
+  --br-tint: var(--primary);
+  --br-glass: var(--frost);
+  --br-glass-edge: var(--frost-border);
+  --br-glass-rim: var(--frost-border);
+  --br-glass-shadow: var(--shadow-lg);
+  --br-spring: var(--spring-ui);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+  width: 100%;
+  max-width: 580px;
+  overflow: hidden;
+  background: var(--br-page);
+  color: var(--br-fg);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 0 0 1px var(--br-line), var(--shadow-lg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar */
+.br-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 8px;
+  background: var(--br-bg);
+  border-right: 1px solid var(--br-line);
+}
+.br-side .br-label { padding: 0 8px; }
+.br-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: var(--radius-md);
+}
+.br-nav.is-active { background: var(--br-fill); font-weight: 600; }
+
+/* Main */
+.br-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 16px 16px 16px; }
+.br-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; padding: 0 4px; }
+.br-title { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 700; letter-spacing: var(--tracking-title); }
+.br-meta { color: var(--br-muted); font-size: var(--text-small); letter-spacing: normal; }
+.br-group { display: flex; flex-direction: column; gap: 4px; }
+.br-label { margin: 0; padding: 0 12px; color: var(--br-muted); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; letter-spacing: normal; }
+.br-list { display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--br-bg); }
+.br-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 40px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+}
+.br-row + .br-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 0;
+  height: 1px;
+  background: var(--br-line);
+  transform: scaleY(0.5);
+  transform-origin: top;
+}
+.br-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--br-safe); }
+.br-dot.is-idle { background: var(--br-muted); opacity: 0.6; }
+.br-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration-line: line-through;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1.5px;
+  transition: text-decoration-color var(--duration-base) var(--ease-out) var(--br-delay, 0ms);
+}
+.br-size { margin-left: auto; color: var(--br-muted); font-size: var(--text-small); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Doomed and kept states */
+.br [data-blast-member],
+.br [data-blast-keep] {
+  outline: 1.5px dashed transparent;
+  outline-offset: -3px;
+  transition:
+    outline-color var(--duration-base) var(--ease-out) var(--br-delay, 0ms),
+    background-color var(--duration-base) var(--ease-out) var(--br-delay, 0ms),
+    transform var(--spring-ui-duration) var(--br-spring) var(--br-delay, 0ms);
+}
+.br [data-blast-member]::after,
+.br [data-blast-keep]::after {
+  flex: none;
+  max-width: 0;
+  overflow: hidden;
+  padding: 2px 0;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    max-width var(--duration-slow) var(--ease-out) var(--br-delay, 0ms),
+    padding var(--duration-slow) var(--ease-out) var(--br-delay, 0ms),
+    opacity var(--duration-base) var(--ease-out) var(--br-delay, 0ms);
+}
+.br [data-blast-member]::after { content: "Deletes"; color: var(--br-danger-text); background: color-mix(in oklab, var(--danger-border) 55%, var(--br-danger-soft)); }
+.br [data-blast-keep]::after { content: "Stays"; color: var(--br-safe-text); background: var(--br-safe-soft); }
+.br .br-nav::after { display: none; }
+.br .br-doomed { outline-color: var(--br-danger); background-color: var(--br-danger-soft); transform: scale(0.985); }
+.br .br-doomed .br-name { text-decoration-color: var(--br-danger); color: var(--br-danger-text); }
+.br .br-safe { outline-color: var(--br-safe); }
+.br .br-doomed::after,
+.br .br-safe::after { max-width: 80px; padding: 2px 8px; opacity: 1; }
+.br .br-doomed + .br-row::before,
+.br .br-row.br-doomed::before,
+.br .br-safe + .br-row::before,
+.br .br-row.br-safe::before { opacity: 0; }
+
+/* Danger zone */
+.br-zone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding: 12px 12px 12px 16px;
+  border-radius: var(--radius-lg); border: 1px solid var(--border);
+  background: var(--br-bg);
+}
+.br-zone strong { display: block; font-size: var(--text-body); font-weight: 600; }
+.br-zone-text { flex: 1 1 0; min-width: 0; }
+.br-zone-note { margin: 2px 0 0; max-width: 34ch; color: var(--br-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.br-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  height: 36px;
+  overflow: hidden;
+  padding: 0 16px;
+  white-space: nowrap;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--br-danger-soft);
+  color: var(--br-danger);
+  font: inherit;
+  font-size: var(--text-ui);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--duration-base), color var(--duration-base), transform var(--spring-press-duration) var(--spring-press);
+}
+.br-btn:active { transform: scale(var(--press-scale)); }
+.br-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.br-btn.is-preview,
+.br-btn.is-armed { background: var(--br-danger); color: var(--br-on-danger); }
+.br-btn-label, .br-btn-count { position: relative; z-index: 1; }
+.br-btn-count {
+  max-width: 0;
+  overflow: hidden;
+  padding: 1px 0;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--br-on-danger) 24%, transparent);
+  font-size: var(--text-caption);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transition: max-width var(--duration-slow), padding var(--duration-slow), opacity var(--duration-base);
+}
+.br-btn.is-preview .br-btn-count { max-width: 70px; padding: 1px 7px; opacity: 1; }
+.br-btn.is-armed .br-btn-count { max-width: 0; padding: 1px 0; opacity: 0; }
+/* Armed: a lighter fill drains left to right over 3s */
+.br-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--br-on-danger) 22%, transparent);
+  transform: scaleX(0);
+  transform-origin: right;
+}
+.br-btn.is-armed::after { animation: br-fuse 3s linear forwards; }
+@keyframes br-fuse { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.br-btn:disabled { opacity: 0.4; cursor: default; background: var(--br-fill); color: var(--br-muted); transform: none; }
+
+/* After the delete: the header says so and the danger zone hands its place to the Undo banner */
+.br-title, .br-meta { transition: color var(--duration-base); }
+.br.is-deleted .br-title { color: var(--br-muted); }
+.br-zone { position: relative; }
+.br.is-deleted .br-zone { justify-content: center; padding: 0; border-color: transparent; background: transparent; }
+.br.is-deleted .br-zone-text, .br.is-deleted .br-zone > .br-btn { display: none; }
+.br.is-deleted .br-toast { position: static; transform: translateY(8px) scale(0.96); }
+.br.is-deleted .br-toast.is-open { transform: none; }
+
+/* Undo banner: Frost capsule, centered in the danger zone */
+.br-toast {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 6px 6px 18px;
+  border-radius: var(--radius-full);
+  background: var(--br-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: inset 0 0 0 1px var(--frost-border), var(--br-glass-shadow);
+  color: var(--br-fg);
+  font-size: var(--text-body);
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translate(-50%, -20%) scale(0.96);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform var(--spring-ui-duration) var(--br-spring), opacity var(--duration-base), visibility 0s linear var(--spring-ui-duration);
+}
+.br-toast.is-open { transform: translate(-50%, -50%); opacity: 1; visibility: visible; transition: transform var(--spring-ui-duration) var(--br-spring), opacity var(--duration-base), visibility 0s; }
+.br-toast button {
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--br-tint);
+  color: var(--primary-foreground);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.br-toast button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (max-width: 480px) {
+  .br { grid-template-columns: minmax(0, 1fr); }
+  .br-side { flex-direction: row; flex-wrap: wrap; align-items: center; border-right: 0; border-bottom: 1px solid var(--br-line); }
+  .br-side .br-label { width: 100%; }
+  .br-zone { flex-wrap: wrap; }
+  .br-zone-text { flex-basis: 100%; }
+  .br-zone-note { min-height: calc(var(--leading-small) * 2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .br *, .br *::after { transition-duration: var(--duration-reduced) !important; transition-delay: 0ms !important; transition-timing-function: linear !important; }
+}
+.br [hidden] { display: none !important; }

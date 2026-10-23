@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step Fold · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Step Fold — finished steps of a form fold up into summary chips; tap a chip to unfold and edit it.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.fo {
+  --fo-bg: var(--card);
+  --fo-fg: var(--foreground);
+  --fo-muted: var(--muted-foreground);
+  --fo-line: var(--border);
+  --fo-sunken: var(--subtle);
+  --fo-fill: var(--muted);
+  --fo-accent: var(--primary);
+  --fo-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--fo-bg);
+  color: var(--fo-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  perspective: 900px;
+}
+.fo-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 0; }
+.fo-chips:empty { display: none; }
+.fo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px 0 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--brand) 12%, transparent);
+  color: var(--fo-fg);
+  font: inherit;
+  font-size: var(--text-small);
+  cursor: pointer;
+  transform-origin: 50% 0;
+  animation: fo-chip var(--spring-pop-duration) var(--spring-pop) both;
+}
+.fo-chip i { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--fo-accent); color: var(--fo-on-accent); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
+.fo-chip small { color: var(--fo-muted); font-size: var(--text-caption); }
+.fo-chip b { font-weight: 600; }
+.fo-chip:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@keyframes fo-chip { from { opacity: 0; transform: translateY(14px) scale(0.7) rotateX(60deg); } }
+.fo-step { border-radius: var(--radius-xl); background: var(--fo-sunken); transform-origin: 50% 0; }
+.fo-step[hidden] { display: none; }
+.fo-step.is-folding { animation: fo-fold var(--duration-slower) cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+@keyframes fo-fold { to { opacity: 0; transform: rotateX(-80deg) scaleY(0.4); } }
+.fo-step.is-unfolding { animation: fo-unfold var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes fo-unfold { from { opacity: 0; transform: rotateX(-70deg) scaleY(0.5); } }
+.fo-step.is-waiting .fo-body { display: none; }
+.fo-step.is-waiting { background: none; box-shadow: inset 0 0 0 1px var(--fo-fill); }
+.fo-step.is-waiting .fo-step-title { color: var(--fo-muted); }
+.fo-step-title { display: flex; align-items: center; gap: 10px; margin: 0; padding: 14px 16px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.fo-step-title span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--fo-fill); font-size: var(--text-small); }
+.fo-step:not(.is-waiting) .fo-step-title span { background: var(--fo-accent); color: var(--fo-on-accent); }
+.fo-body { display: flex; flex-direction: column; gap: 12px; padding: 0 16px 16px; }
+.fo-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.fo-plan { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--fo-bg); box-shadow: 0 0 0 1px var(--fo-fill); cursor: pointer; transition: box-shadow var(--duration-base); }
+.fo-plan input { position: absolute; opacity: 0; }
+.fo-plan b { font-weight: 600; }
+.fo-plan small { color: var(--fo-muted); font-size: var(--text-caption); }
+.fo-plan:has(input:checked) { box-shadow: 0 0 0 2px var(--fo-accent); }
+.fo-plan:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fo-stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.fo-stepper button { width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fo-fill); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
+.fo-stepper button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fo-seats { min-width: 2ch; font-size: var(--text-h2); line-height: var(--leading-h2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.fo-email { height: 44px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--fo-bg); color: var(--fo-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
+.fo-email:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.fo-email[aria-invalid="true"] { box-shadow: 0 0 0 2px var(--danger); }
+.fo-next, .fo-start { height: 44px; border: 0; border-radius: var(--radius-md); background: var(--fo-accent); color: var(--fo-on-accent); font: inherit; font-size: var(--text-title-sm); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.fo-next:active, .fo-start:active { transform: scale(0.97); }
+.fo-next:focus-visible, .fo-start:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fo-done { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: var(--radius-xl); background: var(--fo-sunken); animation: fo-unfold var(--spring-ui-duration) var(--spring-ui) both; }
+.fo-total { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); }
+.fo-total b { font-size: var(--text-h3); line-height: var(--leading-h3); font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  .fo-chip, .fo-step.is-folding, .fo-step.is-unfolding, .fo-done { animation: none; }
+}
+.fo [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Step Fold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="fo" data-mi="step-fold">
+  <div class="fo-chips" aria-label="Completed steps"></div>
+  <section class="fo-step" data-step="plan" data-title="Plan">
+    <p class="fo-step-title"><span>1</span>Choose a Plan</p>
+    <div class="fo-body">
+      <div class="fo-plans" role="radiogroup" aria-label="Plan">
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Starter"><b>Starter</b><small>$12 per seat</small></label>
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Pro" checked><b>Pro</b><small>$29 per seat</small></label>
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Team"><b>Team</b><small>$79 per seat</small></label>
+      </div>
+      <button type="button" class="fo-next">Continue</button>
+    </div>
+  </section>
+  <section class="fo-step" data-step="seats" data-title="Seats">
+    <p class="fo-step-title"><span>2</span>How Many Seats?</p>
+    <div class="fo-body">
+      <div class="fo-stepper"><button type="button" class="fo-minus" aria-label="Fewer seats">−</button><output class="fo-seats" aria-live="polite">5</output><button type="button" class="fo-plus" aria-label="More seats">+</button></div>
+      <button type="button" class="fo-next">Continue</button>
+    </div>
+  </section>
+  <section class="fo-step" data-step="email" data-title="Billing">
+    <p class="fo-step-title"><span>3</span>Billing Email</p>
+    <div class="fo-body">
+      <input class="fo-email" type="email" placeholder="billing@company.com" value="finance@northwind.co" aria-label="Billing email" autocomplete="off">
+      <button type="button" class="fo-next">Continue</button>
+    </div>
+  </section>
+  <section class="fo-done" hidden>
+    <p class="fo-total"></p>
+    <button type="button" class="fo-start">Start Free Trial</button>
+  </section>
+</div>
+</div>
+<script>
+/* Step Fold — vanilla JS. Auto-initializes every [data-mi="step-fold"].
+   Each .fo-step has data-step and data-title; summary() below says what its chip shows.
+   Call window.initStepFold(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var PRICES = { Starter: 12, Pro: 29, Team: 79 };
+
+  function initStepFold(root) {
+    if (!root || root.__miFold) return;
+    root.__miFold = true;
+    var steps = Array.prototype.slice.call(root.querySelectorAll('.fo-step'));
+    var chips = root.querySelector('.fo-chips');
+    var done = root.querySelector('.fo-done');
+    var total = root.querySelector('.fo-total');
+    var seatsOut = root.querySelector('.fo-seats');
+    var email = root.querySelector('.fo-email');
+    var seats = 5;
+    var finished = {}; // step -> true
+    var current = 0;
+
+    function value(step) {
+      var k = step.getAttribute('data-step');
+      if (k === 'plan') return root.querySelector('input[name="fo-plan"]:checked').value;
+      if (k === 'seats') return seats + (seats === 1 ? ' seat' : ' seats');
+      if (k === 'email') return email.value.trim();
+      return '';
+    }
+
+    function renderChips() {
+      chips.replaceChildren();
+      steps.forEach(function (s, i) {
+        if (!finished[i] || i === current) return;
+        var c = document.createElement('button');
+        c.type = 'button';
+        c.className = 'fo-chip';
+        var n = document.createElement('i'); n.textContent = '✓';
+        var label = document.createElement('small'); label.textContent = s.getAttribute('data-title');
+        var b = document.createElement('b'); b.textContent = value(s);
+        c.append(n, label, b);
+        c.setAttribute('aria-label', 'Edit ' + s.getAttribute('data-title') + ': ' + value(s));
+        c.addEventListener('click', function () { open(i); });
+        chips.appendChild(c);
+      });
+    }
+
+    function layout() {
+      var allDone = steps.every(function (s, i) { return finished[i]; }) && current === -1;
+      steps.forEach(function (s, i) {
+        s.hidden = !!finished[i] && i !== current;
+        s.classList.toggle('is-waiting', !finished[i] && i !== current);
+      });
+      done.hidden = !allDone;
+      if (allDone) {
+        var plan = root.querySelector('input[name="fo-plan"]:checked').value;
+        var b = document.createElement('b');
+        b.textContent = '$' + (PRICES[plan] * seats).toLocaleString();
+        total.replaceChildren(b, document.createTextNode(' per month after a 14-day trial. Billed to ' + email.value.trim() + '.'));
+      }
+      renderChips();
+    }
+
+    function open(i, quiet) {
+      var prev = current;
+      current = i;
+      layout();
+      var s = steps[i];
+      if (!reduce.matches) { s.classList.remove('is-unfolding'); void s.offsetWidth; s.classList.add('is-unfolding'); }
+      var focusable = s.querySelector('input, button');
+      if (focusable && !quiet) focusable.focus({ preventScroll: true });
+      return prev;
+    }
+
+    function complete(i) {
+      if (steps[i].getAttribute('data-step') === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) {
+        email.setAttribute('aria-invalid', 'true'); email.focus(); return;
+      }
+      email.removeAttribute('aria-invalid');
+      finished[i] = true;
+      var next = steps.findIndex(function (s, k) { return !finished[k]; });
+      var go = function () {
+        steps[i].classList.remove('is-folding');
+        if (next === -1) { current = -1; layout(); root.querySelector('.fo-start').focus({ preventScroll: true }); }
+        else open(next);
+      };
+      if (reduce.matches) { go(); return; }
+      steps[i].classList.add('is-folding');
+      setTimeout(go, 400);
+    }
+
+    steps.forEach(function (s, i) {
+      s.querySelector('.fo-next').addEventListener('click', function () { complete(i); });
+    });
+    root.querySelector('.fo-minus').addEventListener('click', function () { seats = Math.max(1, seats - 1); seatsOut.textContent = seats; });
+    root.querySelector('.fo-plus').addEventListener('click', function () { seats = Math.min(99, seats + 1); seatsOut.textContent = seats; });
+    email.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); complete(steps.indexOf(email.closest('.fo-step'))); } });
+    root.querySelector('.fo-start').addEventListener('click', function () {
+      total.textContent = 'Trial started. Welcome to ' + root.querySelector('input[name="fo-plan"]:checked').value + '.';
+      setTimeout(function () { finished = {}; open(0); }, 1800);
+    });
+    open(0, true);
+  }
+
+  window.initStepFold = initStepFold;
+  function boot() { document.querySelectorAll('[data-mi="step-fold"]').forEach(initStepFold); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initStepFold"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<div class="ss" data-mi="seat-stacker" data-seats="3">
+  <div class="ss-head">
+    <p class="ss-title">Team Seats</p>
+    <div class="ss-avatars" aria-hidden="true"></div>
+  </div>
+  <div class="ss-control">
+    <button type="button" class="ss-step" data-step="-1" aria-label="Remove a seat">−</button>
+    <label class="ss-count-wrap"><span class="ss-sr">Seats</span><input class="ss-count" type="text" inputmode="numeric" value="3" aria-label="Seats"></label>
+    <button type="button" class="ss-step" data-step="1" aria-label="Add a seat">+</button>
+  </div>
+  <div class="ss-tiers" aria-hidden="true">
+    <div class="ss-tier" data-min="1"><b>$12</b><span>1–9 seats</span></div>
+    <div class="ss-tier" data-min="10"><b>$10</b><span>10–24 seats</span></div>
+    <div class="ss-tier" data-min="25"><b>$8</b><span>25+ seats</span></div>
+  </div>
+  <div class="ss-price">
+    <div><p class="ss-k">Per Seat</p><p class="ss-v">$<span class="ss-odo" data-odo="per"></span><small>/mo</small></p></div>
+    <div><p class="ss-k">Total</p><p class="ss-v ss-total">$<span class="ss-odo" data-odo="total"></span><small>/mo</small></p></div>
+  </div>
+  <p class="ss-note" role="status" aria-live="polite"></p>
+</div>

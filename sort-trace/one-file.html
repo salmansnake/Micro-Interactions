@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sort Trace</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .st so they never affect the rest of your page. */
+.st {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --amber-11: #ab6400;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --chart-5: var(--olive);
+  --chart-6: var(--aqua-700);
+  --foreground: var(--black);
+  --green-11: #218358;
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --on-chart: #000000;
+  --on-chart-strong: #ffffff;
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success-text: #1f7b53;
+  --warning-text: #a15e00;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .st, .dark .st {
+  --amber-11: #ffca16;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --chart-5: var(--olive);
+  --chart-6: var(--aqua-700);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --on-chart: #000000;
+  --on-chart-strong: #000000;
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success-text: var(--green-11);
+  --warning-text: var(--amber-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .st {
+    --amber-11: #ffca16;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --card: var(--white);
+    --chart-1: var(--aqua);
+    --chart-2: var(--pink);
+    --chart-3: var(--orange);
+    --chart-4: var(--sage);
+    --chart-5: var(--olive);
+    --chart-6: var(--aqua-700);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --olive: #AA9856;
+    --on-chart: #000000;
+    --on-chart-strong: #000000;
+    --on-color: #ffffff;
+    --orange: #FE8C5F;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success-text: var(--green-11);
+    --warning-text: var(--amber-11);
+    --white: #161817;
+  }
+}
+
+/* Sort Trace — re-sorted rows leave a fading trail from where they were, with how far each one moved.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.st {
+  --st-bg: var(--card);
+  --st-fg: var(--foreground);
+  --st-muted: var(--muted-foreground);
+  --st-line: var(--border);
+  --st-sunken: var(--subtle);
+  --st-fill: var(--muted);
+  --st-accent: var(--primary);
+  --st-up: var(--success-text);
+  --st-down: var(--warning-text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--st-bg);
+  color: var(--st-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.st-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.st-table { border-radius: var(--radius-lg); background: var(--st-sunken); }
+.st-head, .st-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+.st-head { padding: 4px 8px 0 24px; }
+.st-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--st-muted);
+  font: inherit;
+  font-size: var(--text-small);
+  font-weight: 600;
+  cursor: pointer;
+  justify-self: start;
+}
+.st-sort:nth-child(n+2) { justify-self: end; }
+.st-sort:hover { color: var(--st-fg); }
+.st-sort:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.st-sort[aria-sort="ascending"], .st-sort[aria-sort="descending"] { color: var(--st-accent); }
+.st-sort i { width: 8px; height: 8px; opacity: 0; transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-base); }
+.st-sort i::before { content: ""; display: block; width: 6px; height: 6px; border: solid currentColor; border-width: 0 1.75px 1.75px 0; transform: translate(1px, -1px) rotate(45deg); }
+.st-sort[aria-sort="descending"] i { opacity: 1; }
+.st-sort[aria-sort="ascending"] i { opacity: 1; transform: rotate(180deg); }
+.st-body { position: relative; padding: 0 8px 6px 24px; }
+.st-trails { position: absolute; left: 0; top: 0; width: 26px; height: 100%; overflow: visible; pointer-events: none; }
+.st-trails path { fill: none; stroke-width: 2; stroke-linecap: round; }
+.st-trails path.up { stroke: var(--st-up); }
+.st-trails path.down { stroke: var(--st-down); }
+.st-trails circle.up { fill: var(--st-up); }
+.st-trails circle.down { fill: var(--st-down); }
+.st-row { position: relative; min-height: 44px; padding: 0 6px; border-radius: var(--radius-md); font-variant-numeric: tabular-nums; }
+.st-row + .st-row { box-shadow: inset 0 1px 0 var(--st-line); }
+.st-row span { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.st-row span:nth-child(n+2) { justify-content: flex-end; }
+.st-row b { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: var(--radius-sm); color: var(--on-color); font-size: calc(var(--text-caption) - 1px); }
+.st-row.is-moved { animation: st-flash 1.6s var(--ease-out); }
+@keyframes st-flash { 0% { background: color-mix(in srgb, var(--brand) 14%, transparent); } 100% { background: transparent; } }
+.st-delta {
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--st-bg);
+  font-size: calc(var(--text-caption) - 2px);
+  line-height: 14px;
+  font-style: normal;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+  transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop);
+  z-index: 1;
+}
+.st-delta.up { color: var(--st-up); }
+.st-delta.down { color: var(--st-down); }
+.st-delta.is-on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.st-status { margin: 0 4px; color: var(--st-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+@media (prefers-reduced-motion: reduce) {
+  .st-row.is-moved { animation: none; }
+  .st-sort i, .st-delta { transition-duration: var(--duration-reduced); }
+}
+.st [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="st" data-mi="sort-trace">
+  <p class="st-title">Accounts</p>
+  <div class="st-table" role="table" aria-label="Accounts">
+    <div class="st-head" role="row">
+      <button type="button" class="st-sort" data-key="name" data-type="text" role="columnheader" aria-sort="none">Account<i aria-hidden="true"></i></button>
+      <button type="button" class="st-sort" data-key="mrr" data-type="num" role="columnheader" aria-sort="none">MRR<i aria-hidden="true"></i></button>
+      <button type="button" class="st-sort" data-key="growth" data-type="num" role="columnheader" aria-sort="descending">Growth<i aria-hidden="true"></i></button>
+    </div>
+    <div class="st-body">
+      <svg class="st-trails" aria-hidden="true"></svg>
+      <div class="st-row" role="row" data-name="Northwind" data-mrr="4820" data-growth="12.4"><span role="cell"><b style="background: var(--chart-1); color: var(--on-chart)">N</b>Northwind</span><span role="cell">$4,820</span><span role="cell">+12.4%</span><em class="st-delta" aria-hidden="true"></em></div>
+      <div class="st-row" role="row" data-name="Orbit" data-mrr="2150" data-growth="9.1"><span role="cell"><b style="background: var(--chart-3); color: var(--on-chart)">O</b>Orbit</span><span role="cell">$2,150</span><span role="cell">+9.1%</span><em class="st-delta" aria-hidden="true"></em></div>
+      <div class="st-row" role="row" data-name="Atlas" data-mrr="6340" data-growth="4.8"><span role="cell"><b style="background: var(--chart-4); color: var(--on-chart)">A</b>Atlas</span><span role="cell">$6,340</span><span role="cell">+4.8%</span><em class="st-delta" aria-hidden="true"></em></div>
+      <div class="st-row" role="row" data-name="Nova" data-mrr="980" data-growth="2.2"><span role="cell"><b style="background: var(--chart-2); color: var(--on-chart)">N</b>Nova</span><span role="cell">$980</span><span role="cell">+2.2%</span><em class="st-delta" aria-hidden="true"></em></div>
+      <div class="st-row" role="row" data-name="Beacon" data-mrr="3710" data-growth="-1.6"><span role="cell"><b style="background: var(--chart-5); color: var(--on-chart)">B</b>Beacon</span><span role="cell">$3,710</span><span role="cell">−1.6%</span><em class="st-delta" aria-hidden="true"></em></div>
+      <div class="st-row" role="row" data-name="Cobalt" data-mrr="1490" data-growth="-3.9"><span role="cell"><b style="background: var(--chart-6); color: var(--on-chart-strong)">C</b>Cobalt</span><span role="cell">$1,490</span><span role="cell">−3.9%</span><em class="st-delta" aria-hidden="true"></em></div>
+    </div>
+  </div>
+  <p class="st-status" aria-live="polite">Sorted by growth, highest first.</p>
+</div>
+
+
+<script>
+/* Sort Trace — vanilla JS. Auto-initializes every [data-mi="sort-trace"].
+   Rows carry their sort values as data-* attributes. Call window.initSortTrace(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var NS = 'http://www.w3.org/2000/svg';
+  var LABEL = { name: 'name', mrr: 'MRR', growth: 'growth' };
+
+  function initSortTrace(root) {
+    if (!root || root.__miSort) return;
+    root.__miSort = true;
+    var body = root.querySelector('.st-body');
+    var trails = root.querySelector('.st-trails');
+    var heads = Array.prototype.slice.call(root.querySelectorAll('.st-sort'));
+    var status = root.querySelector('.st-status');
+    var clearTimer = 0;
+
+    function rows() { return Array.prototype.slice.call(body.querySelectorAll('.st-row')); }
+
+    function sortBy(key, dir, type) {
+      var list = rows();
+      var before = new Map(), index = new Map();
+      list.forEach(function (r, i) { before.set(r, r.offsetTop + r.offsetHeight / 2); index.set(r, i); });
+      list.sort(function (a, b) {
+        var x = a.getAttribute('data-' + key), y = b.getAttribute('data-' + key);
+        var c = type === 'num' ? Number(x) - Number(y) : x.localeCompare(y);
+        return dir === 'ascending' ? c : -c;
+      }).forEach(function (r) { body.appendChild(r); });
+
+      trails.replaceChildren();
+      clearTimeout(clearTimer);
+      rows().forEach(function (r, i) {
+        var from = before.get(r), to = r.offsetTop + r.offsetHeight / 2;
+        var moved = index.get(r) - i; // positive = moved up
+        var delta = r.querySelector('.st-delta');
+        delta.classList.remove('is-on', 'up', 'down');
+        r.classList.remove('is-moved');
+        if (!moved) return;
+        var dirCls = moved > 0 ? 'up' : 'down';
+        delta.textContent = (moved > 0 ? '↑' : '↓') + Math.abs(moved);
+        delta.classList.add(dirCls);
+        void r.offsetWidth;
+        r.classList.add('is-moved');
+        setTimeout(function () { delta.classList.add('is-on'); }, reduce.matches ? 0 : 420);
+        // A curved trail in the gutter from the old row position to the new one.
+        var x = 10 + (Math.abs(moved) % 3) * 4;
+        var p = document.createElementNS(NS, 'path');
+        p.setAttribute('class', dirCls);
+        p.setAttribute('d', 'M14 ' + from + ' C' + (14 - x) + ' ' + from + ' ' + (14 - x) + ' ' + to + ' 14 ' + to);
+        var dot = document.createElementNS(NS, 'circle');
+        dot.setAttribute('class', dirCls); dot.setAttribute('cx', 14); dot.setAttribute('cy', to); dot.setAttribute('r', 2.5);
+        trails.append(p, dot);
+        if (!reduce.matches) {
+          var L = p.getTotalLength();
+          p.style.strokeDasharray = L + ' ' + L;
+          p.animate([{ strokeDashoffset: L, opacity: 0.9 }, { strokeDashoffset: 0, opacity: 0.9, offset: 0.35 }, { strokeDashoffset: 0, opacity: 0 }], { duration: 2600, easing: 'ease-out', fill: 'forwards' });
+          dot.animate([{ opacity: 0 }, { opacity: 1, offset: 0.3 }, { opacity: 0 }], { duration: 2600, fill: 'forwards' });
+          // FLIP the row itself
+          r.animate([{ transform: 'translateY(' + (from - to) + 'px)' }, { transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.2,.9,.25,1.05)' });
+        }
+      });
+      clearTimer = setTimeout(function () {
+        trails.replaceChildren();
+        rows().forEach(function (r) { r.querySelector('.st-delta').classList.remove('is-on'); });
+      }, 2800);
+    }
+
+    heads.forEach(function (h) {
+      h.addEventListener('click', function () {
+        var cur = h.getAttribute('aria-sort');
+        var dir = cur === 'descending' ? 'ascending' : cur === 'ascending' ? 'descending' : (h.getAttribute('data-type') === 'num' ? 'descending' : 'ascending');
+        heads.forEach(function (o) { o.setAttribute('aria-sort', o === h ? dir : 'none'); });
+        var key = h.getAttribute('data-key');
+        sortBy(key, dir, h.getAttribute('data-type'));
+        status.textContent = 'Sorted by ' + LABEL[key] + ', ' + (h.getAttribute('data-type') === 'num' ? (dir === 'descending' ? 'highest first.' : 'lowest first.') : (dir === 'ascending' ? 'A to Z.' : 'Z to A.'));
+      });
+    });
+  }
+
+  window.initSortTrace = initSortTrace;
+  function boot() { document.querySelectorAll('[data-mi="sort-trace"]').forEach(initSortTrace); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewind Scrub</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .rw so they never affect the rest of your page. */
+.rw {
+  --duration-base: 200ms;
+  --duration-fast: 140ms;
+  --duration-slow: 320ms;
+  --duration-slower: 480ms;
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title: 20px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --amber-11: #ab6400;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand-strong: var(--aqua-700);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-4: var(--sage);
+  --danger: #ce2c31;
+  --danger-text: #ca2b30;
+  --foreground: var(--black);
+  --green-11: #218358;
+  --input: var(--line-strong);
+  --lift: #FFFFFF;
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --raised: var(--lift);
+  --red-11: #ce2c31;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --success-text: #1f7b53;
+  --warning: var(--amber-9);
+  --warning-text: #a15e00;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .rw, .dark .rw {
+  --amber-11: #ffca16;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand-strong: var(--aqua);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-4: var(--sage);
+  --danger: #d4373c;
+  --danger-text: var(--red-11);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --input: var(--line-strong);
+  --lift: #3F4341;
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --raised: var(--lift);
+  --red-11: #ff9592;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --success-text: var(--green-11);
+  --warning: var(--amber-9);
+  --warning-text: var(--amber-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .rw {
+    --amber-11: #ffca16;
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand-strong: var(--aqua);
+    --card: var(--white);
+    --chart-1: var(--aqua);
+    --chart-2: var(--pink);
+    --chart-4: var(--sage);
+    --danger: #d4373c;
+    --danger-text: var(--red-11);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --input: var(--line-strong);
+    --lift: #3F4341;
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-chart: #000000;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --raised: var(--lift);
+    --red-11: #ff9592;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --success-text: var(--green-11);
+    --warning: var(--amber-9);
+    --warning-text: var(--amber-11);
+    --white: #161817;
+  }
+}
+
+/* Rewind Scrub — drag back through a document's history and watch each edit undo itself in place.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.rw {
+  --rw-bg: var(--card);
+  --rw-fg: var(--foreground);
+  --rw-muted: var(--muted-foreground);
+  --rw-line: var(--border);
+  --rw-sunken: var(--subtle);
+  --rw-fill: var(--muted);
+  --rw-accent: var(--primary);
+  --rw-on-accent: var(--primary-foreground);
+  --rw-green: var(--success-text);
+  --rw-red: var(--danger-text);
+  --rw-orange: var(--warning);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--rw-bg);
+  color: var(--rw-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.rw-head { display: flex; align-items: center; justify-content: space-between; }
+.rw-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.rw-live { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--success) 16%, transparent); color: var(--rw-green); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-base), color var(--duration-base); }
+.rw-live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.rw.is-past .rw-live { background: color-mix(in srgb, var(--rw-orange) 16%, transparent); color: var(--warning-text); }
+.rw-doc { min-height: 132px; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--rw-sunken); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); white-space: pre-wrap; transition: background-color var(--duration-slow); }
+.rw.is-past .rw-doc { background: color-mix(in srgb, var(--rw-orange) 6%, var(--rw-sunken)); }
+.rw-doc .rw-h { font-weight: 700; font-size: var(--text-title); }
+.rw-ins { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--success) 22%, transparent); color: var(--rw-fg); animation: rw-in var(--spring-ui-duration) var(--spring-ui) both; }
+.rw-del { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--rw-red); text-decoration: line-through; animation: rw-out var(--duration-slower) var(--ease-out) both; }
+@keyframes rw-in { from { opacity: 0; filter: blur(3px); } }
+@keyframes rw-out { from { opacity: 0; } }
+.rw-meta { display: flex; align-items: center; gap: 10px; min-height: 32px; }
+.rw-avatar { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 50%; color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; transition: background-color var(--duration-base); }
+.rw-what { margin: 0; color: var(--rw-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.rw-what b { color: var(--rw-fg); font-weight: 600; }
+/* Scrubber */
+.rw-scrub { position: relative; padding: 18px 0 4px; }
+.rw-ticks { position: absolute; left: 11px; right: 11px; top: 30px; display: flex; justify-content: space-between; pointer-events: none; }
+.rw-ticks i { width: 2px; height: 10px; border-radius: var(--radius-xs); background: var(--rw-fill); transition: background-color var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.rw-ticks i.is-past { background: color-mix(in srgb, var(--brand-strong) 45%, transparent); }
+.rw-ticks i.is-on { background: var(--rw-accent); transform: scaleY(1.6); }
+.rw-range { position: relative; width: 100%; height: 34px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; cursor: grab; }
+.rw-range:active { cursor: grabbing; }
+.rw-range::-webkit-slider-runnable-track { height: 4px; border-radius: var(--radius-xs); background: var(--rw-fill); }
+.rw-range::-moz-range-track { height: 4px; border-radius: var(--radius-xs); background: var(--rw-fill); }
+.rw-range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9px; border-radius: 50%; background: var(--raised); box-shadow: 0 0 0 1px var(--input), var(--shadow-sm); transition: transform var(--duration-base); }
+.rw-range::-moz-range-thumb { width: 22px; height: 22px; border: 0; border-radius: 50%; background: var(--raised); box-shadow: 0 0 0 1px var(--input), var(--shadow-sm); }
+.rw-range:active::-webkit-slider-thumb { transform: scale(1.25); }
+.rw-range:focus-visible { outline: none; }
+.rw-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--rw-accent); }
+.rw-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--rw-accent); }
+.rw-bubble { position: absolute; top: -6px; left: var(--x, 100%); padding: 3px 9px; border-radius: var(--radius-full); background: var(--rw-fg); color: var(--rw-bg); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 600; white-space: nowrap; transform: translateX(-50%); transition: left var(--duration-fast) linear; pointer-events: none; }
+.rw-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 36px; }
+.rw-note { margin: 0; color: var(--rw-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.rw-restore { flex: none; height: 36px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--rw-accent); color: var(--rw-on-accent); font: inherit; font-weight: 600; cursor: pointer; animation: rw-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.rw-restore:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@keyframes rw-pop { from { opacity: 0; transform: scale(0.85); } }
+@media (prefers-reduced-motion: reduce) {
+  .rw-ins, .rw-del, .rw-restore { animation: none; }
+}
+.rw [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="rw" data-mi="rewind-scrub">
+  <div class="rw-head">
+    <p class="rw-title">Version History</p>
+    <span class="rw-live">Live</span>
+  </div>
+  <div class="rw-doc" aria-live="polite"></div>
+  <div class="rw-meta">
+    <span class="rw-avatar" aria-hidden="true"></span>
+    <p class="rw-what"></p>
+  </div>
+  <div class="rw-scrub">
+    <div class="rw-ticks" aria-hidden="true"></div>
+    <input class="rw-range" type="range" min="0" max="7" step="1" value="7" aria-label="Rewind through versions">
+    <span class="rw-bubble" aria-hidden="true"></span>
+  </div>
+  <div class="rw-foot">
+    <p class="rw-note">Drag left to rewind. Nothing changes until you restore.</p>
+    <button type="button" class="rw-restore" hidden>Restore This Version</button>
+  </div>
+</div>
+
+
+<script>
+/* Rewind Scrub — vanilla JS. Auto-initializes every [data-mi="rewind-scrub"].
+   Pass real history with root.setVersions([{ text, who, color, ago, what }]). Call window.initRewindScrub(el) for later elements. */
+(function () {
+  'use strict';
+  var VERSIONS = [
+    { text: 'Launch notes', who: 'You', color: 'var(--chart-1)', ago: '2 hours ago', what: 'created the page' },
+    { text: 'Launch notes\nWe ship billing on Monday.', who: 'You', color: 'var(--chart-1)', ago: '2 hours ago', what: 'added the first line' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday.', who: 'Mira', color: 'var(--chart-2)', ago: '1 hour ago', what: 'clarified what ships' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday. Annual plans show savings up front.', who: 'Mira', color: 'var(--chart-2)', ago: '48 minutes ago', what: 'added the pricing line' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday. Annual plans now show their savings up front.', who: 'You', color: 'var(--chart-1)', ago: '31 minutes ago', what: 'tightened the wording' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday. Annual plans now show their savings up front.\nSupport has the FAQ ready.', who: 'Sam', color: 'var(--chart-4)', ago: '20 minutes ago', what: 'added a support note' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday. Annual plans now show their savings up front.\nSupport is drafting the FAQ.', who: 'Mira', color: 'var(--chart-2)', ago: '9 minutes ago', what: 'corrected the FAQ status' },
+    { text: 'Billing launch notes\nWe ship the new billing page on Monday. Annual plans now show their savings up front.\nSupport is drafting the FAQ.', who: 'You', color: 'var(--chart-1)', ago: 'Just now', what: 'renamed the page' }
+  ];
+
+  // Word-level diff (LCS). Returns [{t:'same'|'ins'|'del', s:string}]
+  function diff(a, b) {
+    var A = a.split(/(\s+)/), B = b.split(/(\s+)/), n = A.length, m = B.length, L = [];
+    for (var i = 0; i <= n; i++) { L.push(new Array(m + 1).fill(0)); }
+    for (i = n - 1; i >= 0; i--) for (var j = m - 1; j >= 0; j--) L[i][j] = A[i] === B[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    var out = []; i = 0; j = 0;
+    function push(t, s) { if (out.length && out[out.length - 1].t === t) out[out.length - 1].s += s; else out.push({ t: t, s: s }); }
+    while (i < n && j < m) {
+      if (A[i] === B[j]) { push('same', A[i]); i++; j++; }
+      else if (L[i + 1][j] >= L[i][j + 1]) { push('del', A[i]); i++; }
+      else { push('ins', B[j]); j++; }
+    }
+    while (i < n) push('del', A[i++]);
+    while (j < m) push('ins', B[j++]);
+    return out;
+  }
+
+  function initRewindScrub(root) {
+    if (!root || root.__miRewind) return;
+    root.__miRewind = true;
+    var versions = VERSIONS.slice();
+    var doc = root.querySelector('.rw-doc');
+    var avatar = root.querySelector('.rw-avatar');
+    var what = root.querySelector('.rw-what');
+    var range = root.querySelector('.rw-range');
+    var ticks = root.querySelector('.rw-ticks');
+    var bubble = root.querySelector('.rw-bubble');
+    var restore = root.querySelector('.rw-restore');
+    var live = root.querySelector('.rw-live');
+    var shown = -1;
+
+    function buildTicks() {
+      ticks.replaceChildren();
+      versions.forEach(function () { ticks.appendChild(document.createElement('i')); });
+      range.max = versions.length - 1;
+    }
+
+    // Render a version, showing what that edit changed relative to the one before it.
+    function show(v) {
+      if (v === shown) return;
+      shown = v;
+      var cur = versions[v], prev = v > 0 ? versions[v - 1].text : '';
+      var parts = diff(prev, cur.text);
+      doc.replaceChildren();
+      var firstLine = true;
+      parts.forEach(function (p) {
+        var lines = p.s.split('\n');
+        lines.forEach(function (chunk, k) {
+          if (k > 0) { doc.appendChild(document.createTextNode('\n')); firstLine = false; }
+          if (!chunk) return;
+          var el;
+          if (p.t === 'same') el = document.createTextNode(chunk);
+          else { el = document.createElement('span'); el.className = p.t === 'ins' ? 'rw-ins' : 'rw-del'; el.textContent = chunk; }
+          if (firstLine) { var h = document.createElement('span'); h.className = 'rw-h'; h.appendChild(el); el = h; }
+          doc.appendChild(el);
+        });
+      });
+      avatar.textContent = cur.who[0];
+      avatar.style.background = cur.color;
+      var b = document.createElement('b'); b.textContent = cur.who;
+      what.replaceChildren(b, document.createTextNode(' ' + cur.what + ' · ' + cur.ago));
+      var last = versions.length - 1;
+      root.classList.toggle('is-past', v < last);
+      live.textContent = v < last ? 'Viewing Version ' + (v + 1) : 'Live';
+      restore.hidden = v === last;
+      Array.prototype.forEach.call(ticks.children, function (t, i) { t.classList.toggle('is-past', i < v); t.classList.toggle('is-on', i === v); });
+      bubble.textContent = cur.ago;
+      var pct = v / last;
+      bubble.style.setProperty('--x', 'calc(' + (pct * 100) + '% + ' + (11 - pct * 22) + 'px)');
+      range.setAttribute('aria-valuetext', 'Version ' + (v + 1) + ' of ' + versions.length + ', ' + cur.who + ' ' + cur.what + ', ' + cur.ago);
+    }
+
+    range.addEventListener('input', function () { show(Number(range.value)); });
+    restore.addEventListener('click', function () {
+      var v = Number(range.value), picked = versions[v];
+      versions.push({ text: picked.text, who: 'You', color: 'var(--chart-1)', ago: 'Just now', what: 'restored version ' + (v + 1) });
+      buildTicks();
+      range.value = versions.length - 1;
+      shown = -1;
+      show(versions.length - 1);
+      range.focus();
+    });
+    root.setVersions = function (list) { versions = list.slice(); buildTicks(); range.value = versions.length - 1; shown = -1; show(versions.length - 1); };
+    buildTicks();
+    show(versions.length - 1);
+  }
+
+  window.initRewindScrub = initRewindScrub;
+  function boot() { document.querySelectorAll('[data-mi="rewind-scrub"]').forEach(initRewindScrub); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unsure Underline</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .uu so they never affect the rest of your page. */
+.uu {
+  --duration-base: 200ms;
+  --duration-slower: 480ms;
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale: 0.97;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --foreground: var(--black);
+  --green-11: #218358;
+  --input: var(--line-strong);
+  --lift: #FFFFFF;
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --raised: var(--lift);
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xl: 0 8px 16px -4px rgba(17, 17, 16, 0.08), 0 28px 56px -12px rgba(17, 17, 16, 0.22);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --switch-on: var(--black);
+  --warning: var(--amber-9);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .uu, .dark .uu {
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --input: var(--line-strong);
+  --lift: #3F4341;
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --raised: var(--lift);
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --switch-on: var(--aqua);
+  --warning: var(--amber-9);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .uu {
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --input: var(--line-strong);
+    --lift: #3F4341;
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --raised: var(--lift);
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --switch-on: var(--aqua);
+    --warning: var(--amber-9);
+    --white: #161817;
+  }
+}
+
+/* Unsure Underline — AI text marks the words it is unsure of, and lets you settle each one in a tap.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.uu {
+  --uu-bg: var(--card);
+  --uu-fg: var(--foreground);
+  --uu-muted: var(--muted-foreground);
+  --uu-line: var(--border);
+  --uu-sunken: var(--subtle);
+  --uu-fill: var(--muted);
+  --uu-accent: var(--primary);
+  --uu-on-accent: var(--primary-foreground);
+  --uu-orange: var(--warning);
+  --uu-green: var(--success);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--uu-bg);
+  color: var(--uu-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.uu-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.uu-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.uu-toggle { display: flex; align-items: center; gap: 8px; color: var(--uu-muted); font-size: var(--text-small); }
+.uu-switch { position: relative; flex: none; width: 40px; height: 22px; }
+.uu-switch input { position: absolute; inset: -11px -2px; z-index: 1; width: calc(100% + 4px); height: calc(100% + 22px); margin: 0; opacity: 0; cursor: pointer; }
+.uu-track { position: absolute; inset: 0; border: 1px solid var(--input); border-radius: var(--radius-full); background: var(--muted); transition: background-color var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out); }
+.uu-knob { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--raised); box-shadow: var(--shadow-sm); transition: transform var(--spring-ui-duration) var(--spring-ui), width var(--spring-press-duration) var(--spring-press); }
+.uu-switch input:checked ~ .uu-track { background: var(--switch-on); border-color: var(--switch-on); }
+.uu-switch input:checked ~ .uu-knob { transform: translateX(18px); background: var(--card); }
+.uu-switch input:active ~ .uu-knob { width: 20px; }
+.uu-switch input:checked:active ~ .uu-knob { transform: translateX(14px); }
+.uu-switch input:focus-visible ~ .uu-track { outline: 2px solid var(--ring); outline-offset: 2px; }
+.uu-text { margin: 0; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--uu-sunken); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
+/* The less sure, the stronger the underline: --u runs 0 (sure) to 1 (unsure) */
+.uu-w {
+  display: inline-block;
+  border-radius: var(--radius-xs);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: calc(1px + var(--u, 0) * 2px);
+  text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, var(--uu-orange) calc(35% + var(--u, 0) * 65%), transparent);
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--duration-base), text-decoration-color var(--duration-slower);
+}
+.uu-w:hover, .uu-w:focus-visible, .uu-w.is-open { background: color-mix(in srgb, var(--uu-orange) 16%, transparent); }
+.uu-w:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.uu.is-hidden .uu-w, .uu-w.is-sure { text-decoration-color: transparent; cursor: text; }
+.uu-w.is-fixed { animation: uu-fixed 1.2s var(--ease-out); }
+@keyframes uu-fixed { 0% { background: color-mix(in srgb, var(--uu-green) 30%, transparent); transform: scale(1.06); } 30% { transform: none; } 100% { background: transparent; } }
+.uu-w.is-swap { animation: uu-swap var(--spring-ui-duration) var(--spring-ui); }
+@keyframes uu-swap { from { opacity: 0; transform: translateY(-6px); filter: blur(3px); } }
+/* Popover */
+.uu-pop {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  top: 0;
+  width: 220px;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: var(--radius-xl);
+  background: var(--uu-bg);
+  box-shadow: 0 0 0 1px var(--uu-line), var(--shadow-xl);
+  animation: uu-pop var(--spring-ui-duration) var(--spring-ui) both;
+}
+@keyframes uu-pop { from { opacity: 0; transform: translateY(6px) scale(var(--press-scale)); } }
+.uu-conf { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--uu-muted); font-size: var(--text-caption); font-weight: 600; }
+.uu-meter { flex: 1; height: 4px; overflow: hidden; border-radius: var(--radius-xs); background: var(--uu-fill); }
+.uu-meter i { display: block; height: 100%; background: var(--uu-orange); transform-origin: left; transform: scaleX(var(--c, 0.5)); }
+.uu-alts { display: flex; flex-wrap: wrap; gap: 6px; }
+.uu-alts button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--uu-fill); color: var(--uu-fg); font: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.uu-alts button.is-keep { background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--uu-accent); font-weight: 600; }
+.uu-alts button:active { transform: scale(var(--press-scale)); }
+.uu-alts button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.uu-status { margin: 0 4px; color: var(--uu-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+@media (prefers-reduced-motion: reduce) {
+  .uu-w.is-fixed, .uu-w.is-swap, .uu-pop { animation: none; }
+}
+.uu [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="uu" data-mi="unsure-underline">
+  <div class="uu-head">
+    <p class="uu-title">Draft Reply</p>
+    <label class="uu-toggle"><span>Show Confidence</span>
+      <span class="uu-switch"><input type="checkbox" role="switch" class="uu-on" checked><span class="uu-track"></span><span class="uu-knob"></span></span>
+    </label>
+  </div>
+  <p class="uu-text">Thanks for flagging this. We’ll refund the <span class="uu-w" data-c="0.42" data-alts="monthly">annual</span> charge within <span class="uu-w" data-c="0.58" data-alts="3,7,10">5</span> business days, and your <span class="uu-w" data-c="0.71" data-alts="Team">Pro</span> plan stays active until <span class="uu-w" data-c="0.36" data-alts="March 1,April 14">March 14</span>. I’ve also <span class="uu-w" data-c="0.64" data-alts="added,waived">credited</span> two months to your account.</p>
+  <div class="uu-pop" role="dialog" aria-label="Word suggestions" hidden>
+    <div class="uu-conf"><span class="uu-conf-text"></span><span class="uu-meter"><i></i></span></div>
+    <div class="uu-alts"></div>
+  </div>
+  <p class="uu-status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Unsure Underline — vanilla JS. Auto-initializes every [data-mi="unsure-underline"].
+   Mark words as <span class="uu-w" data-c="0.42" data-alts="a,b">word</span> (c = model confidence 0–1).
+   Call window.initUnsureUnderline(el) for elements added later. */
+(function () {
+  'use strict';
+
+  function initUnsureUnderline(root) {
+    if (!root || root.__miUnsure) return;
+    root.__miUnsure = true;
+    var words = Array.prototype.slice.call(root.querySelectorAll('.uu-w'));
+    var pop = root.querySelector('.uu-pop');
+    var confText = root.querySelector('.uu-conf-text');
+    var meter = root.querySelector('.uu-meter');
+    var alts = root.querySelector('.uu-alts');
+    var toggle = root.querySelector('.uu-on');
+    var status = root.querySelector('.uu-status');
+    var openWord = null;
+
+    function unsureLeft() { return words.filter(function (w) { return !w.classList.contains('is-sure'); }).length; }
+    function say() {
+      var n = unsureLeft();
+      status.textContent = n ? n + (n === 1 ? ' word to check. ' : ' words to check. ') + 'Darker underlines are less certain.' : 'Every word checked. Ready to send.';
+    }
+
+    words.forEach(function (w) {
+      var c = Number(w.getAttribute('data-c'));
+      w.style.setProperty('--u', (1 - c).toFixed(2));
+      w.tabIndex = 0;
+      w.setAttribute('role', 'button');
+      w.setAttribute('aria-haspopup', 'dialog');
+      w.setAttribute('aria-label', w.textContent + ', ' + Math.round(c * 100) + '% sure. Show alternatives.');
+    });
+
+    function close() {
+      if (!openWord) return;
+      openWord.classList.remove('is-open');
+      pop.hidden = true;
+      var w = openWord; openWord = null;
+      return w;
+    }
+
+    function settle(w, text) {
+      var changed = text !== w.textContent;
+      w.textContent = text;
+      w.classList.add('is-sure');
+      w.setAttribute('data-c', '1');
+      w.removeAttribute('role'); w.removeAttribute('aria-haspopup'); w.removeAttribute('aria-label');
+      w.tabIndex = -1;
+      w.classList.remove('is-swap', 'is-fixed'); void w.offsetWidth;
+      if (changed) w.classList.add('is-swap');
+      setTimeout(function () { w.classList.add('is-fixed'); }, changed ? 300 : 0);
+      say();
+      var next = words.filter(function (x) { return !x.classList.contains('is-sure'); })[0];
+      if (next) next.focus({ preventScroll: true });
+    }
+
+    function open(w) {
+      if (root.classList.contains('is-hidden') || w.classList.contains('is-sure')) return;
+      close();
+      openWord = w;
+      w.classList.add('is-open');
+      var c = Number(w.getAttribute('data-c'));
+      confText.textContent = Math.round(c * 100) + '% sure';
+      meter.style.setProperty('--c', c);
+      alts.replaceChildren();
+      var keep = document.createElement('button');
+      keep.type = 'button'; keep.className = 'is-keep'; keep.textContent = 'Keep “' + w.textContent + '”';
+      keep.addEventListener('click', function () { close(); settle(w, w.textContent); });
+      alts.appendChild(keep);
+      w.getAttribute('data-alts').split(',').forEach(function (a) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = a.trim();
+        b.addEventListener('click', function () { close(); settle(w, a.trim()); });
+        alts.appendChild(b);
+      });
+      pop.hidden = false;
+      var o = root.getBoundingClientRect(), r = w.getBoundingClientRect();
+      var left = Math.max(12, Math.min(o.width - pop.offsetWidth - 12, r.left - o.left + r.width / 2 - pop.offsetWidth / 2));
+      var top = r.top - o.top - pop.offsetHeight - 8;
+      if (top < 8) top = r.bottom - o.top + 8;
+      pop.style.left = left + 'px';
+      pop.style.top = top + 'px';
+      keep.focus({ preventScroll: true });
+    }
+
+    root.addEventListener('click', function (e) {
+      var w = e.target.closest('.uu-w');
+      if (w) { openWord === w ? close() : open(w); }
+    });
+    root.addEventListener('keydown', function (e) {
+      var w = e.target.closest('.uu-w');
+      if (w && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(w); }
+      if (e.key === 'Escape' && openWord) { var back = close(); back.focus(); }
+    });
+    document.addEventListener('pointerdown', function (e) {
+      if (openWord && !pop.contains(e.target) && !openWord.contains(e.target)) close();
+    });
+    toggle.addEventListener('change', function () {
+      root.classList.toggle('is-hidden', !toggle.checked);
+      close();
+      words.forEach(function (w) { if (!w.classList.contains('is-sure')) w.tabIndex = toggle.checked ? 0 : -1; });
+      status.textContent = toggle.checked ? '' : 'Confidence hidden.';
+      if (toggle.checked) say();
+    });
+    say();
+  }
+
+  window.initUnsureUnderline = initUnsureUnderline;
+  function boot() { document.querySelectorAll('[data-mi="unsure-underline"]').forEach(initUnsureUnderline); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

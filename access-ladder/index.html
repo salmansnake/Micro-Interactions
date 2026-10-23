@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access Ladder · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Access Ladder — choosing who can open a link climbs a ladder and shows the crowd that gets in.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.al {
+  --al-bg: var(--card);
+  --al-fg: var(--foreground);
+  --al-muted: var(--muted-foreground);
+  --al-line: var(--border);
+  --al-sunken: var(--subtle);
+  --al-fill: var(--muted);
+  --al-accent: var(--primary);
+  --al-on-accent: var(--primary-foreground);
+  --al-orange: var(--warning);
+  --al-level: 1;
+  --al-tone: var(--al-accent);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--al-bg);
+  color: var(--al-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.al[data-level="3"] { --al-tone: var(--al-orange); }
+.al-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.al-reach { margin: 2px 0 0; color: var(--al-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.al-reach b { color: var(--al-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+.al-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; align-items: stretch; }
+/* Ladder: bottom rung is most private. The rail fills up to the chosen rung. */
+.al-ladder { position: relative; display: flex; flex-direction: column-reverse; gap: 4px; padding: 6px; border-radius: var(--radius-xl); background: var(--al-sunken); }
+/* The rail runs through the center of every node: ladder padding 6 + rung padding 10 + half the 22px node column, minus half its 3px width */
+.al-rail { position: absolute; left: calc(6px + 10px + 11px - 1.5px); top: 32px; bottom: 32px; width: 3px; border-radius: var(--radius-xs); background: var(--al-fill); }
+.al-rail i { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--al-level) / 3 * 100%); border-radius: var(--radius-xs); background: var(--al-tone); transition: height var(--spring-ui-duration) var(--spring-ui), background-color var(--duration-slow); }
+.al-rung {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+  padding: 8px 12px 8px 10px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: none;
+  color: var(--al-fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--duration-base);
+}
+.al-rung:hover { background: color-mix(in srgb, var(--al-fg) 5%, transparent); }
+.al-rung[aria-checked="true"] { background: var(--al-bg); box-shadow: 0 0 0 1px var(--al-line), var(--shadow-sm); }
+.al-rung:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.al-node { grid-row: span 2; justify-self: center; position: relative; z-index: 1; width: 12px; height: 12px; border-radius: 50%; background: var(--al-bg); box-shadow: inset 0 0 0 2px var(--al-fill); transition: box-shadow var(--duration-base), background-color var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.al-rung.is-reached .al-node { background: var(--al-tone); box-shadow: none; }
+.al-rung[aria-checked="true"] .al-node { transform: scale(1.35); box-shadow: 0 0 0 4px color-mix(in srgb, var(--al-tone) 22%, transparent); background: var(--al-tone); }
+.al-rung b { font-weight: 600; font-size: var(--text-ui); line-height: var(--leading-ui); }
+.al-rung small { grid-column: 2; color: var(--al-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+/* The crowd: one dot per person who can open it, up to a field of 48, then the whole world */
+/* A tight grid: 'You' takes a 2x2 cell so the other dots pack around it with no gap */
+.al-crowd { position: relative; display: grid; grid-template-columns: repeat(auto-fit, 14px); grid-auto-rows: 14px; grid-auto-flow: row dense; align-content: center; justify-content: center; gap: 4px; padding: 12px; border-radius: var(--radius-xl); background: var(--al-sunken); overflow: hidden; min-height: 176px; box-sizing: border-box; }
+.al-p { width: 14px; height: 14px; border-radius: 50%; background: var(--c, var(--al-accent)); animation: al-in var(--spring-pop-duration) var(--spring-pop) both; }
+.al-p.is-you { grid-column: span 2; grid-row: span 2; width: 32px; height: 32px; display: grid; place-items: center; color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+/* A crowd that fits in one row sits centered beside You instead of hugging its top edge */
+.al-crowd.is-few .al-p.is-you { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+.al-crowd.is-few .al-p:not(.is-you) { grid-row: 1 / span 2; align-self: center; }
+.al-p.is-out { animation: al-out var(--duration-base) var(--ease-in) forwards; }
+@keyframes al-in { from { transform: scale(0); } }
+@keyframes al-out { to { transform: scale(0); opacity: 0; } }
+.al-globe { grid-column: 1 / -1; grid-row: span 5; justify-self: center; align-self: center; width: 86px; height: 86px; color: var(--al-orange); animation: al-in var(--spring-pop-duration) var(--spring-pop) both; }
+.al-globe svg { width: 100%; height: 100%; }
+.al-warn { margin: 0; padding: 10px 12px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--al-orange) 14%, transparent); color: var(--warning-text); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; animation: al-warn var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes al-warn { from { opacity: 0; transform: translateY(-4px); } }
+.al-foot { display: flex; align-items: center; gap: 10px; }
+.al-link { flex: 1; min-width: 0; overflow: hidden; padding: 9px 12px; border-radius: var(--radius-md); background: var(--al-sunken); font: 500 var(--text-small)/var(--leading-small) var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+.al-copy { flex: none; height: 38px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--al-accent); color: var(--al-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-base); }
+.al-copy:active { transform: scale(var(--press-scale)); }
+.al-copy.is-done, .al-copy.is-done:active { background: var(--primary); color: var(--primary-foreground); transform: none; }
+[data-theme="dark"] .al-copy.is-done, [data-theme="dark"] .al-copy.is-done:active { background: var(--foreground); color: var(--background); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .al-copy.is-done { background: var(--foreground); color: var(--background); } }
+.al-copy:disabled { opacity: 0.35; cursor: default; }
+.al-copy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (max-width: 440px) { .al-body { grid-template-columns: minmax(0, 1fr); } .al-crowd { min-height: 96px; } }
+@media (prefers-reduced-motion: reduce) {
+  .al-p, .al-p.is-out, .al-globe, .al-warn { animation: none; }
+  .al-rail i { transition-duration: var(--duration-reduced); }
+}
+.al [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Access Ladder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="al" data-mi="access-ladder">
+  <div class="al-head">
+    <p class="al-title">Share “Q4 Pricing Plan”</p>
+    <p class="al-reach" aria-live="polite"></p>
+  </div>
+  <div class="al-body">
+    <div class="al-ladder" role="radiogroup" aria-label="Who can open the link">
+      <span class="al-rail" aria-hidden="true"><i></i></span>
+      <button type="button" role="radio" class="al-rung" data-level="0" aria-checked="false"><span class="al-node"></span><b>Only You</b><small>Private</small></button>
+      <button type="button" role="radio" class="al-rung" data-level="1" aria-checked="true"><span class="al-node"></span><b>People You Invite</b><small>3 people</small></button>
+      <button type="button" role="radio" class="al-rung" data-level="2" aria-checked="false"><span class="al-node"></span><b>Outcraft Team</b><small>48 people</small></button>
+      <button type="button" role="radio" class="al-rung" data-level="3" aria-checked="false"><span class="al-node"></span><b>Anyone with the Link</b><small>No sign-in needed</small></button>
+    </div>
+    <div class="al-crowd" aria-hidden="true"></div>
+  </div>
+  <p class="al-warn" hidden>Anyone who gets this link can open it, including people outside Outcraft.</p>
+  <div class="al-foot">
+    <code class="al-link">atlas.app/s/q4-pricing</code>
+    <button type="button" class="al-copy">Copy Link</button>
+  </div>
+</div>
+</div>
+<script>
+/* Access Ladder — vanilla JS. Auto-initializes every [data-mi="access-ladder"].
+   Rungs are [data-level] buttons from most private (0) up. Call window.initAccessLadder(el) for later elements. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var COUNTS = [1, 4, 49, Infinity];
+  var PALETTE = ['var(--chart-2)', 'var(--success-text)', 'var(--warning-text)', 'var(--chart-6)', 'var(--chart-1)', 'var(--chart-7)', 'var(--chart-5)'];
+  var GLOBE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3Z"/></svg>';
+
+  function initAccessLadder(root) {
+    if (!root || root.__miLadder) return;
+    root.__miLadder = true;
+    var rungs = Array.prototype.slice.call(root.querySelectorAll('.al-rung'));
+    var crowd = root.querySelector('.al-crowd');
+    var reach = root.querySelector('.al-reach');
+    var warn = root.querySelector('.al-warn');
+    var copy = root.querySelector('.al-copy');
+    var link = root.querySelector('.al-link');
+    var level = -1;
+    var gen = 0;
+
+    // Few people: one row beside You, centered vertically (You spans 2 columns and 2 rows)
+    function fit(n) {
+      var cols = Math.floor((crowd.clientWidth - 24 + 4) / 18);
+      crowd.classList.toggle('is-few', n > 1 && n - 1 <= cols - 2);
+    }
+    if (window.ResizeObserver) new ResizeObserver(function () { fit(crowd.querySelectorAll('.al-p:not(.is-out)').length); }).observe(crowd);
+
+    function people(n) {
+      var have = crowd.querySelectorAll('.al-p:not(.is-out)');
+      var g = crowd.querySelector('.al-globe');
+      if (g) g.remove();
+      if (n === Infinity) {
+        crowd.querySelectorAll('.al-p').forEach(function (p) { p.remove(); });
+        var gl = document.createElement('span'); gl.className = 'al-globe'; gl.innerHTML = GLOBE; crowd.appendChild(gl);
+        return;
+      }
+      if (!have.length) {
+        var you = document.createElement('span'); you.className = 'al-p is-you'; you.textContent = 'You'; you.style.setProperty('--c', 'var(--chart-1)');
+        crowd.appendChild(you);
+        have = [you];
+      }
+      var cur = have.length;
+      for (var i = cur; i < n; i++) {
+        var p = document.createElement('span'); p.className = 'al-p';
+        p.style.setProperty('--c', PALETTE[i % PALETTE.length]);
+        p.style.animationDelay = Math.min((i - cur) * 12, 400) + 'ms';
+        crowd.appendChild(p);
+      }
+      gen++;
+      if (n >= cur) { fit(n); return; }
+      // Leaving: the last dots shrink away first, mirroring how they arrived. Their cells are held until
+      // the last one is gone, then the ones that stay glide to their new spots instead of jumping.
+      var quick = reduce.matches;
+      var wait = quick ? 0 : 260 + Math.min((cur - 1 - n) * 6, 200) + 30;
+      for (var j = cur - 1; j >= n; j--) {
+        var el = have[j];
+        el.style.animationDelay = Math.min((cur - 1 - j) * 6, 200) + 'ms';
+        el.classList.add('is-out');
+      }
+      var mine = gen;
+      function settle() {
+        if (mine !== gen) return;
+        crowd.querySelectorAll('.al-p.is-out').forEach(function (o) { o.remove(); });
+        var keep = Array.prototype.slice.call(crowd.querySelectorAll('.al-p'));
+        var first = keep.map(function (k) { return k.getBoundingClientRect(); });
+        fit(n);
+        if (quick) return;
+        keep.forEach(function (k, i) {
+          var r = k.getBoundingClientRect();
+          var dx = first[i].left - r.left, dy = first[i].top - r.top;
+          if (dx || dy) k.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }], { duration: 360, easing: 'cubic-bezier(.2,.8,.2,1)' });
+        });
+      }
+      if (quick) settle(); else setTimeout(settle, wait);
+    }
+
+    function set(l, focus) {
+      if (l === level) return;
+      level = l;
+      root.setAttribute('data-level', l);
+      root.style.setProperty('--al-level', l);
+      rungs.forEach(function (r) {
+        var rl = Number(r.getAttribute('data-level'));
+        r.setAttribute('aria-checked', rl === l ? 'true' : 'false');
+        r.tabIndex = rl === l ? 0 : -1;
+        r.classList.toggle('is-reached', rl <= l);
+      });
+      people(COUNTS[l]);
+      var b = document.createElement('b');
+      b.textContent = COUNTS[l] === Infinity ? 'Anyone' : COUNTS[l] === 1 ? 'Only you' : COUNTS[l] + ' people';
+      reach.replaceChildren(b, document.createTextNode(COUNTS[l] === Infinity ? ' with the link can open it.' : COUNTS[l] === 1 ? ' can open it.' : ' can open it.'));
+      warn.hidden = l !== 3;
+      copy.disabled = l === 0;
+      link.style.opacity = l === 0 ? 0.4 : 1;
+      if (focus) rungs.filter(function (r) { return Number(r.getAttribute('data-level')) === l; })[0].focus();
+    }
+
+    rungs.forEach(function (r) {
+      r.addEventListener('click', function () { set(Number(r.getAttribute('data-level'))); });
+      r.addEventListener('keydown', function (e) {
+        var d = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
+        if (d == null) return;
+        e.preventDefault();
+        set(Math.max(0, Math.min(rungs.length - 1, level + d)), true);
+      });
+    });
+    copy.addEventListener('click', function () {
+      try { navigator.clipboard.writeText('https://' + link.textContent).catch(function () {}); } catch (e) {}
+      copy.textContent = 'Copied'; copy.classList.add('is-done');
+      setTimeout(function () { copy.textContent = 'Copy Link'; copy.classList.remove('is-done'); }, 1400);
+    });
+    set(Number((root.querySelector('[aria-checked="true"]') || rungs[0]).getAttribute('data-level')));
+  }
+
+  window.initAccessLadder = initAccessLadder;
+  function boot() { document.querySelectorAll('[data-mi="access-ladder"]').forEach(initAccessLadder); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initAccessLadder"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

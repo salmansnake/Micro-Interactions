@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autosave Appreciation</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .av so they never affect the rest of your page. */
+.av {
+  --blur-md: 16px;
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --frost-saturate: 160%;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale-sm: 0.94;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-3: var(--orange);
+  --foreground: var(--black);
+  --frost: rgba(255, 255, 255, 0.74);
+  --frost-border: rgba(0, 0, 0, 0.08);
+  --input: var(--line-strong);
+  --lift: #FFFFFF;
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --orange: #FE8C5F;
+  --primary: var(--black);
+  --raised: var(--lift);
+  --ring: var(--aqua-700);
+  --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .av, .dark .av {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-3: var(--orange);
+  --foreground: #F3F2EE;
+  --frost: rgba(21, 23, 22, 0.74);
+  --frost-border: rgba(243, 242, 238, 0.1);
+  --input: var(--line-strong);
+  --lift: #3F4341;
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --orange: #FE8C5F;
+  --primary: var(--aqua);
+  --raised: var(--lift);
+  --ring: var(--aqua);
+  --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .av {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --chart-3: var(--orange);
+    --foreground: #F3F2EE;
+    --frost: rgba(21, 23, 22, 0.74);
+    --frost-border: rgba(243, 242, 238, 0.1);
+    --input: var(--line-strong);
+    --lift: #3F4341;
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --orange: #FE8C5F;
+    --primary: var(--aqua);
+    --raised: var(--lift);
+    --ring: var(--aqua);
+    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --white: #161817;
+  }
+}
+
+/* Autosave Appreciation — press ⌘S in an app that already autosaves and it thanks you for the gesture.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.av {
+  --av-bg: var(--card);
+  --av-fg: var(--foreground);
+  --av-muted: var(--muted-foreground);
+  --av-line: var(--border);
+  --av-sunken: var(--subtle);
+  --av-fill: var(--muted);
+  --av-accent: var(--primary);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--av-bg);
+  color: var(--av-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.av p { margin: 0; }
+.av-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.av-doc { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.av-saved { display: inline-flex; align-items: center; gap: 4px; color: var(--av-muted); font-size: var(--text-small); }
+.av-saved svg { width: 20px; height: 20px; }
+.av-check { transition: opacity var(--duration-base); }
+.av.is-saving .av-check { opacity: 0; }
+.av-field { position: relative; }
+.av-input { display: block; width: 100%; min-height: 130px; box-sizing: border-box; padding: 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: inherit; font: inherit; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); resize: none; }
+.av-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* Toast: a glass capsule that drops in over the field */
+.av-toast { position: absolute; left: 50%; top: 10px; z-index: 2; display: flex; align-items: center; gap: 8px; width: max-content; max-width: calc(100% - 20px); box-sizing: border-box; padding: 8px 14px; border-radius: var(--radius-full); background: var(--frost); box-shadow: var(--shadow-lg), inset 0 0 0 1px var(--frost-border); -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate)); backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate)); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; opacity: 0; transform: translate(-50%, -14px) scale(0.9); pointer-events: none; transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.av-toast::before { content: ""; flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--chart-3) no-repeat center / 10px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 2.8C20 15.8 12 21 12 21Z' fill='white'/%3E%3C/svg%3E"); }
+.av.is-thanked .av-toast { opacity: 1; transform: translate(-50%, 0); }
+.av-toast.is-bump { animation: av-bump var(--spring-pop-duration) var(--spring-pop); }
+@keyframes av-bump { 40% { transform: translate(-50%, 0) scale(1.06); } }
+.av-count { flex: none; color: var(--av-muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.av-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.av-hint { color: var(--av-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.av-hint kbd, .av-keys kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: var(--radius-xs); background: var(--av-bg); box-shadow: 0 1px 0 var(--av-line), 0 0 0 1px var(--av-line); color: var(--av-fg); font: 600 var(--text-caption)/var(--leading-caption) var(--font-sans); text-align: center; }
+.av-keys { display: inline-flex; flex: none; gap: 4px; align-items: center; height: 44px; padding: 0 12px; border: 0; border-radius: var(--radius-md); background: var(--av-fill); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.av-keys kbd { min-width: 26px; padding: 4px 6px; background: var(--raised); font-size: var(--text-body); line-height: var(--leading-body); }
+.av-keys:active { transform: scale(var(--press-scale-sm)); }
+.av-keys:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.av-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .av-toast { transition-duration: var(--duration-reduced); }
+  .av-toast.is-bump { animation: none; }
+}
+.av [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="av" data-mi="autosave-thanks">
+  <div class="av-bar">
+    <p class="av-doc">Meeting Notes</p>
+    <span class="av-saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A6 6 0 0 0 6.6 9.1 4.75 4.75 0 0 0 7 18.5Z"/><path class="av-check" d="m9.5 13.5 2 2 3.5-4"/></svg><span class="av-saved-text">Saved</span></span>
+  </div>
+  <div class="av-field">
+    <textarea class="av-input" rows="5" aria-label="Notes">Launch moved to the 14th.
+Mira owns the press kit.
+Next sync on Thursday.</textarea>
+    <div class="av-toast" aria-hidden="true"><span class="av-toast-text"></span><span class="av-count"></span></div>
+  </div>
+  <div class="av-foot">
+    <p class="av-hint">Everything saves as you type. Press <kbd>⌘S</kbd> or <kbd>Ctrl S</kbd> anyway.</p>
+    <button type="button" class="av-keys" aria-label="Press Save"><kbd>⌘</kbd><kbd>S</kbd></button>
+  </div>
+  <p class="av-live" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Autosave Appreciation — vanilla JS. Auto-initializes every [data-mi="autosave-thanks"].
+   Catches ⌘S / Ctrl+S while focus is inside the component (or the keycap button) and thanks you instead of
+   opening the browser's Save dialog. Call window.initAutosaveThanks(el) for elements added later. */
+(function () {
+  'use strict';
+  // The message for the nth press; the highest threshold reached wins.
+  var LINES = [[1, 'Already saved. But I appreciate the gesture.'], [2, 'Still saved. Every keystroke, actually.'], [3, 'Saved. Again. It’s fine.'],
+    [5, 'We’ve got it. You can let go.'], [8, 'Muscle memory is a beautiful thing.'], [12, 'The file is now extremely safe.'], [20, 'At this point it’s a ritual. Respect.']];
+
+  function initAutosaveThanks(root) {
+    if (!root || root.__miSave) return;
+    root.__miSave = true;
+    var input = root.querySelector('.av-input'), savedText = root.querySelector('.av-saved-text');
+    var toast = root.querySelector('.av-toast'), text = root.querySelector('.av-toast-text'), countEl = root.querySelector('.av-count');
+    var keys = root.querySelector('.av-keys'), live = root.querySelector('.av-live');
+    var presses = 0, hide = 0, saving = 0;
+
+    function thank() {
+      presses++;
+      var line = LINES[0][1];
+      LINES.forEach(function (l) { if (presses >= l[0]) line = l[1]; });
+      text.textContent = line;
+      countEl.textContent = presses > 1 ? '×' + presses : '';
+      live.textContent = line;
+      root.classList.add('is-thanked');
+      toast.classList.remove('is-bump'); void toast.offsetWidth; toast.classList.add('is-bump');
+      clearTimeout(hide);
+      hide = setTimeout(function () { root.classList.remove('is-thanked'); }, 2600);
+    }
+
+    root.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && e.key.toLowerCase() === 's') { e.preventDefault(); thank(); }
+    });
+    keys.addEventListener('click', thank);
+    input.addEventListener('input', function () {
+      root.classList.add('is-saving');
+      savedText.textContent = 'Saving…';
+      clearTimeout(saving);
+      saving = setTimeout(function () { root.classList.remove('is-saving'); savedText.textContent = 'Saved'; }, 600);
+    });
+  }
+
+  window.initAutosaveThanks = initAutosaveThanks;
+  function boot() { document.querySelectorAll('[data-mi="autosave-thanks"]').forEach(initAutosaveThanks); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

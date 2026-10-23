@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exclamation Budget · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Exclamation Budget — three exclamation marks per message. Past that, they quietly turn into periods.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.eb {
+  --eb-bg: var(--card);
+  --eb-fg: var(--foreground);
+  --eb-muted: var(--muted-foreground);
+  --eb-line: var(--border);
+  --eb-sunken: var(--subtle);
+  --eb-fill: var(--muted);
+  --eb-accent: var(--primary);
+  --eb-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--eb-bg);
+  color: var(--eb-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.eb p { margin: 0; }
+.eb-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.eb-title { font-weight: 600; }
+/* The wallet: one token per exclamation mark */
+.eb-wallet { display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--radius-full); background: var(--eb-sunken); }
+.eb-wallet i { position: relative; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ai); box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--black) 15%, transparent); transition: transform var(--spring-pop-duration) var(--spring-pop), background-color var(--duration-slow), box-shadow var(--duration-slow); }
+.eb-wallet i::after { content: "!"; color: var(--ai-foreground); font: 800 var(--text-body)/1 var(--font-sans); font-style: normal; }
+.eb-wallet i.is-spent { background: transparent; box-shadow: inset 0 0 0 1.5px var(--eb-line); transform: scale(0.82); }
+.eb-wallet i.is-spent::after { color: var(--eb-muted); opacity: 0.4; }
+.eb-wallet i.is-pop { animation: eb-pop var(--duration-slower) var(--ease-out); }
+@keyframes eb-pop { 0% { transform: scale(1); } 40% { transform: scale(1.4) translateY(-6px); } 100% { transform: scale(0.82); } }
+
+.eb-input { display: block; width: 100%; min-height: 84px; box-sizing: border-box; padding: 12px 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: inherit; font: inherit; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); resize: none; }
+.eb-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+.eb-input.is-shrug { animation: eb-shrug var(--spring-ui-duration) var(--spring-ui); }
+@keyframes eb-shrug { 30% { transform: translateY(-4px) scaleY(1.02); } 60% { transform: translateY(1px); } }
+.eb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.eb-chips button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--eb-fill); color: var(--eb-fg); font: inherit; font-size: var(--text-small); font-weight: 500; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.eb-chips button:active { transform: scale(var(--press-scale-sm)); }
+.eb-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.eb-status { color: var(--eb-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+.eb.is-broke .eb-status { color: var(--eb-fg); font-weight: 500; }
+.eb-shop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--ai) 12%, transparent); animation: eb-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes eb-in { from { opacity: 0; transform: translateY(-6px); } }
+.eb-shop-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.eb-buy { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ai); color: var(--ai-foreground); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
+.eb-send { height: 44px; border: 0; border-radius: var(--radius-md); background: var(--eb-accent); color: var(--eb-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.eb-send:active, .eb-buy:active { transform: scale(var(--press-scale)); }
+.eb-send:focus-visible, .eb-buy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .eb-wallet i.is-pop, .eb-input.is-shrug, .eb-shop { animation: none; }
+}
+.eb [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Exclamation Budget"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="eb" data-mi="exclamation-budget" data-budget="3" data-to="Mira">
+  <div class="eb-head">
+    <p class="eb-title">Message Mira</p>
+    <span class="eb-wallet" role="img" aria-label="3 exclamation marks left"><i></i><i></i><i></i></span>
+  </div>
+  <textarea class="eb-input" rows="3" aria-label="Message">Congrats on the launch</textarea>
+  <div class="eb-chips">
+    <button type="button" data-ins="!">Add “!”</button>
+    <button type="button" data-ins="!!!">Add “!!!”</button>
+    <button type="button" data-ins=" So proud of the team!">Add Enthusiasm</button>
+  </div>
+  <p class="eb-status" role="status" aria-live="polite">3 exclamation marks left today.</p>
+  <div class="eb-shop" hidden>
+    <p class="eb-shop-text">Need more enthusiasm?</p>
+    <button type="button" class="eb-buy">3 More for $0.99</button>
+  </div>
+  <button type="button" class="eb-send">Send</button>
+</div>
+</div>
+<script>
+/* Exclamation Budget — vanilla JS. Auto-initializes every [data-mi="exclamation-budget"].
+   The first data-budget "!" in the message are kept; any after that become "." in place (deleting one refunds it).
+   Call window.initExclamationBudget(el) for elements added later. */
+(function () {
+  'use strict';
+
+  function initExclamationBudget(root) {
+    if (!root || root.__miBang) return;
+    root.__miBang = true;
+    var budget = Number(root.getAttribute('data-budget')) || 3;
+    var to = root.getAttribute('data-to') || 'They';
+    var input = root.querySelector('.eb-input'), wallet = root.querySelector('.eb-wallet');
+    var coins = Array.prototype.slice.call(wallet.querySelectorAll('i'));
+    var status = root.querySelector('.eb-status'), shop = root.querySelector('.eb-shop');
+    var buy = root.querySelector('.eb-buy'), send = root.querySelector('.eb-send');
+    var used = 0, converted = 0;
+
+    function enforce() {
+      var seen = 0, changed = false;
+      var caret = input.selectionStart;
+      var out = input.value.replace(/!/g, function () { seen++; if (seen > budget) { changed = true; return '.'; } return '!'; });
+      if (changed) {
+        input.value = out;
+        input.setSelectionRange(caret, caret);
+        converted++;
+        input.classList.remove('is-shrug'); void input.offsetWidth; input.classList.add('is-shrug');
+      }
+      return changed;
+    }
+
+    function render(justConverted) {
+      var n = Math.min(budget, (input.value.match(/!/g) || []).length);
+      coins.forEach(function (c, i) {
+        var spent = i >= budget - n;
+        if (spent && !c.classList.contains('is-spent')) { c.classList.add('is-pop'); setTimeout(function () { c.classList.remove('is-pop'); }, 520); }
+        c.classList.toggle('is-spent', spent);
+      });
+      var left = budget - n;
+      wallet.setAttribute('aria-label', left + ' exclamation marks left');
+      root.classList.toggle('is-broke', justConverted);
+      status.textContent = justConverted ? 'Budget spent. That one’s a period now.' : left === 0 ? 'No exclamation marks left. Choose your words carefully.' : left + (left === 1 ? ' exclamation mark' : ' exclamation marks') + ' left today.';
+      if (justConverted) shop.hidden = false;
+      used = n;
+    }
+
+    input.addEventListener('input', function () { render(enforce()); });
+    root.querySelectorAll('.eb-chips button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var ins = b.getAttribute('data-ins');
+        var s = input.selectionStart != null && document.activeElement === input ? input.selectionStart : input.value.length;
+        input.value = input.value.slice(0, s) + ins + input.value.slice(s);
+        input.focus();
+        input.setSelectionRange(s + ins.length, s + ins.length);
+        render(enforce());
+      });
+    });
+    buy.addEventListener('click', function () {
+      shop.hidden = true;
+      status.textContent = 'Just kidding. Try sounding excited with words. “This is genuinely great news” works.';
+    });
+    send.addEventListener('click', function () {
+      status.textContent = used === 0 ? 'Sent. Calm, measured, slightly suspicious.'
+        : used >= budget ? 'Sent with all ' + budget + ' exclamation marks. ' + to + ' can tell you mean it.'
+        : 'Sent with ' + used + (used === 1 ? ' exclamation mark' : ' exclamation marks') + '. Tasteful.';
+    });
+    render(false);
+  }
+
+  window.initExclamationBudget = initExclamationBudget;
+  function boot() { document.querySelectorAll('[data-mi="exclamation-budget"]').forEach(initExclamationBudget); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initExclamationBudget"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

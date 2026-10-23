@@ -1,0 +1,83 @@
+/* Typo Morph — a search with no results morphs your typo, letter by letter, into the closest match.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.tm {
+  --tm-bg: var(--card);
+  --tm-fg: var(--foreground);
+  --tm-muted: var(--muted-foreground);
+  --tm-line: var(--border);
+  --tm-sunken: var(--subtle);
+  --tm-fill: var(--muted);
+  --tm-accent: var(--primary);
+  --tm-red: var(--danger-text);
+  --tm-green: var(--success-text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--tm-bg);
+  color: var(--tm-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.tm-field { position: relative; display: flex; align-items: center; border-radius: var(--radius-md); background: var(--card); border: 1px solid var(--input); transition: box-shadow var(--duration-base); }
+.tm-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.tm-icon { position: absolute; left: 12px; width: 16px; height: 16px; color: var(--tm-muted); pointer-events: none; }
+.tm-input { width: 100%; height: 40px; box-sizing: border-box; padding: 0 12px 0 36px; border: 0; background: transparent; color: var(--tm-fg); font: 400 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans); letter-spacing: var(--tracking-title); outline: none; -webkit-appearance: none; appearance: none; }
+.tm-input::placeholder { color: var(--tm-muted); opacity: 0.8; }
+.tm-input::-webkit-search-cancel-button { display: none; }
+
+/* The morph line */
+.tm-fix { min-height: 0; color: var(--tm-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.tm-fix:empty { display: none; }
+.tm-none { margin: 0 0 6px; }
+.tm-word {
+  display: inline-flex;
+  align-items: baseline;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  color: var(--tm-fg);
+  font: 600 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans);
+  letter-spacing: var(--tracking-title);
+  cursor: pointer;
+}
+.tm-word:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tm-ch { position: relative; display: inline-block; white-space: pre; }
+.tm-ch.is-del { color: var(--tm-red); text-decoration: line-through; animation: tm-del var(--duration-slower) var(--d, 0ms) cubic-bezier(0.5, 0, 0.9, 0.5) forwards; }
+@keyframes tm-del { 60% { opacity: 1; transform: none; max-width: 1em; } 100% { opacity: 0; transform: translateY(10px) rotate(12deg); max-width: 0; } }
+.tm-ch.is-ins { color: var(--tm-green); animation: tm-ins var(--spring-ui-duration) var(--d, 0ms) var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes tm-ins { from { opacity: 0; transform: translateY(-10px); max-width: 0; } }
+.tm-ch.is-sub { color: var(--tm-green); animation: tm-flip var(--duration-slower) var(--d, 0ms) var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes tm-flip { 0% { transform: rotateX(90deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.tm-ch.is-del, .tm-ch.is-ins { max-width: 1em; overflow: hidden; vertical-align: bottom; }
+.tm-hint { margin: 6px 0 0; }
+.tm-hint kbd { padding: 1px 6px; border-radius: var(--radius-xs); background: var(--tm-fill); color: var(--tm-fg); font: 600 calc(var(--text-caption) - 1px) / 16px var(--font-sans); }
+
+/* Results */
+.tm-results { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); overflow: hidden; background: var(--tm-sunken); }
+.tm-results:empty { display: none; }
+.tm-results li { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 6px 14px; box-sizing: border-box; animation: tm-row var(--spring-ui-duration) var(--spring-ui) both; }
+.tm-results li + li::before { content: ""; position: absolute; top: 0; left: 50px; right: 0; height: 1px; background: var(--tm-line); transform: scaleY(0.5); transform-origin: top; }
+@keyframes tm-row { from { opacity: 0; transform: translateY(4px); } }
+.tm-results i { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-caption); font-style: normal; font-weight: 700; }
+.tm-results b { font-weight: 500; }
+.tm-results small { margin-left: auto; color: var(--tm-muted); font-size: var(--text-caption); white-space: nowrap; }
+.tm-results mark { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--brand) 20%, transparent); color: inherit; }
+.tm-try { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--tm-line); color: var(--tm-muted); font-size: var(--text-small); }
+.tm-try button { height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--tm-fill); color: var(--tm-fg); font: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.tm-try button:active { transform: scale(var(--press-scale)); }
+.tm-try button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .tm-ch.is-del, .tm-ch.is-ins, .tm-ch.is-sub, .tm-results li { animation: none; }
+  .tm-ch.is-del { display: none; }
+}
+.tm [hidden] { display: none !important; }

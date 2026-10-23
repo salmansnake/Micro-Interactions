@@ -1,0 +1,89 @@
+/* Step Fold — finished steps of a form fold up into summary chips; tap a chip to unfold and edit it.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.fo {
+  --fo-bg: var(--card);
+  --fo-fg: var(--foreground);
+  --fo-muted: var(--muted-foreground);
+  --fo-line: var(--border);
+  --fo-sunken: var(--subtle);
+  --fo-fill: var(--muted);
+  --fo-accent: var(--primary);
+  --fo-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--fo-bg);
+  color: var(--fo-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  perspective: 900px;
+}
+.fo-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 0; }
+.fo-chips:empty { display: none; }
+.fo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px 0 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--brand) 12%, transparent);
+  color: var(--fo-fg);
+  font: inherit;
+  font-size: var(--text-small);
+  cursor: pointer;
+  transform-origin: 50% 0;
+  animation: fo-chip var(--spring-pop-duration) var(--spring-pop) both;
+}
+.fo-chip i { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--fo-accent); color: var(--fo-on-accent); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
+.fo-chip small { color: var(--fo-muted); font-size: var(--text-caption); }
+.fo-chip b { font-weight: 600; }
+.fo-chip:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@keyframes fo-chip { from { opacity: 0; transform: translateY(14px) scale(0.7) rotateX(60deg); } }
+.fo-step { border-radius: var(--radius-xl); background: var(--fo-sunken); transform-origin: 50% 0; }
+.fo-step[hidden] { display: none; }
+.fo-step.is-folding { animation: fo-fold var(--duration-slower) cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+@keyframes fo-fold { to { opacity: 0; transform: rotateX(-80deg) scaleY(0.4); } }
+.fo-step.is-unfolding { animation: fo-unfold var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes fo-unfold { from { opacity: 0; transform: rotateX(-70deg) scaleY(0.5); } }
+.fo-step.is-waiting .fo-body { display: none; }
+.fo-step.is-waiting { background: none; box-shadow: inset 0 0 0 1px var(--fo-fill); }
+.fo-step.is-waiting .fo-step-title { color: var(--fo-muted); }
+.fo-step-title { display: flex; align-items: center; gap: 10px; margin: 0; padding: 14px 16px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.fo-step-title span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--fo-fill); font-size: var(--text-small); }
+.fo-step:not(.is-waiting) .fo-step-title span { background: var(--fo-accent); color: var(--fo-on-accent); }
+.fo-body { display: flex; flex-direction: column; gap: 12px; padding: 0 16px 16px; }
+.fo-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.fo-plan { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--fo-bg); box-shadow: 0 0 0 1px var(--fo-fill); cursor: pointer; transition: box-shadow var(--duration-base); }
+.fo-plan input { position: absolute; opacity: 0; }
+.fo-plan b { font-weight: 600; }
+.fo-plan small { color: var(--fo-muted); font-size: var(--text-caption); }
+.fo-plan:has(input:checked) { box-shadow: 0 0 0 2px var(--fo-accent); }
+.fo-plan:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fo-stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.fo-stepper button { width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fo-fill); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
+.fo-stepper button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fo-seats { min-width: 2ch; font-size: var(--text-h2); line-height: var(--leading-h2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.fo-email { height: 44px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--fo-bg); color: var(--fo-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
+.fo-email:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.fo-email[aria-invalid="true"] { box-shadow: 0 0 0 2px var(--danger); }
+.fo-next, .fo-start { height: 44px; border: 0; border-radius: var(--radius-md); background: var(--fo-accent); color: var(--fo-on-accent); font: inherit; font-size: var(--text-title-sm); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.fo-next:active, .fo-start:active { transform: scale(0.97); }
+.fo-next:focus-visible, .fo-start:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fo-done { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: var(--radius-xl); background: var(--fo-sunken); animation: fo-unfold var(--spring-ui-duration) var(--spring-ui) both; }
+.fo-total { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); }
+.fo-total b { font-size: var(--text-h3); line-height: var(--leading-h3); font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  .fo-chip, .fo-step.is-folding, .fo-step.is-unfolding, .fo-done { animation: none; }
+}
+.fo [hidden] { display: none !important; }

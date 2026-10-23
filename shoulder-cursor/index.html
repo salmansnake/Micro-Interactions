@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Over-the-Shoulder Cursor · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Over-the-Shoulder Cursor — a teammate's cursor that lingers on your paragraph puts on reading glasses.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.oc {
+  --oc-bg: var(--card);
+  --oc-fg: var(--foreground);
+  --oc-muted: var(--muted-foreground);
+  --oc-line: var(--border);
+  --oc-sunken: var(--subtle);
+  --oc-accent: var(--primary);
+  --oc-c: var(--chart-1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--oc-bg);
+  color: var(--oc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.oc p { margin: 0; }
+.oc-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.oc-doc-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.oc-people { display: flex; }
+.oc-people span { display: grid; place-items: center; width: 26px; height: 26px; margin-left: -6px; border-radius: 50%; background: var(--c); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; box-shadow: 0 0 0 2px var(--oc-bg); }
+.oc-doc { position: relative; display: flex; flex-direction: column; gap: 14px; min-height: 190px; padding: 18px 18px 22px; overflow: hidden; border-radius: var(--radius-lg); background: var(--oc-sunken); }
+.oc-p { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
+.oc-edit { margin: -4px -6px !important; padding: 4px 6px; border-radius: var(--radius-md); outline: none; caret-color: var(--oc-accent); }
+.oc-edit:focus-visible, .oc-edit:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-strong) 40%, transparent); }
+.oc-other { color: var(--oc-muted); }
+
+/* The teammate's cursor */
+.oc-cursor { position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; transform: translate(var(--x, 300px), var(--y, 150px)) scale(var(--s, 1)); transform-origin: 3px 2px; }
+.oc-arrow { display: block; width: 20px; height: 20px; filter: drop-shadow(0 1px 2px color-mix(in srgb, var(--black) 25%, transparent)); }
+.oc-tag { position: absolute; left: 14px; top: 16px; display: inline-flex; align-items: center; justify-content: center; min-width: 48px; box-sizing: border-box; height: 22px; padding: 0 8px; border-radius: var(--radius-sm) var(--radius-md) var(--radius-md) var(--radius-md); background: var(--oc-c); color: var(--on-chart); font-size: var(--text-caption); font-weight: 600; white-space: nowrap; }
+.oc-glasses { flex: none; width: 0; height: 10px; margin-right: 0; opacity: 0; transform: translateY(-10px) rotate(-12deg); transition: width var(--spring-ui-duration) var(--spring-ui), margin var(--spring-ui-duration) var(--spring-ui), transform var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base); }
+.oc.is-reading .oc-glasses { width: 28px; margin-right: 5px; opacity: 1; transform: none; }
+.oc.is-squinting .oc-glasses { transform: translateY(1px) scale(1.12); }
+.oc.is-startled .oc-glasses { width: 0; margin-right: 0; opacity: 0; transform: translate(10px, 26px) rotate(140deg); transition-duration: var(--duration-slower); }
+.oc-status { min-height: 18px; color: var(--oc-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-glasses { transition-duration: var(--duration-reduced); }
+}
+.oc [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Over-the-Shoulder Cursor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="oc" data-mi="shoulder-cursor" data-name="Sam">
+  <div class="oc-bar">
+    <p class="oc-doc-title">Launch Plan</p>
+    <span class="oc-people" aria-hidden="true"><span style="--c: var(--chart-1)">S</span><span style="--c: var(--chart-2)">Y</span></span>
+  </div>
+  <div class="oc-doc">
+    <p class="oc-p oc-edit" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Your paragraph">We ship on the 14th. Marketing goes live the same morning, and support gets the FAQ two days before. If anything slips, we move everything together.</p>
+    <p class="oc-p oc-other">Budget stays flat. Sam owns the vendor list and the press kit.</p>
+    <div class="oc-cursor" aria-hidden="true">
+      <svg class="oc-arrow" viewBox="0 0 20 20"><path d="M3 2l13 7.5-5.6 1.4L8 16.5Z" stroke-width="1.4" stroke-linejoin="round" style="fill: var(--oc-c); stroke: var(--on-color)"/></svg>
+      <span class="oc-tag"><svg class="oc-glasses" viewBox="0 0 40 14"><circle cx="9" cy="7" r="5.5" stroke-width="2" style="fill: color-mix(in srgb, var(--on-color) 35%, transparent); stroke: var(--on-color)"/><circle cx="31" cy="7" r="5.5" stroke-width="2" style="fill: color-mix(in srgb, var(--on-color) 35%, transparent); stroke: var(--on-color)"/><path d="M14.5 6.5q5.5-3 11 0" stroke-width="2" fill="none" style="stroke: var(--on-color)"/></svg>Sam</span>
+    </div>
+  </div>
+  <p class="oc-status" role="status" aria-live="polite">Sam is in this document.</p>
+</div>
+</div>
+<script>
+/* Over-the-Shoulder Cursor — vanilla JS. Auto-initializes every [data-mi="shoulder-cursor"].
+   The demo drives a teammate's cursor with a small script: it wanders, then settles on your paragraph. After 2.5s
+   it puts on glasses; after 5s it leans in. Typing startles it away. In a real app, feed it live cursor positions.
+   Call window.initShoulderCursor(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function initShoulderCursor(root) {
+    if (!root || root.__miShoulder) return;
+    root.__miShoulder = true;
+    var name = root.getAttribute('data-name') || 'They';
+    var doc = root.querySelector('.oc-doc'), edit = root.querySelector('.oc-edit'), other = root.querySelector('.oc-other');
+    var cur = root.querySelector('.oc-cursor'), status = root.querySelector('.oc-status');
+    var pos = { x: 0, y: 0 }, target = { x: 0, y: 0 }, speed = 0.06, scale = 1, targetScale = 1;
+    var phase = 'idle', since = 0, shown = 0, raf = 0, timers = [], running = false;
+
+    function set(x, y, sp) { target.x = x; target.y = y; speed = sp || 0.06; }
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function clearAll() { timers.forEach(clearTimeout); timers = []; }
+    function box(el) { var d = doc.getBoundingClientRect(), r = el.getBoundingClientRect(); return { x: r.left - d.left, y: r.top - d.top, w: r.width, h: r.height }; }
+
+    function frame(now) {
+      pos.x += (target.x - pos.x) * speed;
+      pos.y += (target.y - pos.y) * speed;
+      scale += (targetScale - scale) * 0.08;
+      cur.style.setProperty('--x', pos.x.toFixed(1) + 'px');
+      cur.style.setProperty('--y', pos.y.toFixed(1) + 'px');
+      cur.style.setProperty('--s', scale.toFixed(3));
+      if (phase === 'reading') {
+        var secs = (now - since) / 1000;
+        if (secs > 2.5 && !root.classList.contains('is-reading')) { root.classList.add('is-reading'); status.textContent = name + ' is reading over your shoulder.'; }
+        if (secs > 5) {
+          root.classList.add('is-squinting');
+          targetScale = 1.18;
+          var whole = Math.floor(secs);
+          if (whole !== shown && whole % 2 === 0) { shown = whole; status.textContent = name + ' has been reading this sentence for ' + whole + ' seconds.'; }
+          // Creep along the line, word by word.
+          var b = box(edit);
+          target.x = Math.min(b.x + b.w - 40, target.x + 0.12);
+        }
+      }
+      raf = requestAnimationFrame(frame);
+    }
+
+    function wander() {
+      clearAll();
+      phase = 'wander';
+      root.classList.remove('is-reading', 'is-squinting', 'is-startled');
+      targetScale = 1;
+      var d = doc.getBoundingClientRect(), o = box(other), e = box(edit);
+      set(o.x + o.w * 0.6, o.y + 6, 0.05);
+      status.textContent = name + ' is in this document.';
+      later(function () { set(d.width * 0.75, 18, 0.05); }, 1200);
+      later(function () {
+        set(e.x + e.w * 0.32, e.y + 14, 0.045);
+        later(function () { phase = 'reading'; since = performance.now(); }, 900);
+      }, 2400);
+    }
+
+    function startle() {
+      if (phase !== 'reading' && phase !== 'wander') return;
+      clearAll();
+      phase = 'startled';
+      root.classList.add('is-startled');
+      root.classList.remove('is-squinting');
+      targetScale = 1;
+      var d = doc.getBoundingClientRect();
+      set(d.width - 60, d.height - 40, reduce.matches ? 1 : 0.22);
+      status.textContent = name + ' suddenly remembered something else.';
+      later(wander, 4200);
+    }
+
+    edit.addEventListener('input', startle);
+    edit.addEventListener('keydown', function (e) { if (e.key.length === 1) startle(); });
+
+    function start() {
+      if (running) return;
+      running = true;
+      var d = doc.getBoundingClientRect();
+      pos.x = target.x = d.width - 50; pos.y = target.y = d.height - 30;
+      raf = requestAnimationFrame(frame);
+      wander();
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (en) {
+        if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
+      }, { threshold: 0.4 });
+      io.observe(root);
+    } else start();
+  }
+
+  window.initShoulderCursor = initShoulderCursor;
+  function boot() { document.querySelectorAll('[data-mi="shoulder-cursor"]').forEach(initShoulderCursor); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initShoulderCursor"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

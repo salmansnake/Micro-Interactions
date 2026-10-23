@@ -1,0 +1,68 @@
+/* Camera-Off Curtain — turning the camera off draws theater curtains. Turning it on opens the show.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.cc {
+  --cc-bg: var(--card);
+  --cc-fg: var(--foreground);
+  --cc-muted: var(--muted-foreground);
+  --cc-fill: var(--muted);
+  --cc-accent: var(--primary);
+  --cc-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--cc-bg);
+  color: var(--cc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.cc p { margin: 0; }
+.cc-tile { position: relative; height: 230px; overflow: hidden; border-radius: var(--radius-xl); background: color-mix(in srgb, var(--on-color) 12%, var(--black)); }
+/* A soft "camera" scene: wall, lamp glow, a person who breathes */
+.cc-scene { position: absolute; inset: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--olive) 32%, var(--on-color)), color-mix(in srgb, var(--olive) 44%, var(--on-color))); }
+.cc-lamp { position: absolute; right: 12%; top: 10%; width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, color-mix(in srgb, var(--olive) 14%, var(--on-color)) 90%, transparent), color-mix(in srgb, color-mix(in srgb, var(--olive) 14%, var(--on-color)) 0%, transparent) 70%); }
+/* One-tone silhouette: a round head resting on the shoulders, no neck */
+.cc-person { --cc-skin: color-mix(in srgb, var(--olive) 36%, var(--black)); position: absolute; left: 50%; bottom: -20px; width: 150px; height: 170px; margin-left: -75px; animation: cc-breathe 4s var(--ease-in-out) infinite; }
+.cc-person::before { content: ""; position: absolute; left: 50%; top: -4px; width: 76px; height: 76px; margin-left: -38px; border-radius: 50%; background: var(--cc-skin); }
+.cc-person::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 98px; border-radius: 64px 64px 0 0 / 46px 46px 0 0; background: var(--cc-skin); }
+@keyframes cc-breathe { 50% { transform: translateY(-2px) scale(1.01); } }
+.cc-spot { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, color-mix(in srgb, var(--olive) 14%, var(--on-color)) 55%, transparent), transparent 32%); opacity: 0; mix-blend-mode: screen; }
+.cc.is-opening .cc-spot { animation: cc-spot 1.8s var(--ease-in-out) forwards; }
+@keyframes cc-spot { 0% { opacity: 0; transform: translateX(-45%); } 30% { opacity: 1; } 70% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+
+/* Velvet curtains */
+.cc-curtains { position: absolute; inset: 0; pointer-events: none; }
+.cc-left, .cc-right { position: absolute; top: 0; bottom: 0; width: 52%; background: linear-gradient(180deg, color-mix(in srgb, var(--black) 15%, transparent), transparent 30%, color-mix(in srgb, var(--black) 35%, transparent)), repeating-linear-gradient(90deg, color-mix(in srgb, var(--red-9) 66%, var(--black)) 0 6px, var(--red-9) 10px, color-mix(in srgb, var(--red-9) 82%, var(--black)) 16px, color-mix(in srgb, var(--red-9) 56%, var(--black)) 22px); box-shadow: 0 0 18px color-mix(in srgb, var(--black) 45%, transparent); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.cc-left { left: 0; transform: translateX(-104%); border-radius: 0 0 40% 0 / 0 0 12% 0; }
+.cc-right { right: 0; transform: translateX(104%); border-radius: 0 0 0 40% / 0 0 0 12%; }
+.cc.is-off .cc-left, .cc.is-off .cc-right { transform: none; }
+.cc-valance { position: absolute; left: 0; right: 0; top: 0; height: 26px; background: radial-gradient(circle at 50% 0, color-mix(in srgb, var(--red-9) 82%, var(--black)) 70%, transparent 71%) 0 0 / 34px 34px repeat-x, linear-gradient(color-mix(in srgb, var(--red-9) 66%, var(--black)), color-mix(in srgb, var(--red-9) 82%, var(--black))); background-size: 34px 34px, 100% 16px; background-repeat: repeat-x, no-repeat; border-bottom: 0; filter: drop-shadow(0 3px 3px color-mix(in srgb, var(--black) 35%, transparent)); }
+.cc-valance::after { content: ""; position: absolute; left: 0; right: 0; top: 14px; height: 2px; background: var(--amber-9); }
+.cc-sign { position: absolute; left: 50%; top: 50%; padding: 6px 12px; border-radius: var(--radius-sm); background: var(--black); color: var(--amber-9); font-size: var(--text-caption); font-weight: 700; letter-spacing: normal; box-shadow: var(--shadow-sm); opacity: 0; transform: translate(-50%, calc(-50% - 14px)) rotate(-3deg); transition: opacity var(--duration-slow), transform var(--spring-pop-duration) var(--spring-pop); }
+.cc.is-off.is-settled .cc-sign { opacity: 1; transform: translate(-50%, -50%) rotate(-3deg); }
+.cc-announce { position: absolute; left: 0; right: 0; top: 34px; color: var(--on-color); font-size: var(--text-body); font-weight: 600; text-align: center; text-shadow: 0 1px 6px color-mix(in srgb, var(--black) 60%, transparent); opacity: 0; }
+.cc.is-opening .cc-announce { animation: cc-announce 2s var(--ease-out) forwards; }
+@keyframes cc-announce { 0% { opacity: 0; transform: translateY(6px); } 20%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+.cc-label { position: absolute; left: 10px; bottom: 10px; display: inline-flex; align-items: center; box-sizing: border-box; height: 26px; padding: 0 10px; white-space: nowrap; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 62%, transparent); color: var(--on-color); font-size: var(--text-small); font-weight: 600; line-height: var(--leading-small); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+
+.cc-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cc-status { color: var(--cc-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.cc-cam { display: inline-flex; flex: none; align-items: center; gap: 6px; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--cc-fill); color: var(--cc-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.cc-cam svg { width: 20px; height: 20px; }
+.cc-cam[aria-pressed="true"] .cc-slash { display: none; }
+.cc-cam:active { transform: scale(var(--press-scale)); }
+.cc-cam:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-person, .cc.is-opening .cc-spot, .cc.is-opening .cc-announce { animation: none; }
+  .cc-left, .cc-right, .cc-sign { transition-duration: var(--duration-reduced); transition-timing-function: linear; }
+}
+.cc [hidden] { display: none !important; }

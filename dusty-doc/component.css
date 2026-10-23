@@ -1,0 +1,55 @@
+/* Dusty Doc — a document untouched for years opens covered in dust. Scrolling or swiping blows it off.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.dd {
+  --dd-bg: var(--card);
+  --dd-fg: var(--foreground);
+  --dd-muted: var(--muted-foreground);
+  --dd-sunken: var(--subtle);
+  --dd-fill: var(--muted);
+  --dd-accent: var(--primary);
+  --dd-age: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--dd-bg);
+  color: var(--dd-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.dd p { margin: 0; }
+.dd-meta { display: flex; align-items: center; gap: 12px; }
+.dd-icon { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--brand-strong) 14%, transparent); color: var(--brand-strong); filter: grayscale(calc(var(--dd-age) * 0.8)); transition: filter var(--duration-slower); }
+.dd-icon svg { width: 22px; height: 22px; }
+.dd-title { font-weight: 600; }
+.dd-sub { color: var(--dd-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.dd-page { position: relative; height: 230px; overflow: hidden; border-radius: var(--radius-lg); background: var(--dd-sunken); touch-action: pan-y; }
+/* The content itself looks old until it's cleaned */
+.dd-scroll { height: 100%; padding: 4px 18px 18px; box-sizing: border-box; overflow-y: auto; filter: sepia(calc(var(--dd-age) * 0.55)) contrast(calc(1 - var(--dd-age) * 0.15)); opacity: calc(1 - var(--dd-age) * 0.25); transition: filter var(--duration-slower), opacity var(--duration-slower); }
+.dd-scroll:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: var(--radius-lg); }
+.dd-scroll h4 { margin: 14px 0 4px; font-size: var(--text-body); font-weight: 600; }
+.dd-scroll p { color: var(--dd-muted); line-height: 21px; }
+.dd-scroll .dd-end { margin-top: 18px; font-style: italic; }
+.dd-page::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, color-mix(in srgb, var(--olive) 18%, transparent), color-mix(in srgb, var(--olive) 8%, transparent)); opacity: var(--dd-age); transition: opacity var(--duration-slower); }
+.dd-dust { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.dd-web { position: absolute; right: 0; top: 0; width: 70px; height: 70px; color: color-mix(in srgb, var(--stone) 80%, transparent); pointer-events: none; transform-origin: 100% 0; transition: transform var(--duration-slower) var(--ease-in), opacity var(--duration-slower); }
+.dd.is-web-gone .dd-web { opacity: 0; transform: translate(20px, 60px) rotate(40deg) scale(0.6); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dd-web { color: color-mix(in srgb, var(--paper) 55%, transparent); } }
+:root[data-theme="dark"] .dd-web { color: color-mix(in srgb, var(--paper) 55%, transparent); }
+.dd-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+.dd-status { color: var(--dd-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.dd-again { flex: none; height: 32px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--dd-accent); font: inherit; font-weight: 600; cursor: pointer; }
+.dd-again:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dd-web, .dd-scroll { transition-duration: var(--duration-reduced); }
+}
+.dd [hidden] { display: none !important; }

@@ -1,0 +1,82 @@
+/* Scope Chips — search filters like from:mira morph into colored chips as you type, and back into text when you delete into them.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.sx {
+  --sx-bg: var(--card);
+  --sx-fg: var(--foreground);
+  --sx-muted: var(--muted-foreground);
+  --sx-line: var(--border);
+  --sx-sunken: var(--subtle);
+  --sx-fill: var(--muted);
+  --sx-accent: var(--primary);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--sx-bg);
+  color: var(--sx-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.sx-field { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 44px; box-sizing: border-box; padding: 6px 10px 6px 34px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--input); box-shadow: var(--shadow-xs); position: relative; cursor: text; }
+.sx-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.sx-icon { position: absolute; left: 12px; top: 14px; width: 16px; height: 16px; color: var(--sx-muted); }
+.sx-chips { display: contents; }
+.sx-input { flex: 1 1 120px; min-width: 100px; height: 30px; padding: 0 2px; border: 0; background: transparent; color: var(--sx-fg); font: inherit; font-size: var(--text-title-sm); letter-spacing: var(--tracking-title); outline: none; }
+/* Chips: each filter key has its own color */
+.sx-chip {
+  --k: var(--sx-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 4px 0 10px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--k) 14%, transparent);
+  color: var(--sx-fg);
+  font-size: var(--text-ui);
+  white-space: nowrap;
+  transform-origin: left center;
+  animation: sx-chip var(--spring-pop-duration) var(--spring-pop) both;
+}
+.sx-chip[data-key="from"] { --k: var(--chart-2); }
+.sx-chip[data-key="in"] { --k: var(--sx-accent); }
+.sx-chip[data-key="is"] { --k: var(--success); }
+.sx-chip small { color: color-mix(in srgb, var(--k) 80%, var(--sx-fg)); font-size: var(--text-caption); font-weight: 600; }
+.sx-chip b { font-weight: 600; }
+.sx-chip button { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; color: inherit; opacity: 0.55; font-size: var(--text-body); line-height: 1; cursor: pointer; }
+.sx-chip button:hover { opacity: 1; background: color-mix(in srgb, var(--k) 20%, transparent); }
+.sx-chip button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; opacity: 1; }
+@keyframes sx-chip { 0% { transform: scaleX(0.6); opacity: 0.4; border-radius: var(--radius-xs); } 100% { transform: none; opacity: 1; } }
+.sx-chip.is-melting { animation: sx-melt var(--duration-base) var(--ease-in) forwards; }
+@keyframes sx-melt { to { transform: scaleX(0.6); opacity: 0; } }
+.sx-suggest { position: absolute; z-index: 4; left: 20px; right: 20px; top: 70px; margin: 0; padding: 6px; list-style: none; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--sx-bg); box-shadow: 0 0 0 1px var(--sx-line), var(--shadow-xl); animation: sx-pop var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes sx-pop { from { opacity: 0; transform: translateY(-4px); } }
+.sx-suggest li { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 10px; border-radius: var(--radius-md); cursor: pointer; }
+.sx-suggest li[aria-selected="true"] { background: var(--sx-accent); color: var(--primary-foreground); }
+.sx-suggest code { font: 500 var(--text-small)/var(--leading-small) var(--font-mono); }
+.sx-suggest small { margin-left: auto; opacity: 0.7; font-size: var(--text-caption); }
+.sx-tip { margin: 0 4px; color: var(--sx-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.sx-tip code { padding: 1px 5px; border-radius: var(--radius-xs); background: var(--sx-fill); color: var(--sx-fg); font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono); }
+.sx-results { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--sx-sunken); }
+.sx-results li { position: relative; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 14px; box-sizing: border-box; animation: sx-row var(--spring-ui-duration) var(--spring-ui) both; }
+.sx-results li + li::before { content: ""; position: absolute; top: 0; left: 48px; right: 0; height: 1px; background: var(--sx-line); transform: scaleY(0.5); transform-origin: top; }
+@keyframes sx-row { from { opacity: 0; transform: translateY(4px); } }
+.sx-results i { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 50%; color: var(--on-chart); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
+.sx-results div { min-width: 0; }
+.sx-results b { display: block; font-weight: 600; font-size: var(--text-ui); }
+.sx-results span { display: block; overflow: hidden; color: var(--sx-muted); font-size: var(--text-small); text-overflow: ellipsis; white-space: nowrap; }
+.sx-results small { margin-left: auto; flex: none; padding: 2px 8px; border-radius: var(--radius-full); background: var(--sx-fill); color: var(--sx-muted); font-size: calc(var(--text-caption) - 1px); }
+.sx-results .sx-none { justify-content: center; color: var(--sx-muted); font-size: var(--text-small); }
+@media (prefers-reduced-motion: reduce) {
+  .sx-chip, .sx-chip.is-melting, .sx-suggest, .sx-results li { animation: none; }
+}
+.sx [hidden] { display: none !important; }

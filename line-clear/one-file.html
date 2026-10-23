@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Line Clear</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .ct so they never affect the rest of your page. */
+.ct {
+  --duration-instant: 80ms;
+  --duration-slower: 480ms;
+  --ease-in: cubic-bezier(0.5, 0, 0.78, 0.24);
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale-sm: 0.94;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --chart-5: var(--olive);
+  --danger-text: #ca2b30;
+  --foreground: var(--black);
+  --green-11: #218358;
+  --green-3: #e6f6eb;
+  --green-7: #8eceaa;
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --on-chart: #000000;
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --red-11: #ce2c31;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --success-border: var(--green-7);
+  --success-subtle: var(--green-3);
+  --success-text: #1f7b53;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .ct, .dark .ct {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --chart-5: var(--olive);
+  --danger-text: var(--red-11);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --green-3: #132d21;
+  --green-7: #2f7c57;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --on-chart: #000000;
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --red-11: #ff9592;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --success-border: var(--green-7);
+  --success-subtle: var(--green-3);
+  --success-text: var(--green-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .ct {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --chart-1: var(--aqua);
+    --chart-2: var(--pink);
+    --chart-3: var(--orange);
+    --chart-4: var(--sage);
+    --chart-5: var(--olive);
+    --danger-text: var(--red-11);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --green-3: #132d21;
+    --green-7: #2f7c57;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --olive: #AA9856;
+    --on-chart: #000000;
+    --on-color: #ffffff;
+    --orange: #FE8C5F;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --red-11: #ff9592;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --success-border: var(--green-7);
+    --success-subtle: var(--green-3);
+    --success-text: var(--green-11);
+    --white: #161817;
+  }
+}
+
+/* Line Clear — accepted meetings drop into the day like blocks. Fill every gap and the row "clears".
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ct {
+  --ct-bg: var(--card);
+  --ct-fg: var(--foreground);
+  --ct-muted: var(--muted-foreground);
+  --ct-line: var(--border);
+  --ct-sunken: var(--subtle);
+  --ct-fill: var(--muted);
+  --ct-accent: var(--primary);
+  --ct-on-accent: var(--primary-foreground);
+  --ct-row: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ct-bg);
+  color: var(--ct-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ct p { margin: 0; }
+.ct-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.ct-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.ct-free { color: var(--ct-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.ct.is-full .ct-free { color: var(--danger-text); font-weight: 600; }
+.ct-day { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 6px; padding: 8px; border-radius: var(--radius-lg); background: var(--ct-sunken); }
+.ct-hours { display: grid; grid-template-rows: repeat(8, var(--ct-row)); gap: 2px; color: var(--ct-muted); font-size: calc(var(--text-caption) - 1px); line-height: 1; text-align: right; font-variant-numeric: tabular-nums; }
+.ct-hours span { padding-top: 3px; }
+.ct-col { position: relative; height: calc(var(--ct-row) * 8 + 14px); overflow: hidden; border-radius: var(--radius-md); background: repeating-linear-gradient(180deg, transparent 0 calc(var(--ct-row) + 1px), var(--ct-line) calc(var(--ct-row) + 1px) calc(var(--ct-row) + 2px)); background-size: 100% calc(var(--ct-row) + 2px); }
+.ct-block { position: absolute; left: 0; right: 0; top: calc(var(--slot) * (var(--ct-row) + 2px)); height: var(--ct-row); box-sizing: border-box; padding: 0 10px; border-radius: var(--radius-sm); background: var(--c); color: var(--on-chart); font-size: var(--text-small); line-height: var(--ct-row); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: inset 0 1px 0 color-mix(in srgb, var(--on-color) 35%, transparent), inset 0 -2px 0 color-mix(in srgb, var(--black) 18%, transparent); }
+.ct-block.is-drop { animation: ct-drop var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes ct-drop { from { transform: translateY(calc((var(--slot) + 1) * (var(--ct-row) + 2px) * -1)); } }
+.ct-block.is-flash { animation: ct-flash var(--duration-slower) var(--ease-out) both; animation-delay: calc(var(--slot) * var(--duration-instant)); }
+@keyframes ct-flash { 0%, 100% { filter: none; } 30% { filter: brightness(2.4) saturate(0.2); transform: scaleX(1.02); } }
+.ct-block.is-out { animation: ct-out var(--duration-slower) var(--ease-in) forwards; }
+@keyframes ct-out { to { opacity: 0; transform: translateX(110%) rotate(6deg); } }
+.ct-block.is-lunch { background: repeating-linear-gradient(-45deg, var(--success-subtle) 0 10px, color-mix(in srgb, var(--success) 22%, var(--success-subtle)) 10px 20px); color: var(--success-text); box-shadow: inset 0 0 0 1px var(--success-border); }
+.ct-block.is-lunch::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: var(--radius-xs); background: currentColor; -webkit-mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Zm2 0h6V7a3 3 0 0 0-6 0Z'/%3E%3C/svg%3E"); mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Zm2 0h6V7a3 3 0 0 0-6 0Z'/%3E%3C/svg%3E"); vertical-align: -1px; }
+
+.ct-inv-title { margin-bottom: 6px !important; color: var(--ct-muted); font-size: var(--text-small); font-weight: 600; }
+.ct-list { margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--ct-sunken); }
+.ct-list:empty { display: none; }
+.ct-list li { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 8px 0 14px; }
+.ct-list li + li::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--ct-line); transform: scaleY(0.5); transform-origin: top; }
+.ct-list b { display: block; font-weight: 600; }
+.ct-list small { color: var(--ct-muted); font-size: var(--text-caption); }
+.ct-list button, .ct-lunch { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ct-accent); color: var(--ct-on-accent); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ct-list button:active, .ct-lunch:active { transform: scale(var(--press-scale-sm)); }
+.ct-list button:focus-visible, .ct-lunch:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ct-clear { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--success) 14%, transparent); animation: ct-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes ct-in { from { opacity: 0; transform: translateY(-6px); } }
+.ct-clear-text { font-size: var(--text-body); line-height: var(--leading-body); }
+.ct-lunch { align-self: flex-start; height: 40px; background: var(--success); }
+.ct-status { min-height: 18px; color: var(--ct-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ct-status:empty { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-block.is-drop, .ct-block.is-flash, .ct-block.is-out, .ct-clear { animation: none; }
+}
+.ct [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="ct" data-mi="line-clear">
+  <div class="ct-head">
+    <p class="ct-title">Thursday</p>
+    <p class="ct-free">3 hours free</p>
+  </div>
+  <div class="ct-day">
+    <div class="ct-hours" aria-hidden="true"><span>9</span><span>10</span><span>11</span><span>12</span><span>1</span><span>2</span><span>3</span><span>4</span></div>
+    <div class="ct-col">
+      <div class="ct-block" data-slot="0" style="--c: var(--chart-1)">Standup</div>
+      <div class="ct-block" data-slot="1" style="--c: var(--chart-4)">Roadmap</div>
+      <div class="ct-block" data-slot="2" style="--c: var(--chart-5)">1:1 with Leo</div>
+      <div class="ct-block" data-slot="5" style="--c: var(--chart-2)">Design Review</div>
+      <div class="ct-block" data-slot="7" style="--c: var(--chart-3)">Weekly Sync</div>
+    </div>
+  </div>
+  <div class="ct-invites">
+    <p class="ct-inv-title">Invites</p>
+    <ul class="ct-list">
+      <li><span><b>Budget Check</b><small>12:00 PM · Priya</small></span><button type="button" data-slot="3" data-name="Budget Check" data-c="var(--chart-2)">Accept</button></li>
+      <li><span><b>Vendor Call</b><small>1:00 PM · Sam</small></span><button type="button" data-slot="4" data-name="Vendor Call" data-c="var(--chart-5)">Accept</button></li>
+      <li><span><b>Quick Sync</b><small>3:00 PM · Mira</small></span><button type="button" data-slot="6" data-name="Quick Sync" data-c="var(--chart-1)">Accept</button></li>
+    </ul>
+  </div>
+  <div class="ct-clear" hidden>
+    <p class="ct-clear-text"><b>Line clear.</b> No gaps from 9 to 5. Not even for lunch.</p>
+    <button type="button" class="ct-lunch">Protect 12:00 for Lunch</button>
+  </div>
+  <p class="ct-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Line Clear — vanilla JS. Auto-initializes every [data-mi="line-clear"].
+   Blocks are hour slots 0–7 (9 AM to 5 PM). Accepting an invite drops it into its slot; when every slot is full the
+   day flashes like a cleared row and offers to protect lunch. Call window.initLineClear(el) for elements added later. */
+(function () {
+  'use strict';
+  var SLOTS = 8, LUNCH = 3;
+
+  function initLineClear(root) {
+    if (!root || root.__miLineClear) return;
+    root.__miLineClear = true;
+    var col = root.querySelector('.ct-col'), free = root.querySelector('.ct-free'), list = root.querySelector('.ct-list');
+    var clear = root.querySelector('.ct-clear'), lunch = root.querySelector('.ct-lunch'), status = root.querySelector('.ct-status');
+
+    function blocks() { return Array.prototype.slice.call(col.querySelectorAll('.ct-block:not(.is-out)')); }
+    col.querySelectorAll('.ct-block').forEach(function (b) { b.style.setProperty('--slot', b.getAttribute('data-slot')); });
+
+    function count() {
+      var n = SLOTS - blocks().length;
+      free.textContent = n === 0 ? 'No time free' : n + (n === 1 ? ' hour free' : ' hours free');
+      root.classList.toggle('is-full', n === 0);
+      return n;
+    }
+
+    function full() {
+      blocks().forEach(function (b) { b.classList.remove('is-drop', 'is-flash'); void b.offsetWidth; b.classList.add('is-flash'); });
+      setTimeout(function () { clear.hidden = false; lunch.focus(); }, 700);
+    }
+
+    list.addEventListener('click', function (e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      var slot = btn.getAttribute('data-slot');
+      var b = document.createElement('div');
+      b.className = 'ct-block is-drop';
+      b.setAttribute('data-slot', slot);
+      b.style.setProperty('--slot', slot);
+      b.style.setProperty('--c', btn.getAttribute('data-c'));
+      b.textContent = btn.getAttribute('data-name');
+      col.appendChild(b);
+      var li = btn.closest('li'), next = li.nextElementSibling || li.previousElementSibling;
+      li.remove();
+      if (!list.children.length) root.querySelector('.ct-invites').hidden = true;
+      if (next) next.querySelector('button').focus();
+      status.textContent = '';
+      if (count() === 0) setTimeout(full, 650);
+    });
+
+    lunch.addEventListener('click', function () {
+      var taken = blocks().filter(function (b) { return Number(b.getAttribute('data-slot')) === LUNCH; })[0];
+      var name = taken ? taken.textContent : 'that meeting';
+      if (taken) { taken.classList.add('is-out'); setTimeout(function () { taken.remove(); }, 440); }
+      setTimeout(function () {
+        var l = document.createElement('div');
+        l.className = 'ct-block is-lunch is-drop';
+        l.setAttribute('data-slot', LUNCH);
+        l.style.setProperty('--slot', LUNCH);
+        l.textContent = 'Lunch (Protected)';
+        col.appendChild(l);
+        count();
+        free.textContent = 'Lunch protected';
+        root.classList.remove('is-full');
+      }, 300);
+      clear.hidden = true;
+      status.textContent = 'Lunch protected. ' + name + ' moved to tomorrow, where it will also be fine.';
+    });
+    count();
+  }
+
+  window.initLineClear = initLineClear;
+  function boot() { document.querySelectorAll('[data-mi="line-clear"]').forEach(initLineClear); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

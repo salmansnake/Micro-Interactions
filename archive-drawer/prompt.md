@@ -1,0 +1,27 @@
+Build an "Archive Drawer" for inboxes in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
+
+WHAT IT DOES
+Archiving usually makes items vanish. Here each archived item flies into a small drawer that visibly fills up, so people know where things went, and opening the drawer lets them restore anything.
+
+BEHAVIOR
+1. A list of messages, each with an Archive button.
+2. Archive: the row's height collapses to zero while a card with its subject flies on an arc into the drawer, shrinking to 15% and fading at the end (560ms). Focus moves to the next row's Archive button.
+3. The drawer is a little cabinet: a 72×36px wood-toned front with a flat, shadowless handle near the top (35% black) and "Archive" printed in small 600-weight text below it, set slightly deeper (45% black) so it reads as the same tone as the handle (no separate label beside it), and a stack of paper edges rising out of the top. It hugs its contents: when empty it's just the front, with no space reserved above, and it grows as papers stack up. Each item adds 2.5px to the paper stack (springy), and the front widens slightly with the count (up to 8 items). When an item lands, the front squashes ("gulps") with a pop spring. A black badge (Aqua in dark mode) shows the count.
+4. Clicking the drawer opens it: the front slides down a little, the papers rise, and a panel lists archived items with Restore buttons.
+5. Restore: the item flies from the drawer back into the list and reappears with a spring; the count drops.
+6. Empty inbox shows "Inbox zero. Everything is in the drawer."
+Reduced motion: no flights or gulps; counts and lists still update.
+
+APPEARANCE (Outcraft Design System)
+- Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
+- Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
+- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float.
+- Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
+- Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
+- Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
+- Copy: title-case button labels, sentence-case body text, no emoji.
+- This one: lists are 12px rounded groups with 56px rows; the drawer is a small skeuomorphic object, which suits a single playful accent on an otherwise flat screen.
+
+DELIVER
+The component, the demo inbox, and short usage notes.

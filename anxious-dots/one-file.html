@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anxious Typing Dots</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .ax so they never affect the rest of your page. */
+.ax {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --duration-slow: 320ms;
+  --duration-slower: 480ms;
+  --ease-in-out: cubic-bezier(0.62, 0, 0.32, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-body-lg: 24px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --press-scale: 0.97;
+  --radius-md: 8px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-body-lg: 16px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-2: var(--pink);
+  --foreground: var(--black);
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .ax, .dark .ax {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-2: var(--pink);
+  --foreground: #F3F2EE;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .ax {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --chart-2: var(--pink);
+    --foreground: #F3F2EE;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-chart: #000000;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --white: #161817;
+  }
+}
+
+/* Anxious Typing Dots — the typing indicator gets more nervous the longer someone types, then they send "yes".
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ax {
+  --ax-bg: var(--card);
+  --ax-fg: var(--foreground);
+  --ax-muted: var(--muted-foreground);
+  --ax-line: var(--border);
+  --ax-sunken: var(--subtle);
+  --ax-fill: var(--muted);
+  --ax-accent: var(--primary);
+  --ax-on-accent: var(--primary-foreground);
+  --ax-them: color-mix(in srgb, var(--ax-fg) 9%, var(--ax-bg));
+  --ax-beat: 1.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ax-bg);
+  color: var(--ax-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ax p { margin: 0; }
+.ax-head { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--ax-line); }
+.ax-avatar { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--chart-2); color: var(--on-chart); font-weight: 700; }
+.ax-name { font-weight: 600; }
+.ax-presence { color: var(--ax-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+
+.ax-thread { display: flex; flex-direction: column; gap: 4px; min-height: 196px; }
+.ax-msg { max-width: 78%; padding: 8px 13px; border-radius: var(--radius-xl); font-size: var(--text-body-lg); line-height: var(--leading-body-lg); letter-spacing: normal; }
+.ax-msg--me { align-self: flex-end; background: var(--ax-accent); color: var(--ax-on-accent); }
+.ax-msg--them { align-self: flex-start; margin-top: 6px; background: var(--ax-them); animation: ax-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.ax-read { align-self: flex-end; color: var(--ax-muted); font-size: calc(var(--text-caption) - 1px); line-height: 14px; font-weight: 500; }
+
+/* The indicator. Its size, speed and shake come from data-stage. */
+.ax-typing { margin-top: 8px; }
+.ax-bubble {
+  position: relative;
+  display: block;
+  width: 62px;
+  height: 36px;
+  border-radius: var(--radius-xl);
+  background: var(--ax-them);
+  transform-origin: 0 100%;
+  transition: width var(--spring-ui-duration) var(--spring-ui), height var(--spring-ui-duration) var(--spring-ui), transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-slow);
+}
+.ax-ghost { position: absolute; top: 11px; left: 14px; right: 14px; bottom: 32px; border-radius: var(--radius-xs); background: repeating-linear-gradient(to bottom, color-mix(in srgb, var(--ax-fg) 10%, transparent) 0 7px, transparent 7px 13px); -webkit-mask-image: linear-gradient(90deg, var(--black) 62%, transparent); mask-image: linear-gradient(90deg, var(--black) 62%, transparent); opacity: 0; transition: opacity var(--duration-slower); }
+.ax-dots { position: absolute; left: 14px; bottom: 14px; display: flex; gap: 4px; }
+.ax-dots i { width: 8px; height: 8px; border-radius: 50%; background: color-mix(in srgb, var(--ax-fg) 38%, transparent); animation: ax-bob var(--ax-beat) var(--ease-in-out) infinite; }
+.ax-dots i:nth-child(2) { animation-delay: calc(var(--ax-beat) / 6); }
+.ax-dots i:nth-child(3) { animation-delay: calc(var(--ax-beat) / 3); }
+@keyframes ax-bob { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.ax[data-stage="2"] { --ax-beat: 0.9s; }
+.ax[data-stage="2"] .ax-bubble { width: 96px; }
+.ax[data-stage="3"] { --ax-beat: 0.62s; }
+.ax[data-stage="3"] .ax-bubble { width: 168px; height: 58px; }
+.ax[data-stage="4"], .ax[data-stage="5"] { --ax-beat: 0.4s; }
+.ax[data-stage="4"] .ax-bubble, .ax[data-stage="5"] .ax-bubble { width: 230px; height: 84px; }
+.ax[data-stage="3"] .ax-ghost, .ax[data-stage="4"] .ax-ghost, .ax[data-stage="5"] .ax-ghost { opacity: 1; }
+.ax[data-stage="4"] .ax-dots { animation: ax-jitter var(--duration-base) steps(2) infinite; }
+.ax[data-stage="5"] .ax-dots i { animation: none; opacity: 0.35; }
+.ax[data-stage="6"] .ax-bubble, .ax[data-stage="7"] .ax-bubble { transform: scale(0); opacity: 0; transition-duration: var(--spring-press-duration); }
+/* Once the reply lands, the empty indicator gives its space back so "yes" sits right under the question */
+.ax[data-stage="7"] .ax-typing { display: none; }
+.ax[data-stage="7"] .ax-msg--them { margin-top: 10px; }
+@keyframes ax-jitter { 50% { transform: translate(0.5px, -0.5px); } }
+@keyframes ax-pop { from { opacity: 0; transform: scale(0.6); } }
+
+.ax-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid var(--ax-line); }
+.ax-now { min-width: 0; }
+.ax-caption { font-weight: 600; font-size: var(--text-body); }
+.ax-timer { color: var(--ax-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+.ax-replay { flex: none; height: 36px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--ax-fill); color: var(--ax-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ax-replay:active { transform: scale(var(--press-scale)); }
+.ax-replay:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ax-dots i, .ax[data-stage="4"] .ax-dots, .ax-msg--them { animation: none; }
+  .ax-bubble { transition-duration: var(--duration-reduced); transition-timing-function: linear; }
+}
+.ax [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="ax" data-mi="anxious-dots" data-name="Mira">
+  <header class="ax-head">
+    <span class="ax-avatar" aria-hidden="true">M</span>
+    <div><p class="ax-name">Mira Chen</p><p class="ax-presence">Active now</p></div>
+  </header>
+  <div class="ax-thread">
+    <p class="ax-msg ax-msg--me">Quick question. Are we still shipping on Friday?</p>
+    <p class="ax-read">Seen 4:12 PM</p>
+    <div class="ax-typing" aria-hidden="true">
+      <span class="ax-bubble"><span class="ax-ghost"></span><span class="ax-dots"><i></i><i></i><i></i></span></span>
+    </div>
+    <p class="ax-msg ax-msg--them" hidden>yes</p>
+  </div>
+  <div class="ax-foot">
+    <div class="ax-now">
+      <p class="ax-caption" role="status" aria-live="polite">Mira is typing…</p>
+      <p class="ax-timer">Typing for 0:00</p>
+    </div>
+    <button type="button" class="ax-replay">Replay</button>
+  </div>
+</div>
+
+
+<script>
+/* Anxious Typing Dots — vanilla JS. Auto-initializes every [data-mi="anxious-dots"].
+   Plays a scripted typing session when it first comes into view; Replay plays it again.
+   In a real chat, drive data-stage from how long the other person has been typing.
+   Call window.initAnxiousDots(el) for elements added later. */
+(function () {
+  'use strict';
+  // at: demo time in ms. clock: how long they've "really" been typing, in seconds.
+  function script(n) {
+    return [
+      { at: 0, stage: 1, caption: n + ' is typing…', clock: 3 },
+      { at: 1800, stage: 2, caption: n + ' is typing a lot…', clock: 41 },
+      { at: 3600, stage: 3, caption: 'This is a paragraph now.', clock: 96 },
+      { at: 5400, stage: 4, caption: n + ' is writing you a novel.', clock: 178 },
+      { at: 7400, stage: 5, caption: n + ' stopped typing.', clock: 200, timer: 'Paused at ' },
+      { at: 8600, stage: 4, caption: n + ' is typing again…', clock: 204 },
+      { at: 9900, stage: 6, caption: n + ' deleted all of it.', clock: 242, timer: 'Deleted after ' },
+      { at: 11300, stage: 7, caption: '4 minutes of typing. 3 letters.', clock: 249, timer: 'Total: ', end: true }
+    ];
+  }
+  function mmss(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+
+  function initAnxiousDots(root) {
+    if (!root || root.__miDots) return;
+    root.__miDots = true;
+    var name = root.getAttribute('data-name') || 'They';
+    var steps = script(name);
+    var caption = root.querySelector('.ax-caption');
+    var timer = root.querySelector('.ax-timer');
+    var reply = root.querySelector('.ax-msg--them');
+    var presence = root.querySelector('.ax-presence');
+    var replay = root.querySelector('.ax-replay');
+    var t0 = 0, raf = 0, idx = -1;
+
+    function frame(now) {
+      var t = Math.max(0, now - t0); // the first frame can be stamped just before t0
+      while (idx + 1 < steps.length && t >= steps[idx + 1].at) {
+        idx++;
+        var s = steps[idx];
+        root.setAttribute('data-stage', s.stage);
+        caption.textContent = s.caption;
+        if (s.end) {
+          reply.hidden = false;
+          presence.textContent = 'Active now';
+        } else if (s.stage === 6) presence.textContent = 'Active now';
+        else presence.textContent = 'Typing…';
+      }
+      var cur = steps[idx], nxt = steps[idx + 1];
+      // The timer runs between the scripted clock values, so it visibly races.
+      var secs = cur.clock;
+      if (nxt && !cur.timer) secs = cur.clock + (nxt.clock - cur.clock) * Math.min(1, (t - cur.at) / (nxt.at - cur.at));
+      timer.textContent = (cur.timer || 'Typing for ') + mmss(secs);
+      if (nxt) raf = requestAnimationFrame(frame);
+    }
+
+    function play() {
+      cancelAnimationFrame(raf);
+      reply.hidden = true;
+      idx = -1;
+      t0 = performance.now();
+      raf = requestAnimationFrame(frame);
+    }
+
+    replay.addEventListener('click', play);
+    root.setAttribute('data-stage', '1');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); play(); }
+      }, { threshold: 0.5 });
+      io.observe(root);
+    } else play();
+    root.replay = play;
+  }
+
+  window.initAnxiousDots = initAnxiousDots;
+  function boot() { document.querySelectorAll('[data-mi="anxious-dots"]').forEach(initAnxiousDots); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

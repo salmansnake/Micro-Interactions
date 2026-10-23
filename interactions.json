@@ -1,0 +1,1735 @@
+{
+  "_readme": "Single source of truth for every interaction. Read RULES.md before editing. Numbers are permanent: never renumber or reuse. New interactions take the next number and new: true.",
+  "types": [
+    "Useful",
+    "Secretly Useful",
+    "Pure Joke"
+  ],
+  "topics": [
+    "Billing and Plans",
+    "Forms and Input",
+    "Search and Navigation",
+    "Files and Data",
+    "Loading and Status",
+    "Messages and Email",
+    "Meetings and Calendar",
+    "Teams and Sharing",
+    "AI",
+    "Developer Tools"
+  ],
+  "hero": [
+    "cancel-dodge",
+    "clipboard-stack",
+    "unsubscribe-eager"
+  ],
+  "interactions": [
+    {
+      "number": "001",
+      "slug": "blast-radius",
+      "name": "Blast Radius",
+      "type": "Useful",
+      "topic": "Files and Data",
+      "new": false,
+      "summary": "Hover a delete button and everything that goes with it is marked across the page, along with everything that stays.",
+      "tryit": "Hover Delete Project, then click it twice. Undo brings it all back.",
+      "specs": [
+        {
+          "label": "Trigger",
+          "value": "Hover or keyboard focus"
+        },
+        {
+          "label": "Ripple",
+          "value": "0.35ms per px, max 320ms"
+        },
+        {
+          "label": "Confirm",
+          "value": "Second click within 3 seconds"
+        },
+        {
+          "label": "Recovery",
+          "value": "Undo in a Frost banner"
+        }
+      ]
+    },
+    {
+      "number": "002",
+      "slug": "heavy-save",
+      "name": "Heavy Save",
+      "type": "Useful",
+      "topic": "Files and Data",
+      "new": false,
+      "summary": "The Save button sinks and darkens with every unsaved change. Try to leave, and it tugs you back.",
+      "tryit": "Edit two or three rows, tap Go to Billing, then Save.",
+      "specs": [
+        {
+          "label": "Weight",
+          "value": "1.6px per change, up to 5"
+        },
+        {
+          "label": "Counting",
+          "value": "Reverting a field lightens it"
+        },
+        {
+          "label": "Leave Guard",
+          "value": "Tug plus an inline Discard"
+        },
+        {
+          "label": "Release",
+          "value": "7px spring overshoot"
+        }
+      ]
+    },
+    {
+      "number": "003",
+      "slug": "point-at-error",
+      "name": "Point-at-Error",
+      "type": "Useful",
+      "topic": "Forms and Input",
+      "new": false,
+      "summary": "The error message draws a line to the exact character that broke the email, and offers a fix when the fix is certain.",
+      "tryit": "Pick an example under the field, or type your own address.",
+      "specs": [
+        {
+          "label": "Checks",
+          "value": "Blur, Enter, or an 800ms pause"
+        },
+        {
+          "label": "Pointer",
+          "value": "Draws to the character in 420ms"
+        },
+        {
+          "label": "Typos",
+          "value": "Amber, not red"
+        },
+        {
+          "label": "Fix",
+          "value": "One tap when unambiguous"
+        }
+      ]
+    },
+    {
+      "number": "004",
+      "slug": "coin-drop",
+      "name": "Coin Drop",
+      "type": "Useful",
+      "topic": "Billing and Plans",
+      "new": false,
+      "summary": "Switch to yearly and the savings fall into each plan as coins. The counter climbs as they land.",
+      "tryit": "Switch to Yearly, then back to Monthly.",
+      "specs": [
+        {
+          "label": "Coins",
+          "value": "3 to 8 per plan"
+        },
+        {
+          "label": "Flight",
+          "value": "720 to 880ms arcs"
+        },
+        {
+          "label": "Counter",
+          "value": "Steps up as each coin lands"
+        },
+        {
+          "label": "Reverse",
+          "value": "Coins fly back on Monthly"
+        }
+      ]
+    },
+    {
+      "number": "005",
+      "slug": "shortcut-reveal",
+      "name": "Shortcut Reveal",
+      "type": "Useful",
+      "topic": "Search and Navigation",
+      "new": false,
+      "summary": "Hold Ctrl or ⌘ and every shortcut on the toolbar appears, rippling out from your pointer. Use one and it is marked learned.",
+      "tryit": "Hold Ctrl (⌘ on Mac) and press B. On a phone, press and hold the button at the bottom.",
+      "specs": [
+        {
+          "label": "Trigger",
+          "value": "Modifier held alone for 320ms"
+        },
+        {
+          "label": "Ripple",
+          "value": "0.6ms per px, max 260ms"
+        },
+        {
+          "label": "Teaching",
+          "value": "Clicks show the shortcut"
+        },
+        {
+          "label": "Safety",
+          "value": "Ignores typing elsewhere"
+        }
+      ]
+    },
+    {
+      "number": "006",
+      "slug": "spill-counter",
+      "name": "Spill Counter",
+      "type": "Useful",
+      "topic": "Forms and Input",
+      "new": false,
+      "summary": "Type past the limit and the extra characters spill off the line, each hanging lower than the last. Trim lets them fall away.",
+      "tryit": "Press Keep Typing for Me, or type past 80 characters. Then press Trim.",
+      "specs": [
+        {
+          "label": "Limit",
+          "value": "80 characters, configurable"
+        },
+        {
+          "label": "Spill",
+          "value": "0.45px lower per extra character"
+        },
+        {
+          "label": "Warning",
+          "value": "Amber with 10 left, red when over"
+        },
+        {
+          "label": "Trim",
+          "value": "Excess falls, last letter first"
+        }
+      ]
+    },
+    {
+      "number": "007",
+      "slug": "frosted-peek",
+      "name": "Frosted Peek",
+      "type": "Useful",
+      "topic": "Billing and Plans",
+      "new": false,
+      "summary": "A Pro chart under frost. Drag across it to open a clear window and read real numbers before you pay.",
+      "tryit": "Hover or drag across the chart. Use the arrow keys after tabbing to it. Then press Unlock Forecasts.",
+      "specs": [
+        {
+          "label": "Window",
+          "value": "80px, follows the pointer"
+        },
+        {
+          "label": "Lens",
+          "value": "Frost with the month and value"
+        },
+        {
+          "label": "Keyboard",
+          "value": "Slider: arrows, Home, End"
+        },
+        {
+          "label": "Unlock",
+          "value": "Frost wipes away in one spring"
+        }
+      ]
+    },
+    {
+      "number": "008",
+      "slug": "refill-timer",
+      "name": "Refill Timer",
+      "type": "Useful",
+      "topic": "Loading and Status",
+      "new": false,
+      "summary": "Run out of generations and the button becomes the timer, filling as the next credit returns while each dot refills like a tank.",
+      "tryit": "Press Generate five times fast, then watch it refill.",
+      "specs": [
+        {
+          "label": "Credits",
+          "value": "5, one back every 3s in the demo"
+        },
+        {
+          "label": "Dots",
+          "value": "Fill from the bottom as they return"
+        },
+        {
+          "label": "Button",
+          "value": "Never dead: shows the countdown"
+        },
+        {
+          "label": "Return",
+          "value": "Bump and pop when a credit is back"
+        }
+      ]
+    },
+    {
+      "number": "009",
+      "slug": "file-dropzone",
+      "name": "File-Aware Dropzone",
+      "type": "Useful",
+      "topic": "Files and Data",
+      "new": false,
+      "summary": "It knows what you are dropping before you let go, then previews each type its own way: rows slide in, photos develop, pages fan out.",
+      "tryit": "Drag a CSV, image or PDF over it, or press a sample button.",
+      "specs": [
+        {
+          "label": "Detection",
+          "value": "Reads the type mid-drag"
+        },
+        {
+          "label": "CSV",
+          "value": "Header and 4 rows, counted"
+        },
+        {
+          "label": "Image",
+          "value": "Develops over 1.8s"
+        },
+        {
+          "label": "PDF",
+          "value": "Pages fan out, page count read"
+        }
+      ]
+    },
+    {
+      "number": "010",
+      "slug": "ghost-caret",
+      "name": "Ghost Caret",
+      "type": "Useful",
+      "topic": "Teams and Sharing",
+      "new": false,
+      "summary": "A teammate's cursor and fresh words live inside the field. Put your cursor near theirs and they politely wait for you.",
+      "tryit": "Watch Mira type, then click near her caret. Press Replay to watch again.",
+      "specs": [
+        {
+          "label": "Highlight",
+          "value": "Fresh text fades over 4s"
+        },
+        {
+          "label": "Caret",
+          "value": "Glides with a ui spring"
+        },
+        {
+          "label": "Yielding",
+          "value": "Waits within 12 characters of you"
+        },
+        {
+          "label": "Your Caret",
+          "value": "Never moves when they type"
+        }
+      ]
+    },
+    {
+      "number": "011",
+      "slug": "honest-skeleton",
+      "name": "Honest Skeleton",
+      "type": "Useful",
+      "topic": "Loading and Status",
+      "new": false,
+      "summary": "Known data shows at once, each part shimmers at its own pace, slow parts say so, and a failed part offers Retry instead of shimmering forever.",
+      "tryit": "Watch it load, then press Retry on the chart. Press Reload to replay.",
+      "specs": [
+        {
+          "label": "Known Data",
+          "value": "Renders with no skeleton"
+        },
+        {
+          "label": "Shimmer",
+          "value": "Speed matches the expected wait"
+        },
+        {
+          "label": "Slow",
+          "value": "Admits it after 1.2s"
+        },
+        {
+          "label": "Failure",
+          "value": "Inline Retry, rest unaffected"
+        }
+      ]
+    },
+    {
+      "number": "012",
+      "slug": "typo-morph",
+      "name": "Typo Morph",
+      "type": "Useful",
+      "topic": "Search and Navigation",
+      "new": false,
+      "summary": "A search with no results morphs your typo, letter by letter, into the closest real match, then shows its results.",
+      "tryit": "Pick an example, or type a misspelled setting. Press Tab to accept.",
+      "specs": [
+        {
+          "label": "Match",
+          "value": "Levenshtein, up to 45% different"
+        },
+        {
+          "label": "Morph",
+          "value": "Strike, drop in, flip, 120ms apart"
+        },
+        {
+          "label": "Accept",
+          "value": "Tab or click the word"
+        },
+        {
+          "label": "Results",
+          "value": "Follow once the morph ends"
+        }
+      ]
+    },
+    {
+      "number": "013",
+      "slug": "clipboard-stack",
+      "name": "Clipboard Stack",
+      "type": "Useful",
+      "topic": "Files and Data",
+      "new": false,
+      "summary": "Copied text flies into a clipboard that keeps your last five copies, so an earlier one is one click away.",
+      "tryit": "Copy two or three values, then open the clipboard.",
+      "specs": [
+        {
+          "label": "Flight",
+          "value": "620ms arc into the clipboard"
+        },
+        {
+          "label": "Stack",
+          "value": "Up to 3 slips fan out"
+        },
+        {
+          "label": "Keeps",
+          "value": "Last 5 copies, no duplicates"
+        },
+        {
+          "label": "Recopy",
+          "value": "One click from the list"
+        }
+      ]
+    },
+    {
+      "number": "014",
+      "slug": "leaning-empty-state",
+      "name": "Leaning Empty State",
+      "type": "Useful",
+      "topic": "Loading and Status",
+      "new": false,
+      "summary": "The illustration on an empty screen turns toward the button as your pointer gets close. Click and the tiles gather into your first project.",
+      "tryit": "Move toward New Project, then click it.",
+      "specs": [
+        {
+          "label": "Range",
+          "value": "Lean starts 320px from the button"
+        },
+        {
+          "label": "Tilt",
+          "value": "Up to 22° toward the button"
+        },
+        {
+          "label": "Focus",
+          "value": "Keyboard focus leans fully"
+        },
+        {
+          "label": "Create",
+          "value": "Tiles gather, first item arrives"
+        }
+      ]
+    },
+    {
+      "number": "015",
+      "slug": "session-fade",
+      "name": "Session Fade",
+      "type": "Useful",
+      "topic": "Loading and Status",
+      "new": false,
+      "summary": "As a session nears timeout the page drains of color instead of popping a modal. Any movement floods it back from your pointer.",
+      "tryit": "Keep your pointer still for 10 seconds, then move it.",
+      "specs": [
+        {
+          "label": "Session",
+          "value": "20s demo, warns in the last 10s"
+        },
+        {
+          "label": "Fade",
+          "value": "Grayscale and vignette track time"
+        },
+        {
+          "label": "Wake",
+          "value": "Color springs back from the pointer"
+        },
+        {
+          "label": "Lock",
+          "value": "Signed-out screen at zero"
+        }
+      ]
+    },
+    {
+      "number": "016",
+      "slug": "lock-builder",
+      "name": "Lock Builder",
+      "type": "Useful",
+      "topic": "Forms and Input",
+      "new": false,
+      "summary": "Each password rule you meet slides a bolt into a padlock. Meet them all and the shackle snaps shut.",
+      "tryit": "Type a password like Atlas2026!",
+      "specs": [
+        {
+          "label": "Rules",
+          "value": "Length, case, number, symbol"
+        },
+        {
+          "label": "Bolts",
+          "value": "One per rule, pop spring"
+        },
+        {
+          "label": "Color",
+          "value": "Amber, black, then green"
+        },
+        {
+          "label": "Lock",
+          "value": "Shackle closes at four of four"
+        }
+      ]
+    },
+    {
+      "number": "017",
+      "slug": "seat-stacker",
+      "name": "Seat Stacker",
+      "type": "Useful",
+      "topic": "Billing and Plans",
+      "new": false,
+      "summary": "Avatars stack as you add seats, prices roll like an odometer, and crossing a volume tier is celebrated.",
+      "tryit": "Press + until you reach 10 seats.",
+      "specs": [
+        {
+          "label": "Tiers",
+          "value": "$12, $10 from 10, $8 from 25"
+        },
+        {
+          "label": "Odometer",
+          "value": "Each digit rolls on a spring"
+        },
+        {
+          "label": "Nudge",
+          "value": "Shows when 3 seats from a tier"
+        },
+        {
+          "label": "Avatars",
+          "value": "6 shown, then +n"
+        }
+      ]
+    },
+    {
+      "number": "018",
+      "slug": "snooze-slide",
+      "name": "Snooze Slide",
+      "type": "Useful",
+      "topic": "Messages and Email",
+      "new": false,
+      "summary": "Drag a notification right to snooze it. The further you drag, the later it comes back, with the exact time shown behind the card.",
+      "tryit": "Drag a card right, past two steps, and let go. Or focus it and press the right arrow.",
+      "specs": [
+        {
+          "label": "Steps",
+          "value": "Every 64px: 1 hour to next week"
+        },
+        {
+          "label": "Feedback",
+          "value": "Label pops, 8ms haptic tick"
+        },
+        {
+          "label": "Release",
+          "value": "Card slides off, pill with Undo"
+        },
+        {
+          "label": "Keyboard",
+          "value": "Arrows step, Enter snoozes"
+        }
+      ]
+    },
+    {
+      "number": "019",
+      "slug": "setup-ring",
+      "name": "Setup Ring",
+      "type": "Useful",
+      "topic": "Loading and Status",
+      "new": false,
+      "summary": "Finishing a setup step flies its check into a ring that fills one segment at a time. Complete it and the ring becomes a badge.",
+      "tryit": "Press Done on each step.",
+      "specs": [
+        {
+          "label": "Segments",
+          "value": "One arc per task"
+        },
+        {
+          "label": "Flight",
+          "value": "560ms from the checkbox"
+        },
+        {
+          "label": "Count",
+          "value": "Percent eases up"
+        },
+        {
+          "label": "Finish",
+          "value": "Green badge, list folds away"
+        }
+      ]
+    },
+    {
+      "number": "020",
+      "slug": "elastic-range",
+      "name": "Elastic Range",
+      "type": "Useful",
+      "topic": "Forms and Input",
+      "new": false,
+      "summary": "The date range stretches like a rubber band toward your pointer, and strains against a booked night instead of allowing an impossible stay.",
+      "tryit": "Click Nov 12, then point at Nov 24.",
+      "specs": [
+        {
+          "label": "Band",
+          "value": "Pop spring per week row"
+        },
+        {
+          "label": "Bubble",
+          "value": "Nights and price ride along"
+        },
+        {
+          "label": "Booked",
+          "value": "Clamps and strains, says why"
+        },
+        {
+          "label": "Keyboard",
+          "value": "Arrows by day and week"
+        }
+      ]
+    },
+    {
+      "number": "021",
+      "slug": "offline-queue",
+      "name": "Offline Queue",
+      "type": "Useful",
+      "topic": "Loading and Status",
+      "new": false,
+      "summary": "Changes made offline pile up in a visible queue, then fly to the cloud one by one when you reconnect.",
+      "tryit": "Switch Online off, check two tasks, then switch it back on.",
+      "specs": [
+        {
+          "label": "Offline",
+          "value": "Rows get a clock badge"
+        },
+        {
+          "label": "Queue",
+          "value": "Chips stack in a pill"
+        },
+        {
+          "label": "Reconnect",
+          "value": "Each change flies to the cloud"
+        },
+        {
+          "label": "Confirm",
+          "value": "Clock turns into a green check"
+        }
+      ]
+    },
+    {
+      "number": "022",
+      "slug": "pocket-progress",
+      "name": "Pocket Progress",
+      "type": "Useful",
+      "topic": "Loading and Status",
+      "new": false,
+      "summary": "A long export's progress sheet morphs into a small Frost pill so you can keep working. It pings when the job is done.",
+      "tryit": "Press Export CSV, then Keep Working. Click rows while it runs.",
+      "specs": [
+        {
+          "label": "Morph",
+          "value": "FLIP from sheet to pill"
+        },
+        {
+          "label": "Pill",
+          "value": "Ring plus live percent"
+        },
+        {
+          "label": "Done",
+          "value": "Turns green and pings"
+        },
+        {
+          "label": "Back",
+          "value": "Click the pill to expand"
+        }
+      ]
+    },
+    {
+      "number": "023",
+      "slug": "unsure-underline",
+      "name": "Unsure Underline",
+      "type": "Useful",
+      "topic": "AI",
+      "new": false,
+      "summary": "AI text marks the words it is unsure of, with darker underlines for less certainty, and lets you settle each one in a tap.",
+      "tryit": "Click an underlined word and pick an option.",
+      "specs": [
+        {
+          "label": "Underline",
+          "value": "Thicker and darker when unsure"
+        },
+        {
+          "label": "Popover",
+          "value": "Confidence meter plus options"
+        },
+        {
+          "label": "Settle",
+          "value": "Swap, green flash, next word"
+        },
+        {
+          "label": "Toggle",
+          "value": "Hide or show all marks"
+        }
+      ]
+    },
+    {
+      "number": "024",
+      "slug": "paper-invite",
+      "name": "Paper Invite",
+      "type": "Useful",
+      "topic": "Teams and Sharing",
+      "new": false,
+      "summary": "Invites fold into paper planes and fly off. Addresses that can't be invited boomerang back as red chips with the reason.",
+      "tryit": "Press Fill Sample Emails, then Send Invites.",
+      "specs": [
+        {
+          "label": "Input",
+          "value": "Enter, comma, space or paste"
+        },
+        {
+          "label": "Send",
+          "value": "Planes leave 140ms apart"
+        },
+        {
+          "label": "Problems",
+          "value": "Loop back with a reason"
+        },
+        {
+          "label": "Status",
+          "value": "Sent and needs-attention counts"
+        }
+      ]
+    },
+    {
+      "number": "025",
+      "slug": "preview-palette",
+      "name": "Preview Palette",
+      "type": "Useful",
+      "topic": "Search and Navigation",
+      "new": false,
+      "summary": "A command palette that previews each command live on the page before you commit. Escape puts everything back.",
+      "tryit": "Open Commands, arrow through the options, then press Enter or Escape.",
+      "specs": [
+        {
+          "label": "Preview",
+          "value": "Applies while highlighted"
+        },
+        {
+          "label": "Signal",
+          "value": "Aqua ring and Previewing badge"
+        },
+        {
+          "label": "Revert",
+          "value": "Escape, click away, or leave the list"
+        },
+        {
+          "label": "Sort",
+          "value": "Rows reorder with FLIP"
+        }
+      ]
+    },
+    {
+      "number": "026",
+      "slug": "token-taximeter",
+      "name": "Token Taximeter",
+      "type": "Useful",
+      "topic": "Billing and Plans",
+      "new": false,
+      "summary": "A taxi meter runs as you type a prompt, so you see what it will cost, and how much of the budget it uses, before you send it.",
+      "tryit": "Type into the prompt, then switch to Smart and Long.",
+      "specs": [
+        {
+          "label": "Fare",
+          "value": "Odometer digits roll on a spring"
+        },
+        {
+          "label": "Estimate",
+          "value": "Characters ÷ 4, swap in a tokenizer"
+        },
+        {
+          "label": "Controls",
+          "value": "Model and answer length"
+        },
+        {
+          "label": "Budget",
+          "value": "Spent so far plus this prompt"
+        }
+      ]
+    },
+    {
+      "number": "027",
+      "slug": "approval-stamp",
+      "name": "Approval Stamp",
+      "type": "Useful",
+      "topic": "Teams and Sharing",
+      "new": false,
+      "summary": "Approving or declining lands an ink stamp with who decided and when. Undo lifts it back off.",
+      "tryit": "Press Approve, then Undo. Try Decline, which asks for a reason first.",
+      "specs": [
+        {
+          "label": "Stamp",
+          "value": "Slams from 2.2× with blur"
+        },
+        {
+          "label": "Record",
+          "value": "Initials, date and time"
+        },
+        {
+          "label": "Decline",
+          "value": "Requires a reason"
+        },
+        {
+          "label": "Undo",
+          "value": "6 seconds to lift it off"
+        }
+      ]
+    },
+    {
+      "number": "028",
+      "slug": "lasso-select",
+      "name": "Lasso Select",
+      "type": "Useful",
+      "topic": "Files and Data",
+      "new": false,
+      "summary": "Draw a free-form loop around files to select them. Files light up as the loop reaches them, and a count follows your pointer.",
+      "tryit": "Draw a loop around a few files. Hold Shift and draw again to add more.",
+      "specs": [
+        {
+          "label": "Shape",
+          "value": "Free-form, not a rectangle"
+        },
+        {
+          "label": "Test",
+          "value": "Tile centers inside the loop"
+        },
+        {
+          "label": "Count",
+          "value": "Bubble rides the pointer"
+        },
+        {
+          "label": "Keyboard",
+          "value": "Arrows, Space, ⌘A, Escape"
+        }
+      ]
+    },
+    {
+      "number": "029",
+      "slug": "archive-drawer",
+      "name": "Archive Drawer",
+      "type": "Useful",
+      "topic": "Files and Data",
+      "new": false,
+      "summary": "Archived messages fly into a little drawer that visibly fills up. Open it to put anything back.",
+      "tryit": "Archive two messages, then open the drawer and restore one.",
+      "specs": [
+        {
+          "label": "Flight",
+          "value": "560ms arc into the drawer"
+        },
+        {
+          "label": "Fill",
+          "value": "Papers stack, front gulps"
+        },
+        {
+          "label": "Count",
+          "value": "Badge on the drawer"
+        },
+        {
+          "label": "Restore",
+          "value": "Flies back into the list"
+        }
+      ]
+    },
+    {
+      "number": "030",
+      "slug": "sort-trace",
+      "name": "Sort Trace",
+      "type": "Useful",
+      "topic": "Search and Navigation",
+      "new": false,
+      "summary": "When a table re-sorts, each row glides to its new place and leaves a fading trail showing where it came from and how far it moved.",
+      "tryit": "Click MRR, then Account, then MRR again.",
+      "specs": [
+        {
+          "label": "Motion",
+          "value": "Rows FLIP to new places"
+        },
+        {
+          "label": "Trails",
+          "value": "Green up, amber down"
+        },
+        {
+          "label": "Badges",
+          "value": "↑3 or ↓2 per row"
+        },
+        {
+          "label": "Fade",
+          "value": "Trails clear after 2.6s"
+        }
+      ]
+    },
+    {
+      "number": "031",
+      "slug": "step-fold",
+      "name": "Step Fold",
+      "type": "Useful",
+      "topic": "Forms and Input",
+      "new": false,
+      "summary": "Finished steps fold up into summary chips, so the form stays short and every answer is one tap away from editing.",
+      "tryit": "Continue through the steps, then tap a chip to change an answer.",
+      "specs": [
+        {
+          "label": "Fold",
+          "value": "Folds up around its top edge"
+        },
+        {
+          "label": "Chips",
+          "value": "Step name plus the answer"
+        },
+        {
+          "label": "Edit",
+          "value": "Tap a chip to unfold it"
+        },
+        {
+          "label": "Finish",
+          "value": "Total and billing summary"
+        }
+      ]
+    },
+    {
+      "number": "032",
+      "slug": "rewind-scrub",
+      "name": "Rewind Scrub",
+      "type": "Useful",
+      "topic": "Files and Data",
+      "new": false,
+      "summary": "Drag back through a document's history and watch each edit undo itself in place, with who made it and when.",
+      "tryit": "Drag the scrubber left, then press Restore This Version.",
+      "specs": [
+        {
+          "label": "Diff",
+          "value": "Word-level, added and removed"
+        },
+        {
+          "label": "Who",
+          "value": "Author, change and time"
+        },
+        {
+          "label": "State",
+          "value": "Live or Viewing Version n"
+        },
+        {
+          "label": "Restore",
+          "value": "Adds a version, keeps history"
+        }
+      ]
+    },
+    {
+      "number": "033",
+      "slug": "due-heat",
+      "name": "Due Heat",
+      "type": "Useful",
+      "topic": "Meetings and Calendar",
+      "new": false,
+      "summary": "Due dates warm up continuously as they approach, from calm gray to blue, amber and red, and pulse faster in the final day.",
+      "tryit": "Drag Move Time Forward slowly to the right.",
+      "specs": [
+        {
+          "label": "Heat",
+          "value": "Eases in over the last 3 days"
+        },
+        {
+          "label": "Pulse",
+          "value": "Quickens in the final 24h"
+        },
+        {
+          "label": "Overdue",
+          "value": "Solid red and a single shake"
+        },
+        {
+          "label": "Live",
+          "value": "Updates every 30 seconds"
+        }
+      ]
+    },
+    {
+      "number": "034",
+      "slug": "scope-chips",
+      "name": "Scope Chips",
+      "type": "Useful",
+      "topic": "Search and Navigation",
+      "new": false,
+      "summary": "Typing from:mira or in:billing morphs into a colored chip. Backspace into a chip and it melts back into editable text.",
+      "tryit": "Type from:mi then a space, then in:b. Press Backspace twice.",
+      "specs": [
+        {
+          "label": "Keys",
+          "value": "from, in and is"
+        },
+        {
+          "label": "Morph",
+          "value": "Chip grows from the left"
+        },
+        {
+          "label": "Melt",
+          "value": "Backspace turns it back to text"
+        },
+        {
+          "label": "Results",
+          "value": "Filter live as chips change"
+        }
+      ]
+    },
+    {
+      "number": "035",
+      "slug": "access-ladder",
+      "name": "Access Ladder",
+      "type": "Useful",
+      "topic": "Teams and Sharing",
+      "new": false,
+      "summary": "Choosing who can open a link climbs a ladder, and a crowd beside it shows exactly how many people that lets in.",
+      "tryit": "Click each rung from Only You up to Anyone with the Link.",
+      "specs": [
+        {
+          "label": "Ladder",
+          "value": "Rail fills to the chosen rung"
+        },
+        {
+          "label": "Crowd",
+          "value": "One dot per person"
+        },
+        {
+          "label": "Public",
+          "value": "Globe and an amber warning"
+        },
+        {
+          "label": "Keyboard",
+          "value": "Arrow keys climb"
+        }
+      ]
+    },
+    {
+      "number": "036",
+      "slug": "could-be-email",
+      "name": "Could've Been an Email",
+      "type": "Secretly Useful",
+      "topic": "Meetings and Calendar",
+      "new": true,
+      "summary": "A short meeting with no agenda quietly folds itself into an envelope, and works out how many hours sending it would give back.",
+      "tryit": "Wait a second. Then try It Really Needs a Meeting, or type an agenda.",
+      "specs": [
+        {
+          "label": "Rule",
+          "value": "Under 3 words of agenda"
+        },
+        {
+          "label": "Fold",
+          "value": "Event springs into an envelope"
+        },
+        {
+          "label": "Math",
+          "value": "People × minutes saved"
+        },
+        {
+          "label": "Escape",
+          "value": "Type an agenda to unfold"
+        }
+      ]
+    },
+    {
+      "number": "037",
+      "slug": "anxious-dots",
+      "name": "Anxious Typing Dots",
+      "type": "Pure Joke",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "The typing indicator gets more nervous the longer they type. It grows, speeds up, shakes, deletes everything, and sends \"yes\".",
+      "tryit": "Watch it play, then press Replay.",
+      "specs": [
+        {
+          "label": "Stages",
+          "value": "Typing to a novel in 7 steps"
+        },
+        {
+          "label": "Bubble",
+          "value": "Grows on a ui spring"
+        },
+        {
+          "label": "Dots",
+          "value": "Bob faster, then jitter"
+        },
+        {
+          "label": "Ending",
+          "value": "4 minutes, 3 letters"
+        }
+      ]
+    },
+    {
+      "number": "038",
+      "slug": "rage-click",
+      "name": "Rage Click Detector",
+      "type": "Secretly Useful",
+      "topic": "Loading and Status",
+      "new": true,
+      "summary": "Click a busy button again and again and it notices, tells you how long is really left, promises only one job started, and hands you a stress ball.",
+      "tryit": "Press Export PDF, then click it five times fast. Squeeze the ball.",
+      "specs": [
+        {
+          "label": "Rage",
+          "value": "4 clicks inside 1.5 seconds"
+        },
+        {
+          "label": "Queue",
+          "value": "Extra clicks never start jobs"
+        },
+        {
+          "label": "Ball",
+          "value": "Squash and pop spring"
+        },
+        {
+          "label": "Honesty",
+          "value": "Real time left, every click"
+        }
+      ]
+    },
+    {
+      "number": "039",
+      "slug": "ai-flip-flop",
+      "name": "AI Flip-Flop",
+      "type": "Pure Joke",
+      "topic": "AI",
+      "new": true,
+      "summary": "Ask the assistant \"Are you sure?\" and it changes its answer, while its confidence badge shrinks, turns red and starts to sweat.",
+      "tryit": "Press Are You Sure? until it pulls itself together.",
+      "specs": [
+        {
+          "label": "Badge",
+          "value": "Scales with confidence"
+        },
+        {
+          "label": "Color",
+          "value": "Green to amber to red"
+        },
+        {
+          "label": "Sweat",
+          "value": "Below 60%, faster below 25%"
+        },
+        {
+          "label": "Ending",
+          "value": "Back to 100%, no apology"
+        }
+      ]
+    },
+    {
+      "number": "040",
+      "slug": "terms-speedrun",
+      "name": "Terms Speedrun",
+      "type": "Secretly Useful",
+      "topic": "Forms and Input",
+      "new": true,
+      "summary": "Scroll through the terms at an impossible speed and the checkbox admits what really happened, then gives you the short version.",
+      "tryit": "Flick the terms to the bottom as fast as you can.",
+      "specs": [
+        {
+          "label": "Meter",
+          "value": "Live words per second"
+        },
+        {
+          "label": "Honest",
+          "value": "Under 12 words per second"
+        },
+        {
+          "label": "Busted",
+          "value": "The checkbox label changes"
+        },
+        {
+          "label": "Summary",
+          "value": "Three lines that matter"
+        }
+      ]
+    },
+    {
+      "number": "041",
+      "slug": "lgtm-stamp",
+      "name": "LGTM (Didn't Look)",
+      "type": "Pure Joke",
+      "topic": "Developer Tools",
+      "new": true,
+      "summary": "Approve a 2,000-line pull request seconds after opening it, and the approval stamp tells everyone what really happened.",
+      "tryit": "Press Approve right away. Then Undo, scroll the whole diff and approve again.",
+      "specs": [
+        {
+          "label": "Timer",
+          "value": "Starts when the review is on screen"
+        },
+        {
+          "label": "Viewed",
+          "value": "Follows how far the diff is scrolled"
+        },
+        {
+          "label": "Honest",
+          "value": "80% of files or 20 seconds"
+        },
+        {
+          "label": "Stamp",
+          "value": "Slams in, rotated −9°"
+        }
+      ]
+    },
+    {
+      "number": "042",
+      "slug": "friday-deploy",
+      "name": "Friday Deploy Hard Hat",
+      "type": "Secretly Useful",
+      "topic": "Developer Tools",
+      "new": true,
+      "summary": "After 4 PM on a Friday, Deploy puts on a hard hat and caution tape, makes you hold it for two seconds, and offers Monday instead.",
+      "tryit": "Hold Deploy for two seconds, or let go early. Try Tue 11 AM for comparison.",
+      "specs": [
+        {
+          "label": "Risky",
+          "value": "Friday from 4 PM"
+        },
+        {
+          "label": "Hold",
+          "value": "2 seconds to deploy anyway"
+        },
+        {
+          "label": "Hat",
+          "value": "Drops in on a pop spring"
+        },
+        {
+          "label": "Escape",
+          "value": "Schedule for Monday 10 AM"
+        }
+      ]
+    },
+    {
+      "number": "043",
+      "slug": "commit-mood",
+      "name": "Commit Mood Ring",
+      "type": "Pure Joke",
+      "topic": "Developer Tools",
+      "new": true,
+      "summary": "Commit messages are read as feelings. From “fix” to “pls work”, the mood ring slides from calm aqua to quiet acceptance.",
+      "tryit": "Tap fix, fix again, final fix and pls work in order.",
+      "specs": [
+        {
+          "label": "Score",
+          "value": "Words like fix, again, pls, why"
+        },
+        {
+          "label": "Window",
+          "value": "The last four commits"
+        },
+        {
+          "label": "Moods",
+          "value": "Calm to Acceptance in six steps"
+        },
+        {
+          "label": "Care",
+          "value": "A break at Bargaining"
+        }
+      ]
+    },
+    {
+      "number": "044",
+      "slug": "rubber-duck",
+      "name": "Rubber Duck Gate",
+      "type": "Secretly Useful",
+      "topic": "Developer Tools",
+      "new": true,
+      "summary": "Before you file a bug, a rubber duck asks you to explain it first. It nods along, and half the time you solve it yourself.",
+      "tryit": "Press File Bug, then explain the problem in two sentences.",
+      "specs": [
+        {
+          "label": "Gate",
+          "value": "First press summons the duck"
+        },
+        {
+          "label": "Nod",
+          "value": "At every finished sentence"
+        },
+        {
+          "label": "Unlock",
+          "value": "After two sentences"
+        },
+        {
+          "label": "Joy",
+          "value": "A backflip when you solve it"
+        }
+      ]
+    },
+    {
+      "number": "045",
+      "slug": "final-final",
+      "name": "final_FINAL_v3",
+      "type": "Pure Joke",
+      "topic": "Files and Data",
+      "new": true,
+      "summary": "Every save renames the file one step further: final, final_v2, FINAL, FINAL_final_v3 (use this one)… and back to where it started.",
+      "tryit": "Press Save over and over, or ⌘S with focus inside.",
+      "specs": [
+        {
+          "label": "Stages",
+          "value": "Ten names, then full circle"
+        },
+        {
+          "label": "Typing",
+          "value": "Backspaces, then retypes"
+        },
+        {
+          "label": "Folder",
+          "value": "Every old version piles up"
+        },
+        {
+          "label": "Shortcut",
+          "value": "⌘S or Ctrl+S"
+        }
+      ]
+    },
+    {
+      "number": "046",
+      "slug": "tone-thermometer",
+      "name": "Tone Thermometer",
+      "type": "Secretly Useful",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "Passive-aggressive phrases drop the temperature of your message until it frosts over. One button warms it up with friendlier words.",
+      "tryit": "Add a phrase chip and watch the frost spread, then press Warm It Up.",
+      "specs": [
+        {
+          "label": "Start",
+          "value": "22° and warm"
+        },
+        {
+          "label": "Cost",
+          "value": "“Per my last email” is −14°"
+        },
+        {
+          "label": "Frost",
+          "value": "Creeps in from the corners"
+        },
+        {
+          "label": "Thaw",
+          "value": "Swaps every phrase at once"
+        }
+      ]
+    },
+    {
+      "number": "047",
+      "slug": "quick-question",
+      "name": "Quick Question Stopwatch",
+      "type": "Pure Joke",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "Start a message with “quick question” and a stopwatch starts too, following the thread until it admits this is a meeting now.",
+      "tryit": "Press Send and watch the thread unfold.",
+      "specs": [
+        {
+          "label": "Trigger",
+          "value": "“quick question”"
+        },
+        {
+          "label": "Clock",
+          "value": "Time-lapse of a real thread"
+        },
+        {
+          "label": "Verdict",
+          "value": "Quick to meeting in four steps"
+        },
+        {
+          "label": "Ending",
+          "value": "Turn It Into a Call"
+        }
+      ]
+    },
+    {
+      "number": "048",
+      "slug": "circle-back",
+      "name": "Circle Back Boomerang",
+      "type": "Secretly Useful",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "“Let’s circle back next week” becomes a boomerang. Send it and it spins away, then flies back a week later as a reminder.",
+      "tryit": "Press Send, then Skip Ahead a Week.",
+      "specs": [
+        {
+          "label": "Phrases",
+          "value": "Circle back, follow up, touch base"
+        },
+        {
+          "label": "When",
+          "value": "Tomorrow, weekdays, next week"
+        },
+        {
+          "label": "Flight",
+          "value": "Five spins out, five back"
+        },
+        {
+          "label": "Return",
+          "value": "Lands as a reminder card"
+        }
+      ]
+    },
+    {
+      "number": "049",
+      "slug": "exclamation-budget",
+      "name": "Exclamation Budget",
+      "type": "Pure Joke",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "You get three exclamation marks per message. Spend them, and any more quietly turn into periods while the field shrugs.",
+      "tryit": "Tap Add “!”, then Add “!!!”.",
+      "specs": [
+        {
+          "label": "Budget",
+          "value": "Three per message"
+        },
+        {
+          "label": "Overflow",
+          "value": "Extra ones become periods"
+        },
+        {
+          "label": "Refund",
+          "value": "Delete one to get it back"
+        },
+        {
+          "label": "Shop",
+          "value": "3 more for $0.99 (not really)"
+        }
+      ]
+    },
+    {
+      "number": "050",
+      "slug": "attachment-shrug",
+      "name": "Attachment Shrug",
+      "type": "Secretly Useful",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "Write “see the attached deck” with nothing attached and the Send button shrugs at you instead of sending.",
+      "tryit": "Press Send. Then attach the file and send again.",
+      "specs": [
+        {
+          "label": "Detects",
+          "value": "attached, attachment, enclosed"
+        },
+        {
+          "label": "Hint",
+          "value": "The paperclip glances around"
+        },
+        {
+          "label": "Shrug",
+          "value": "Send lifts twice, ¯\\_(ツ)_/¯"
+        },
+        {
+          "label": "Choice",
+          "value": "Attach File or Send Anyway"
+        }
+      ]
+    },
+    {
+      "number": "051",
+      "slug": "mute-mime",
+      "name": "Mute Mime",
+      "type": "Secretly Useful",
+      "topic": "Meetings and Calendar",
+      "new": true,
+      "summary": "Talk while muted and your voice bounces off an invisible glass box around your tile, like a mime. Then it tells you you’re on mute.",
+      "tryit": "Hold Hold to Talk for two seconds. Then unmute and hold again.",
+      "specs": [
+        {
+          "label": "Waves",
+          "value": "A ring every 420ms"
+        },
+        {
+          "label": "Box",
+          "value": "Flashes where the waves hit"
+        },
+        {
+          "label": "Toast",
+          "value": "After 1.4 seconds muted"
+        },
+        {
+          "label": "Live",
+          "value": "Rings turn green and escape"
+        }
+      ]
+    },
+    {
+      "number": "052",
+      "slug": "camera-curtain",
+      "name": "Camera-Off Curtain",
+      "type": "Pure Joke",
+      "topic": "Meetings and Calendar",
+      "new": true,
+      "summary": "Turning your camera off draws red velvet theater curtains across your tile. Turning it on opens the show with a spotlight.",
+      "tryit": "Turn the camera off, wait a second, then turn it back on.",
+      "specs": [
+        {
+          "label": "Curtains",
+          "value": "Slide in on a pop spring"
+        },
+        {
+          "label": "Sign",
+          "value": "Intermission, after 0.9s"
+        },
+        {
+          "label": "Opening",
+          "value": "Spotlight sweep"
+        },
+        {
+          "label": "Billing",
+          "value": "“And now, presenting…”"
+        }
+      ]
+    },
+    {
+      "number": "053",
+      "slug": "overtime-fuse",
+      "name": "Overtime Fuse",
+      "type": "Secretly Useful",
+      "topic": "Meetings and Calendar",
+      "new": true,
+      "summary": "Once a meeting runs past its end time, the progress bar becomes a burning fuse, with a running count of person-minutes.",
+      "tryit": "Drag Move Time Forward past 30 minutes.",
+      "specs": [
+        {
+          "label": "Before",
+          "value": "A normal progress bar"
+        },
+        {
+          "label": "After",
+          "value": "A rope burning right to left"
+        },
+        {
+          "label": "Cost",
+          "value": "Minutes over × people"
+        },
+        {
+          "label": "Nudge",
+          "value": "End button pulses at 5 min"
+        }
+      ]
+    },
+    {
+      "number": "054",
+      "slug": "line-clear",
+      "name": "Line Clear",
+      "type": "Secretly Useful",
+      "topic": "Meetings and Calendar",
+      "new": true,
+      "summary": "Accepted meetings drop into your day like falling blocks. Fill every gap and the day flashes like a cleared line, then offers to protect lunch.",
+      "tryit": "Accept all three invites, then protect lunch.",
+      "specs": [
+        {
+          "label": "Drop",
+          "value": "Blocks fall into their slot"
+        },
+        {
+          "label": "Clear",
+          "value": "Rows flash top to bottom"
+        },
+        {
+          "label": "Count",
+          "value": "Free hours, live"
+        },
+        {
+          "label": "Lunch",
+          "value": "Pushes the 12:00 meeting out"
+        }
+      ]
+    },
+    {
+      "number": "055",
+      "slug": "shoulder-cursor",
+      "name": "Over-the-Shoulder Cursor",
+      "type": "Pure Joke",
+      "topic": "Teams and Sharing",
+      "new": true,
+      "summary": "A teammate’s cursor lingering on your paragraph puts on tiny reading glasses, then leans in. Start typing and it darts away.",
+      "tryit": "Wait for the glasses, then type in the first paragraph.",
+      "specs": [
+        {
+          "label": "Glasses",
+          "value": "After 2.5 seconds of reading"
+        },
+        {
+          "label": "Lean",
+          "value": "Scales up after 5 seconds"
+        },
+        {
+          "label": "Startle",
+          "value": "Typing sends it to a corner"
+        },
+        {
+          "label": "Return",
+          "value": "Wanders back after 4 seconds"
+        }
+      ]
+    },
+    {
+      "number": "056",
+      "slug": "dusty-doc",
+      "name": "Dusty Doc",
+      "type": "Pure Joke",
+      "topic": "Files and Data",
+      "new": true,
+      "summary": "A document nobody has opened in years loads covered in dust, with a cobweb in the corner. Scrolling or swiping blows it all away.",
+      "tryit": "Scroll the page up and down, or swipe across it fast.",
+      "specs": [
+        {
+          "label": "Dust",
+          "value": "About 520 specks on a canvas"
+        },
+        {
+          "label": "Scroll",
+          "value": "Blows a share off each move"
+        },
+        {
+          "label": "Swipe",
+          "value": "Fast moves clear a path"
+        },
+        {
+          "label": "Web",
+          "value": "Falls off below 45% dust"
+        }
+      ]
+    },
+    {
+      "number": "057",
+      "slug": "autosave-thanks",
+      "name": "Autosave Appreciation",
+      "type": "Secretly Useful",
+      "topic": "Files and Data",
+      "new": true,
+      "summary": "Press ⌘S in an app that already autosaves and it thanks you for the gesture, getting more philosophical the more you press.",
+      "tryit": "Click into the notes and press ⌘S or Ctrl+S a few times.",
+      "specs": [
+        {
+          "label": "Catches",
+          "value": "⌘S and Ctrl+S"
+        },
+        {
+          "label": "Toast",
+          "value": "Frost with a heart"
+        },
+        {
+          "label": "Ladder",
+          "value": "Seven messages by count"
+        },
+        {
+          "label": "Count",
+          "value": "×n from the second press"
+        }
+      ]
+    },
+    {
+      "number": "058",
+      "slug": "unsubscribe-eager",
+      "name": "Unsubscribe Comes to You",
+      "type": "Pure Joke",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "The opposite of the button that runs away. Unsubscribe slides toward your cursor, grows, and says “Yes, This One.” One click, done.",
+      "tryit": "Move your mouse toward Unsubscribe and let it come to you.",
+      "specs": [
+        {
+          "label": "Range",
+          "value": "Notices you within 220px"
+        },
+        {
+          "label": "Pull",
+          "value": "Moves 62% of the way to you"
+        },
+        {
+          "label": "Labels",
+          "value": "Over Here, then Yes, This One"
+        },
+        {
+          "label": "Exit",
+          "value": "One click, no survey"
+        }
+      ]
+    },
+    {
+      "number": "059",
+      "slug": "dizzy-refresh",
+      "name": "Dizzy Refresh",
+      "type": "Secretly Useful",
+      "topic": "Loading and Status",
+      "new": true,
+      "summary": "Pull to refresh again and again and the spinner gets woozy, then dizzy with spinning eyes, then offers to just tell you when something arrives.",
+      "tryit": "Pull the list down, or press refresh five times quickly.",
+      "specs": [
+        {
+          "label": "Pull",
+          "value": "Bars appear as you drag"
+        },
+        {
+          "label": "Woozy",
+          "value": "From the third refresh"
+        },
+        {
+          "label": "Dizzy",
+          "value": "From the fifth, with eyes"
+        },
+        {
+          "label": "Offer",
+          "value": "Notify me instead"
+        }
+      ]
+    },
+    {
+      "number": "060",
+      "slug": "aging-reminder",
+      "name": "Aging Reminder",
+      "type": "Secretly Useful",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "Every snooze makes the reminder visibly older: yellowed, curled, taped back up, coffee-stained. Done snaps it fresh again.",
+      "tryit": "Press Snooze 1 Hour five or six times, then Done.",
+      "specs": [
+        {
+          "label": "Age",
+          "value": "Snoozes ÷ 8"
+        },
+        {
+          "label": "Wear",
+          "value": "Olive, wrinkles, curl, tilt"
+        },
+        {
+          "label": "Extras",
+          "value": "Tape at 3, coffee at 5"
+        },
+        {
+          "label": "Done",
+          "value": "Springs flat and fresh"
+        }
+      ]
+    },
+    {
+      "number": "061",
+      "slug": "cancel-dodge",
+      "name": "Cancel, Eventually",
+      "type": "Pure Joke",
+      "topic": "Billing and Plans",
+      "new": true,
+      "summary": "Reach for Cancel and it swaps places with Keep My Plan, so you land on Keep instead. Five times. Then it gets tired, walks back, and lets you leave.",
+      "tryit": "Move your mouse onto Cancel Subscription. Keep chasing it.",
+      "specs": [
+        {
+          "label": "Swaps",
+          "value": "Five, Cancel left and Keep right"
+        },
+        {
+          "label": "Mid-run",
+          "value": "Clicks do nothing"
+        },
+        {
+          "label": "Then",
+          "value": "Walks home tired and works"
+        },
+        {
+          "label": "Pressed",
+          "value": "Soft red turns solid red"
+        }
+      ]
+    }
+  ]
+}

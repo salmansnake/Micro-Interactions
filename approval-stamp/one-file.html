@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approval Stamp</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .as so they never affect the rest of your page. */
+.as {
+  --duration-base: 200ms;
+  --duration-slower: 480ms;
+  --ease-in: cubic-bezier(0.5, 0, 0.78, 0.24);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-h2: 36px;
+  --leading-small: 18px;
+  --leading-title: 28px;
+  --press-scale: 0.97;
+  --press-scale-sm: 0.94;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-h2: 30px;
+  --text-small: 13px;
+  --text-title: 20px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --danger: #ce2c31;
+  --danger-foreground: #ffffff;
+  --danger-subtle: var(--red-3);
+  --danger-text: #ca2b30;
+  --foreground: var(--black);
+  --green-11: #218358;
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --red-11: #ce2c31;
+  --red-3: #feebec;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --success-foreground: #ffffff;
+  --success-text: #1f7b53;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .as, .dark .as {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --danger: #d4373c;
+  --danger-foreground: #ffffff;
+  --danger-subtle: var(--red-3);
+  --danger-text: var(--red-11);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --red-11: #ff9592;
+  --red-3: #3b1219;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --success-foreground: #ffffff;
+  --success-text: var(--green-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .as {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --chart-1: var(--aqua);
+    --danger: #d4373c;
+    --danger-foreground: #ffffff;
+    --danger-subtle: var(--red-3);
+    --danger-text: var(--red-11);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-chart: #000000;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --red-11: #ff9592;
+    --red-3: #3b1219;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --success-foreground: #ffffff;
+    --success-text: var(--green-11);
+    --white: #161817;
+  }
+}
+
+/* Approval Stamp — approving or declining lands an ink stamp with who and when, and it can be lifted off again.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.as {
+  --as-bg: var(--card);
+  --as-fg: var(--foreground);
+  --as-muted: var(--muted-foreground);
+  --as-line: var(--border);
+  --as-sunken: var(--subtle);
+  --as-fill: var(--muted);
+  --as-accent: var(--primary);
+  --as-on-accent: var(--primary-foreground);
+  --as-green: var(--success-text);
+  --as-red: var(--danger-text);
+  --as-ink: var(--as-green);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--as-bg);
+  color: var(--as-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.as.is-declined { --as-ink: var(--as-red); }
+.as-card { position: relative; padding: 16px; border-radius: var(--radius-xl); background: var(--as-sunken); transition: transform var(--spring-press-duration) var(--spring-press); }
+.as-card.is-hit { animation: as-hit var(--spring-pop-duration) var(--spring-pop); }
+@keyframes as-hit { 25% { transform: scale(0.985) translateY(2px); } 100% { transform: none; } }
+.as-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.as-avatar { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--chart-1); color: var(--on-chart); font-weight: 700; }
+.as-who, .as-when { margin: 0; }
+.as-who b { font-weight: 600; }
+.as-when { color: var(--as-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.as-amount { margin: 0; font-size: var(--text-h2); line-height: var(--leading-h2); font-weight: 700; letter-spacing: var(--tracking-title); font-variant-numeric: tabular-nums; }
+.as-what { margin: 2px 0 12px; color: var(--as-muted); }
+.as-lines { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--as-line); }
+.as-lines li { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--as-line); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.as-lines li span:first-child { color: var(--as-muted); }
+/* The stamp */
+.as-stamp {
+  position: absolute;
+  right: 16px;
+  top: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 14px 7px;
+  border: 3px solid var(--as-ink);
+  border-radius: var(--radius-lg);
+  color: var(--as-ink);
+  opacity: 0;
+  transform: rotate(-9deg) scale(2.2);
+  filter: blur(4px);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  /* worn ink: speckled mask */
+  -webkit-mask-image: radial-gradient(circle at 20% 30%, var(--black) 0 60%, transparent 61%), radial-gradient(var(--black) 60%, color-mix(in srgb, var(--black) 75%, transparent) 100%);
+  -webkit-mask-size: 7px 7px, 100% 100%;
+  -webkit-mask-composite: source-over;
+  mask-image: radial-gradient(circle at 20% 30%, var(--black) 0 60%, transparent 61%), radial-gradient(var(--black) 60%, color-mix(in srgb, var(--black) 75%, transparent) 100%);
+  mask-size: 7px 7px, 100% 100%;
+  mask-composite: add;
+}
+@media (prefers-color-scheme: dark) { .as-stamp { mix-blend-mode: normal; } }
+:root[data-theme="dark"] .as-stamp { mix-blend-mode: normal; }
+.as.is-stamped .as-stamp { animation: as-slam var(--duration-slower) cubic-bezier(0.2, 0.9, 0.3, 1.25) forwards; }
+@keyframes as-slam {
+  0% { opacity: 0; transform: rotate(-9deg) scale(2.2); filter: blur(4px); }
+  55% { opacity: 1; transform: rotate(-9deg) scale(var(--press-scale-sm)); filter: blur(0); }
+  100% { opacity: 0.9; transform: rotate(-9deg) scale(1); filter: blur(0); }
+}
+.as.is-lifting .as-stamp { animation: as-lift var(--spring-press-duration) var(--ease-in) forwards; }
+@keyframes as-lift { from { opacity: 0.9; transform: rotate(-9deg) scale(1); } to { opacity: 0; transform: rotate(-4deg) scale(1.3) translateY(-20px); filter: blur(2px); } }
+.as-stamp-word { font-size: var(--text-title); line-height: var(--leading-title); font-weight: 800; letter-spacing: var(--tracking-title); }
+.as-stamp-meta { font-size: calc(var(--text-caption) - 2px); line-height: 12px; font-weight: 600; letter-spacing: normal; white-space: nowrap; }
+.as-reason { display: flex; flex-direction: column; gap: 6px; animation: as-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes as-in { from { opacity: 0; transform: translateY(-6px); } }
+.as-reason-label { padding-left: 4px; color: var(--as-muted); font-size: var(--text-small); }
+.as-reason-input { height: 44px; padding: 0 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-md); background: var(--card); color: var(--as-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
+.as-reason-input:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.as-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.as-btn { height: 44px; border: 0; border-radius: var(--radius-md); font: inherit; font-size: var(--text-title-sm); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.as-btn:active { transform: scale(var(--press-scale)); }
+.as-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.as-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+.as-decline { background: var(--danger-subtle); color: var(--as-red); }
+/* Reason field open: same label, solid red, so it's clear the next press sends the decline */
+.as-decline.is-armed { background: var(--danger); color: var(--danger-foreground); }
+.as-approve { background: var(--success); color: var(--success-foreground); }
+.as-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 0; margin: 0; color: var(--as-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.as-status:empty { display: none; }
+.as-status button { flex: none; height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--as-fill); color: var(--as-fg); font: inherit; font-weight: 600; cursor: pointer; }
+.as-status button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .as.is-stamped .as-stamp { animation: none; opacity: 0.9; transform: rotate(-9deg); filter: none; }
+  .as.is-lifting .as-stamp { animation: none; opacity: 0; }
+  .as-card.is-hit, .as-reason { animation: none; }
+}
+.as [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="as" data-mi="approval-stamp" data-approver="Jordan Lee">
+  <article class="as-card">
+    <header class="as-head">
+      <span class="as-avatar">S</span>
+      <div><p class="as-who"><b>Sam Rivera</b> requested</p><p class="as-when">Expense · Submitted today at 10:24 AM</p></div>
+    </header>
+    <p class="as-amount">$2,400.00</p>
+    <p class="as-what">Team offsite in Austin, 2 nights for 6 people</p>
+    <ul class="as-lines">
+      <li><span>Hotel</span><span>$1,620.00</span></li>
+      <li><span>Meals</span><span>$540.00</span></li>
+      <li><span>Transport</span><span>$240.00</span></li>
+    </ul>
+    <div class="as-stamp" aria-hidden="true"><span class="as-stamp-word"></span><span class="as-stamp-meta"></span></div>
+  </article>
+  <div class="as-reason" hidden>
+    <label class="as-reason-label" for="as-reason">Why are you declining? Sam will see this.</label>
+    <input id="as-reason" class="as-reason-input" type="text" placeholder="Over the team's monthly budget" autocomplete="off">
+  </div>
+  <div class="as-actions">
+    <button type="button" class="as-btn as-decline">Decline</button>
+    <button type="button" class="as-btn as-approve">Approve</button>
+  </div>
+  <p class="as-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Approval Stamp — vanilla JS. Auto-initializes every [data-mi="approval-stamp"].
+   data-approver names who stamps. Call window.initApprovalStamp(el) for elements added later. */
+(function () {
+  'use strict';
+  var UNDO_MS = 6000;
+
+  function initApprovalStamp(root) {
+    if (!root || root.__miStamp) return;
+    root.__miStamp = true;
+    var approver = root.getAttribute('data-approver') || 'You';
+    var card = root.querySelector('.as-card');
+    var word = root.querySelector('.as-stamp-word');
+    var meta = root.querySelector('.as-stamp-meta');
+    var approve = root.querySelector('.as-approve');
+    var decline = root.querySelector('.as-decline');
+    var reasonBox = root.querySelector('.as-reason');
+    var reason = root.querySelector('.as-reason-input');
+    var status = root.querySelector('.as-status');
+    var undoTimer = 0;
+
+    function stamp(kind) {
+      var now = new Date();
+      var initials = approver.split(/\s+/).map(function (p) { return p[0]; }).join('').toUpperCase();
+      root.classList.remove('is-lifting');
+      root.classList.toggle('is-declined', kind === 'declined');
+      word.textContent = kind === 'approved' ? 'Approved' : 'Declined';
+      meta.textContent = initials + ' · ' + now.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' · ' + now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      root.classList.remove('is-stamped'); void root.offsetWidth; root.classList.add('is-stamped');
+      // the card takes the hit just as the stamp lands
+      setTimeout(function () { card.classList.remove('is-hit'); void card.offsetWidth; card.classList.add('is-hit'); }, 200);
+      approve.disabled = decline.disabled = true;
+      reasonBox.hidden = true;
+      var msg = document.createElement('span');
+      msg.textContent = kind === 'approved'
+        ? 'Approved. Sam will be reimbursed in the next payout.'
+        : 'Declined' + (reason.value.trim() ? ': ' + reason.value.trim() : '') + '. Sam has been told why.';
+      var undo = document.createElement('button');
+      undo.type = 'button';
+      undo.textContent = 'Undo';
+      undo.addEventListener('click', lift);
+      status.replaceChildren(msg, undo);
+      clearTimeout(undoTimer);
+      undoTimer = setTimeout(function () { if (undo.isConnected) undo.remove(); }, UNDO_MS);
+      undo.focus({ preventScroll: true });
+    }
+
+    function lift() {
+      clearTimeout(undoTimer);
+      root.classList.add('is-lifting');
+      setTimeout(function () {
+        root.classList.remove('is-stamped', 'is-lifting', 'is-declined');
+        approve.disabled = decline.disabled = false;
+        decline.classList.remove('is-armed');
+        reason.value = '';
+        status.replaceChildren();
+        approve.focus({ preventScroll: true });
+      }, 400);
+    }
+
+    approve.addEventListener('click', function () { stamp('approved'); });
+    decline.addEventListener('click', function () {
+      // First press asks for a reason; the second stamps.
+      if (reasonBox.hidden) {
+        reasonBox.hidden = false;
+        decline.classList.add('is-armed');   // the label stays "Decline"; solid red says the next press sends it
+        reason.focus();
+        return;
+      }
+      stamp('declined');
+    });
+    reason.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); stamp('declined'); } if (e.key === 'Escape') { reasonBox.hidden = true; decline.classList.remove('is-armed'); decline.focus(); } });
+  }
+
+  window.initApprovalStamp = initApprovalStamp;
+  function boot() { document.querySelectorAll('[data-mi="approval-stamp"]').forEach(initApprovalStamp); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

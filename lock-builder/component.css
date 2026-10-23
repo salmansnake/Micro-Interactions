@@ -1,0 +1,75 @@
+/* Lock Builder — each password rule you meet slides a bolt into a padlock; meet them all and it snaps shut.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.lb {
+  --lb-bg: var(--card);
+  --lb-fg: var(--foreground);
+  --lb-muted: var(--muted-foreground);
+  --lb-line: var(--border);
+  --lb-sunken: var(--subtle);
+  --lb-fill: var(--muted);
+  --lb-accent: var(--primary);
+  --lb-green: var(--success);
+  --lb-green-text: var(--success-text);
+  --lb-orange: var(--warning);
+  --lb-tone: var(--lb-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--lb-bg);
+  color: var(--lb-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.lb[data-level="1"], .lb[data-level="2"] { --lb-tone: var(--lb-orange); }
+.lb[data-level="3"] { --lb-tone: var(--lb-accent); }
+.lb[data-level="4"] { --lb-tone: var(--lb-green); }
+.lb-top { display: flex; align-items: center; gap: 16px; }
+.lb-lock { flex: none; width: 56px; height: 63px; overflow: visible; }
+.lb-shackle {
+  fill: none;
+  stroke: var(--lb-tone);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transform-box: fill-box;
+  transform-origin: 100% 100%;
+  transform: translateY(-9px) rotate(14deg);
+  transition: stroke var(--duration-slow), transform var(--spring-ui-duration) var(--spring-ui);
+}
+.lb[data-level="4"] .lb-shackle { transform: none; transition: stroke var(--duration-slow), transform var(--spring-pop-duration) var(--spring-pop); }
+.lb-body { fill: color-mix(in srgb, var(--lb-tone) 18%, transparent); stroke: var(--lb-tone); stroke-width: 2; transition: fill var(--duration-slow), stroke var(--duration-slow); }
+.lb[data-level="4"] .lb-body { fill: var(--lb-green); }
+.lb-bolt { fill: var(--lb-tone); opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; transform: translateY(14px) scaleY(0.3); transition: transform var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base), fill var(--duration-slow); }
+.lb-bolt.is-in { opacity: 1; transform: none; }
+.lb[data-level="4"] .lb-bolt { fill: var(--on-color); }
+.lb.is-locked .lb-lock { animation: lb-thunk var(--spring-pop-duration) var(--spring-pop); }
+@keyframes lb-thunk { 30% { transform: translateY(3px) scale(1.04, 0.96); } 100% { transform: none; } }
+.lb-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.lb-strength { margin: 2px 0 0; color: var(--lb-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.lb-strength b { color: var(--lb-tone); }
+.lb[data-level="4"] .lb-strength b { color: var(--lb-green-text); }
+.lb-field { position: relative; display: flex; align-items: center; border-radius: var(--radius-md); background: var(--card); border: 1px solid var(--input); transition: box-shadow var(--duration-base); }
+.lb-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.lb-input { flex: 1; min-width: 0; height: 44px; padding: 0 14px; border: 0; background: transparent; color: var(--lb-fg); font: 400 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans); letter-spacing: var(--tracking-title); outline: none; }
+.lb-show { flex: none; height: 32px; margin-right: 6px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--lb-accent); font: inherit; font-weight: 600; cursor: pointer; }
+.lb-show:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.lb-rules { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0 4px; list-style: none; font-size: var(--text-body); line-height: var(--leading-body); }
+.lb-rules li { display: flex; align-items: center; gap: 10px; color: var(--lb-muted); transition: color var(--duration-base); }
+.lb-rules li.is-met { color: var(--lb-fg); }
+.lb-tick { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--lb-fill); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.lb-tick::after { content: ""; position: absolute; left: 6px; top: 3px; width: 4px; height: 8px; border: solid var(--on-color); border-width: 0 2px 2px 0; transform: rotate(45deg) scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.lb-rules li.is-met .lb-tick { background: var(--lb-green); box-shadow: none; }
+.lb-rules li.is-met .lb-tick::after { transform: rotate(45deg) scale(1); }
+@media (prefers-reduced-motion: reduce) {
+  .lb-shackle, .lb-bolt, .lb-tick::after { transition-duration: var(--duration-reduced) !important; transition-timing-function: linear !important; }
+  .lb.is-locked .lb-lock { animation: none; }
+}
+.lb [hidden] { display: none !important; }

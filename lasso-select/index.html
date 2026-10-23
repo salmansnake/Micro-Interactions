@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lasso Select · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Lasso Select — draw a free-form loop around files to select them; a live count follows your pointer.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ls {
+  --ls-bg: var(--card);
+  --ls-fg: var(--foreground);
+  --ls-muted: var(--muted-foreground);
+  --ls-line: var(--border);
+  --ls-sunken: var(--subtle);
+  --ls-fill: var(--muted);
+  --ls-accent: var(--primary);
+  --ls-on-accent: var(--primary-foreground);
+  --ls-glass: var(--frost);
+  --ls-glass-edge: var(--frost-border);
+  --ls-glass-rim: var(--frost-border);
+  --ls-glass-shadow: var(--shadow-lg);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ls-bg);
+  color: var(--ls-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ls-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.ls-hint { margin: 2px 0 0; color: var(--ls-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ls-area { position: relative; padding: 12px; border-radius: var(--radius-xl); background: var(--ls-sunken); touch-action: none; user-select: none; -webkit-user-select: none; cursor: crosshair; outline: none; }
+.ls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.ls-grid li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px 8px;
+  border-radius: var(--radius-lg);
+  cursor: default;
+  outline: none;
+  transition: background-color var(--duration-fast), transform var(--spring-ui-duration) var(--spring-ui);
+}
+.ls-grid li:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.ls-grid i { display: block; width: 44px; height: 52px; border-radius: var(--radius-md); background: linear-gradient(160deg, var(--c), color-mix(in srgb, var(--c) 65%, var(--black))); box-shadow: var(--shadow-sm); }
+.ls-grid span { max-width: 100%; overflow: hidden; font-size: var(--text-caption); line-height: var(--leading-caption); text-overflow: ellipsis; white-space: nowrap; }
+.ls-grid li.is-hot { background: color-mix(in srgb, var(--brand) 10%, transparent); transform: scale(var(--press-scale)); }
+.ls-grid li[aria-selected="true"] { background: color-mix(in srgb, var(--brand) 16%, transparent); }
+.ls-grid li[aria-selected="true"] span { color: var(--ls-accent); font-weight: 600; }
+.ls-grid li::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ls-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.5 7.8 12 13 6.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat;
+  box-shadow: 0 0 0 2px var(--ls-bg);
+  transform: scale(0);
+  transition: transform var(--spring-pop-duration) var(--spring-pop);
+}
+.ls-grid li[aria-selected="true"]::after { transform: scale(1); }
+.ls-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.ls-path { fill: color-mix(in srgb, var(--brand) 10%, transparent); stroke: var(--brand-strong); stroke-width: 1.75; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 6 5; animation: ls-march var(--duration-slower) linear infinite; }
+@keyframes ls-march { to { stroke-dashoffset: -11; } }
+.ls-path.is-closing { animation: ls-close var(--duration-slow) var(--ease-out) forwards; }
+@keyframes ls-close { to { opacity: 0; } }
+.ls-count {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  background: var(--ls-accent);
+  color: var(--ls-on-accent);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(var(--x, 0px), var(--y, 0px)) translate(14px, 14px) scale(0.6);
+  transition: opacity var(--duration-fast), transform var(--duration-fast) linear;
+}
+.ls-count.is-on { opacity: 1; transform: translate(var(--x, 0px), var(--y, 0px)) translate(14px, 14px) scale(1); }
+.ls-count.is-bump { animation: ls-bump var(--spring-pop-duration) var(--spring-pop); }
+@keyframes ls-bump { 40% { filter: brightness(1.2); } }
+/* Selection bar: a Frost capsule */
+.ls-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: center;
+  padding: 5px 5px 5px 16px;
+  border-radius: var(--radius-full);
+  background: var(--ls-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: inset 0 0 0 1px var(--frost-border), var(--ls-glass-shadow);
+  animation: ls-bar var(--spring-ui-duration) var(--spring-ui) both;
+}
+@keyframes ls-bar { from { opacity: 0; transform: translateY(10px) scale(var(--press-scale)); } }
+.ls-bar-text { margin-right: 6px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ls-act, .ls-clear { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--ls-fill); color: var(--ls-fg); font: inherit; font-weight: 600; cursor: pointer; }
+.ls-clear { width: 32px; padding: 0; font-size: calc(var(--text-title-sm) + 1px); line-height: 1; }
+.ls-act:focus-visible, .ls-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .ls-path, .ls-bar, .ls-count.is-bump { animation: none; }
+  .ls-grid li { transition-duration: var(--duration-reduced); }
+}
+.ls [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Lasso Select"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="ls" data-mi="lasso-select">
+  <div class="ls-head">
+    <p class="ls-title">Brand Assets</p>
+    <p class="ls-hint">Draw around files to select them. Hold Shift to add.</p>
+  </div>
+  <div class="ls-area" tabindex="-1">
+    <ul class="ls-grid" role="listbox" aria-multiselectable="true" aria-label="Files">
+      <li role="option" aria-selected="false" tabindex="0" style="--c:var(--brand-strong)"><i></i><span>logo-mark.svg</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--success)"><i></i><span>hero-v2.png</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--ai)"><i></i><span>pricing.fig</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--chart-2)"><i></i><span>deck-q4.pdf</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--chart-3)"><i></i><span>icon-set.zip</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--chart-1)"><i></i><span>palette.ase</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--chart-6)"><i></i><span>type-specimen.pdf</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--chart-5)"><i></i><span>photo-team.jpg</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--brand-strong)"><i></i><span>favicon.ico</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--success)"><i></i><span>og-image.png</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--ai)"><i></i><span>email-header.png</span></li>
+      <li role="option" aria-selected="false" tabindex="-1" style="--c:var(--chart-2)"><i></i><span>brand-guide.pdf</span></li>
+    </ul>
+    <svg class="ls-svg" aria-hidden="true"><path class="ls-path" d=""></path></svg>
+    <span class="ls-count" aria-hidden="true"></span>
+  </div>
+  <div class="ls-bar" role="toolbar" aria-label="Selection actions" hidden>
+    <span class="ls-bar-text" aria-live="polite"></span>
+    <button type="button" class="ls-act">Move</button>
+    <button type="button" class="ls-act">Download</button>
+    <button type="button" class="ls-clear" aria-label="Clear selection">×</button>
+  </div>
+</div>
+</div>
+<script>
+/* Lasso Select — vanilla JS. Auto-initializes every [data-mi="lasso-select"].
+   Items are [role="option"] inside .ls-grid. Call window.initLassoSelect(el) for elements added later. */
+(function () {
+  'use strict';
+
+  // Ray-casting point-in-polygon test.
+  function inside(x, y, pts) {
+    var hit = false;
+    for (var i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      var xi = pts[i][0], yi = pts[i][1], xj = pts[j][0], yj = pts[j][1];
+      if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) hit = !hit;
+    }
+    return hit;
+  }
+
+  function initLassoSelect(root) {
+    if (!root || root.__miLasso) return;
+    root.__miLasso = true;
+    var area = root.querySelector('.ls-area');
+    var items = Array.prototype.slice.call(root.querySelectorAll('[role="option"]'));
+    var path = root.querySelector('.ls-path');
+    var count = root.querySelector('.ls-count');
+    var bar = root.querySelector('.ls-bar');
+    var barText = root.querySelector('.ls-bar-text');
+    var pts = [], drawing = false, base = [], lastHot = -1, raf = 0;
+
+    function isSel(el) { return el.getAttribute('aria-selected') === 'true'; }
+    function setSel(el, on) { el.setAttribute('aria-selected', on ? 'true' : 'false'); }
+    function selectedCount() { return items.filter(isSel).length; }
+    function updateBar() {
+      var n = selectedCount();
+      bar.hidden = n === 0;
+      barText.textContent = n + (n === 1 ? ' Selected' : ' Selected');
+    }
+    function local(e) { var r = area.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+    function centers() {
+      var r = area.getBoundingClientRect();
+      return items.map(function (el) { var b = el.getBoundingClientRect(); return [b.left - r.left + b.width / 2, b.top - r.top + b.height / 2]; });
+    }
+
+    var cs = [];
+    function frame() {
+      raf = 0;
+      if (pts.length < 2) return;
+      path.setAttribute('d', 'M' + pts.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' L') + ' Z');
+      var hot = 0;
+      items.forEach(function (el, i) {
+        var inLoop = pts.length > 2 && inside(cs[i][0], cs[i][1], pts);
+        el.classList.toggle('is-hot', inLoop);
+        if (inLoop) hot++;
+      });
+      var total = hot + base.filter(function (el) { return !el.classList.contains('is-hot'); }).length;
+      var last = pts[pts.length - 1];
+      count.style.setProperty('--x', last[0] + 'px');
+      count.style.setProperty('--y', last[1] + 'px');
+      count.textContent = String(total);
+      count.classList.toggle('is-on', total > 0);
+      if (total !== lastHot) { count.classList.remove('is-bump'); void count.offsetWidth; count.classList.add('is-bump'); lastHot = total; }
+    }
+
+    area.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) return;
+      drawing = true;
+      try { area.setPointerCapture(e.pointerId); } catch (err) {}
+      base = e.shiftKey || e.metaKey ? items.filter(isSel) : [];
+      if (!e.shiftKey && !e.metaKey) items.forEach(function (el) { setSel(el, false); });
+      cs = centers();
+      pts = [local(e)];
+      lastHot = -1;
+      path.classList.remove('is-closing');
+      updateBar();
+    });
+    area.addEventListener('pointermove', function (e) {
+      if (!drawing) return;
+      var p = local(e), q = pts[pts.length - 1];
+      if (Math.hypot(p[0] - q[0], p[1] - q[1]) < 4) return;
+      pts.push(p);
+      if (!raf) raf = requestAnimationFrame(frame);
+    });
+    function end() {
+      if (!drawing) return;
+      drawing = false;
+      if (pts.length < 3) {
+        // A click, not a loop: select or clear what's under the pointer.
+        var el = document.elementFromPoint(area.getBoundingClientRect().left + pts[0][0], area.getBoundingClientRect().top + pts[0][1]);
+        var item = el && el.closest('[role="option"]');
+        if (item) { setSel(item, true); item.focus({ preventScroll: true }); }
+      } else {
+        items.forEach(function (el) { if (el.classList.contains('is-hot')) setSel(el, true); el.classList.remove('is-hot'); });
+      }
+      path.classList.add('is-closing');
+      count.classList.remove('is-on');
+      pts = [];
+      updateBar();
+    }
+    area.addEventListener('pointerup', end);
+    area.addEventListener('pointercancel', end);
+
+    // Keyboard: arrows move, Space toggles, ⌘A / Ctrl+A selects all, Escape clears.
+    area.addEventListener('keydown', function (e) {
+      var i = items.indexOf(document.activeElement);
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'a') { e.preventDefault(); items.forEach(function (el) { setSel(el, true); }); updateBar(); return; }
+      if (e.key === 'Escape') { items.forEach(function (el) { setSel(el, false); }); updateBar(); return; }
+      if (i < 0) return;
+      var cols = Math.max(1, Math.round(area.querySelector('.ls-grid').clientWidth / items[0].offsetWidth));
+      var move = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: cols, ArrowUp: -cols }[e.key];
+      if (move) {
+        e.preventDefault();
+        var n = Math.max(0, Math.min(items.length - 1, i + move));
+        items[i].tabIndex = -1; items[n].tabIndex = 0; items[n].focus();
+        if (e.shiftKey) setSel(items[n], true), updateBar();
+      } else if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        setSel(items[i], !isSel(items[i]));
+        updateBar();
+      }
+    });
+    root.querySelector('.ls-clear').addEventListener('click', function () {
+      items.forEach(function (el) { setSel(el, false); });
+      updateBar();
+      area.querySelector('[tabindex="0"]').focus();
+    });
+    root.querySelectorAll('.ls-act').forEach(function (b) {
+      b.addEventListener('click', function () { barText.textContent = b.textContent + ' ' + selectedCount() + ' files'; });
+    });
+  }
+
+  window.initLassoSelect = initLassoSelect;
+  function boot() { document.querySelectorAll('[data-mi="lasso-select"]').forEach(initLassoSelect); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initLassoSelect"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

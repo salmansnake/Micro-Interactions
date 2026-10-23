@@ -1,0 +1,32 @@
+<div class="fo" data-mi="step-fold">
+  <div class="fo-chips" aria-label="Completed steps"></div>
+  <section class="fo-step" data-step="plan" data-title="Plan">
+    <p class="fo-step-title"><span>1</span>Choose a Plan</p>
+    <div class="fo-body">
+      <div class="fo-plans" role="radiogroup" aria-label="Plan">
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Starter"><b>Starter</b><small>$12 per seat</small></label>
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Pro" checked><b>Pro</b><small>$29 per seat</small></label>
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Team"><b>Team</b><small>$79 per seat</small></label>
+      </div>
+      <button type="button" class="fo-next">Continue</button>
+    </div>
+  </section>
+  <section class="fo-step" data-step="seats" data-title="Seats">
+    <p class="fo-step-title"><span>2</span>How Many Seats?</p>
+    <div class="fo-body">
+      <div class="fo-stepper"><button type="button" class="fo-minus" aria-label="Fewer seats">−</button><output class="fo-seats" aria-live="polite">5</output><button type="button" class="fo-plus" aria-label="More seats">+</button></div>
+      <button type="button" class="fo-next">Continue</button>
+    </div>
+  </section>
+  <section class="fo-step" data-step="email" data-title="Billing">
+    <p class="fo-step-title"><span>3</span>Billing Email</p>
+    <div class="fo-body">
+      <input class="fo-email" type="email" placeholder="billing@company.com" value="finance@northwind.co" aria-label="Billing email" autocomplete="off">
+      <button type="button" class="fo-next">Continue</button>
+    </div>
+  </section>
+  <section class="fo-done" hidden>
+    <p class="fo-total"></p>
+    <button type="button" class="fo-start">Start Free Trial</button>
+  </section>
+</div>

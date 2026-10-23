@@ -1,0 +1,30 @@
+Build an "Honest Skeleton" loading pattern in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
+
+WHAT IT DOES
+Loading screens usually shimmer everything for the same length of time and never admit a problem. This one shows what is already known at once, gives each part its own skeleton, says when a part is slow, and turns a failed part into a clear error with Retry, while the rest of the screen carries on.
+
+BEHAVIOR
+1. Split the view into parts that load independently (demo: a project card with a header, a meta line, three stats, a recent-activity list and a 14-day bar chart).
+2. Data you already have (the name and icon of the item the person just clicked) renders immediately with no skeleton.
+3. Each loading part shows a skeleton shaped like its content: text bars, stat tiles, avatar rows, a chart block. Skeleton bars shimmer with a moving gradient whose speed reflects that part's expected wait (0.9s for quick parts, 1.6s for slow ones). Set aria-busy on each loading part.
+4. If a part is still loading after 1.2s, a small pill appears over it: an amber dot and "Still loading · 2s", counting up every half second.
+5. When a part arrives, its content develops out of the skeleton: fade in from blur(6px) and 3px lower, panel spring. Chart bars grow from the bottom, 30ms apart.
+6. If a part fails, replace it with an inline error row ("Usage couldn't load. Your other data is fine.") and a secondary Retry button that reloads only that part.
+7. A Reload button restarts the demo. Start loading the first time the card scrolls into view.
+
+Demo timing: meta 450ms, stats 800ms, activity 2.3s (shows the slow label), chart fails at 2.6s and succeeds on Retry.
+Reduced motion: no shimmer or develop animation; content swaps in.
+
+APPEARANCE (Outcraft Design System)
+- Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
+- Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
+- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float.
+- Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
+- Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
+- Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
+- Copy: title-case button labels, sentence-case body text, no emoji.
+- This one: the card is a 16px white card; stats are 12px rounded tiles in Soft ground; the slow label is a small elevated pill with a hairline ring.
+
+DELIVER
+The component with a parts configuration (skeleton, real content, timing), the demo card, and short usage notes.

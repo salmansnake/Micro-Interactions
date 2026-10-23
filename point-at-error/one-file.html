@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Point-at-Error</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .pe so they never affect the rest of your page. */
+.pe {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --press-scale: 0.97;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --text-body: 15px;
+  --text-small: 13px;
+  --amber-11: #ab6400;
+  --amber-3: #fff7c2;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --canvas: #FAFAF8;
+  --card: var(--white);
+  --danger: #ce2c31;
+  --danger-subtle: var(--red-3);
+  --danger-text: #ca2b30;
+  --foreground: var(--black);
+  --green-11: #218358;
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--black);
+  --red-11: #ce2c31;
+  --red-3: #feebec;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success-text: #1f7b53;
+  --warning: var(--amber-9);
+  --warning-subtle: var(--amber-3);
+  --warning-text: #a15e00;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .pe, .dark .pe {
+  --amber-11: #ffca16;
+  --amber-3: #302008;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --canvas: #0B0C0B;
+  --card: var(--white);
+  --danger: #d4373c;
+  --danger-subtle: var(--red-3);
+  --danger-text: var(--red-11);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--aqua);
+  --red-11: #ff9592;
+  --red-3: #3b1219;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success-text: var(--green-11);
+  --warning: var(--amber-9);
+  --warning-subtle: var(--amber-3);
+  --warning-text: var(--amber-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .pe {
+    --amber-11: #ffca16;
+    --amber-3: #302008;
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --canvas: #0B0C0B;
+    --card: var(--white);
+    --danger: #d4373c;
+    --danger-subtle: var(--red-3);
+    --danger-text: var(--red-11);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --primary: var(--aqua);
+    --red-11: #ff9592;
+    --red-3: #3b1219;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success-text: var(--green-11);
+    --warning: var(--amber-9);
+    --warning-subtle: var(--amber-3);
+    --warning-text: var(--amber-11);
+    --white: #161817;
+  }
+}
+
+/* Point-at-Error — the error message draws a line to the exact character that's wrong.
+   Outcraft Design System v2: a filled text field on a grouped card. */
+.pe {
+  --pe-bg: var(--card);
+  --pe-fg: var(--foreground);
+  --pe-muted: var(--muted-foreground);
+  --pe-line: var(--border);
+  --pe-sunken: var(--subtle);
+  --pe-fill: var(--muted);
+  --pe-accent: var(--primary);
+  --pe-danger: var(--danger);
+  --pe-danger-text: var(--danger-text);
+  --pe-danger-soft: var(--danger-subtle);
+  --pe-warn: var(--warning);
+  --pe-warn-text: var(--warning-text);
+  --pe-warn-soft: var(--warning-subtle);
+  --pe-ok: var(--success-text);
+  --pe-tone: var(--pe-danger);
+  --pe-tone-text: var(--pe-danger-text);
+  --pe-tone-soft: var(--pe-danger-soft);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--pe-bg);
+  color: var(--pe-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.pe.is-soft { --pe-tone: var(--pe-warn); --pe-tone-text: var(--pe-warn-text); --pe-tone-soft: var(--pe-warn-soft); }
+.pe-label { padding-left: 4px; color: var(--pe-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.pe-field {
+  position: relative;
+  border-radius: var(--radius-md);
+  background: var(--card); border: 1px solid var(--input);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out);
+}
+.pe-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.pe.has-error .pe-field { border-color: var(--pe-tone); box-shadow: 0 0 0 3px color-mix(in srgb, var(--pe-tone) 20%, transparent); }
+.pe-input {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 44px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  color: var(--pe-fg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  outline: none;
+}
+.pe-input::placeholder { color: var(--pe-muted); opacity: 0.6; }
+/* Highlight behind the offending character */
+.pe-mark {
+  position: absolute;
+  z-index: 0;
+  top: 9px;
+  bottom: 9px;
+  left: 0;
+  width: 0;
+  box-sizing: border-box;
+  border-radius: var(--radius-xs);
+  background: var(--pe-tone-soft);
+  box-shadow: inset 0 -2px 0 var(--pe-tone);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-base), left var(--spring-press-duration) var(--spring-press), width var(--spring-press-duration) var(--spring-press);
+}
+.pe-mark.is-gap { background: transparent; box-shadow: none; border: 1.5px dashed var(--pe-tone); }
+.pe.has-error .pe-mark { opacity: 1; }
+/* Connector line */
+.pe-line {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-base);
+}
+.pe.has-error .pe-line { opacity: 1; }
+.pe-line path { fill: none; stroke: var(--pe-tone); stroke-width: 1.5; stroke-linecap: round; }
+.pe-line circle { fill: var(--pe-tone); }
+.pe-msg {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  min-height: 28px;
+  margin: 14px 0 0;
+  padding-left: 20px;
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  letter-spacing: normal;
+}
+.pe.has-error .pe-msg-text { color: var(--pe-tone-text); font-weight: 500; }
+.pe.is-ok .pe-msg-text { color: var(--pe-ok); }
+.pe.is-ok .pe-msg-text::before { content: "✓ "; }
+.pe-fix {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--pe-tone-soft);
+  color: var(--pe-tone-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.pe-fix:active { transform: scale(var(--press-scale)); }
+.pe-fix:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.pe-try {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--pe-line);
+  color: var(--pe-muted);
+  font-size: var(--text-small);
+}
+.pe-try span { margin-right: 2px; }
+.pe-try button {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--pe-fill);
+  color: var(--pe-fg);
+  font: inherit;
+  white-space: pre;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.pe-try button:active { transform: scale(var(--press-scale)); }
+.pe-try button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .pe-mark, .pe-line { transition-duration: var(--duration-reduced) !important; }
+}
+.pe [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="pe" data-mi="point-at-error">
+  <label class="pe-label" for="pe-email">Work email</label>
+  <div class="pe-field">
+    <span class="pe-mark" aria-hidden="true"></span>
+    <input id="pe-email" class="pe-input" type="text" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="name@company.com" aria-describedby="pe-msg">
+  </div>
+  <p class="pe-msg" id="pe-msg" aria-live="polite"><span class="pe-msg-text"></span><button type="button" class="pe-fix" hidden>Fix it</button></p>
+  <svg class="pe-line" aria-hidden="true" focusable="false"><path d="M0 0"></path><circle r="2.5" cx="0" cy="0"></circle></svg>
+  <div class="pe-try">
+    <span>Try</span>
+    <button type="button" data-try="sarah miller@acme.io">sarah miller@acme.io</button>
+    <button type="button" data-try="sarah@@acme.io">sarah@@acme.io</button>
+    <button type="button" data-try="sarah,miller@acme.io">sarah,miller@acme.io</button>
+    <button type="button" data-try="sarah@acme">sarah@acme</button>
+    <button type="button" data-try="sarah@gmial.com">sarah@gmial.com</button>
+  </div>
+</div>
+
+
+<script>
+/* Point-at-Error — vanilla JS. Auto-initializes every [data-mi="point-at-error"].
+   Call window.initPointAtError(el) for elements added later.
+   window.checkEmail(value) is exported so you can reuse the rules. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var PAUSE = 800;
+
+  var NAMES = {
+    ',': 'comma', ';': 'semicolon', ':': 'colon', '<': '“<”', '>': '“>”',
+    '(': 'bracket', ')': 'bracket', '[': 'bracket', ']': 'bracket', '\\': 'backslash', '"': 'quote mark'
+  };
+  var TYPOS = {
+    'gmial.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmai.com': 'gmail.com', 'gmail.co': 'gmail.com',
+    'gnail.com': 'gmail.com', 'gmaill.com': 'gmail.com', 'hotmial.com': 'hotmail.com', 'hotmal.com': 'hotmail.com',
+    'yaho.com': 'yahoo.com', 'yahooo.com': 'yahoo.com', 'outlok.com': 'outlook.com', 'outlook.co': 'outlook.com',
+    'iclod.com': 'icloud.com', 'icoud.com': 'icloud.com'
+  };
+
+  function cut(v, i, len) { return v.slice(0, i) + v.slice(i + len); }
+
+  // Returns null when valid, otherwise { i, len, gap?, soft?, msg, fix?, fixLabel? }
+  function checkEmail(v) {
+    var sp = v.search(/\s/);
+    if (sp > -1) return { i: sp, len: 1, msg: 'Remove the space. Email addresses can’t contain spaces.', fix: v.replace(/\s+/g, ''), fixLabel: 'Remove spaces' };
+    var bad = v.search(/[,;:<>()\[\]\\"]/);
+    if (bad > -1) return { i: bad, len: 1, msg: 'Remove the ' + (NAMES[v[bad]] || v[bad]) + '. It isn’t allowed in an email.', fix: cut(v, bad, 1), fixLabel: 'Remove it' };
+    var at = v.indexOf('@');
+    if (at === -1) return { i: v.length, len: 0, gap: true, msg: 'Add an @ and your company domain, like @company.com.' };
+    if (at === 0) return { i: 0, len: 1, msg: 'Add your name before the @.' };
+    var at2 = v.indexOf('@', at + 1);
+    if (at2 > -1) return { i: at2, len: 1, msg: 'An email can only have one @.', fix: cut(v, at2, 1), fixLabel: 'Remove it' };
+    var dd = v.indexOf('..');
+    if (dd > -1) return { i: dd, len: 2, msg: 'Two dots in a row aren’t allowed.', fix: v.replace(/\.{2,}/g, '.'), fixLabel: 'Use one dot' };
+    var local = v.slice(0, at);
+    var domain = v.slice(at + 1);
+    if (local[0] === '.') return { i: 0, len: 1, msg: 'An email can’t start with a dot.', fix: v.slice(1), fixLabel: 'Remove it' };
+    if (local[local.length - 1] === '.') return { i: at - 1, len: 1, msg: 'Remove the dot right before the @.', fix: cut(v, at - 1, 1), fixLabel: 'Remove it' };
+    if (!domain) return { i: v.length, len: 0, gap: true, msg: 'Add the domain after the @, like company.com.' };
+    if (domain[0] === '.') return { i: at + 1, len: 1, msg: 'The domain can’t start with a dot.', fix: cut(v, at + 1, 1), fixLabel: 'Remove it' };
+    if (domain.indexOf('.') === -1) return { i: v.length, len: 0, gap: true, msg: 'Add the ending to ' + domain + ', like ' + domain + '.com.', fix: v + '.com', fixLabel: 'Add .com' };
+    if (domain[domain.length - 1] === '.') return { i: v.length, len: 0, gap: true, msg: 'Finish the ending after the dot, like .com.' };
+    var right = TYPOS[domain.toLowerCase()];
+    if (right) {
+      var d = domain.toLowerCase();
+      var s = 0;
+      while (s < d.length && d[s] === right[s]) s++;
+      var e = 0;
+      while (e < d.length - s && d[d.length - 1 - e] === right[right.length - 1 - e]) e++;
+      var len = Math.max(1, d.length - e - s);
+      return { i: at + 1 + Math.min(s, d.length - 1), len: len, soft: true, msg: 'Did you mean ' + right + '?', fix: local + '@' + right, fixLabel: 'Use ' + right };
+    }
+    return null;
+  }
+
+  function initPointAtError(root) {
+    if (!root || root.__miPoint) return;
+    root.__miPoint = true;
+
+    var input = root.querySelector('.pe-input');
+    var field = root.querySelector('.pe-field');
+    var mark = root.querySelector('.pe-mark');
+    var svg = root.querySelector('.pe-line');
+    var path = svg.querySelector('path');
+    var dot = svg.querySelector('circle');
+    var text = root.querySelector('.pe-msg-text');
+    var fixBtn = root.querySelector('.pe-fix');
+    var ctx = document.createElement('canvas').getContext('2d');
+    var current = null;
+    var timer = 0;
+
+    function measure(str) {
+      var s = getComputedStyle(input);
+      ctx.font = [s.fontStyle, s.fontWeight, s.fontSize, s.fontFamily].join(' ');
+      return ctx.measureText(str).width;
+    }
+
+    // Box of the problem characters, in the field's coordinates.
+    function charBox(err) {
+      var s = getComputedStyle(input);
+      var padL = parseFloat(s.paddingLeft);
+      var padR = parseFloat(s.paddingRight);
+      var v = input.value;
+      var x = padL + measure(v.slice(0, err.i)) - input.scrollLeft;
+      var w = err.gap ? 12 : measure(v.slice(err.i, err.i + err.len));
+      if (err.gap) x += 2;
+      else { x -= 2; w += 4; }
+      var maxX = input.clientWidth - padR - w + 4;
+      x = Math.max(padL - 4, Math.min(x, maxX));
+      return { x: x, w: Math.max(w, 6) };
+    }
+
+    function layout(animate) {
+      if (!current) return;
+      var b = charBox(current);
+      mark.style.left = b.x + 'px';
+      mark.style.width = b.w + 'px';
+      mark.classList.toggle('is-gap', !!current.gap);
+
+      var rr = root.getBoundingClientRect();
+      var fr = field.getBoundingClientRect();
+      var tr = text.getBoundingClientRect();
+      var ox = rr.left + root.clientLeft;
+      var oy = rr.top + root.clientTop;
+      var markBottom = parseFloat(getComputedStyle(mark).bottom) || 7;
+      var ex = fr.left + field.clientLeft + b.x + b.w / 2 - ox;
+      var ey = fr.top + field.clientTop + field.clientHeight - markBottom + 2 - oy;
+      var sx = tr.left - 6 - ox;
+      var sy = tr.top + 10 - oy;
+      path.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + (sx - 12) + ' ' + sy + ' ' + ex + ' ' + (ey + 22) + ' ' + ex + ' ' + ey);
+      dot.setAttribute('cx', ex);
+      dot.setAttribute('cy', ey);
+
+      if (animate && !reduce.matches && path.animate) {
+        var L = path.getTotalLength();
+        path.style.strokeDasharray = L + ' ' + L;
+        path.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: 420, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'both' });
+        dot.animate([{ opacity: 0 }, { opacity: 0, offset: 0.8 }, { opacity: 1 }], { duration: 460, fill: 'both' });
+      } else {
+        path.style.strokeDasharray = 'none';
+      }
+    }
+
+    function setState(err, ok) {
+      current = err;
+      root.classList.toggle('has-error', !!err);
+      root.classList.toggle('is-soft', !!(err && err.soft));
+      root.classList.toggle('is-ok', !!ok);
+      if (err) {
+        text.textContent = err.msg;
+        fixBtn.hidden = !err.fix;
+        fixBtn.textContent = err.fixLabel || 'Fix it';
+        input.setAttribute('aria-invalid', 'true');
+        requestAnimationFrame(function () { layout(true); });
+      } else {
+        text.textContent = ok ? 'Looks good.' : '';
+        fixBtn.hidden = true;
+        input.removeAttribute('aria-invalid');
+      }
+    }
+
+    function validate() {
+      clearTimeout(timer);
+      var v = input.value;
+      if (!v) { setState(null, false); return; }
+      var err = checkEmail(v);
+      setState(err, !err);
+    }
+
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      setState(null, false); // stay quiet while typing
+      timer = setTimeout(validate, PAUSE);
+    });
+    input.addEventListener('blur', validate);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') validate(); });
+    ['scroll', 'keyup', 'click', 'select'].forEach(function (t) {
+      input.addEventListener(t, function () { layout(false); });
+    });
+    if (window.ResizeObserver) new ResizeObserver(function () { layout(false); }).observe(root);
+
+    fixBtn.addEventListener('click', function () {
+      if (!current || !current.fix) return;
+      input.value = current.fix;
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+      validate();
+    });
+
+    root.querySelectorAll('[data-try]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        input.value = b.getAttribute('data-try');
+        input.scrollLeft = 0;
+        validate();
+      });
+    });
+  }
+
+  window.checkEmail = checkEmail;
+  window.initPointAtError = initPointAtError;
+  function boot() { document.querySelectorAll('[data-mi="point-at-error"]').forEach(initPointAtError); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

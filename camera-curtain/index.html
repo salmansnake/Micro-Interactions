@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camera-Off Curtain · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Camera-Off Curtain — turning the camera off draws theater curtains. Turning it on opens the show.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.cc {
+  --cc-bg: var(--card);
+  --cc-fg: var(--foreground);
+  --cc-muted: var(--muted-foreground);
+  --cc-fill: var(--muted);
+  --cc-accent: var(--primary);
+  --cc-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--cc-bg);
+  color: var(--cc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.cc p { margin: 0; }
+.cc-tile { position: relative; height: 230px; overflow: hidden; border-radius: var(--radius-xl); background: color-mix(in srgb, var(--on-color) 12%, var(--black)); }
+/* A soft "camera" scene: wall, lamp glow, a person who breathes */
+.cc-scene { position: absolute; inset: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--olive) 32%, var(--on-color)), color-mix(in srgb, var(--olive) 44%, var(--on-color))); }
+.cc-lamp { position: absolute; right: 12%; top: 10%; width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, color-mix(in srgb, var(--olive) 14%, var(--on-color)) 90%, transparent), color-mix(in srgb, color-mix(in srgb, var(--olive) 14%, var(--on-color)) 0%, transparent) 70%); }
+/* One-tone silhouette: a round head resting on the shoulders, no neck */
+.cc-person { --cc-skin: color-mix(in srgb, var(--olive) 36%, var(--black)); position: absolute; left: 50%; bottom: -20px; width: 150px; height: 170px; margin-left: -75px; animation: cc-breathe 4s var(--ease-in-out) infinite; }
+.cc-person::before { content: ""; position: absolute; left: 50%; top: -4px; width: 76px; height: 76px; margin-left: -38px; border-radius: 50%; background: var(--cc-skin); }
+.cc-person::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 98px; border-radius: 64px 64px 0 0 / 46px 46px 0 0; background: var(--cc-skin); }
+@keyframes cc-breathe { 50% { transform: translateY(-2px) scale(1.01); } }
+.cc-spot { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, color-mix(in srgb, var(--olive) 14%, var(--on-color)) 55%, transparent), transparent 32%); opacity: 0; mix-blend-mode: screen; }
+.cc.is-opening .cc-spot { animation: cc-spot 1.8s var(--ease-in-out) forwards; }
+@keyframes cc-spot { 0% { opacity: 0; transform: translateX(-45%); } 30% { opacity: 1; } 70% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+
+/* Velvet curtains */
+.cc-curtains { position: absolute; inset: 0; pointer-events: none; }
+.cc-left, .cc-right { position: absolute; top: 0; bottom: 0; width: 52%; background: linear-gradient(180deg, color-mix(in srgb, var(--black) 15%, transparent), transparent 30%, color-mix(in srgb, var(--black) 35%, transparent)), repeating-linear-gradient(90deg, color-mix(in srgb, var(--red-9) 66%, var(--black)) 0 6px, var(--red-9) 10px, color-mix(in srgb, var(--red-9) 82%, var(--black)) 16px, color-mix(in srgb, var(--red-9) 56%, var(--black)) 22px); box-shadow: 0 0 18px color-mix(in srgb, var(--black) 45%, transparent); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.cc-left { left: 0; transform: translateX(-104%); border-radius: 0 0 40% 0 / 0 0 12% 0; }
+.cc-right { right: 0; transform: translateX(104%); border-radius: 0 0 0 40% / 0 0 0 12%; }
+.cc.is-off .cc-left, .cc.is-off .cc-right { transform: none; }
+.cc-valance { position: absolute; left: 0; right: 0; top: 0; height: 26px; background: radial-gradient(circle at 50% 0, color-mix(in srgb, var(--red-9) 82%, var(--black)) 70%, transparent 71%) 0 0 / 34px 34px repeat-x, linear-gradient(color-mix(in srgb, var(--red-9) 66%, var(--black)), color-mix(in srgb, var(--red-9) 82%, var(--black))); background-size: 34px 34px, 100% 16px; background-repeat: repeat-x, no-repeat; border-bottom: 0; filter: drop-shadow(0 3px 3px color-mix(in srgb, var(--black) 35%, transparent)); }
+.cc-valance::after { content: ""; position: absolute; left: 0; right: 0; top: 14px; height: 2px; background: var(--amber-9); }
+.cc-sign { position: absolute; left: 50%; top: 50%; padding: 6px 12px; border-radius: var(--radius-sm); background: var(--black); color: var(--amber-9); font-size: var(--text-caption); font-weight: 700; letter-spacing: normal; box-shadow: var(--shadow-sm); opacity: 0; transform: translate(-50%, calc(-50% - 14px)) rotate(-3deg); transition: opacity var(--duration-slow), transform var(--spring-pop-duration) var(--spring-pop); }
+.cc.is-off.is-settled .cc-sign { opacity: 1; transform: translate(-50%, -50%) rotate(-3deg); }
+.cc-announce { position: absolute; left: 0; right: 0; top: 34px; color: var(--on-color); font-size: var(--text-body); font-weight: 600; text-align: center; text-shadow: 0 1px 6px color-mix(in srgb, var(--black) 60%, transparent); opacity: 0; }
+.cc.is-opening .cc-announce { animation: cc-announce 2s var(--ease-out) forwards; }
+@keyframes cc-announce { 0% { opacity: 0; transform: translateY(6px); } 20%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+.cc-label { position: absolute; left: 10px; bottom: 10px; display: inline-flex; align-items: center; box-sizing: border-box; height: 26px; padding: 0 10px; white-space: nowrap; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 62%, transparent); color: var(--on-color); font-size: var(--text-small); font-weight: 600; line-height: var(--leading-small); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+
+.cc-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cc-status { color: var(--cc-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.cc-cam { display: inline-flex; flex: none; align-items: center; gap: 6px; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--cc-fill); color: var(--cc-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.cc-cam svg { width: 20px; height: 20px; }
+.cc-cam[aria-pressed="true"] .cc-slash { display: none; }
+.cc-cam:active { transform: scale(var(--press-scale)); }
+.cc-cam:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-person, .cc.is-opening .cc-spot, .cc.is-opening .cc-announce { animation: none; }
+  .cc-left, .cc-right, .cc-sign { transition-duration: var(--duration-reduced); transition-timing-function: linear; }
+}
+.cc [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Camera-Off Curtain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="cc" data-mi="camera-curtain" data-name="Mira">
+  <div class="cc-tile">
+    <div class="cc-scene" aria-hidden="true"><span class="cc-lamp"></span><span class="cc-person"></span><span class="cc-spot"></span></div>
+    <div class="cc-curtains" aria-hidden="true">
+      <span class="cc-left"></span><span class="cc-right"></span><span class="cc-valance"></span>
+      <span class="cc-sign">Intermission</span>
+    </div>
+    <p class="cc-announce" aria-hidden="true">And now, presenting… Mira</p>
+    <span class="cc-label">Mira</span>
+  </div>
+  <div class="cc-bar">
+    <p class="cc-status" role="status" aria-live="polite">Camera on.</p>
+    <button type="button" class="cc-cam" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6.5" width="12.5" height="11" rx="2.5"/><path d="m15.5 10.5 5-3v9l-5-3Z"/><path class="cc-slash" d="M3 4l18 16" stroke-linecap="round"/></svg><span class="cc-cam-label">Turn Camera Off</span></button>
+  </div>
+</div>
+</div>
+<script>
+/* Camera-Off Curtain — vanilla JS. Auto-initializes every [data-mi="camera-curtain"].
+   root.setCamera(on) drives it from your real camera state. Call window.initCameraCurtain(el) for later elements. */
+(function () {
+  'use strict';
+
+  function initCameraCurtain(root) {
+    if (!root || root.__miCurtain) return;
+    root.__miCurtain = true;
+    var name = root.getAttribute('data-name') || 'You';
+    var cam = root.querySelector('.cc-cam'), camLabel = root.querySelector('.cc-cam-label');
+    var label = root.querySelector('.cc-label'), status = root.querySelector('.cc-status');
+    var on = true, settle = 0, open = 0;
+
+    function setCamera(v) {
+      on = v;
+      clearTimeout(settle); clearTimeout(open);
+      root.classList.toggle('is-off', !on);
+      root.classList.remove('is-settled', 'is-opening');
+      cam.setAttribute('aria-pressed', on ? 'true' : 'false');
+      camLabel.textContent = on ? 'Turn Camera Off' : 'Turn Camera On';
+      label.textContent = on ? name : name + ' · Camera Off';
+      if (on) {
+        void root.offsetWidth;
+        root.classList.add('is-opening');
+        open = setTimeout(function () { root.classList.remove('is-opening'); }, 2100);
+        status.textContent = 'Camera on. The audience is delighted.';
+      } else {
+        settle = setTimeout(function () { root.classList.add('is-settled'); }, 900);
+        status.textContent = 'Camera off. The show will resume shortly.';
+      }
+    }
+
+    cam.addEventListener('click', function () { setCamera(!on); });
+    root.setCamera = setCamera;
+  }
+
+  window.initCameraCurtain = initCameraCurtain;
+  function boot() { document.querySelectorAll('[data-mi="camera-curtain"]').forEach(initCameraCurtain); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initCameraCurtain"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

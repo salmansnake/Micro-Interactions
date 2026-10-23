@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Could&#x27;ve Been an Email · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Could've Been an Email — a short meeting with no agenda folds itself into an envelope.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ce {
+  --ce-bg: var(--card);
+  --ce-fg: var(--foreground);
+  --ce-muted: var(--muted-foreground);
+  --ce-line: var(--border);
+  --ce-sunken: var(--subtle);
+  --ce-fill: var(--muted);
+  --ce-thumb: var(--raised);
+  --ce-accent: var(--primary);
+  --ce-on-accent: var(--primary-foreground);
+  --ce-paper: var(--card);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ce-bg);
+  color: var(--ce-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ce p { margin: 0; }
+
+/* Form: one grouped list */
+.ce-fields { border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--input); box-shadow: var(--shadow-xs); }
+.ce-row { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 10px 0 16px; }
+.ce-row + .ce-row::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; height: 1px; background: var(--ce-line); transform: scaleY(0.5); transform-origin: top; }
+.ce-row-label { flex: none; }
+.ce-title-input { flex: 1; width: 0; min-width: 0; padding: 0 6px; border: 0; background: none; color: inherit; font: inherit; font-weight: 600; text-align: right; }
+.ce-title-input:focus { outline: none; }
+.ce-row:focus-within .ce-row-label { color: var(--ce-accent); }
+.ce-row--agenda { flex-direction: column; align-items: stretch; gap: 2px; padding: 12px 16px; }
+.ce-agenda { min-height: 40px; padding: 0; border: 0; background: none; color: inherit; font: inherit; resize: none; }
+.ce-agenda:focus { outline: none; }
+.ce-agenda::placeholder { color: var(--ce-muted); }
+
+/* Capsule segmented control */
+.ce-seg { --i: 1; position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 2px; border-radius: var(--radius-md); background: var(--ce-fill); }
+.ce-seg::before { content: ""; position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc((100% - 4px) / 4); border-radius: var(--radius-sm); background: var(--ce-thumb); box-shadow: var(--shadow-sm); transform: translateX(calc(var(--i) * 100%)); transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.ce-seg button { position: relative; z-index: 1; min-width: 44px; height: 30px; padding: 0 6px; border: 0; border-radius: var(--radius-sm); background: none; color: inherit; font: 600 var(--text-small)/1 inherit; font-family: inherit; font-variant-numeric: tabular-nums; cursor: pointer; }
+.ce-seg button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* Stepper */
+.ce-step { display: flex; align-items: center; gap: 2px; }
+.ce-step button { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--ce-fill); color: inherit; font: 500 var(--text-title-sm)/1 inherit; font-family: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ce-step button:active { transform: scale(var(--press-scale-sm)); }
+.ce-step button:disabled { opacity: 0.35; cursor: default; }
+.ce-step button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ce-people { min-width: 30px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Day view with one event */
+.ce-cal { position: relative; height: 136px; border-radius: var(--radius-lg); background: var(--ce-sunken); overflow: hidden; }
+.ce-hour { position: absolute; left: 0; right: 0; top: calc(12px + var(--y) * 1px); display: flex; align-items: center; gap: 8px; padding-left: 12px; color: var(--ce-muted); font-size: calc(var(--text-caption) - 1px); line-height: 1; font-variant-numeric: tabular-nums; transform: translateY(-50%); }
+.ce-hour::after { content: ""; flex: 1; height: 1px; background: var(--ce-line); transform: scaleY(0.5); }
+.ce-event {
+  --ce-h: 52px;
+  position: absolute;
+  top: 12px;
+  left: 64px;
+  width: calc(100% - 76px);
+  height: var(--ce-h);
+  border-radius: var(--radius-sm);
+  background: var(--brand-subtle);
+  color: var(--brand-text);
+  transition: top var(--spring-ui-duration) var(--spring-ui), left var(--spring-ui-duration) var(--spring-ui), width var(--spring-ui-duration) var(--spring-ui), height var(--spring-ui-duration) var(--spring-ui), background-color var(--duration-slow), box-shadow var(--duration-slow), transform var(--duration-slower) cubic-bezier(0.5, 0, 0.75, 0), opacity var(--duration-slower);
+}
+.ce-event::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: var(--radius-sm) 0 0 var(--radius-sm); background: var(--brand-strong); transition: opacity var(--duration-base); }
+.ce-face { display: flex; flex-direction: column; padding: 5px 10px 5px 12px; overflow: hidden; height: 100%; box-sizing: border-box; transition: opacity var(--duration-base); }
+.ce-face b { overflow: hidden; font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.ce-face span { overflow: hidden; font-size: var(--text-caption); line-height: var(--leading-caption); text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* The envelope it folds into */
+.ce-env { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; opacity: 0; perspective: 420px; pointer-events: none; transition: opacity var(--duration-base); }
+.ce-flap { position: absolute; left: 0; right: 0; top: 0; height: 56%; background: color-mix(in srgb, var(--ce-fg) 5%, var(--ce-paper)); clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top; transform: rotateX(178deg); filter: drop-shadow(0 1px 0 var(--ce-line)); transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.ce-stamp { position: absolute; top: 8px; right: 8px; width: 16px; height: 20px; border-radius: var(--radius-xs); outline: 1.5px dashed color-mix(in srgb, var(--brand-strong) 60%, transparent); outline-offset: -3px; background: color-mix(in srgb, var(--brand) 22%, transparent); }
+.ce-env-to, .ce-env-re { position: absolute; left: 12px; right: 12px; overflow: hidden; color: var(--ce-muted); font-size: calc(var(--text-caption) - 1px); line-height: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.ce-env-to { bottom: 24px; color: var(--ce-fg); font-weight: 600; }
+.ce-env-re { bottom: 10px; }
+
+.ce.is-email .ce-event { top: 15px; left: calc(50% - 84px); width: 168px; height: 106px; background: var(--ce-paper); box-shadow: 0 0 0 1px var(--ce-line), var(--shadow-md); }
+.ce.is-email .ce-event::before, .ce.is-email .ce-face { opacity: 0; }
+.ce.is-email .ce-env { opacity: 1; transition-delay: var(--duration-fast); }
+.ce.is-email .ce-flap { transform: rotateX(0deg); transition-delay: var(--duration-base); }
+.ce.is-sent .ce-event { transform: translate(150px, -130px) rotate(16deg) scale(0.6); opacity: 0; }
+.ce-free { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ce-muted); font-size: var(--text-small); font-weight: 500; opacity: 0; transition: opacity var(--duration-slow) var(--duration-slow); }
+.ce.is-sent .ce-free { opacity: 1; }
+
+/* Verdict */
+.ce-verdict { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--brand) 10%, transparent); animation: ce-in var(--spring-ui-duration) var(--spring-ui) both; }
+.ce-verdict-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.ce-verdict-sub { color: var(--ce-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ce-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.ce-send, .ce-keep, .ce-again { height: 40px; padding: 0 16px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ce-send { background: var(--ce-accent); color: var(--ce-on-accent); }
+.ce-keep { background: var(--ce-fill); color: var(--ce-fg); }
+.ce-again { height: 32px; padding: 0 12px; background: none; color: var(--ce-accent); }
+.ce-send:active, .ce-keep:active, .ce-again:active { transform: scale(var(--press-scale)); }
+.ce-send:focus-visible, .ce-keep:focus-visible, .ce-again:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@keyframes ce-in { from { opacity: 0; transform: translateY(-6px); } }
+.ce-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 32px; }
+.ce-status { color: var(--ce-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ce-event, .ce-flap, .ce-seg::before { transition-duration: var(--duration-reduced); transition-timing-function: linear; transition-delay: 0s !important; }
+  .ce.is-sent .ce-event { transform: none; }
+  .ce-verdict { animation: none; }
+}
+.ce [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Could&#x27;ve Been an Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="ce" data-mi="could-be-email" data-start="10:00">
+  <div class="ce-fields">
+    <label class="ce-row">
+      <span class="ce-row-label">Title</span>
+      <input class="ce-title-input" type="text" value="Quick Sync" autocomplete="off" spellcheck="false">
+    </label>
+    <div class="ce-row">
+      <span class="ce-row-label" id="ce-dur-label">Duration</span>
+      <div class="ce-seg" role="radiogroup" aria-labelledby="ce-dur-label">
+        <button type="button" role="radio" data-min="15">15m</button>
+        <button type="button" role="radio" data-min="30" aria-checked="true">30m</button>
+        <button type="button" role="radio" data-min="45">45m</button>
+        <button type="button" role="radio" data-min="60">1h</button>
+      </div>
+    </div>
+    <div class="ce-row">
+      <span class="ce-row-label" id="ce-ppl-label">People</span>
+      <div class="ce-step" role="group" aria-labelledby="ce-ppl-label">
+        <button type="button" class="ce-minus" aria-label="Fewer people">−</button>
+        <output class="ce-people" aria-live="polite">6</output>
+        <button type="button" class="ce-plus" aria-label="More people">+</button>
+      </div>
+    </div>
+    <label class="ce-row ce-row--agenda">
+      <span class="ce-row-label">Agenda</span>
+      <textarea class="ce-agenda" rows="2" placeholder="What needs to be decided?"></textarea>
+    </label>
+  </div>
+
+  <div class="ce-cal" aria-hidden="true">
+    <span class="ce-hour" style="--y: 0">10 AM</span>
+    <span class="ce-hour" style="--y: 52">10:30</span>
+    <span class="ce-hour" style="--y: 104">11 AM</span>
+    <div class="ce-event">
+      <div class="ce-face"><b class="ce-ev-title">Quick Sync</b><span class="ce-ev-time">10:00–10:30 · 6 people</span></div>
+      <div class="ce-env">
+        <span class="ce-flap"></span>
+        <span class="ce-stamp"></span>
+        <span class="ce-env-to">To: 6 people</span>
+        <span class="ce-env-re">Re: Quick Sync</span>
+      </div>
+    </div>
+    <p class="ce-free">Free from 10:00 to 10:30</p>
+  </div>
+
+  <div class="ce-verdict" hidden>
+    <p class="ce-verdict-title">This could have been an email.</p>
+    <p class="ce-verdict-sub">It would give 6 people 3 hours back.</p>
+    <div class="ce-actions">
+      <button type="button" class="ce-send">Send as Email</button>
+      <button type="button" class="ce-keep">It Really Needs a Meeting</button>
+    </div>
+  </div>
+  <div class="ce-foot">
+    <p class="ce-status" role="status" aria-live="polite"></p>
+    <button type="button" class="ce-again" hidden>Start Over</button>
+  </div>
+</div>
+</div>
+<script>
+/* Could've Been an Email — vanilla JS. Auto-initializes every [data-mi="could-be-email"].
+   A meeting with fewer than three words of agenda folds into an envelope a moment after it comes into view.
+   Call window.initCouldBeEmail(el) for elements added later. */
+(function () {
+  'use strict';
+  var PX_PER_MIN = 104 / 60;
+  var MIN_AGENDA_WORDS = 3;
+
+  function words(s) { s = s.trim(); return s ? s.split(/\s+/).length : 0; }
+  function span(min) {
+    var h = Math.floor(min / 60), m = min % 60, out = [];
+    if (h) out.push(h + (h === 1 ? ' hour' : ' hours'));
+    if (m) out.push(m + ' minutes');
+    return out.join(' ');
+  }
+  function clock(start, add) {
+    var p = start.split(':'), t = Number(p[0]) * 60 + Number(p[1]) + add;
+    return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+  }
+
+  function initCouldBeEmail(root) {
+    if (!root || root.__miEmail) return;
+    root.__miEmail = true;
+    var $ = function (s) { return root.querySelector(s); };
+    var title = $('.ce-title-input'), seg = $('.ce-seg'), agenda = $('.ce-agenda');
+    var minus = $('.ce-minus'), plus = $('.ce-plus'), peopleOut = $('.ce-people');
+    var event = $('.ce-event'), evTitle = $('.ce-ev-title'), evTime = $('.ce-ev-time');
+    var envTo = $('.ce-env-to'), envRe = $('.ce-env-re'), free = $('.ce-free');
+    var verdict = $('.ce-verdict'), vTitle = $('.ce-verdict-title'), vSub = $('.ce-verdict-sub');
+    var send = $('.ce-send'), keep = $('.ce-keep'), status = $('.ce-status'), again = $('.ce-again');
+    var buttons = Array.prototype.slice.call(seg.querySelectorAll('button'));
+    var start = root.getAttribute('data-start') || '10:00';
+    var mins = 30, people = Number(peopleOut.textContent) || 6;
+    var armed = false, overridden = false, sent = false, folded = false, timer = 0;
+
+    function pair() { return people === 2; }
+    function saved() { return span(people * mins); }
+
+    function render() {
+      var end = clock(start, mins);
+      var name = title.value.trim() || 'Untitled Meeting';
+      event.style.setProperty('--ce-h', Math.round(mins * PX_PER_MIN) + 'px');
+      evTitle.textContent = name;
+      evTime.textContent = start + '–' + end + ' · ' + people + ' people';
+      envTo.textContent = 'To: ' + people + ' people';
+      envRe.textContent = 'Re: ' + name;
+      free.textContent = 'Free from ' + start + ' to ' + end;
+      vTitle.textContent = pair() ? 'This could have been a message.' : 'This could have been an email.';
+      vSub.textContent = pair() ? 'It would give the two of you ' + saved() + ' back.' : 'It would give ' + people + ' people ' + saved() + ' back.';
+      send.textContent = pair() ? 'Send as Message' : 'Send as Email';
+      minus.disabled = people <= 2;
+      plus.disabled = people >= 40;
+      peopleOut.textContent = people;
+    }
+
+    function setFold(on) {
+      if (on === folded) return;
+      folded = on;
+      root.classList.toggle('is-email', on);
+      verdict.hidden = !on;
+    }
+
+    function evaluate() {
+      setFold(armed && !sent && !overridden && words(agenda.value) < MIN_AGENDA_WORDS);
+    }
+
+    buttons.forEach(function (b, i) {
+      b.addEventListener('click', function () { pick(i); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        pick((i + (e.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length);
+        buttons[(i + (e.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length].focus();
+      });
+    });
+    function pick(i) {
+      mins = Number(buttons[i].getAttribute('data-min'));
+      seg.style.setProperty('--i', i);
+      buttons.forEach(function (b, k) { b.setAttribute('aria-checked', k === i ? 'true' : 'false'); b.tabIndex = k === i ? 0 : -1; });
+      render();
+    }
+
+    minus.addEventListener('click', function () { people = Math.max(2, people - 1); render(); });
+    plus.addEventListener('click', function () { people = Math.min(40, people + 1); render(); });
+    title.addEventListener('input', render);
+
+    agenda.addEventListener('input', function () {
+      clearTimeout(timer);
+      if (words(agenda.value) >= MIN_AGENDA_WORDS) {
+        if (folded) status.textContent = 'Now that’s a meeting.';
+        evaluate();
+      } else {
+        // Give people a moment to finish typing before folding it again.
+        timer = setTimeout(function () { if (!folded && !overridden) status.textContent = ''; evaluate(); }, 900);
+      }
+    });
+
+    keep.addEventListener('click', function () {
+      overridden = true;
+      evaluate();
+      status.textContent = 'Fine. Add an agenda so everyone knows why they’re there.';
+      agenda.focus();
+    });
+
+    send.addEventListener('click', function () {
+      sent = true;
+      root.classList.add('is-sent');
+      verdict.hidden = true;
+      status.textContent = pair() ? 'Sent. You both got ' + saved() + ' back.' : 'Sent. ' + people + ' people just got ' + saved() + ' back.';
+      again.hidden = false;
+      again.focus();
+    });
+
+    again.addEventListener('click', function () {
+      sent = false; overridden = false; folded = false;
+      root.classList.remove('is-sent', 'is-email');
+      agenda.value = '';
+      status.textContent = '';
+      again.hidden = true;
+      title.focus();
+      clearTimeout(timer);
+      timer = setTimeout(evaluate, 1100);
+    });
+
+    // Fold a beat after it first scrolls into view, so people see it happen.
+    function arm() { if (armed) return; armed = true; timer = setTimeout(evaluate, 1100); }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); arm(); }
+      }, { threshold: 0.6 });
+      io.observe(root);
+    } else arm();
+
+    buttons.forEach(function (b, k) { if (b.getAttribute('aria-checked') === 'true') pick(k); });
+    render();
+  }
+
+  window.initCouldBeEmail = initCouldBeEmail;
+  function boot() { document.querySelectorAll('[data-mi="could-be-email"]').forEach(initCouldBeEmail); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initCouldBeEmail"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

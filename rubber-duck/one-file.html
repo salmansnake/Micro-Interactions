@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rubber Duck Gate</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .rd so they never affect the rest of your page. */
+.rd {
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --press-scale: 0.97;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --ai: var(--orange);
+  --amber-11: #ab6400;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: var(--black);
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --warning: var(--amber-9);
+  --warning-text: #a15e00;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .rd, .dark .rd {
+  --ai: var(--orange);
+  --amber-11: #ffca16;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --warning: var(--amber-9);
+  --warning-text: var(--amber-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .rd {
+    --ai: var(--orange);
+    --amber-11: #ffca16;
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-color: #ffffff;
+    --orange: #FE8C5F;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --warning: var(--amber-9);
+    --warning-text: var(--amber-11);
+    --white: #161817;
+  }
+}
+
+/* Rubber Duck Gate — before you file a bug, a rubber duck asks you to explain it. It nods along.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.rd {
+  --rd-bg: var(--card);
+  --rd-fg: var(--foreground);
+  --rd-muted: var(--muted-foreground);
+  --rd-line: var(--border);
+  --rd-sunken: var(--subtle);
+  --rd-fill: var(--muted);
+  --rd-accent: var(--primary);
+  --rd-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--rd-bg);
+  color: var(--rd-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.rd p { margin: 0; }
+.rd-form { border-radius: var(--radius-lg); background: var(--rd-sunken); }
+.rd-field { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 16px 12px; }
+.rd-field + .rd-field::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; height: 1px; background: var(--rd-line); transform: scaleY(0.5); transform-origin: top; }
+.rd-field-label { color: var(--rd-muted); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 500; transition: color var(--duration-base); }
+.rd-field:focus-within .rd-field-label { color: var(--rd-accent); }
+.rd-title, .rd-desc { padding: 0; border: 0; background: none; color: inherit; font: inherit; resize: none; }
+.rd-title { font-weight: 600; }
+.rd-title:focus, .rd-desc:focus { outline: none; }
+.rd-desc::placeholder { color: var(--rd-muted); }
+.rd.is-ducking .rd-desc-label { color: var(--warning-text); }
+
+.rd-duck-row { display: flex; align-items: flex-end; gap: 10px; animation: rd-up var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes rd-up { from { opacity: 0; transform: translateY(24px) scale(0.9); } }
+.rd-duck { flex: none; width: 64px; height: 56px; transform-origin: 50% 90%; }
+.rd-duck svg { display: block; width: 100%; height: 100%; }
+.rd-duck.is-nod { animation: rd-nod var(--spring-ui-duration) var(--spring-ui); }
+@keyframes rd-nod { 30% { transform: rotate(9deg) translateY(2px); } 60% { transform: rotate(-3deg); } }
+.rd-duck.is-joy { animation: rd-joy var(--spring-pop-duration) var(--spring-pop); }
+@keyframes rd-joy { 40% { transform: translateY(-18px) rotate(-200deg); } 100% { transform: rotate(-360deg); } }
+.rd-say { position: relative; flex: 1; padding: 10px 14px; border-radius: var(--radius-xl) var(--radius-xl) var(--radius-xl) var(--radius-sm); background: color-mix(in srgb, var(--warning) 22%, var(--rd-bg)); font-size: var(--text-body); line-height: var(--leading-body); }
+
+.rd-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.rd-actions button { flex: 1 1 auto; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.rd-actions button:active { transform: scale(var(--press-scale)); }
+.rd-actions button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.rd-submit, .rd-solved { background: var(--rd-accent); color: var(--rd-on-accent); }
+.rd-file { background: var(--rd-fill); color: var(--rd-fg); }
+.rd-foot { color: var(--rd-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.rd-foot b { color: var(--rd-fg); font-variant-numeric: tabular-nums; }
+.rd.is-closed .rd-form { opacity: 0.5; transition: opacity var(--duration-slow); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-duck-row, .rd-duck.is-nod, .rd-duck.is-joy { animation: none; }
+}
+.rd [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="rd" data-mi="rubber-duck" data-solved="37">
+  <div class="rd-form">
+    <label class="rd-field">
+      <span class="rd-field-label">Title</span>
+      <input class="rd-title" type="text" value="Export button does nothing" autocomplete="off">
+    </label>
+    <label class="rd-field">
+      <span class="rd-field-label rd-desc-label">What happens?</span>
+      <textarea class="rd-desc" rows="3" placeholder="Steps, what you expected, what happened"></textarea>
+    </label>
+  </div>
+  <div class="rd-duck-row" hidden>
+    <span class="rd-duck" aria-hidden="true">
+      <svg viewBox="0 0 64 56"><ellipse cx="30" cy="38" rx="25" ry="15" style="fill: var(--warning)"/><path d="M8 32c-4-6-3-12 1-12 3 0 4 5 6 8" style="fill: var(--warning)"/><circle cx="40" cy="20" r="13" style="fill: var(--warning)"/><path d="M51 21c5-1 10 0 12 2-2 3-7 4-12 3Z" style="fill: var(--ai)"/><circle cx="43" cy="16.5" r="2.2" style="fill: var(--foreground)"/><circle cx="43.8" cy="15.8" r=".7" style="fill: var(--on-color)"/><path d="M18 36c4 5 12 6 18 3" stroke-width="2.5" fill="none" stroke-linecap="round" style="stroke: color-mix(in srgb, var(--amber-9) 80%, var(--black))"/></svg>
+    </span>
+    <p class="rd-say" role="status" aria-live="polite">Before you file it, explain it to me. Step by step.</p>
+  </div>
+  <div class="rd-actions">
+    <button type="button" class="rd-submit">File Bug</button>
+    <button type="button" class="rd-solved" hidden>I Figured It Out</button>
+    <button type="button" class="rd-file" hidden>Still Broken, File It</button>
+  </div>
+  <p class="rd-foot">The duck has closed <b class="rd-pct">37%</b> of bugs before they were filed.</p>
+</div>
+
+
+<script>
+/* Rubber Duck Gate — vanilla JS. Auto-initializes every [data-mi="rubber-duck"].
+   File Bug first summons the duck; it nods at every finished sentence. After two sentences you can
+   say you figured it out, or file it anyway. Call window.initRubberDuck(el) for elements added later. */
+(function () {
+  'use strict';
+  var NODS = ['Mm-hm.', 'Go on.', 'And then what happens?', 'Interesting.', 'Wait. Say that part again.', 'Quack. Keep going.'];
+
+  function sentences(s) { return (s.match(/[.?!](\s|$)|\n/g) || []).length; }
+
+  function initRubberDuck(root) {
+    if (!root || root.__miDuck) return;
+    root.__miDuck = true;
+    var desc = root.querySelector('.rd-desc'), label = root.querySelector('.rd-desc-label');
+    var row = root.querySelector('.rd-duck-row'), duck = root.querySelector('.rd-duck'), say = root.querySelector('.rd-say');
+    var submit = root.querySelector('.rd-submit'), solved = root.querySelector('.rd-solved'), file = root.querySelector('.rd-file');
+    var pctEl = root.querySelector('.rd-pct'), pct = Number(root.getAttribute('data-solved')) || 37;
+    var ducking = false, seen = 0, n = 0;
+
+    function play(cls) { duck.classList.remove('is-nod', 'is-joy'); void duck.offsetWidth; duck.classList.add(cls); }
+
+    function reset() {
+      ducking = false; seen = 0; n = 0;
+      root.classList.remove('is-ducking', 'is-closed');
+      row.hidden = true;
+      desc.value = ''; desc.disabled = false;
+      label.textContent = 'What happens?';
+      submit.hidden = false; submit.textContent = 'File Bug';
+      solved.hidden = true; file.hidden = true;
+    }
+
+    submit.addEventListener('click', function () {
+      if (submit.textContent !== 'File Bug') { reset(); desc.focus(); return; }
+      ducking = true;
+      root.classList.add('is-ducking');
+      row.hidden = false;
+      say.textContent = 'Before you file it, explain it to me. Step by step.';
+      label.textContent = 'Explain it to the duck';
+      submit.hidden = true;
+      desc.focus();
+    });
+
+    desc.addEventListener('input', function () {
+      if (!ducking) return;
+      var s = sentences(desc.value);
+      if (s > seen) {
+        seen = s;
+        say.textContent = NODS[n++ % NODS.length];
+        play('is-nod');
+      }
+      if (seen >= 2) { solved.hidden = false; file.hidden = false; }
+    });
+
+    solved.addEventListener('click', function () {
+      ducking = false;
+      pct = Math.min(99, pct + 1);
+      pctEl.textContent = pct + '%';
+      say.textContent = 'Quack. Bug closed before it existed.';
+      play('is-joy');
+      root.classList.add('is-closed');
+      desc.disabled = true;
+      solved.hidden = true; file.hidden = true;
+      submit.hidden = false; submit.textContent = 'Report Another';
+      submit.focus();
+    });
+
+    file.addEventListener('click', function () {
+      ducking = false;
+      say.textContent = 'Filed as BUG-' + (1000 + Math.floor(Math.random() * 900)) + '. The duck believes in you.';
+      play('is-nod');
+      root.classList.add('is-closed');
+      desc.disabled = true;
+      solved.hidden = true; file.hidden = true;
+      submit.hidden = false; submit.textContent = 'Report Another';
+      submit.focus();
+    });
+  }
+
+  window.initRubberDuck = initRubberDuck;
+  function boot() { document.querySelectorAll('[data-mi="rubber-duck"]').forEach(initRubberDuck); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

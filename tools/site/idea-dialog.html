@@ -1,0 +1,32 @@
+<dialog class="idea" id="idea-dialog" aria-labelledby="idea-title" aria-describedby="idea-sub">
+  <form class="idea-form" novalidate>
+    <header class="idea-head">
+      <div><h2 id="idea-title">Submit an idea</h2><p id="idea-sub">Got a moment in a product that deserves a better micro interaction? Tell me. If it's good, I'll build it and send you the link.</p></div>
+      <button type="button" class="oc-btn oc-btn--ghost oc-btn--icon oc-btn--sm" data-idea-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </header>
+    <div class="idea-body">
+      <div class="idea-field"><label class="oc-label" for="idea-name">Idea name <span class="idea-req" aria-hidden="true">*</span></label><input class="oc-input" id="idea-name" name="name" type="text" maxlength="60" autocomplete="off" placeholder="e.g. Cart Gravity" required aria-describedby="idea-name-err"><p class="idea-err" id="idea-name-err" role="alert"></p></div>
+      <div class="idea-two">
+        <div class="idea-field"><label class="oc-label" for="idea-product">Which product?</label><input class="oc-input" id="idea-product" name="product" type="text" maxlength="60" autocomplete="off" placeholder="e.g. Stripe or Figma"></div>
+        <div class="idea-field"><label class="oc-label" for="idea-moment">Where should it happen?</label><input class="oc-input" id="idea-moment" name="moment" type="text" maxlength="80" autocomplete="off" placeholder="e.g. Checkout, deleting a file"></div>
+      </div>
+      <div class="idea-field"><label class="oc-label" for="idea-desc">What should it do? <span class="idea-req" aria-hidden="true">*</span></label><textarea class="oc-textarea" id="idea-desc" name="description" rows="4" maxlength="600" placeholder="Describe what the user does and what the interface does back. Funny or useful, both welcome." required aria-describedby="idea-desc-hint idea-desc-err"></textarea><div class="idea-row"><p class="oc-hint" id="idea-desc-hint">A few sentences is plenty.</p><p class="oc-hint idea-count" aria-hidden="true"><span id="idea-count">0</span>/600</p></div><p class="idea-err" id="idea-desc-err" role="alert"></p></div>
+      <div class="idea-two">
+        <div class="idea-field"><label class="oc-label" for="idea-email">Your email <span class="idea-req" aria-hidden="true">*</span></label><input class="oc-input" id="idea-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="idea-email-hint idea-email-err"><p class="oc-hint" id="idea-email-hint">So I can send you the link when it's built. Never shared.</p><p class="idea-err" id="idea-email-err" role="alert"></p></div>
+        <div class="idea-field"><label class="oc-label" for="idea-credit">Credit me as</label><input class="oc-input" id="idea-credit" name="credit" type="text" maxlength="60" autocomplete="off" placeholder="Name or @handle"><p class="oc-hint">Optional. Leave empty to stay anonymous.</p></div>
+      </div>
+      <div class="idea-hp" aria-hidden="true"><label>Leave this empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+      <p class="idea-err idea-form-err" id="idea-form-err" role="alert"></p>
+    </div>
+    <footer class="idea-foot">
+      <button type="button" class="oc-btn oc-btn--outline" data-idea-close>Cancel</button>
+      <button type="submit" class="oc-btn" data-idea-send>Send idea</button>
+    </footer>
+  </form>
+  <div class="idea-done" hidden tabindex="-1">
+    <div class="idea-done-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h2>Thanks, got it.</h2>
+    <p>If it makes the cut, I'll build it and email you the link.</p>
+    <button type="button" class="oc-btn" data-idea-close>Done</button>
+  </div>
+</dialog>

@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewind Scrub · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Rewind Scrub — drag back through a document's history and watch each edit undo itself in place.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.rw {
+  --rw-bg: var(--card);
+  --rw-fg: var(--foreground);
+  --rw-muted: var(--muted-foreground);
+  --rw-line: var(--border);
+  --rw-sunken: var(--subtle);
+  --rw-fill: var(--muted);
+  --rw-accent: var(--primary);
+  --rw-on-accent: var(--primary-foreground);
+  --rw-green: var(--success-text);
+  --rw-red: var(--danger-text);
+  --rw-orange: var(--warning);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--rw-bg);
+  color: var(--rw-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.rw-head { display: flex; align-items: center; justify-content: space-between; }
+.rw-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.rw-live { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--success) 16%, transparent); color: var(--rw-green); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-base), color var(--duration-base); }
+.rw-live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.rw.is-past .rw-live { background: color-mix(in srgb, var(--rw-orange) 16%, transparent); color: var(--warning-text); }
+.rw-doc { min-height: 132px; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--rw-sunken); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); white-space: pre-wrap; transition: background-color var(--duration-slow); }
+.rw.is-past .rw-doc { background: color-mix(in srgb, var(--rw-orange) 6%, var(--rw-sunken)); }
+.rw-doc .rw-h { font-weight: 700; font-size: var(--text-title); }
+.rw-ins { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--success) 22%, transparent); color: var(--rw-fg); animation: rw-in var(--spring-ui-duration) var(--spring-ui) both; }
+.rw-del { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--rw-red); text-decoration: line-through; animation: rw-out var(--duration-slower) var(--ease-out) both; }
+@keyframes rw-in { from { opacity: 0; filter: blur(3px); } }
+@keyframes rw-out { from { opacity: 0; } }
+.rw-meta { display: flex; align-items: center; gap: 10px; min-height: 32px; }
+.rw-avatar { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 50%; color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; transition: background-color var(--duration-base); }
+.rw-what { margin: 0; color: var(--rw-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.rw-what b { color: var(--rw-fg); font-weight: 600; }
+/* Scrubber */
+.rw-scrub { position: relative; padding: 18px 0 4px; }
+.rw-ticks { position: absolute; left: 11px; right: 11px; top: 30px; display: flex; justify-content: space-between; pointer-events: none; }
+.rw-ticks i { width: 2px; height: 10px; border-radius: var(--radius-xs); background: var(--rw-fill); transition: background-color var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.rw-ticks i.is-past { background: color-mix(in srgb, var(--brand-strong) 45%, transparent); }
+.rw-ticks i.is-on { background: var(--rw-accent); transform: scaleY(1.6); }
+.rw-range { position: relative; width: 100%; height: 34px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; cursor: grab; }
+.rw-range:active { cursor: grabbing; }
+.rw-range::-webkit-slider-runnable-track { height: 4px; border-radius: var(--radius-xs); background: var(--rw-fill); }
+.rw-range::-moz-range-track { height: 4px; border-radius: var(--radius-xs); background: var(--rw-fill); }
+.rw-range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9px; border-radius: 50%; background: var(--raised); box-shadow: 0 0 0 1px var(--input), var(--shadow-sm); transition: transform var(--duration-base); }
+.rw-range::-moz-range-thumb { width: 22px; height: 22px; border: 0; border-radius: 50%; background: var(--raised); box-shadow: 0 0 0 1px var(--input), var(--shadow-sm); }
+.rw-range:active::-webkit-slider-thumb { transform: scale(1.25); }
+.rw-range:focus-visible { outline: none; }
+.rw-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--rw-accent); }
+.rw-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--rw-accent); }
+.rw-bubble { position: absolute; top: -6px; left: var(--x, 100%); padding: 3px 9px; border-radius: var(--radius-full); background: var(--rw-fg); color: var(--rw-bg); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 600; white-space: nowrap; transform: translateX(-50%); transition: left var(--duration-fast) linear; pointer-events: none; }
+.rw-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 36px; }
+.rw-note { margin: 0; color: var(--rw-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.rw-restore { flex: none; height: 36px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--rw-accent); color: var(--rw-on-accent); font: inherit; font-weight: 600; cursor: pointer; animation: rw-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.rw-restore:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@keyframes rw-pop { from { opacity: 0; transform: scale(0.85); } }
+@media (prefers-reduced-motion: reduce) {
+  .rw-ins, .rw-del, .rw-restore { animation: none; }
+}
+.rw [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Rewind Scrub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="rw" data-mi="rewind-scrub">
+  <div class="rw-head">
+    <p class="rw-title">Version History</p>
+    <span class="rw-live">Live</span>
+  </div>
+  <div class="rw-doc" aria-live="polite"></div>
+  <div class="rw-meta">
+    <span class="rw-avatar" aria-hidden="true"></span>
+    <p class="rw-what"></p>
+  </div>
+  <div class="rw-scrub">
+    <div class="rw-ticks" aria-hidden="true"></div>
+    <input class="rw-range" type="range" min="0" max="7" step="1" value="7" aria-label="Rewind through versions">
+    <span class="rw-bubble" aria-hidden="true"></span>
+  </div>
+  <div class="rw-foot">
+    <p class="rw-note">Drag left to rewind. Nothing changes until you restore.</p>
+    <button type="button" class="rw-restore" hidden>Restore This Version</button>
+  </div>
+</div>
+</div>
+<script>
+/* Rewind Scrub — vanilla JS. Auto-initializes every [data-mi="rewind-scrub"].
+   Pass real history with root.setVersions([{ text, who, color, ago, what }]). Call window.initRewindScrub(el) for later elements. */
+(function () {
+  'use strict';
+  var VERSIONS = [
+    { text: 'Launch notes', who: 'You', color: 'var(--chart-1)', ago: '2 hours ago', what: 'created the page' },
+    { text: 'Launch notes\nWe ship billing on Monday.', who: 'You', color: 'var(--chart-1)', ago: '2 hours ago', what: 'added the first line' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday.', who: 'Mira', color: 'var(--chart-2)', ago: '1 hour ago', what: 'clarified what ships' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday. Annual plans show savings up front.', who: 'Mira', color: 'var(--chart-2)', ago: '48 minutes ago', what: 'added the pricing line' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday. Annual plans now show their savings up front.', who: 'You', color: 'var(--chart-1)', ago: '31 minutes ago', what: 'tightened the wording' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday. Annual plans now show their savings up front.\nSupport has the FAQ ready.', who: 'Sam', color: 'var(--chart-4)', ago: '20 minutes ago', what: 'added a support note' },
+    { text: 'Launch notes\nWe ship the new billing page on Monday. Annual plans now show their savings up front.\nSupport is drafting the FAQ.', who: 'Mira', color: 'var(--chart-2)', ago: '9 minutes ago', what: 'corrected the FAQ status' },
+    { text: 'Billing launch notes\nWe ship the new billing page on Monday. Annual plans now show their savings up front.\nSupport is drafting the FAQ.', who: 'You', color: 'var(--chart-1)', ago: 'Just now', what: 'renamed the page' }
+  ];
+
+  // Word-level diff (LCS). Returns [{t:'same'|'ins'|'del', s:string}]
+  function diff(a, b) {
+    var A = a.split(/(\s+)/), B = b.split(/(\s+)/), n = A.length, m = B.length, L = [];
+    for (var i = 0; i <= n; i++) { L.push(new Array(m + 1).fill(0)); }
+    for (i = n - 1; i >= 0; i--) for (var j = m - 1; j >= 0; j--) L[i][j] = A[i] === B[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    var out = []; i = 0; j = 0;
+    function push(t, s) { if (out.length && out[out.length - 1].t === t) out[out.length - 1].s += s; else out.push({ t: t, s: s }); }
+    while (i < n && j < m) {
+      if (A[i] === B[j]) { push('same', A[i]); i++; j++; }
+      else if (L[i + 1][j] >= L[i][j + 1]) { push('del', A[i]); i++; }
+      else { push('ins', B[j]); j++; }
+    }
+    while (i < n) push('del', A[i++]);
+    while (j < m) push('ins', B[j++]);
+    return out;
+  }
+
+  function initRewindScrub(root) {
+    if (!root || root.__miRewind) return;
+    root.__miRewind = true;
+    var versions = VERSIONS.slice();
+    var doc = root.querySelector('.rw-doc');
+    var avatar = root.querySelector('.rw-avatar');
+    var what = root.querySelector('.rw-what');
+    var range = root.querySelector('.rw-range');
+    var ticks = root.querySelector('.rw-ticks');
+    var bubble = root.querySelector('.rw-bubble');
+    var restore = root.querySelector('.rw-restore');
+    var live = root.querySelector('.rw-live');
+    var shown = -1;
+
+    function buildTicks() {
+      ticks.replaceChildren();
+      versions.forEach(function () { ticks.appendChild(document.createElement('i')); });
+      range.max = versions.length - 1;
+    }
+
+    // Render a version, showing what that edit changed relative to the one before it.
+    function show(v) {
+      if (v === shown) return;
+      shown = v;
+      var cur = versions[v], prev = v > 0 ? versions[v - 1].text : '';
+      var parts = diff(prev, cur.text);
+      doc.replaceChildren();
+      var firstLine = true;
+      parts.forEach(function (p) {
+        var lines = p.s.split('\n');
+        lines.forEach(function (chunk, k) {
+          if (k > 0) { doc.appendChild(document.createTextNode('\n')); firstLine = false; }
+          if (!chunk) return;
+          var el;
+          if (p.t === 'same') el = document.createTextNode(chunk);
+          else { el = document.createElement('span'); el.className = p.t === 'ins' ? 'rw-ins' : 'rw-del'; el.textContent = chunk; }
+          if (firstLine) { var h = document.createElement('span'); h.className = 'rw-h'; h.appendChild(el); el = h; }
+          doc.appendChild(el);
+        });
+      });
+      avatar.textContent = cur.who[0];
+      avatar.style.background = cur.color;
+      var b = document.createElement('b'); b.textContent = cur.who;
+      what.replaceChildren(b, document.createTextNode(' ' + cur.what + ' · ' + cur.ago));
+      var last = versions.length - 1;
+      root.classList.toggle('is-past', v < last);
+      live.textContent = v < last ? 'Viewing Version ' + (v + 1) : 'Live';
+      restore.hidden = v === last;
+      Array.prototype.forEach.call(ticks.children, function (t, i) { t.classList.toggle('is-past', i < v); t.classList.toggle('is-on', i === v); });
+      bubble.textContent = cur.ago;
+      var pct = v / last;
+      bubble.style.setProperty('--x', 'calc(' + (pct * 100) + '% + ' + (11 - pct * 22) + 'px)');
+      range.setAttribute('aria-valuetext', 'Version ' + (v + 1) + ' of ' + versions.length + ', ' + cur.who + ' ' + cur.what + ', ' + cur.ago);
+    }
+
+    range.addEventListener('input', function () { show(Number(range.value)); });
+    restore.addEventListener('click', function () {
+      var v = Number(range.value), picked = versions[v];
+      versions.push({ text: picked.text, who: 'You', color: 'var(--chart-1)', ago: 'Just now', what: 'restored version ' + (v + 1) });
+      buildTicks();
+      range.value = versions.length - 1;
+      shown = -1;
+      show(versions.length - 1);
+      range.focus();
+    });
+    root.setVersions = function (list) { versions = list.slice(); buildTicks(); range.value = versions.length - 1; shown = -1; show(versions.length - 1); };
+    buildTicks();
+    show(versions.length - 1);
+  }
+
+  window.initRewindScrub = initRewindScrub;
+  function boot() { document.querySelectorAll('[data-mi="rewind-scrub"]').forEach(initRewindScrub); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initRewindScrub"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

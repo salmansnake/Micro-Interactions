@@ -1,0 +1,23 @@
+<div class="pv" data-mi="preview-palette">
+  <div class="pv-app" data-scheme="light" data-accent="aqua" data-density="comfortable" data-sort="recent">
+    <div class="pv-app-bar">
+      <span class="pv-logo">A</span>
+      <span class="pv-app-name">Atlas</span>
+      <span class="pv-badge" aria-hidden="true">Previewing</span>
+      <button type="button" class="pv-open" aria-haspopup="dialog">Commands <kbd>⌘K</kbd></button>
+    </div>
+    <ul class="pv-items">
+      <li data-name="Billing page" data-recent="1"><i></i><span>Billing page</span><small>Edited 2m ago</small></li>
+      <li data-name="Onboarding flow" data-recent="2"><i></i><span>Onboarding flow</span><small>Edited 1h ago</small></li>
+      <li data-name="API reference" data-recent="3"><i></i><span>API reference</span><small>Edited 3h ago</small></li>
+      <li data-name="Changelog" data-recent="4"><i></i><span>Changelog</span><small>Edited yesterday</small></li>
+    </ul>
+    <button type="button" class="pv-cta">New Page</button>
+  </div>
+  <div class="pv-palette" role="dialog" aria-label="Command palette" hidden>
+    <input class="pv-input" type="text" placeholder="Type a command" aria-label="Type a command" aria-controls="pv-list" autocomplete="off" spellcheck="false">
+    <ul class="pv-list" id="pv-list" role="listbox"></ul>
+    <p class="pv-help"><kbd>↑</kbd><kbd>↓</kbd> preview · <kbd>↵</kbd> apply · <kbd>esc</kbd> revert</p>
+  </div>
+  <p class="pv-status" role="status" aria-live="polite"></p>
+</div>

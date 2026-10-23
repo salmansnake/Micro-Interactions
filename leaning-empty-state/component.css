@@ -1,0 +1,87 @@
+/* Leaning Empty State — the empty screen's illustration leans toward the button as you get close.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.le {
+  --le-bg: var(--card);
+  --le-fg: var(--foreground);
+  --le-muted: var(--muted-foreground);
+  --le-line: var(--border);
+  --le-sunken: var(--subtle);
+  --le-fill: var(--muted);
+  --le-accent: var(--primary);
+  --le-on-accent: var(--primary-foreground);
+  --le-pull: 0;
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 28px 24px;
+  background: var(--le-bg);
+  color: var(--le-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+}
+.le-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.le-art { position: relative; width: 240px; height: 132px; margin-bottom: 10px; perspective: 600px; }
+.le-tile {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: var(--le-bg);
+  box-shadow: 0 0 0 1px var(--le-line), var(--shadow-md);
+  transform: translate(var(--tx, 0px), var(--ty, 0px)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) rotate(var(--r0, 0deg));
+  transition: transform var(--spring-ui-duration) var(--spring-ui), box-shadow var(--duration-slow);
+  will-change: transform;
+}
+.le-tile i { display: block; height: 6px; border-radius: var(--radius-xs); background: var(--le-fill); }
+.le-tile i:first-child { width: 60%; background: color-mix(in srgb, var(--tile, var(--le-accent)) 70%, transparent); }
+.le-tile i:nth-child(2) { width: 85%; }
+.le-tile i:nth-child(3) { width: 45%; }
+.le-tile--a { left: 6px; top: 34px; width: 72px; height: 66px; --r0: -8deg; --tile: var(--ai); }
+.le-tile--b { left: 70px; top: 4px; width: 64px; height: 52px; --r0: 5deg; --tile: var(--success); }
+.le-tile--c { left: 128px; top: 40px; width: 76px; height: 70px; --r0: -3deg; --tile: var(--le-accent); }
+.le-tile--d { left: 186px; top: 8px; width: 52px; height: 48px; --r0: 10deg; --tile: var(--chart-2); }
+.le-title { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+.le-body { margin: 0 0 12px; max-width: 30ch; color: var(--le-muted); font-size: var(--text-body); line-height: var(--leading-body); }
+.le-cta {
+  height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--le-accent);
+  color: var(--le-on-accent);
+  font: inherit;
+  font-size: var(--text-title-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-title);
+  cursor: pointer;
+  box-shadow: 0 0 0 calc(var(--le-pull) * 6px) color-mix(in srgb, var(--brand) 16%, transparent);
+  transition: transform var(--spring-press-duration) var(--spring-press), box-shadow var(--duration-slow);
+}
+.le-cta:active { transform: scale(var(--press-scale)); }
+.le-cta:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* After creating */
+.le-filled { text-align: left; }
+.le-list-title { margin: 0 0 10px; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+.le-list { margin: 0 0 16px; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--le-sunken); }
+.le-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.le-item-icon { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--le-accent); color: var(--le-on-accent); font-weight: 700; }
+.le-item b { display: block; font-weight: 600; }
+.le-item small { color: var(--le-muted); font-size: var(--text-small); }
+.le-item.is-new { animation: le-arrive var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes le-arrive { from { opacity: 0; transform: translateY(-24px) scale(0.9); } }
+.le-reset { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--le-fill); color: var(--le-fg); font: inherit; font-weight: 600; cursor: pointer; }
+.le-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .le-tile { transition: none; }
+  .le-item.is-new { animation: none; }
+}
+.le [hidden] { display: none !important; }

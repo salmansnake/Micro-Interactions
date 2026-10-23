@@ -1,0 +1,69 @@
+/* Due Heat — due dates warm up continuously as they approach, pulsing faster the closer they get.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.dh {
+  --dh-bg: var(--card);
+  --dh-fg: var(--foreground);
+  --dh-muted: var(--muted-foreground);
+  --dh-line: var(--border);
+  --dh-sunken: var(--subtle);
+  --dh-fill: var(--muted);
+  --dh-accent: var(--primary);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--dh-bg);
+  color: var(--dh-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.dh-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.dh-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.dh-now { margin: 0; color: var(--dh-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.dh-list { margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--dh-sunken); }
+.dh-row { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 0 12px 0 16px; }
+.dh-row + .dh-row::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; height: 1px; background: var(--dh-line); transform: scaleY(0.5); transform-origin: top; }
+.dh-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* --dh-c is set by JS from the heat: gray → blue → orange → red, never through green. */
+.dh-chip {
+  --dh-c: var(--stone);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  padding: 4px 10px 4px 8px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--dh-c) 14%, transparent);
+  color: color-mix(in srgb, var(--dh-c) 72%, var(--black));
+  font-size: var(--text-small);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: background-color var(--duration-slow), color var(--duration-slow);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dh-chip { color: color-mix(in srgb, var(--dh-c) 70%, var(--on-color)); background: color-mix(in srgb, var(--dh-c) 22%, transparent); } }
+:root[data-theme="dark"] .dh-chip { color: color-mix(in srgb, var(--dh-c) 70%, var(--on-color)); background: color-mix(in srgb, var(--dh-c) 22%, transparent); }
+.dh-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--dh-c); }
+/* The pulse speeds up with heat; nothing pulses until the last day. */
+.dh-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: inherit; opacity: 0; }
+.dh-chip.is-warm .dh-dot::after { animation: dh-pulse var(--beat, 2s) var(--ease-out) infinite; }
+@keyframes dh-pulse { 0% { opacity: 0.6; transform: scale(1); } 100% { opacity: 0; transform: scale(2.6); } }
+.dh-chip.is-over { --dh-c: var(--danger); }
+.dh-row.is-overdue-new .dh-chip { animation: dh-shake var(--duration-slower) var(--ease-out); }
+@keyframes dh-shake { 25% { transform: translateX(-4px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-2px); } }
+.dh-time { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.dh-time-label { color: var(--dh-muted); font-size: var(--text-small); }
+.dh-range { width: 100%; accent-color: var(--dh-accent); }
+.dh-range:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: var(--radius-xs); }
+@media (prefers-reduced-motion: reduce) {
+  .dh-chip.is-warm .dh-dot::after, .dh-row.is-overdue-new .dh-chip { animation: none; }
+}
+.dh [hidden] { display: none !important; }

@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session Fade</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .sf so they never affect the rest of your page. */
+.sf {
+  --blur-md: 16px;
+  --duration-fast: 140ms;
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --frost-saturate: 160%;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --leading-title: 28px;
+  --leading-title-sm: 24px;
+  --press-scale: 0.97;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-panel: linear(0, 0.0198, 0.069, 0.1356, 0.211, 0.2893, 0.3667, 0.4407, 0.5096, 0.5727, 0.6297, 0.6805, 0.7255, 0.765, 0.7995, 0.8294, 0.8552, 0.8774, 0.8964, 0.9127, 0.9265, 0.9382, 0.9482, 0.9566, 0.9637, 0.9696, 0.9746, 0.9788, 0.9824, 0.9853, 0.9878, 0.9899, 0.9916, 0.993, 0.9942, 0.9952, 0.996, 0.9967, 0.9973, 0.9978, 1);
+  --spring-panel-duration: 530ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title: 20px;
+  --text-title-sm: 17px;
+  --text-ui: 14px;
+  --tracking-title: -0.015em;
+  --ai: var(--orange);
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --blue-9: #0090ff;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --dot-info: var(--blue-9);
+  --dot-success: var(--green-9);
+  --dot-warning: var(--amber-9);
+  --foreground: var(--black);
+  --frost: rgba(255, 255, 255, 0.74);
+  --frost-border: rgba(0, 0, 0, 0.08);
+  --green-11: #218358;
+  --green-9: #30a46c;
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --orange: #FE8C5F;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .sf, .dark .sf {
+  --ai: var(--orange);
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --blue-9: #0090ff;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --dot-info: var(--blue-9);
+  --dot-success: var(--green-9);
+  --dot-warning: var(--amber-9);
+  --foreground: #F3F2EE;
+  --frost: rgba(21, 23, 22, 0.74);
+  --frost-border: rgba(243, 242, 238, 0.1);
+  --green-11: #3dd68c;
+  --green-9: #30a46c;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --orange: #FE8C5F;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .sf {
+    --ai: var(--orange);
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --blue-9: #0090ff;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --card: var(--white);
+    --dot-info: var(--blue-9);
+    --dot-success: var(--green-9);
+    --dot-warning: var(--amber-9);
+    --foreground: #F3F2EE;
+    --frost: rgba(21, 23, 22, 0.74);
+    --frost-border: rgba(243, 242, 238, 0.1);
+    --green-11: #3dd68c;
+    --green-9: #30a46c;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --orange: #FE8C5F;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --white: #161817;
+  }
+}
+
+/* Session Fade — the page drains of color as a session nears timeout; any activity floods it back.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+@property --sf-p { syntax: "<number>"; inherits: true; initial-value: 0; }
+.sf {
+  --sf-bg: var(--card);
+  --sf-fg: var(--foreground);
+  --sf-muted: var(--muted-foreground);
+  --sf-line: var(--border);
+  --sf-sunken: var(--subtle);
+  --sf-fill: var(--muted);
+  --sf-accent: var(--primary);
+  --sf-on-accent: var(--primary-foreground);
+  --sf-glass: var(--frost);
+  --sf-glass-edge: var(--frost-border);
+  --sf-glass-rim: var(--frost-border);
+  --sf-glass-shadow: var(--shadow-lg);
+  --sf-p: 0; /* 0 = fully awake, 1 = about to sign out */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 460px;
+  color: var(--sf-fg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.sf.is-waking { transition: --sf-p var(--spring-panel-duration) var(--spring-panel); }
+.sf-screen { position: relative; overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--sf-bg); box-shadow: inset 0 0 calc(var(--sf-p) * 80px) calc(var(--sf-p) * 10px) color-mix(in srgb, var(--black) calc(var(--sf-p) * 35%), transparent); }
+.sf-app { padding: 18px; filter: grayscale(var(--sf-p)) brightness(calc(1 - var(--sf-p) * 0.12)) contrast(calc(1 - var(--sf-p) * 0.15)); }
+.sf-app-title { margin: 0 0 12px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.sf-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+.sf-tile { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--brand) 12%, transparent); }
+.sf-tile--green { background: color-mix(in srgb, var(--success) 16%, transparent); }
+.sf-tile--orange { background: color-mix(in srgb, var(--ai) 16%, transparent); }
+.sf-tile b { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 700; font-variant-numeric: tabular-nums; }
+.sf-tile span { color: var(--sf-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.sf-rows { margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--sf-sunken); }
+.sf-rows li { position: relative; display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; font-size: var(--text-ui); }
+.sf-rows li + li::before { content: ""; position: absolute; top: 0; left: 30px; right: 0; height: 1px; background: var(--sf-line); transform: scaleY(0.5); transform-origin: top; }
+.sf-rows i { flex: none; width: 8px; height: 8px; border-radius: 50%; }
+.sf-rows small { margin-left: auto; color: var(--sf-muted); font-size: var(--text-caption); }
+/* Color flooding back from where you moved */
+.sf-ripple { position: absolute; left: var(--sf-x, 50%); top: var(--sf-y, 50%); width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: color-mix(in srgb, var(--brand) 22%, transparent); opacity: 0; pointer-events: none; }
+.sf-ripple.is-on { animation: sf-ripple var(--spring-panel-duration) var(--ease-out); }
+@keyframes sf-ripple { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(40); } }
+/* Banner: Frost capsule */
+.sf-banner {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 6px 6px 16px;
+  border-radius: var(--radius-full);
+  background: var(--sf-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: inset 0 0 0 1px var(--frost-border), var(--sf-glass-shadow);
+  font-size: var(--text-body);
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  animation: sf-banner var(--spring-ui-duration) var(--spring-ui) both;
+}
+@keyframes sf-banner { from { opacity: 0; transform: translate(-50%, 16px); } }
+.sf-left { font-variant-numeric: tabular-nums; }
+.sf-stay, .sf-again { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--sf-accent); color: var(--sf-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.sf-stay:active, .sf-again:active { transform: scale(var(--press-scale)); }
+.sf-stay:focus-visible, .sf-again:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* Locked */
+.sf-lock { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 24px; text-align: center; background: color-mix(in srgb, var(--sf-bg) 72%, transparent); -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); animation: sf-lock var(--spring-panel-duration) var(--spring-panel) both; }
+.sf-lock[hidden] { display: none; }
+@keyframes sf-lock { from { opacity: 0; } }
+.sf-lock svg { width: 32px; height: 32px; margin-bottom: 4px; color: var(--sf-muted); }
+.sf-lock-title { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+.sf-lock-body { margin: 0 0 10px; max-width: 30ch; color: var(--sf-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.sf-foot { display: flex; align-items: center; gap: 12px; padding: 0 4px; }
+.sf-note { flex: 1; margin: 0; color: var(--sf-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.sf-meter { flex: none; width: 64px; height: 4px; overflow: hidden; border-radius: var(--radius-xs); background: var(--sf-fill); }
+.sf-meter i { display: block; height: 100%; background: var(--sf-accent); transform-origin: left; transform: scaleX(var(--sf-r, 1)); }
+@media (prefers-reduced-motion: reduce) {
+  .sf.is-waking { transition: --sf-p var(--duration-fast) linear; }
+  .sf-ripple.is-on, .sf-banner, .sf-lock { animation: none; }
+}
+.sf [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="sf" data-mi="session-fade" data-timeout="20" data-warn="10">
+  <div class="sf-screen">
+    <div class="sf-app" aria-label="Dashboard">
+      <p class="sf-app-title">Atlas Overview</p>
+      <div class="sf-tiles">
+        <div class="sf-tile"><b>$48.2k</b><span>Revenue</span></div>
+        <div class="sf-tile sf-tile--green"><b>99.98%</b><span>Uptime</span></div>
+        <div class="sf-tile sf-tile--orange"><b>12</b><span>Open Tickets</span></div>
+      </div>
+      <ul class="sf-rows">
+        <li><i style="background: var(--dot-info)"></i>Deploy to production finished<small>2m</small></li>
+        <li><i style="background: var(--dot-success)"></i>Invoice #1042 paid<small>18m</small></li>
+        <li><i style="background: var(--dot-warning)"></i>Usage at 82% of plan<small>1h</small></li>
+      </ul>
+    </div>
+    <span class="sf-ripple" aria-hidden="true"></span>
+    <div class="sf-banner" role="status" aria-live="polite" hidden>
+      <span class="sf-banner-text">Signing out in <b class="sf-left">0:10</b></span>
+      <button type="button" class="sf-stay">Stay Signed In</button>
+    </div>
+    <div class="sf-lock" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>
+      <p class="sf-lock-title">Signed Out</p>
+      <p class="sf-lock-body">We signed you out after 20 seconds without activity to keep Atlas safe.</p>
+      <button type="button" class="sf-again">Sign In Again</button>
+    </div>
+  </div>
+  <div class="sf-foot">
+    <p class="sf-note">This demo session lasts 20 seconds. Keep still to watch it fade; move to stay.</p>
+    <div class="sf-meter" aria-hidden="true"><i></i></div>
+  </div>
+</div>
+
+
+<script>
+/* Session Fade — vanilla JS. Auto-initializes every [data-mi="session-fade"].
+   data-timeout and data-warn are in seconds. Call window.initSessionFade(el) for later elements. */
+(function () {
+  'use strict';
+
+  function initSessionFade(root) {
+    if (!root || root.__miFade) return;
+    root.__miFade = true;
+    var TIMEOUT = (Number(root.getAttribute('data-timeout')) || 20) * 1000;
+    var WARN = (Number(root.getAttribute('data-warn')) || 10) * 1000;
+    var screen = root.querySelector('.sf-screen');
+    var banner = root.querySelector('.sf-banner');
+    var leftEl = root.querySelector('.sf-left');
+    var lock = root.querySelector('.sf-lock');
+    var ripple = root.querySelector('.sf-ripple');
+    var deadline = 0, raf = 0, visible = false, locked = false, lastShown = '', lastFrame = 0;
+
+    function fmt(ms) { var s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+
+    function tick() {
+      raf = 0;
+      if (locked) return;
+      var now = performance.now();
+      if (!visible) { deadline += now - (lastFrame || now); lastFrame = now; raf = requestAnimationFrame(tick); return; } // pause off screen
+      lastFrame = now;
+      var left = deadline - now;
+      root.style.setProperty('--sf-r', Math.max(0, left / TIMEOUT).toFixed(4));
+      if (left <= 0) { signOut(); return; }
+      if (left <= WARN) {
+        if (!root.classList.contains('is-waking')) root.style.setProperty('--sf-p', (1 - left / WARN).toFixed(4));
+        if (banner.hidden) banner.hidden = false;
+        var txt = fmt(left);
+        if (txt !== lastShown) { leftEl.textContent = txt; lastShown = txt; }
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    function start() {
+      locked = false;
+      lock.hidden = true;
+      banner.hidden = true;
+      deadline = performance.now() + TIMEOUT;
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+    function wake(x, y) {
+      if (locked) return;
+      var warning = deadline - performance.now() <= WARN;
+      deadline = performance.now() + TIMEOUT;
+      if (!warning) return;
+      banner.hidden = true;
+      root.classList.add('is-waking');
+      root.style.setProperty('--sf-p', '0');
+      setTimeout(function () { root.classList.remove('is-waking'); }, 760);
+      var r = screen.getBoundingClientRect();
+      root.style.setProperty('--sf-x', (x != null ? x - r.left : r.width / 2) + 'px');
+      root.style.setProperty('--sf-y', (y != null ? y - r.top : r.height / 2) + 'px');
+      ripple.classList.remove('is-on');
+      void ripple.offsetWidth;
+      ripple.classList.add('is-on');
+    }
+    function signOut() {
+      locked = true;
+      banner.hidden = true;
+      root.style.setProperty('--sf-p', '1');
+      lock.hidden = false;
+      var a = document.activeElement;
+      if (!a || a === document.body || root.contains(a)) lock.querySelector('.sf-again').focus({ preventScroll: true });
+    }
+
+    screen.addEventListener('pointermove', function (e) { wake(e.clientX, e.clientY); });
+    screen.addEventListener('pointerdown', function (e) { wake(e.clientX, e.clientY); });
+    root.addEventListener('keydown', function () { wake(); });
+    root.querySelector('.sf-stay').addEventListener('click', function (e) { wake(e.clientX, e.clientY); });
+    root.querySelector('.sf-again').addEventListener('click', function () {
+      root.classList.add('is-waking');
+      root.style.setProperty('--sf-p', '0');
+      setTimeout(function () { root.classList.remove('is-waking'); }, 760);
+      start();
+    });
+
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        visible = es[0].isIntersecting;
+        if (visible && !deadline) start();
+      }, { threshold: 0.4 }).observe(root);
+    } else { visible = true; start(); }
+  }
+
+  window.initSessionFade = initSessionFade;
+  function boot() { document.querySelectorAll('[data-mi="session-fade"]').forEach(initSessionFade); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

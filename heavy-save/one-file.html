@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heavy Save</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .hs so they never affect the rest of your page. */
+.hs {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --duration-slow: 320ms;
+  --duration-slower: 480ms;
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --radius-full: 9999px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --text-ui: 14px;
+  --tracking-title: -0.015em;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: var(--black);
+  --green-11: #218358;
+  --input: var(--line-strong);
+  --lift: #FFFFFF;
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --overlay: rgba(0, 0, 0, 0.4);
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --raised: var(--lift);
+  --ring: var(--aqua-700);
+  --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --switch-on: var(--black);
+  --warning: var(--amber-9);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .hs, .dark .hs {
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --input: var(--line-strong);
+  --lift: #3F4341;
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --overlay: rgba(0, 0, 0, 0.6);
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --raised: var(--lift);
+  --ring: var(--aqua);
+  --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --switch-on: var(--aqua);
+  --warning: var(--amber-9);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .hs {
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --input: var(--line-strong);
+    --lift: #3F4341;
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --overlay: rgba(0, 0, 0, 0.6);
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --raised: var(--lift);
+    --ring: var(--aqua);
+    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --switch-on: var(--aqua);
+    --warning: var(--amber-9);
+    --white: #161817;
+  }
+}
+
+/* Heavy Save — the Save button gains weight with every unsaved change.
+   Outcraft Design System v2: an inset grouped form with a capsule Save button. */
+.hs {
+  --hs-page: var(--subtle);
+  --hs-bg: var(--card);
+  --hs-fg: var(--foreground);
+  --hs-muted: var(--muted-foreground);
+  --hs-line: var(--border);
+  --hs-fill: var(--muted);
+  --hs-accent: var(--primary);
+  --hs-on-accent: var(--primary-foreground);
+  --hs-green: var(--success);
+  --hs-warn: var(--warning);
+  --hs-shadow: var(--overlay);
+  --hs-w: 0; /* weight, set by JS: 0–5 */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 18px 16px 12px;
+  background: var(--hs-page);
+  color: var(--hs-fg);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 0 0 1px var(--hs-line), var(--shadow-lg);
+  font: 400 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans);
+  letter-spacing: var(--tracking-title);
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.hs-header { margin: 0; padding: 0 16px; color: var(--hs-muted); font-size: var(--text-body); line-height: var(--leading-body); font-weight: 600; letter-spacing: normal; }
+.hs-list { overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--hs-bg); }
+.hs-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 6px 16px;
+  cursor: text;
+}
+.hs-row + .hs-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 0;
+  height: 1px;
+  background: var(--hs-line);
+  transform: scaleY(0.5);
+  transform-origin: top;
+}
+.hs-label { position: relative; flex: none; display: flex; align-items: center; }
+.hs-dirty {
+  position: absolute;
+  left: -11px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hs-accent);
+  transform: scale(0);
+  transition: transform var(--spring-ui-duration) var(--spring-ui);
+}
+.hs .is-dirty .hs-dirty { transform: scale(1); }
+.hs input[type="text"],
+.hs select {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--hs-muted);
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: right;
+  text-align-last: right;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.hs select { cursor: pointer; padding-right: 18px; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 7px) 50%, calc(100% - 2px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+.hs input[type="text"]:focus { color: var(--hs-fg); }
+.hs-row:focus-within { background: color-mix(in srgb, var(--hs-accent) 6%, transparent); }
+.hs input[type="text"]:focus-visible,
+.hs select:focus-visible { box-shadow: 0 0 0 2px var(--hs-accent); }
+
+/* Switch: Outcraft 40×22, knob stretches while held */
+.hs-switch { position: relative; flex: none; width: 40px; height: 22px; margin-left: auto; }
+.hs-switch input { position: absolute; inset: -11px -2px; z-index: 1; width: calc(100% + 4px); height: calc(100% + 22px); margin: 0; opacity: 0; cursor: pointer; }
+.hs-track { position: absolute; inset: 0; border: 1px solid var(--input); border-radius: var(--radius-full); background: var(--muted); transition: background-color var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out); }
+.hs-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--raised);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--spring-ui-duration) var(--spring-ui), width var(--spring-press-duration) var(--spring-press);
+}
+.hs-switch input:checked ~ .hs-track { background: var(--switch-on); border-color: var(--switch-on); }
+.hs-switch input:checked ~ .hs-knob { transform: translateX(18px); background: var(--card); }
+.hs-switch input:active ~ .hs-knob { width: 20px; }
+.hs-switch input:checked:active ~ .hs-knob { transform: translateX(14px); }
+.hs-switch input:focus-visible ~ .hs-track { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* Bar */
+.hs-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; min-height: 52px; padding: 8px 0 8px 8px; }
+.hs-leave {
+  height: 32px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--hs-accent);
+  font: inherit;
+  font-size: var(--text-ui);
+  letter-spacing: normal;
+  cursor: pointer;
+}
+.hs-leave:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.hs-note {
+  flex: 1 1 120px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  min-width: 0;
+  margin: 0;
+  color: var(--hs-muted);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  letter-spacing: normal;
+  text-align: right;
+}
+.hs-note.is-warn { color: var(--hs-fg); font-weight: 600; }
+.hs-note button {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--hs-fill);
+  color: var(--hs-fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Save button: capsule, sinks with weight */
+.hs-btn { position: relative; flex: none; margin-left: auto; padding: 0; border: 0; border-radius: var(--radius-full); background: none; color: var(--hs-on-accent); font: inherit; cursor: pointer; }
+.hs-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 18px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  font-weight: 600;
+  letter-spacing: normal;
+  background: color-mix(in oklab, var(--hs-accent), var(--black) calc(var(--hs-w) * 5%));
+  transform: translateY(calc(var(--hs-w) * 1.6px));
+  box-shadow: 0 calc((7 - var(--hs-w)) * 1px) calc((16 - var(--hs-w) * 2) * 1px) -8px var(--hs-shadow);
+  transition: transform var(--spring-ui-duration) var(--spring-ui), box-shadow var(--duration-slower) var(--ease-out), background-color var(--duration-slow) var(--ease-out);
+}
+.hs-btn:focus-visible { outline: none; }
+.hs-btn:focus-visible .hs-face { outline: 2px solid var(--ring); outline-offset: 2px; }
+.hs-badge,
+.hs-badge-ghost {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--hs-on-accent) 26%, transparent);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+}
+.hs-badge-ghost { position: absolute; margin: 0; pointer-events: none; background: var(--hs-accent); color: var(--hs-on-accent); }
+.hs.is-clean .hs-btn { cursor: default; }
+.hs.is-clean .hs-face { background: var(--hs-fill); color: var(--hs-muted); box-shadow: none; }
+.hs.is-clean .hs-badge { display: none; }
+.hs.is-saving .hs-face { opacity: 0.8; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-face, .hs-dirty, .hs-knob { transition-duration: var(--duration-reduced) !important; transition-timing-function: linear !important; }
+}
+.hs [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<form class="hs is-clean" data-mi="heavy-save" novalidate>
+  <p class="hs-header">Workspace</p>
+  <div class="hs-list">
+    <label class="hs-row">
+      <span class="hs-label"><i class="hs-dirty" aria-hidden="true"></i>Name</span>
+      <input type="text" id="hs-name" name="name" value="Northwind Studio" autocomplete="off">
+    </label>
+    <label class="hs-row">
+      <span class="hs-label"><i class="hs-dirty" aria-hidden="true"></i>URL</span>
+      <input type="text" id="hs-slug" name="slug" value="northwind" autocomplete="off">
+    </label>
+    <label class="hs-row">
+      <span class="hs-label"><i class="hs-dirty" aria-hidden="true"></i>Time Zone</span>
+      <select id="hs-tz" name="tz">
+        <option>America/Chicago</option>
+        <option>America/New_York</option>
+        <option>Europe/London</option>
+        <option>Asia/Tokyo</option>
+      </select>
+    </label>
+    <label class="hs-row">
+      <span class="hs-label"><i class="hs-dirty" aria-hidden="true"></i>Weekly Digest</span>
+      <span class="hs-switch">
+        <input type="checkbox" role="switch" id="hs-digest" name="digest" checked>
+        <span class="hs-track"></span><span class="hs-knob"></span>
+      </span>
+    </label>
+  </div>
+  <div class="hs-bar">
+    <button type="button" class="hs-leave">Go to Billing</button>
+    <p class="hs-note" role="status" aria-live="polite"></p>
+    <button type="submit" class="hs-btn" aria-disabled="true" aria-label="All changes saved">
+      <span class="hs-face"><span class="hs-btn-label">Saved</span><span class="hs-badge">0</span></span>
+    </button>
+  </div>
+</form>
+
+
+<script>
+/* Heavy Save — vanilla JS. Auto-initializes every [data-mi="heavy-save"] form.
+   Call window.initHeavySave(form) for forms added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var MAX_WEIGHT = 5;
+
+  function initHeavySave(form) {
+    if (!form || form.__miHeavy) return;
+    form.__miHeavy = true;
+
+    var controls = Array.prototype.slice.call(form.querySelectorAll('input, select, textarea'))
+      .filter(function (c) { return c.name; });
+    var btn = form.querySelector('.hs-btn');
+    var face = form.querySelector('.hs-face');
+    var label = form.querySelector('.hs-btn-label');
+    var badge = form.querySelector('.hs-badge');
+    var note = form.querySelector('.hs-note');
+    var leave = form.querySelector('.hs-leave');
+    var saved = new Map();
+    var last = 0;
+    var saving = false;
+    var noteTimer = 0;
+
+    function read(c) { return c.type === 'checkbox' ? c.checked : c.value; }
+    function write(c, v) { if (c.type === 'checkbox') c.checked = v; else c.value = v; }
+    function snapshot() { controls.forEach(function (c) { saved.set(c, read(c)); }); }
+
+    // A change = a field whose value differs from the last saved value.
+    function countChanges() {
+      var n = 0;
+      controls.forEach(function (c) {
+        var dirty = read(c) !== saved.get(c);
+        var wrap = c.closest('.hs-row');
+        if (wrap) wrap.classList.toggle('is-dirty', dirty);
+        if (dirty) n++;
+      });
+      return n;
+    }
+
+    function add(el, frames, opts) {
+      if (reduce.matches || !el.animate) return;
+      opts.composite = 'add'; // layers on top of the weight offset
+      try { el.animate(frames, opts); } catch (e) { delete opts.composite; el.animate(frames, opts); }
+    }
+
+    function render(n) {
+      form.style.setProperty('--hs-w', Math.min(n, MAX_WEIGHT));
+      form.classList.toggle('is-clean', n === 0);
+      btn.setAttribute('aria-disabled', n === 0 ? 'true' : 'false');
+      btn.setAttribute('aria-label', n === 0 ? 'All changes saved' : 'Save ' + n + (n === 1 ? ' change' : ' changes'));
+      if (!saving) label.textContent = n === 0 ? 'Saved' : 'Save';
+      badge.textContent = n;
+      if (n > last) {
+        add(face, [
+          { transform: 'scale(1, 1)' },
+          { transform: 'scale(1.04, 0.9)', offset: 0.35 },
+          { transform: 'scale(0.99, 1.03)', offset: 0.7 },
+          { transform: 'scale(1, 1)' }
+        ], { duration: 380, easing: 'ease-out' });
+        if (!reduce.matches && badge.animate) {
+          badge.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.35)' }, { transform: 'scale(1)' }], { duration: 300, easing: 'ease-out' });
+        }
+      }
+      if (n === 0) hideNote();
+      last = n;
+    }
+
+    function update() { render(countChanges()); }
+
+    function showNote(content, warn) {
+      clearTimeout(noteTimer);
+      note.replaceChildren.apply(note, content);
+      note.classList.toggle('is-warn', !!warn);
+    }
+    function hideNote() { clearTimeout(noteTimer); note.replaceChildren(); note.classList.remove('is-warn'); }
+
+    function tug() {
+      add(face, [
+        { transform: 'translateX(0) scale(1)' },
+        { transform: 'translateX(-7px) scale(1.06)', offset: 0.3 },
+        { transform: 'translateX(3px) scale(1)', offset: 0.6 },
+        { transform: 'translateX(0) scale(1)' }
+      ], { duration: 480, easing: 'ease-out' });
+    }
+
+    function discard() {
+      controls.forEach(function (c) { write(c, saved.get(c)); });
+      update();
+    }
+
+    function flyBadge() {
+      if (reduce.matches || !badge.animate) return;
+      var b = badge.getBoundingClientRect();
+      var r = btn.getBoundingClientRect();
+      var ghost = document.createElement('span');
+      ghost.className = 'hs-badge-ghost';
+      ghost.textContent = badge.textContent;
+      ghost.style.left = (b.left - r.left) + 'px';
+      ghost.style.top = (b.top - r.top) + 'px';
+      btn.appendChild(ghost);
+      ghost.animate(
+        [{ transform: 'translateY(0) scale(1)', opacity: 1 }, { transform: 'translateY(-28px) scale(0.6)', opacity: 0 }],
+        { duration: 520, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards' }
+      ).finished.then(function () { ghost.remove(); });
+    }
+
+    form.addEventListener('input', update);
+    form.addEventListener('change', update);
+
+    leave.addEventListener('click', function () {
+      var n = countChanges();
+      if (n === 0) {
+        showNote([document.createTextNode('Billing would open now. Nothing was lost.')], false);
+        noteTimer = setTimeout(hideNote, 2400);
+        return;
+      }
+      var undoBtn = document.createElement('button');
+      undoBtn.type = 'button';
+      undoBtn.textContent = 'Discard';
+      undoBtn.addEventListener('click', discard);
+      showNote([document.createTextNode('You have ' + n + ' unsaved ' + (n === 1 ? 'change.' : 'changes.')), undoBtn], true);
+      tug();
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (saving || countChanges() === 0) return;
+      saving = true;
+      form.classList.add('is-saving');
+      label.textContent = 'Saving';
+      hideNote();
+      setTimeout(function () {
+        snapshot();
+        flyBadge();
+        saving = false;
+        form.classList.remove('is-saving');
+        render(countChanges());
+        add(face, [
+          { transform: 'translateY(0)' },
+          { transform: 'translateY(-7px)', offset: 0.35 },
+          { transform: 'translateY(0)' }
+        ], { duration: 520, easing: 'cubic-bezier(.2,.8,.3,1)' });
+      }, 650);
+    });
+
+    snapshot();
+    update();
+  }
+
+  window.initHeavySave = initHeavySave;
+  function boot() { document.querySelectorAll('[data-mi="heavy-save"]').forEach(initHeavySave); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

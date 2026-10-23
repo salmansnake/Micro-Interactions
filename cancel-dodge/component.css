@@ -1,0 +1,83 @@
+/* Cancel, Eventually: reach for Cancel and it swaps places with Keep My Plan. Five times. Then it gives up and works.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.cn {
+  --cn-bg: var(--card);
+  --cn-fg: var(--foreground);
+  --cn-muted: var(--muted-foreground);
+  --cn-line: var(--border);
+  container-type: inline-size;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 24px;
+  background: var(--cn-bg);
+  color: var(--cn-fg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.cn *, .cn *::before, .cn *::after { box-sizing: border-box; }
+.cn p, .cn h3 { margin: 0; }
+.cn-main, .cn-done { display: flex; flex-direction: column; gap: 8px; }
+.cn-head { margin-bottom: 4px; }
+.cn-plan { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: var(--radius-full); background: var(--brand-subtle); color: var(--brand-text); font: 600 var(--text-caption)/1 var(--font-sans); font-variant-numeric: tabular-nums; }
+.cn-title { font: 600 var(--text-title)/var(--leading-title) var(--font-sans); letter-spacing: var(--tracking-title); color: var(--cn-fg); }
+.cn-body { color: var(--cn-muted); }
+/* The pleading line in Outcraft Orange, nudged 35% toward Orange 700 so it holds up on white (about #E47447, 3:1).
+   In dark mode --orange-700 is Orange itself, so the mix is plain #FE8C5F. Space is reserved so nothing jumps. */
+.cn-quip { min-height: var(--leading-small); color: color-mix(in srgb, var(--orange) 65%, var(--orange-700)); font: 600 var(--text-small)/var(--leading-small) var(--font-sans); }
+.cn-quip:empty { visibility: hidden; }
+.cn-quip.is-new { animation: cn-quip var(--spring-pop-duration) var(--spring-pop); }
+@keyframes cn-quip { from { opacity: 0; transform: translateY(4px); } }
+
+/* Two equal buttons on one line */
+.cn-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.cn-keep, .cn-cancel, .cn-again {
+  height: 44px; padding: 0 12px; border-radius: var(--radius-md);
+  font: 600 var(--text-ui)/var(--leading-ui) var(--font-sans); white-space: nowrap; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.cn-keep, .cn-cancel {
+  position: relative; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  transition: transform var(--spring-ui-duration) var(--spring-ui), background-color var(--duration-fast), border-color var(--duration-fast), color var(--duration-fast);
+  will-change: transform;
+}
+.cn-keep { border: 0; background: var(--primary); color: var(--primary-foreground); transform: translateX(var(--cn-keep-x, 0px)); }
+.cn-keep:hover { background: color-mix(in srgb, var(--primary) 88%, var(--background)); }
+/* Cancel: soft red while it's running away; once it's calm, pressing it goes solid red */
+.cn-cancel { border: 1px solid var(--danger-border); background: var(--danger-subtle); color: var(--danger-text); transform: translateX(var(--cn-x, 0px)); }
+.cn.is-free .cn-cancel:hover { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 14%, var(--danger-subtle)); }
+.cn.is-free .cn-cancel:active { border-color: var(--danger); background: var(--danger); color: var(--danger-foreground); transition-duration: var(--duration-instant); }
+.cn-keep:focus-visible, .cn-cancel:focus-visible, .cn-again:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cn-keep.is-plead { animation: cn-plead var(--spring-pop-duration) var(--spring-pop); }
+@keyframes cn-plead { 40% { scale: 1.03; } }
+
+/* Mid-swap: neither button can be hovered or clicked, and both lean into the run */
+.cn.is-running .cn-keep, .cn.is-running .cn-cancel { pointer-events: none; }
+.cn.is-run-l .cn-cancel, .cn.is-run-r .cn-keep { animation: cn-lean-l var(--spring-ui-duration) var(--ease-out); }
+.cn.is-run-r .cn-cancel, .cn.is-run-l .cn-keep { animation: cn-lean-r var(--spring-ui-duration) var(--ease-out); }
+@keyframes cn-lean-l { 30% { rotate: -5deg; scale: 1.03 0.96; } }
+@keyframes cn-lean-r { 30% { rotate: 5deg; scale: 1.03 0.96; } }
+/* Out of breath: the walk home is slow, then Cancel pants */
+.cn.is-walking .cn-keep, .cn.is-walking .cn-cancel { transition: transform calc(var(--spring-panel-duration) * 2) var(--ease-in-out), background-color var(--duration-fast); }
+.cn.is-tired .cn-cancel { animation: cn-pant var(--duration-slower) var(--ease-in-out) 3; }
+@keyframes cn-pant { 50% { scale: 1.02 0.94; } }
+@container (max-width: 340px) { .cn-keep, .cn-cancel { padding: 0 8px; font-size: var(--text-small); } .cn-long { display: none; } }
+
+.cn-done { align-items: flex-start; outline: none; animation: cn-in var(--spring-panel-duration) var(--spring-panel) both; }
+@keyframes cn-in { from { opacity: 0; transform: translateY(8px); } }
+.cn-again { margin-top: 12px; border: 1px solid var(--cn-line); background: var(--background); color: var(--cn-fg); transition: transform var(--spring-press-duration) var(--spring-press); }
+.cn-again:hover { background: var(--subtle); }
+.cn-again:active { transform: scale(var(--press-scale)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-keep, .cn-cancel, .cn.is-walking .cn-keep, .cn.is-walking .cn-cancel { transition: opacity var(--duration-reduced) var(--ease-out), background-color var(--duration-fast); }
+  .cn.is-run-l .cn-cancel, .cn.is-run-r .cn-cancel, .cn.is-run-l .cn-keep, .cn.is-run-r .cn-keep, .cn.is-tired .cn-cancel, .cn-keep.is-plead, .cn-done, .cn-quip.is-new { animation: none; }
+  .cn.is-blink .cn-cancel, .cn.is-blink .cn-keep { opacity: 0; }
+  .cn-again:active { transform: none; }
+}
+.cn [hidden] { display: none !important; }

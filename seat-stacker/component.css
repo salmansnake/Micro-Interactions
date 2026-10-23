@@ -1,0 +1,98 @@
+/* Seat Stacker — avatars stack as you add seats, and crossing a volume tier rolls the price down.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ss {
+  --ss-bg: var(--card);
+  --ss-fg: var(--foreground);
+  --ss-muted: var(--muted-foreground);
+  --ss-line: var(--border);
+  --ss-sunken: var(--subtle);
+  --ss-fill: var(--muted);
+  --ss-accent: var(--primary);
+  --ss-on-accent: var(--primary-foreground);
+  --ss-green: var(--success);
+  --ss-green-text: var(--success-text);
+  --ss-green-soft: var(--success-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ss-bg);
+  color: var(--ss-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ss-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+.ss-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.ss-avatars { display: flex; flex-direction: row-reverse; justify-content: flex-end; }
+.ss-av {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-left: -8px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--ss-bg);
+  color: var(--on-chart);
+  font-size: calc(var(--text-caption) - 1px);
+  font-weight: 700;
+  animation: ss-pop var(--spring-pop-duration) var(--spring-pop) both;
+}
+.ss-av:last-child { margin-left: 0; }
+.ss-av.is-more { background: var(--ss-fill); color: var(--ss-fg); font-size: calc(var(--text-caption) - 1px); }
+.ss-av.is-leaving { animation: ss-leave var(--duration-slow) var(--ease-in) forwards; }
+@keyframes ss-pop { from { transform: scale(0) translateY(6px); } }
+@keyframes ss-leave { to { transform: scale(0); opacity: 0; } }
+.ss-control { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.ss-step {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ss-fill);
+  color: var(--ss-fg);
+  font: 500 var(--text-h3)/1 var(--font-sans);
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.ss-step:active { transform: scale(0.9); }
+.ss-step:disabled { opacity: 0.35; cursor: default; }
+.ss-step:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ss-count { width: 3.2ch; padding: 0; border: 0; border-radius: var(--radius-md); background: none; color: var(--ss-fg); font: 700 calc(var(--text-h1) + 4px) / 48px var(--font-sans); text-align: center; font-variant-numeric: tabular-nums; outline: none; }
+.ss-count:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.ss-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* Tiers */
+.ss-tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 4px; border-radius: var(--radius-lg); background: var(--ss-sunken); }
+.ss-tier { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 8px 4px; border-radius: var(--radius-md); transition: background-color var(--duration-slow), box-shadow var(--duration-slow); }
+.ss-tier b { font-size: var(--text-body); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ss-tier span { color: var(--ss-muted); font-size: calc(var(--text-caption) - 1px); line-height: 13px; }
+.ss-tier.is-on { background: var(--raised); box-shadow: 0 0 0 1px var(--ss-line), var(--shadow-sm); }
+.ss-tier.is-new { animation: ss-tier var(--spring-pop-duration) var(--spring-pop); }
+@keyframes ss-tier { 30% { transform: scale(1.08); } 100% { transform: none; } }
+/* Price odometers */
+.ss-price { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ss-price > div { padding: 12px 14px; border-radius: var(--radius-lg); background: var(--ss-sunken); }
+.ss-k { margin: 0 0 2px; color: var(--ss-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.ss-v { display: flex; align-items: baseline; margin: 0; font-size: var(--text-h3); line-height: var(--leading-h3); font-weight: 700; font-variant-numeric: tabular-nums; }
+.ss-v small { margin-left: 3px; color: var(--ss-muted); font-size: var(--text-small); font-weight: 400; }
+.ss-odo { display: inline-flex; height: 34px; overflow: hidden; }
+.ss-col { display: flex; flex-direction: column; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.ss-col span { height: 34px; line-height: 34px; text-align: center; }
+.ss-note { min-height: 30px; margin: 0; }
+.ss-note:empty { display: none; }
+.ss-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: var(--radius-full); background: var(--ss-green-soft); color: var(--ss-green-text); font-size: var(--text-small); font-weight: 600; animation: ss-chip var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes ss-chip { from { opacity: 0; transform: translateY(6px) scale(0.9); } }
+@media (prefers-reduced-motion: reduce) {
+  .ss-av, .ss-av.is-leaving, .ss-tier.is-new, .ss-chip { animation: none; }
+  .ss-col { transition-duration: var(--duration-reduced); }
+}
+.ss [hidden] { display: none !important; }

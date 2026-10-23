@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unsubscribe Comes to You · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Unsubscribe Comes to You — the opposite of the button that runs away: it eagerly slides toward your cursor.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ue {
+  --ue-bg: var(--card);
+  --ue-fg: var(--foreground);
+  --ue-muted: var(--muted-foreground);
+  --ue-line: var(--border);
+  --ue-sunken: var(--subtle);
+  --ue-fill: var(--muted);
+  --ue-accent: var(--primary);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ue-bg);
+  color: var(--ue-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  transition: opacity var(--duration-slower);
+}
+.ue p { margin: 0; }
+.ue-mail { display: flex; align-items: center; gap: 12px; }
+.ue-logo { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-md); background: linear-gradient(160deg, var(--orange), var(--pink)); color: var(--on-chart); font-weight: 800; }
+.ue-mail-text { flex: 1; min-width: 0; contain: inline-size; }
+.ue-from { font-weight: 600; }
+.ue-subj { overflow: hidden; color: var(--ue-muted); font-size: var(--text-small); line-height: var(--leading-small); text-overflow: ellipsis; white-space: nowrap; }
+.ue-lines { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: var(--radius-lg); background: var(--ue-sunken); transition: opacity var(--duration-slower); }
+.ue-lines i { height: 8px; border-radius: var(--radius-xs); background: var(--ue-fill); }
+.ue-lines i:nth-child(2) { width: 86%; }
+.ue-lines i:nth-child(3) { width: 92%; }
+.ue-lines i:nth-child(4) { width: 54%; }
+.ue.is-done .ue-lines, .ue.is-done .ue-mail { opacity: 0.4; }
+
+/* The zone the button may roam inside */
+.ue-zone { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; min-height: 108px; padding: 12px 8px 16px; border-top: 1px solid var(--ue-line); }
+.ue-legal { color: var(--ue-muted); font-size: var(--text-caption); line-height: var(--leading-caption); text-align: center; }
+.ue-btn { position: relative; z-index: 1; height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--ue-muted); font: inherit; font-size: var(--text-small); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; transform: translate(var(--ue-x, 0), var(--ue-y, 0)) scale(var(--ue-s, 1)); transition: background-color var(--duration-base), color var(--duration-base), box-shadow var(--duration-base); will-change: transform; }
+.ue.is-near .ue-btn { background: var(--ue-accent); color: var(--primary-foreground); text-decoration: none; font-weight: 600; box-shadow: 0 6px 16px color-mix(in srgb, var(--brand-strong) 35%, transparent); }
+.ue.is-eager .ue-btn { animation: ue-wag var(--duration-slower) var(--ease-in-out) infinite; }
+@keyframes ue-wag { 50% { rotate: 3deg; } }
+.ue-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ue.is-done .ue-btn { background: var(--success); color: var(--success-foreground); text-decoration: none; font-weight: 600; }
+.ue-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ue-status { color: var(--ue-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ue-status:empty { display: none; }
+.ue-undo { flex: none; height: 32px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--ue-accent); font: inherit; font-weight: 600; cursor: pointer; }
+.ue-undo:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ue.is-eager .ue-btn { animation: none; }
+}
+.ue [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Unsubscribe Comes to You"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="ue" data-mi="unsubscribe-eager">
+  <div class="ue-mail">
+    <span class="ue-logo" aria-hidden="true">G</span>
+    <div class="ue-mail-text">
+      <p class="ue-from">The Weekly Growth Digest</p>
+      <p class="ue-subj">Issue #212 · 9 tips you’ve definitely seen before</p>
+    </div>
+  </div>
+  <div class="ue-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="ue-zone">
+    <p class="ue-legal">You’re receiving this because you signed up in 2019 and forgot.</p>
+    <button type="button" class="ue-btn"><span class="ue-label">Unsubscribe</span></button>
+  </div>
+  <div class="ue-foot">
+    <p class="ue-status" role="status" aria-live="polite"></p>
+    <button type="button" class="ue-undo" hidden>Resubscribe</button>
+  </div>
+</div>
+</div>
+<script>
+/* Unsubscribe Comes to You — vanilla JS. Auto-initializes every [data-mi="unsubscribe-eager"].
+   Within 220px of the pointer, the button springs toward it (kept inside the card) and gets keener as it gets
+   closer. On touch and keyboard it simply stays put. Call window.initUnsubscribeEager(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var RANGE = 220, PULL = 0.62;
+
+  function initUnsubscribeEager(root) {
+    if (!root || root.__miUnsub) return;
+    root.__miUnsub = true;
+    var btn = root.querySelector('.ue-btn'), label = root.querySelector('.ue-label');
+    var status = root.querySelector('.ue-status'), undo = root.querySelector('.ue-undo');
+    var x = 0, y = 0, vx = 0, vy = 0, tx = 0, ty = 0, s = 1, ts = 1, raf = 0, done = false;
+
+    function home() {
+      var r = btn.getBoundingClientRect();
+      return { cx: r.left + r.width / 2 - x, cy: r.top + r.height / 2 - y, w: r.width, h: r.height };
+    }
+
+    function step() {
+      // A spring with a little overshoot, so it looks keen rather than mechanical.
+      vx = (vx + (tx - x) * 0.14) * 0.72; vy = (vy + (ty - y) * 0.14) * 0.72;
+      x += vx; y += vy; s += (ts - s) * 0.2;
+      btn.style.setProperty('--ue-x', x.toFixed(1) + 'px');
+      btn.style.setProperty('--ue-y', y.toFixed(1) + 'px');
+      btn.style.setProperty('--ue-s', s.toFixed(3));
+      if (Math.abs(tx - x) + Math.abs(ty - y) + Math.abs(vx) + Math.abs(vy) + Math.abs(ts - s) > 0.05) raf = requestAnimationFrame(step);
+      else raf = 0;
+    }
+    function go() { if (!raf) raf = requestAnimationFrame(step); }
+
+    root.addEventListener('pointermove', function (e) {
+      if (done || e.pointerType !== 'mouse' || reduce.matches) return;
+      var h = home(), dx = e.clientX - h.cx, dy = e.clientY - h.cy, d = Math.hypot(dx, dy);
+      var card = root.getBoundingClientRect();
+      if (d < RANGE) {
+        var k = PULL * (1 - d / RANGE * 0.4);
+        tx = dx * k; ty = dy * k;
+        // Stay inside the card.
+        tx = Math.max(card.left + 12 + h.w / 2 - h.cx, Math.min(card.right - 12 - h.w / 2 - h.cx, tx));
+        ty = Math.max(card.top + 12 + h.h / 2 - h.cy, Math.min(card.bottom - 12 - h.h / 2 - h.cy, ty));
+        ts = 1 + 0.18 * (1 - d / RANGE);
+        var near = d < 150;
+        root.classList.toggle('is-near', near);
+        root.classList.toggle('is-eager', d < 70);
+        label.textContent = d < 70 ? 'Yes, This One' : near ? 'Over Here' : 'Unsubscribe';
+      } else {
+        tx = 0; ty = 0; ts = 1;
+        root.classList.remove('is-near', 'is-eager');
+        label.textContent = 'Unsubscribe';
+      }
+      go();
+    });
+    root.addEventListener('pointerleave', function () {
+      if (done) return;
+      tx = 0; ty = 0; ts = 1;
+      root.classList.remove('is-near', 'is-eager');
+      label.textContent = 'Unsubscribe';
+      go();
+    });
+
+    btn.addEventListener('click', function () {
+      if (done) return;
+      done = true;
+      root.classList.remove('is-eager');
+      root.classList.add('is-done');
+      label.textContent = 'Unsubscribed';
+      status.textContent = 'Done. No survey, no “Are you sure?”, no sad puppy. That’s it.';
+      undo.hidden = false;
+      tx = 0; ty = 0; ts = 1; go();
+    });
+    undo.addEventListener('click', function () {
+      done = false;
+      root.classList.remove('is-done', 'is-near');
+      label.textContent = 'Unsubscribe';
+      status.textContent = 'Resubscribed. We’ll pretend that didn’t happen.';
+      undo.hidden = true;
+      btn.focus();
+    });
+  }
+
+  window.initUnsubscribeEager = initUnsubscribeEager;
+  function boot() { document.querySelectorAll('[data-mi="unsubscribe-eager"]').forEach(initUnsubscribeEager); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initUnsubscribeEager"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

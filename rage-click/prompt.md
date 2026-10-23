@@ -1,0 +1,28 @@
+Build a "Rage Click Detector" for slow buttons in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
+
+WHAT IT DOES
+Click a busy button over and over and it notices: it calms you down, tells you the truth about the wait, promises only one job started, and hands you a stress ball to squeeze.
+
+BEHAVIOR
+1. A file card (red document icon, "Q3 Revenue Report", "2,418 rows · PDF") above a full-width 44px filled button, "Export PDF".
+2. First click starts one export (5 seconds in the demo): the button turns Soft ground with an arc spinner and "Exporting…", and a 4px progress bar fills.
+3. Every extra click while busy is counted, never queued: a red "×3" counter pill bumps on the button's right edge and the button nudges sideways. The first few say "Still working on it. About 3 seconds left."
+4. Four or more extra clicks within 1.5 seconds is a rage click: the message becomes "Okay, okay. I heard you. It's still exporting, about 2 seconds left. Only one export was started." and a stress ball panel springs up (pop spring).
+5. The stress ball is a 76px orange sphere (radial gradient, inner shadow) with two small eyes and a smile. Press and hold to squeeze: it flattens to scale(1.26, 0.68) from its bottom in 0.12s, the eyes squint and the mouth stretches. Release and it springs back with the pop spring. A counter reads "3 squeezes", and at 10 adds "You're doing great." Space and Enter squeeze too.
+6. Past 12 extra clicks: "Clicking faster won't make it faster. But it's sweet that you care."
+7. When it finishes, the button turns green, "Download PDF", and the message says "Done. It was always going to take 5 seconds." (or "Your report is ready." if nobody raged). Download shows the file name and resets.
+Reduced motion: no nudges or bumps; the ball squeezes with 100ms transitions.
+
+APPEARANCE (Outcraft Design System)
+- Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
+- Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
+- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float.
+- Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
+- Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
+- Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
+- Copy: title-case button labels, sentence-case body text, no emoji.
+- This one: the button is a 44px button that changes fill per state (black or Aqua in dark mode, Soft ground, green); the ball panel is a 12px Soft ground card.
+
+DELIVER
+The detector as a wrapper for any slow action (click threshold, window and duration as inputs), the demo, and short usage notes.

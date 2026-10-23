@@ -1,0 +1,111 @@
+/* Rage Click Detector — click a slow button too many times and it calms you down, then hands you a stress ball.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.rc {
+  --rc-bg: var(--card);
+  --rc-fg: var(--foreground);
+  --rc-muted: var(--muted-foreground);
+  --rc-line: var(--border);
+  --rc-sunken: var(--subtle);
+  --rc-fill: var(--muted);
+  --rc-accent: var(--primary);
+  --rc-on-accent: var(--primary-foreground);
+  --rc-green: var(--success);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--rc-bg);
+  color: var(--rc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.rc p { margin: 0; }
+.rc-card { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-lg); background: var(--rc-sunken); }
+.rc-icon { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger); }
+.rc-icon svg { width: 22px; height: 22px; }
+.rc-title { font-weight: 600; }
+.rc-sub { color: var(--rc-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+.rc-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--rc-accent);
+  color: var(--rc-on-accent);
+  font: inherit;
+  font-size: var(--text-title-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-title);
+  cursor: pointer;
+  transition: background-color var(--duration-slow), color var(--duration-slow), transform var(--spring-press-duration) var(--spring-press);
+}
+.rc-btn:active { transform: scale(var(--press-scale)); }
+.rc-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.rc.is-busy .rc-btn { background: var(--rc-fill); color: var(--rc-fg); cursor: progress; }
+.rc.is-done .rc-btn { background: var(--rc-green); color: var(--on-color); }
+.rc-btn.is-nudge { animation: rc-nudge var(--duration-slow) var(--ease-out); }
+@keyframes rc-nudge { 25% { transform: translateX(-3px) scale(var(--press-scale-lg)); } 60% { transform: translateX(2px); } }
+.rc-spin { display: none; width: 16px; height: 16px; border-radius: 50%; border: 2px solid color-mix(in srgb, currentColor 25%, transparent); border-top-color: currentColor; animation: rc-spin 0.8s linear infinite; }
+.rc.is-busy .rc-spin { display: block; }
+@keyframes rc-spin { to { transform: rotate(1turn); } }
+.rc-count { position: absolute; right: 8px; top: 50%; min-width: 34px; height: 34px; margin-top: -17px; padding: 0 8px; box-sizing: border-box; border-radius: var(--radius-full); background: color-mix(in srgb, var(--danger) 16%, var(--rc-bg)); color: var(--danger-text); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 700; font-variant-numeric: tabular-nums; opacity: 0; transform: scale(0.6); transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.rc-count.is-on { opacity: 1; transform: none; }
+.rc-count.is-bump { animation: rc-bump var(--spring-pop-duration) var(--spring-pop); }
+@keyframes rc-bump { 30% { transform: scale(1.25); } }
+
+.rc-bar { height: 4px; border-radius: var(--radius-xs); background: var(--rc-fill); overflow: hidden; opacity: 0; transition: opacity var(--duration-slow); }
+.rc.is-busy .rc-bar, .rc.is-done .rc-bar { opacity: 1; }
+.rc-bar i { display: block; width: 0; height: 100%; border-radius: var(--radius-xs); background: var(--rc-accent); }
+.rc.is-done .rc-bar i { background: var(--rc-green); }
+.rc-msg { min-height: 40px; color: var(--rc-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.rc.is-raging .rc-msg { color: var(--rc-fg); font-size: var(--text-body); font-weight: 500; }
+
+/* The stress ball */
+.rc-ball-wrap { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--rc-sunken); animation: rc-in var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes rc-in { from { opacity: 0; transform: translateY(12px) scale(var(--press-scale-sm)); } }
+.rc-ball {
+  position: relative;
+  flex: none;
+  width: 76px;
+  height: 76px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, color-mix(in srgb, var(--orange) 22%, var(--on-color)) 0, color-mix(in srgb, var(--orange) 70%, var(--amber-9)) 26%, var(--orange) 58%, color-mix(in srgb, var(--orange) 72%, var(--black)) 100%);
+  box-shadow: var(--shadow-md);
+  cursor: grab;
+  touch-action: none;
+  transform-origin: 50% 100%;
+  transition: transform var(--spring-pop-duration) var(--spring-pop);
+  -webkit-tap-highlight-color: transparent;
+}
+.rc-ball.is-squeeze { transform: scale(1.26, 0.68); cursor: grabbing; transition: transform var(--duration-fast) var(--ease-out); }
+.rc-ball:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.rc-eye { position: absolute; top: 34%; left: 30%; width: 7px; height: 9px; border-radius: 50%; background: color-mix(in srgb, var(--orange) 34%, var(--black)); transition: transform var(--duration-fast); }
+.rc-eye + .rc-eye { left: auto; right: 30%; }
+.rc-mouth { position: absolute; top: 54%; left: 50%; width: 16px; height: 7px; margin-left: -8px; box-sizing: border-box; border-bottom: 2.5px solid color-mix(in srgb, var(--orange) 34%, var(--black)); border-radius: 0 0 var(--radius-md) var(--radius-md); transition: transform var(--duration-fast); }
+.rc-ball.is-squeeze .rc-eye { transform: scaleY(0.18); }
+.rc-ball.is-squeeze .rc-mouth { transform: scale(1.5, 0.6); }
+.rc-ball-note { display: flex; flex-direction: column; gap: 2px; min-width: 0; font-size: var(--text-small); line-height: var(--leading-small); }
+.rc-ball-note b { font-size: var(--text-body); line-height: var(--leading-body); font-weight: 600; }
+.rc-squeezes { color: var(--rc-muted); font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rc-btn.is-nudge, .rc-count.is-bump, .rc-ball-wrap { animation: none; }
+  .rc-ball, .rc-ball.is-squeeze { transition-duration: var(--duration-reduced); transition-timing-function: linear; }
+}
+.rc [hidden] { display: none !important; }

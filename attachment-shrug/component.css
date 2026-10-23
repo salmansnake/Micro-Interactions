@@ -1,0 +1,73 @@
+/* Attachment Shrug — say "attached" with nothing attached and the Send button shrugs at you.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.at {
+  --at-bg: var(--card);
+  --at-fg: var(--foreground);
+  --at-muted: var(--muted-foreground);
+  --at-line: var(--border);
+  --at-sunken: var(--subtle);
+  --at-fill: var(--muted);
+  --at-accent: var(--primary);
+  --at-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--at-bg);
+  color: var(--at-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.at p { margin: 0; }
+.at-fields { border-bottom: 1px solid var(--at-line); }
+.at-row { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--at-line); font-size: var(--text-body); }
+.at-row:first-child { border-top: 0; padding-top: 0; }
+.at-row span { width: 58px; color: var(--at-muted); }
+.at-row b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.at-body { display: block; width: 100%; min-height: 72px; box-sizing: border-box; padding: 0; border: 0; background: none; color: inherit; font: inherit; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); resize: none; }
+.at-body:focus { outline: none; }
+.at-files:empty { display: none; }
+.at-file { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 10px; border-radius: var(--radius-lg); background: var(--at-sunken); animation: at-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes at-in { from { opacity: 0; transform: translateY(8px) scale(var(--press-scale)); } }
+.at-file-icon { display: grid; place-items: center; flex: none; width: 32px; height: 38px; border-radius: var(--radius-sm); background: var(--danger); color: var(--danger-foreground); font-size: calc(var(--text-caption) - 2px); font-weight: 800; }
+.at-file-name { flex: 1; min-width: 0; overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.at-file-name small { display: block; color: var(--at-muted); font-size: var(--text-caption); font-weight: 400; }
+.at-remove { flex: none; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--at-fill); color: var(--at-muted); font: 600 var(--text-title-sm)/1 inherit; cursor: pointer; }
+.at-remove:focus-visible, .at-clip:focus-visible, .at-send:focus-visible, .at-ask button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.at-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.at-clip { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--at-fill); color: var(--at-fg); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), color var(--duration-base), background-color var(--duration-base); }
+.at-clip svg { width: 22px; height: 22px; }
+.at-clip:active { transform: scale(var(--press-scale-sm)); }
+.at.is-hint .at-clip { color: var(--brand-foreground); background: var(--brand); animation: at-look 2.4s var(--ease-in-out) infinite; }
+@keyframes at-look { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-16deg); } 80% { transform: rotate(14deg); } 90% { transform: rotate(-6deg); } }
+.at-send-wrap { position: relative; }
+.at-send { height: 44px; padding: 0 26px; border: 0; border-radius: var(--radius-md); background: var(--at-accent); color: var(--at-on-accent); font: inherit; font-weight: 600; cursor: pointer; transform-origin: 50% 100%; transition: transform var(--spring-press-duration) var(--spring-press); }
+.at-send:active { transform: scale(var(--press-scale)); }
+.at-send.is-shrug { animation: at-shrug var(--spring-ui-duration) var(--spring-ui); }
+@keyframes at-shrug { 15% { transform: translateY(-6px) scaleX(0.94) scaleY(1.06); } 30% { transform: none; } 45% { transform: translateY(-6px) scaleX(0.94) scaleY(1.06); } 60% { transform: none; } }
+.at-shrug { position: absolute; right: 0; bottom: calc(100% + 8px); padding: 6px 10px; border-radius: var(--radius-lg); background: var(--at-fg); color: var(--at-bg); font: 600 var(--text-body)/1 var(--font-sans); white-space: nowrap; opacity: 0; transform: translateY(8px) scale(0.6); transform-origin: 80% 100%; pointer-events: none; transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.at-shrug::after { content: ""; position: absolute; right: 26px; top: 100%; border: 6px solid transparent; border-top-color: var(--at-fg); }
+.at.is-shrugging .at-shrug { opacity: 1; transform: none; }
+.at-ask { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: var(--brand-subtle); box-shadow: inset 0 0 0 1px var(--brand-border); animation: at-in var(--spring-ui-duration) var(--spring-ui) both; }
+.at-ask-text { font-weight: 500; }
+.at-ask-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.at-ask button { height: 36px; padding: 0 14px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; }
+.at-attach { background: var(--at-accent); color: var(--at-on-accent); }
+.at-anyway { background: var(--at-bg); color: var(--at-fg); box-shadow: inset 0 0 0 1px var(--brand-border); }
+.at-status { min-height: 18px; color: var(--at-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.at-status:empty { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .at.is-hint .at-clip, .at-send.is-shrug, .at-file, .at-ask { animation: none; }
+  .at-shrug { transition-duration: var(--duration-reduced); }
+}
+.at [hidden] { display: none !important; }

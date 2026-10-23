@@ -1,0 +1,93 @@
+/* Offline Queue — changes made offline pile up in a visible queue, then fly to the cloud when you reconnect.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.oq {
+  --oq-bg: var(--card);
+  --oq-fg: var(--foreground);
+  --oq-muted: var(--muted-foreground);
+  --oq-line: var(--border);
+  --oq-sunken: var(--subtle);
+  --oq-fill: var(--muted);
+  --oq-accent: var(--primary);
+  --oq-on-accent: var(--primary-foreground);
+  --oq-green: var(--success);
+  --oq-orange: var(--warning);
+  --oq-orange-text: var(--warning-text);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--oq-bg);
+  color: var(--oq-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.oq-head { display: flex; align-items: center; gap: 12px; }
+.oq-titles { flex: 1; min-width: 0; }
+.oq-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.oq-state { display: flex; align-items: center; gap: 6px; margin: 2px 0 0; color: var(--oq-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.oq-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--oq-green); transition: background-color var(--duration-slow); }
+.oq.is-offline .oq-dot { background: var(--oq-orange); }
+.oq.is-offline .oq-state { color: var(--oq-orange-text); }
+.oq-cloud { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--oq-fill); color: var(--oq-accent); transition: color var(--duration-slow); }
+.oq-cloud svg { width: 20px; height: 20px; }
+.oq-slash { stroke-dasharray: 23; stroke-dashoffset: 23; transition: stroke-dashoffset var(--spring-ui-duration) var(--spring-ui); }
+.oq.is-offline .oq-cloud { color: var(--oq-muted); }
+.oq.is-offline .oq-slash { stroke-dashoffset: 0; }
+.oq-cloud.is-hit { animation: oq-hit var(--spring-pop-duration) var(--spring-pop); }
+@keyframes oq-hit { 40% { transform: scale(1.18); } 100% { transform: none; } }
+.oq-switch-row { display: flex; align-items: center; gap: 8px; color: var(--oq-muted); font-size: var(--text-small); }
+.oq-switch { position: relative; flex: none; width: 40px; height: 22px; }
+.oq-switch input { position: absolute; inset: -11px -2px; z-index: 1; width: calc(100% + 4px); height: calc(100% + 22px); margin: 0; opacity: 0; cursor: pointer; }
+.oq-track { position: absolute; inset: 0; border: 1px solid var(--input); border-radius: var(--radius-full); background: var(--muted); transition: background-color var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out); }
+.oq-knob { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--raised); box-shadow: var(--shadow-sm); transition: transform var(--spring-ui-duration) var(--spring-ui), width var(--spring-press-duration) var(--spring-press); }
+.oq-switch input:checked ~ .oq-track { background: var(--switch-on); border-color: var(--switch-on); }
+.oq-switch input:checked ~ .oq-knob { transform: translateX(18px); background: var(--card); }
+.oq-switch input:active ~ .oq-knob { width: 20px; }
+.oq-switch input:checked:active ~ .oq-knob { transform: translateX(14px); }
+.oq-switch input:focus-visible ~ .oq-track { outline: 2px solid var(--ring); outline-offset: 2px; }
+.oq-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--oq-sunken); }
+.oq-row { position: relative; display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 12px 0 14px; }
+.oq-row + .oq-row::before { content: ""; position: absolute; top: 0; left: 48px; right: 0; height: 1px; background: var(--oq-line); transform: scaleY(0.5); transform-origin: top; }
+.oq-row.is-new { animation: oq-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes oq-in { from { opacity: 0; transform: translateY(-6px); } }
+.oq-check { position: relative; flex: none; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; box-shadow: inset 0 0 0 1.5px var(--oq-fill); cursor: pointer; transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.oq-check::after { content: ""; position: absolute; left: 7.5px; top: 4px; width: 5px; height: 10px; border: solid var(--primary-foreground); border-width: 0 2.2px 2.2px 0; transform: rotate(45deg) scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.oq-check[aria-pressed="true"] { background: var(--oq-accent); box-shadow: none; }
+.oq-check[aria-pressed="true"]::after { transform: rotate(45deg) scale(1); }
+.oq-check:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.oq-text { flex: 1; min-width: 0; }
+.oq-check[aria-pressed="true"] + .oq-text { color: var(--oq-muted); text-decoration: line-through; text-decoration-color: var(--oq-fill); }
+/* Per-row sync badge: pending (clock), syncing (spinner), synced (check) */
+.oq-badge { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; opacity: 0; transform: scale(0.5); transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop), background-color var(--duration-base); }
+.oq-row.is-pending .oq-badge, .oq-row.is-synced .oq-badge { opacity: 1; transform: none; }
+.oq-row.is-pending .oq-badge { box-shadow: inset 0 0 0 1.5px var(--oq-orange); }
+.oq-row.is-pending .oq-badge::before { content: ""; position: absolute; left: 8px; top: 4px; width: 1.5px; height: 6px; background: var(--oq-orange); border-radius: var(--radius-xs); }
+.oq-row.is-pending .oq-badge::after { content: ""; position: absolute; left: 8px; top: 8.5px; width: 4px; height: 1.5px; background: var(--oq-orange); border-radius: var(--radius-xs); }
+.oq-row.is-synced .oq-badge { background: var(--oq-green); }
+.oq-row.is-synced .oq-badge::after { content: ""; position: absolute; left: 6.5px; top: 3.5px; width: 4px; height: 8px; border: solid var(--on-color); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.oq-add { display: flex; gap: 8px; }
+.oq-input { flex: 1; min-width: 0; height: 40px; padding: 0 12px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-md); background: var(--card); color: var(--oq-fg); font: inherit; font-size: var(--text-body); outline: none; }
+.oq-input:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.oq-add-btn { flex: none; height: 40px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--oq-accent); color: var(--oq-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.oq-add-btn:active { transform: scale(var(--press-scale)); }
+.oq-add-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* The queue: a pill that holds one chip per waiting change */
+.oq-queue { display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--oq-orange) 14%, transparent); color: var(--oq-orange-text); font-size: var(--text-small); font-weight: 600; animation: oq-in var(--spring-ui-duration) var(--spring-ui) both; }
+.oq-chips { display: flex; }
+.oq-chip { width: 18px; height: 22px; margin-left: -9px; border-radius: var(--radius-xs); background: var(--oq-bg); box-shadow: 0 0 0 1px var(--oq-line), var(--shadow-xs); animation: oq-chip var(--spring-pop-duration) var(--spring-pop) both; }
+.oq-chip:first-child { margin-left: 0; }
+@keyframes oq-chip { from { transform: translateY(-14px) rotate(-12deg); opacity: 0; } }
+.oq-fly { position: absolute; z-index: 4; left: 0; top: 0; width: 18px; height: 22px; border-radius: var(--radius-xs); background: var(--oq-bg); box-shadow: 0 0 0 1px var(--oq-line), var(--shadow-sm); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .oq-row.is-new, .oq-queue, .oq-chip, .oq-cloud.is-hit { animation: none; }
+}
+.oq [hidden] { display: none !important; }

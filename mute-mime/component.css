@@ -1,0 +1,74 @@
+/* Mute Mime — talk while muted and your sound waves hit an invisible glass box around your tile.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.mm {
+  --mm-bg: var(--card);
+  --mm-fg: var(--foreground);
+  --mm-muted: var(--muted-foreground);
+  --mm-fill: var(--muted);
+  --mm-accent: var(--primary);
+  --mm-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--mm-bg);
+  color: var(--mm-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.mm p { margin: 0; }
+/* A video tile. It stays dark in both themes, like a real call. */
+.mm-tile { position: relative; display: grid; place-items: center; height: 220px; overflow: hidden; border-radius: var(--radius-xl); background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--on-color) 18%, var(--black)), var(--black) 70%); box-shadow: inset 0 0 0 0 var(--success); transition: box-shadow var(--duration-slow); }
+.mm.is-live .mm-tile { box-shadow: inset 0 0 0 3px var(--success); }
+.mm-avatar { position: relative; z-index: 2; display: grid; place-items: center; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(160deg, var(--chart-1), var(--chart-2)); color: var(--on-chart); font-size: var(--text-title-sm); font-weight: 700; transition: transform var(--duration-base); }
+.mm.is-talking .mm-avatar { animation: mm-talk var(--duration-slow) var(--ease-in-out) infinite alternate; }
+@keyframes mm-talk { to { transform: scale(1.05); } }
+.mm-name { position: absolute; z-index: 3; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px 0 6px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 45%, transparent); color: var(--on-color); font-size: var(--text-small); font-weight: 600; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.mm-mic { width: 16px; height: 16px; color: var(--danger); }
+.mm.is-live .mm-mic { color: var(--on-color); }
+.mm.is-live .mm-slash { display: none; }
+
+/* The invisible box: only visible where a wave hits it */
+.mm-box { position: absolute; inset: 14px; z-index: 1; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--on-color) 0%, transparent), inset 0 0 0 0 color-mix(in srgb, var(--on-color) 0%, transparent); pointer-events: none; }
+.mm-box.is-hit { animation: mm-hit var(--duration-slower) var(--ease-out); }
+@keyframes mm-hit { 0% { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--on-color) 75%, transparent), inset 0 0 26px color-mix(in srgb, var(--aqua) 40%, transparent); } 100% { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--on-color) 0%, transparent), inset 0 0 0 color-mix(in srgb, var(--aqua) 0%, transparent); } }
+.mm-box::before, .mm-box::after { content: ""; position: absolute; width: 22px; height: 22px; border: 0 solid color-mix(in srgb, var(--on-color) 35%, transparent); }
+.mm-box::before { left: 0; top: 0; border-width: 1.5px 0 0 1.5px; border-top-left-radius: 10px; }
+.mm-box::after { right: 0; bottom: 0; border-width: 0 1.5px 1.5px 0; border-bottom-right-radius: 10px; }
+.mm:not(.is-talking) .mm-box::before, .mm:not(.is-talking) .mm-box::after, .mm.is-live .mm-box::before, .mm.is-live .mm-box::after { opacity: 0; }
+.mm-box::before, .mm-box::after { transition: opacity var(--duration-slow); }
+
+.mm-waves { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.mm-waves i { position: absolute; left: 50%; top: 50%; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--on-color) 55%, transparent); box-sizing: border-box; }
+.mm-waves i.is-boxed { animation: mm-boxed var(--mm-dur, 0.7s) var(--ease-out) forwards; }
+.mm-waves i.is-free { animation: mm-free 1.2s var(--ease-out) forwards; }
+@keyframes mm-boxed { 0% { transform: scale(1); opacity: 0.8; } 80% { transform: scale(var(--mm-stop, 2.4)); opacity: 0.8; } 100% { transform: scale(var(--mm-stop, 2.4)) scaleY(0.92); opacity: 0; } }
+@keyframes mm-free { 0% { transform: scale(1); opacity: 0.7; border-color: color-mix(in srgb, var(--success) 80%, transparent); } 100% { transform: scale(6); opacity: 0; border-color: color-mix(in srgb, var(--success) 40%, transparent); } }
+
+.mm-toast { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--danger) 12%, transparent); animation: mm-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes mm-in { from { opacity: 0; transform: translateY(-6px); } }
+.mm-toast-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
+.mm-unmute-inline { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--danger); color: var(--danger-foreground); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
+.mm-controls { display: flex; gap: 8px; }
+.mm-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; touch-action: none; -webkit-user-select: none; user-select: none; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-base); }
+.mm-controls button svg { width: 20px; height: 20px; }
+.mm-mute { flex: none; padding: 0 18px; background: var(--mm-fill); color: var(--mm-fg); }
+.mm-mute[aria-pressed="true"] { background: color-mix(in srgb, var(--danger) 16%, transparent); color: var(--danger-text); }
+.mm-talk { flex: 1; background: var(--mm-accent); color: var(--mm-on-accent); }
+.mm.is-talking .mm-talk { transform: scale(0.97); }
+.mm-controls button:focus-visible, .mm-unmute-inline:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mm.is-talking .mm-avatar, .mm-toast { animation: none; }
+  .mm-waves i.is-boxed, .mm-waves i.is-free { animation-duration: var(--duration-instant); }
+  .mm-box.is-hit { animation-duration: 0.8s; }
+}
+.mm [hidden] { display: none !important; }

@@ -1,0 +1,92 @@
+/* Unsure Underline — AI text marks the words it is unsure of, and lets you settle each one in a tap.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.uu {
+  --uu-bg: var(--card);
+  --uu-fg: var(--foreground);
+  --uu-muted: var(--muted-foreground);
+  --uu-line: var(--border);
+  --uu-sunken: var(--subtle);
+  --uu-fill: var(--muted);
+  --uu-accent: var(--primary);
+  --uu-on-accent: var(--primary-foreground);
+  --uu-orange: var(--warning);
+  --uu-green: var(--success);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--uu-bg);
+  color: var(--uu-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.uu-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.uu-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.uu-toggle { display: flex; align-items: center; gap: 8px; color: var(--uu-muted); font-size: var(--text-small); }
+.uu-switch { position: relative; flex: none; width: 40px; height: 22px; }
+.uu-switch input { position: absolute; inset: -11px -2px; z-index: 1; width: calc(100% + 4px); height: calc(100% + 22px); margin: 0; opacity: 0; cursor: pointer; }
+.uu-track { position: absolute; inset: 0; border: 1px solid var(--input); border-radius: var(--radius-full); background: var(--muted); transition: background-color var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out); }
+.uu-knob { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--raised); box-shadow: var(--shadow-sm); transition: transform var(--spring-ui-duration) var(--spring-ui), width var(--spring-press-duration) var(--spring-press); }
+.uu-switch input:checked ~ .uu-track { background: var(--switch-on); border-color: var(--switch-on); }
+.uu-switch input:checked ~ .uu-knob { transform: translateX(18px); background: var(--card); }
+.uu-switch input:active ~ .uu-knob { width: 20px; }
+.uu-switch input:checked:active ~ .uu-knob { transform: translateX(14px); }
+.uu-switch input:focus-visible ~ .uu-track { outline: 2px solid var(--ring); outline-offset: 2px; }
+.uu-text { margin: 0; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--uu-sunken); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
+/* The less sure, the stronger the underline: --u runs 0 (sure) to 1 (unsure) */
+.uu-w {
+  display: inline-block;
+  border-radius: var(--radius-xs);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: calc(1px + var(--u, 0) * 2px);
+  text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, var(--uu-orange) calc(35% + var(--u, 0) * 65%), transparent);
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--duration-base), text-decoration-color var(--duration-slower);
+}
+.uu-w:hover, .uu-w:focus-visible, .uu-w.is-open { background: color-mix(in srgb, var(--uu-orange) 16%, transparent); }
+.uu-w:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.uu.is-hidden .uu-w, .uu-w.is-sure { text-decoration-color: transparent; cursor: text; }
+.uu-w.is-fixed { animation: uu-fixed 1.2s var(--ease-out); }
+@keyframes uu-fixed { 0% { background: color-mix(in srgb, var(--uu-green) 30%, transparent); transform: scale(1.06); } 30% { transform: none; } 100% { background: transparent; } }
+.uu-w.is-swap { animation: uu-swap var(--spring-ui-duration) var(--spring-ui); }
+@keyframes uu-swap { from { opacity: 0; transform: translateY(-6px); filter: blur(3px); } }
+/* Popover */
+.uu-pop {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  top: 0;
+  width: 220px;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: var(--radius-xl);
+  background: var(--uu-bg);
+  box-shadow: 0 0 0 1px var(--uu-line), var(--shadow-xl);
+  animation: uu-pop var(--spring-ui-duration) var(--spring-ui) both;
+}
+@keyframes uu-pop { from { opacity: 0; transform: translateY(6px) scale(var(--press-scale)); } }
+.uu-conf { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--uu-muted); font-size: var(--text-caption); font-weight: 600; }
+.uu-meter { flex: 1; height: 4px; overflow: hidden; border-radius: var(--radius-xs); background: var(--uu-fill); }
+.uu-meter i { display: block; height: 100%; background: var(--uu-orange); transform-origin: left; transform: scaleX(var(--c, 0.5)); }
+.uu-alts { display: flex; flex-wrap: wrap; gap: 6px; }
+.uu-alts button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--uu-fill); color: var(--uu-fg); font: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.uu-alts button.is-keep { background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--uu-accent); font-weight: 600; }
+.uu-alts button:active { transform: scale(var(--press-scale)); }
+.uu-alts button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.uu-status { margin: 0 4px; color: var(--uu-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+@media (prefers-reduced-motion: reduce) {
+  .uu-w.is-fixed, .uu-w.is-swap, .uu-pop { animation: none; }
+}
+.uu [hidden] { display: none !important; }

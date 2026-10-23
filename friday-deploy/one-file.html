@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Friday Deploy Hard Hat</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .fy so they never affect the rest of your page. */
+.fy {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --duration-slow: 320ms;
+  --font-mono: "Geist Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale: 0.97;
+  --press-scale-lg: 0.985;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --amber-11: #ab6400;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: var(--black);
+  --green-11: #218358;
+  --lift: #FFFFFF;
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-color: #ffffff;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --raised: var(--lift);
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --success-foreground: #ffffff;
+  --warning: var(--amber-9);
+  --warning-text: #a15e00;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .fy, .dark .fy {
+  --amber-11: #ffca16;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --lift: #3F4341;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-color: #ffffff;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --raised: var(--lift);
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --success-foreground: #ffffff;
+  --warning: var(--amber-9);
+  --warning-text: var(--amber-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .fy {
+    --amber-11: #ffca16;
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --lift: #3F4341;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-color: #ffffff;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --raised: var(--lift);
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --success-foreground: #ffffff;
+    --warning: var(--amber-9);
+    --warning-text: var(--amber-11);
+    --white: #161817;
+  }
+}
+
+/* Friday Deploy Hard Hat — after 4 PM on a Friday, Deploy puts on a hard hat and caution tape and asks you to hold.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.fy {
+  --fy-bg: var(--card);
+  --fy-fg: var(--foreground);
+  --fy-muted: var(--muted-foreground);
+  --fy-line: var(--border);
+  --fy-sunken: var(--subtle);
+  --fy-fill: var(--muted);
+  --fy-thumb: var(--raised);
+  --fy-accent: var(--primary);
+  --fy-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--fy-bg);
+  color: var(--fy-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.fy p { margin: 0; }
+.fy-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.fy-meta { color: var(--fy-muted); font-size: var(--text-small); line-height: var(--leading-small); font-family: var(--font-mono); letter-spacing: 0; }
+.fy-when { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 14px; border-radius: var(--radius-lg); background: var(--fy-sunken); }
+.fy-when-label { flex: none; color: var(--fy-muted); font-size: var(--text-small); }
+.fy-seg { --i: 2; position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); flex: 1; max-width: 300px; padding: 2px; border-radius: var(--radius-md); background: var(--fy-fill); }
+.fy-seg::before { content: ""; position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc((100% - 4px) / 3); border-radius: var(--radius-sm); background: var(--fy-thumb); box-shadow: var(--shadow-sm); transform: translateX(calc(var(--i) * 100%)); transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.fy-seg button { position: relative; z-index: 1; height: 30px; padding: 0 2px; white-space: nowrap; border: 0; border-radius: var(--radius-sm); background: none; color: inherit; font: 600 var(--text-caption)/1 inherit; font-family: inherit; white-space: nowrap; cursor: pointer; }
+.fy { container-type: inline-size; }
+@container (max-width: 300px) { .fy-seg button { font-size: 11px; } }
+.fy-seg button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* The button, its tape and its hat */
+.fy-stage { position: relative; padding-top: 22px; }
+.fy-hat { position: absolute; left: 50%; top: 0; width: 64px; height: 40px; margin-left: -32px; z-index: 2; opacity: 0; transform: translateY(-40px) rotate(-14deg); transition: transform var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base); pointer-events: none; }
+.fy-hat svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 3px 4px color-mix(in srgb, var(--black) 18%, transparent)); }
+.fy.is-risky .fy-hat { opacity: 1; transform: translateY(0) rotate(-6deg); }
+.fy.is-leaving .fy-hat { opacity: 0; transform: translate(60px, -50px) rotate(30deg); transition-duration: var(--spring-ui-duration); }
+.fy-deploy { display: block; width: 100%; padding: 0; border: 0; border-radius: var(--radius-md); background: transparent; font: inherit; cursor: pointer; touch-action: none; -webkit-user-select: none; user-select: none; transition: transform var(--spring-press-duration) var(--spring-press), padding var(--duration-slow); }
+.fy-deploy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fy-deploy:active { transform: scale(var(--press-scale-lg)); }
+.fy-inner { position: relative; display: grid; place-items: center; height: 44px; overflow: hidden; border-radius: var(--radius-md); background: var(--fy-accent); color: var(--fy-on-accent); font-size: var(--text-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); transition: background-color var(--duration-slow); }
+.fy-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: color-mix(in srgb, var(--on-color) 28%, transparent); }
+.fy-label { position: relative; }
+.fy.is-risky .fy-deploy { padding: 5px; border-radius: var(--radius-lg); background: repeating-linear-gradient(-45deg, var(--warning) 0 12px, var(--black) 12px 24px); box-shadow: 0 0 0 1.5px var(--warning); }
+.fy.is-risky .fy-inner { background: var(--black); color: var(--warning); }
+.fy.is-risky .fy-fill { background: color-mix(in srgb, var(--warning) 30%, transparent); }
+.fy.is-done .fy-inner { background: var(--success); color: var(--success-foreground); }
+.fy-warn { min-height: 0; color: var(--warning-text); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.fy-warn:empty { display: none; }
+.fy-later { height: 44px; border: 0; border-radius: var(--radius-md); background: var(--fy-fill); color: var(--fy-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.fy-later:active { transform: scale(var(--press-scale)); }
+.fy-later:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (max-width: 440px) {
+  .fy-when { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px; }
+  .fy-when-label { padding-left: 6px; }
+  .fy-seg { max-width: none; }
+}
+.fy-status { min-height: 18px; color: var(--fy-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fy-hat { transition-duration: var(--duration-reduced); }
+}
+.fy [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="fy" data-mi="friday-deploy" data-oncall="Mira" data-hold="2000">
+  <div class="fy-head">
+    <p class="fy-title">Deploy to Production</p>
+    <p class="fy-meta">api-gateway · v2.18.0 · 14 commits</p>
+  </div>
+  <div class="fy-when">
+    <span class="fy-when-label" id="fy-when-label">Pretend It’s</span>
+    <div class="fy-seg" role="radiogroup" aria-labelledby="fy-when-label">
+      <button type="button" role="radio" data-day="Tuesday" data-time="11:00 AM">Tue 11 AM</button>
+      <button type="button" role="radio" data-day="Thursday" data-time="3:00 PM">Thu 3 PM</button>
+      <button type="button" role="radio" data-day="Friday" data-time="5:00 PM" data-risky aria-checked="true">Fri 5 PM</button>
+    </div>
+  </div>
+  <div class="fy-stage">
+    <span class="fy-hat" aria-hidden="true">
+      <svg viewBox="0 0 64 40"><path d="M8 30c0-14 10.5-24 24-24s24 10 24 24Z" style="fill: var(--warning)"/><path d="M27 6.5c1.6-.3 3.3-.5 5-.5s3.4.2 5 .5V24h-10Z" style="fill: color-mix(in srgb, var(--amber-9) 80%, var(--black))"/><path d="M2 30h60a3 3 0 0 1 0 6H2a3 3 0 0 1 0-6Z" style="fill: color-mix(in srgb, var(--amber-9) 62%, var(--black))"/><path d="M14 22c2-6 6-10.5 11-12.5" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".8" style="stroke: color-mix(in srgb, var(--amber-9) 40%, var(--on-color))"/></svg>
+    </span>
+    <button type="button" class="fy-deploy"><span class="fy-inner"><span class="fy-fill" aria-hidden="true"></span><span class="fy-label">Deploy</span></span></button>
+  </div>
+  <p class="fy-warn"></p>
+  <button type="button" class="fy-later" hidden>Schedule for Monday 10:00 AM</button>
+  <p class="fy-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Friday Deploy Hard Hat — vanilla JS. Auto-initializes every [data-mi="friday-deploy"].
+   The demo uses a pretend clock; in production, call root.setRisky(isFridayAfter4pm()) yourself.
+   Risky deploys need a press-and-hold (data-hold ms). Call window.initFridayDeploy(el) for later elements. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function initFridayDeploy(root) {
+    if (!root || root.__miFriday) return;
+    root.__miFriday = true;
+    var seg = root.querySelector('.fy-seg'), buttons = Array.prototype.slice.call(seg.querySelectorAll('button'));
+    var deploy = root.querySelector('.fy-deploy'), label = root.querySelector('.fy-label'), fill = root.querySelector('.fy-fill');
+    var warn = root.querySelector('.fy-warn'), later = root.querySelector('.fy-later'), status = root.querySelector('.fy-status');
+    var oncall = root.getAttribute('data-oncall') || 'Whoever is on call';
+    var holdMs = Number(root.getAttribute('data-hold')) || 2000;
+    var risky = false, day = '', time = '', t0 = 0, raf = 0, holding = false, done = false;
+
+    function setLabel() { label.textContent = done ? 'Deployed' : risky ? (holding ? 'Keep Holding…' : 'Hold to Deploy Anyway') : 'Deploy'; }
+
+    function setRisky(on) {
+      risky = on; done = false;
+      root.classList.remove('is-done', 'is-leaving');
+      root.classList.toggle('is-risky', on);
+      warn.textContent = on ? 'It’s ' + time + ' on a ' + day + '. ' + oncall + ' is on call this weekend, and has plans.' : '';
+      later.hidden = !on;
+      fill.style.width = '0';
+      status.textContent = '';
+      setLabel();
+    }
+
+    function pick(i, focus) {
+      var b = buttons[i];
+      seg.style.setProperty('--i', i);
+      buttons.forEach(function (x, k) { x.setAttribute('aria-checked', k === i ? 'true' : 'false'); x.tabIndex = k === i ? 0 : -1; });
+      day = b.getAttribute('data-day'); time = b.getAttribute('data-time');
+      setRisky(b.hasAttribute('data-risky'));
+      if (focus) b.focus();
+    }
+    buttons.forEach(function (b, i) {
+      b.addEventListener('click', function () { pick(i); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        pick((i + (e.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length, true);
+      });
+    });
+
+    function finish() {
+      done = true; holding = false;
+      root.classList.add('is-done');
+      fill.style.width = '100%';
+      setLabel();
+      later.hidden = true;
+      warn.textContent = '';
+      status.textContent = risky
+        ? 'Deployed at ' + time + ' on a ' + day + '. ' + oncall + ' has been notified. ' + oncall + ' is not happy.'
+        : 'Deployed to production. Have a lovely ' + day + '.';
+    }
+
+    function frame(now) {
+      if (!holding) return;
+      var p = Math.min(1, (now - t0) / (risky ? holdMs : 700));
+      fill.style.width = (p * 100).toFixed(1) + '%';
+      if (p >= 1) finish(); else raf = requestAnimationFrame(frame);
+    }
+
+    function press() {
+      if (done) { setRisky(risky); return; }
+      if (holding) return;
+      holding = true; t0 = performance.now();
+      setLabel();
+      raf = requestAnimationFrame(frame);
+    }
+    function release() {
+      if (!holding || !risky) return; // calm days finish on their own after one press
+      holding = false;
+      cancelAnimationFrame(raf);
+      fill.style.transition = 'width 0.3s';
+      fill.style.width = '0';
+      setTimeout(function () { fill.style.transition = ''; }, 320);
+      setLabel();
+      status.textContent = 'Hold for ' + Math.round(holdMs / 1000) + ' full seconds. That’s how sure you need to be.';
+    }
+
+    deploy.addEventListener('pointerdown', function (e) { if (e.button === 0) { deploy.setPointerCapture && deploy.setPointerCapture(e.pointerId); press(); } });
+    deploy.addEventListener('pointerup', release);
+    deploy.addEventListener('pointercancel', release);
+    deploy.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); press(); } });
+    deploy.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); release(); } });
+
+    later.addEventListener('click', function () {
+      root.classList.add('is-leaving');
+      later.hidden = true;
+      warn.textContent = '';
+      status.textContent = 'Scheduled for Monday 10:00 AM. Go enjoy your weekend.';
+      setTimeout(function () { root.classList.remove('is-risky'); }, reduce.matches ? 0 : 500);
+      label.textContent = 'Deploys Monday 10:00 AM';
+      done = true;
+    });
+
+    root.setRisky = setRisky;
+    var start = buttons.findIndex(function (b) { return b.getAttribute('aria-checked') === 'true'; });
+    pick(start < 0 ? 0 : start);
+  }
+
+  window.initFridayDeploy = initFridayDeploy;
+  function boot() { document.querySelectorAll('[data-mi="friday-deploy"]').forEach(initFridayDeploy); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

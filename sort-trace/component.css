@@ -1,0 +1,97 @@
+/* Sort Trace — re-sorted rows leave a fading trail from where they were, with how far each one moved.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.st {
+  --st-bg: var(--card);
+  --st-fg: var(--foreground);
+  --st-muted: var(--muted-foreground);
+  --st-line: var(--border);
+  --st-sunken: var(--subtle);
+  --st-fill: var(--muted);
+  --st-accent: var(--primary);
+  --st-up: var(--success-text);
+  --st-down: var(--warning-text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--st-bg);
+  color: var(--st-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.st-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.st-table { border-radius: var(--radius-lg); background: var(--st-sunken); }
+.st-head, .st-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+.st-head { padding: 4px 8px 0 24px; }
+.st-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--st-muted);
+  font: inherit;
+  font-size: var(--text-small);
+  font-weight: 600;
+  cursor: pointer;
+  justify-self: start;
+}
+.st-sort:nth-child(n+2) { justify-self: end; }
+.st-sort:hover { color: var(--st-fg); }
+.st-sort:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.st-sort[aria-sort="ascending"], .st-sort[aria-sort="descending"] { color: var(--st-accent); }
+.st-sort i { width: 8px; height: 8px; opacity: 0; transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-base); }
+.st-sort i::before { content: ""; display: block; width: 6px; height: 6px; border: solid currentColor; border-width: 0 1.75px 1.75px 0; transform: translate(1px, -1px) rotate(45deg); }
+.st-sort[aria-sort="descending"] i { opacity: 1; }
+.st-sort[aria-sort="ascending"] i { opacity: 1; transform: rotate(180deg); }
+.st-body { position: relative; padding: 0 8px 6px 24px; }
+.st-trails { position: absolute; left: 0; top: 0; width: 26px; height: 100%; overflow: visible; pointer-events: none; }
+.st-trails path { fill: none; stroke-width: 2; stroke-linecap: round; }
+.st-trails path.up { stroke: var(--st-up); }
+.st-trails path.down { stroke: var(--st-down); }
+.st-trails circle.up { fill: var(--st-up); }
+.st-trails circle.down { fill: var(--st-down); }
+.st-row { position: relative; min-height: 44px; padding: 0 6px; border-radius: var(--radius-md); font-variant-numeric: tabular-nums; }
+.st-row + .st-row { box-shadow: inset 0 1px 0 var(--st-line); }
+.st-row span { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.st-row span:nth-child(n+2) { justify-content: flex-end; }
+.st-row b { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: var(--radius-sm); color: var(--on-color); font-size: calc(var(--text-caption) - 1px); }
+.st-row.is-moved { animation: st-flash 1.6s var(--ease-out); }
+@keyframes st-flash { 0% { background: color-mix(in srgb, var(--brand) 14%, transparent); } 100% { background: transparent; } }
+.st-delta {
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--st-bg);
+  font-size: calc(var(--text-caption) - 2px);
+  line-height: 14px;
+  font-style: normal;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+  transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop);
+  z-index: 1;
+}
+.st-delta.up { color: var(--st-up); }
+.st-delta.down { color: var(--st-down); }
+.st-delta.is-on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.st-status { margin: 0 4px; color: var(--st-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+@media (prefers-reduced-motion: reduce) {
+  .st-row.is-moved { animation: none; }
+  .st-sort i, .st-delta { transition-duration: var(--duration-reduced); }
+}
+.st [hidden] { display: none !important; }

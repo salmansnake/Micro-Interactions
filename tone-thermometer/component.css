@@ -1,0 +1,81 @@
+/* Tone Thermometer — passive-aggressive phrases drop the temperature and frost the message. Warm It Up thaws it.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.tn {
+  --tn-bg: var(--card);
+  --tn-fg: var(--foreground);
+  --tn-muted: var(--muted-foreground);
+  --tn-line: var(--border);
+  --tn-sunken: var(--subtle);
+  --tn-fill: var(--muted);
+  --tn-accent: var(--primary);
+  --tn-on-accent: var(--primary-foreground);
+  --tn-c: var(--warning);
+  --tn-cold: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--tn-bg);
+  color: var(--tn-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.tn p { margin: 0; }
+.tn-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tn-title { font-weight: 600; }
+.tn-temp { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px 0 6px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--tn-c) 16%, transparent); color: color-mix(in srgb, var(--tn-c) 72%, var(--tn-fg)); font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; transition: background-color var(--duration-slower), color var(--duration-slower); }
+.tn-temp svg { width: 20px; height: 20px; }
+.tn-mercury { transition: d var(--duration-slower); }
+.tn-deg { font-weight: 700; }
+.tn-temp.is-drop { animation: tn-shiver var(--duration-slower) linear; }
+@keyframes tn-shiver { 20%, 60% { transform: translateX(-1.5px); } 40%, 80% { transform: translateX(1.5px); } }
+
+/* The field frosts over as it gets colder */
+.tn-field { position: relative; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--chart-1) calc(var(--tn-cold) * 16%), var(--tn-sunken)); box-shadow: inset 0 0 0 calc(var(--tn-cold) * 1.5px) color-mix(in srgb, var(--chart-1) 70%, transparent), inset 0 0 calc(var(--tn-cold) * 26px) color-mix(in srgb, var(--on-color) 70%, var(--chart-1)); transition: background-color 0.8s, box-shadow 0.8s; overflow: hidden; }
+.tn-input { position: relative; z-index: 1; display: block; width: 100%; min-height: 118px; box-sizing: border-box; padding: 12px 14px; border: 0; background: none; color: inherit; font: inherit; line-height: 21px; resize: none; }
+.tn-input:focus { outline: none; }
+.tn-field:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tn-frost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--tn-cold);
+  background:
+    radial-gradient(circle at 0 0, color-mix(in srgb, var(--on-color) 95%, transparent), color-mix(in srgb, var(--aqua-100) 60%, transparent) 18%, transparent 42%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--on-color) 90%, transparent), color-mix(in srgb, var(--aqua-100) 55%, transparent) 16%, transparent 38%),
+    radial-gradient(circle at 100% 0, color-mix(in srgb, var(--aqua-100) 80%, transparent), transparent 26%),
+    repeating-conic-gradient(from 15deg at 6% 10%, color-mix(in srgb, var(--on-color) 50%, transparent) 0 2deg, transparent 2deg 14deg);
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 38%, var(--black) 80%);
+  mask-image: radial-gradient(ellipse at center, transparent 38%, var(--black) 80%);
+  transition: opacity 0.8s;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tn-frost { opacity: calc(var(--tn-cold) * 0.5); } }
+:root[data-theme="dark"] .tn-frost { opacity: calc(var(--tn-cold) * 0.5); }
+.tn-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tn-chips button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--tn-fill); color: var(--tn-fg); font: inherit; font-size: var(--text-small); font-weight: 500; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.tn-chips button::before { content: "+ "; color: var(--tn-muted); }
+.tn-chips button:active { transform: scale(var(--press-scale-sm)); }
+.tn-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tn-fix { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--chart-1) 16%, transparent); animation: tn-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes tn-in { from { opacity: 0; transform: translateY(-6px); } }
+.tn-fix-text { font-size: var(--text-small); line-height: var(--leading-small); }
+.tn-warm { flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ai); color: var(--ai-foreground); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.tn-warm:active, .tn-send:active { transform: scale(var(--press-scale)); }
+.tn-warm:focus-visible, .tn-send:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tn-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tn-status { color: var(--tn-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.tn-send { flex: none; height: 44px; padding: 0 22px; border: 0; border-radius: var(--radius-md); background: var(--tn-accent); color: var(--tn-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tn-temp.is-drop, .tn-fix { animation: none; }
+  .tn-field, .tn-frost { transition-duration: var(--duration-reduced); }
+}
+.tn [hidden] { display: none !important; }

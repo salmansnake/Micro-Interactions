@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attachment Shrug</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .at so they never affect the rest of your page. */
+.at {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --ease-in-out: cubic-bezier(0.62, 0, 0.32, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale: 0.97;
+  --press-scale-sm: 0.94;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-100: #CFF8F6;
+  --aqua-700: #0B7573;
+  --aqua-border: #8FE0DD;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --brand-border: var(--aqua-border);
+  --brand-foreground: #000000;
+  --brand-subtle: var(--aqua-100);
+  --card: var(--white);
+  --danger: #ce2c31;
+  --danger-foreground: #ffffff;
+  --foreground: var(--black);
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .at, .dark .at {
+  --aqua: #79EEEC;
+  --aqua-100: #0E2E2D;
+  --aqua-700: #79EEEC;
+  --aqua-border: #1F5654;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --brand-border: var(--aqua-border);
+  --brand-foreground: #000000;
+  --brand-subtle: var(--aqua-100);
+  --card: var(--white);
+  --danger: #d4373c;
+  --danger-foreground: #ffffff;
+  --foreground: #F3F2EE;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .at {
+    --aqua: #79EEEC;
+    --aqua-100: #0E2E2D;
+    --aqua-700: #79EEEC;
+    --aqua-border: #1F5654;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --brand-border: var(--aqua-border);
+    --brand-foreground: #000000;
+    --brand-subtle: var(--aqua-100);
+    --card: var(--white);
+    --danger: #d4373c;
+    --danger-foreground: #ffffff;
+    --foreground: #F3F2EE;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --white: #161817;
+  }
+}
+
+/* Attachment Shrug — say "attached" with nothing attached and the Send button shrugs at you.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.at {
+  --at-bg: var(--card);
+  --at-fg: var(--foreground);
+  --at-muted: var(--muted-foreground);
+  --at-line: var(--border);
+  --at-sunken: var(--subtle);
+  --at-fill: var(--muted);
+  --at-accent: var(--primary);
+  --at-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--at-bg);
+  color: var(--at-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.at p { margin: 0; }
+.at-fields { border-bottom: 1px solid var(--at-line); }
+.at-row { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--at-line); font-size: var(--text-body); }
+.at-row:first-child { border-top: 0; padding-top: 0; }
+.at-row span { width: 58px; color: var(--at-muted); }
+.at-row b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.at-body { display: block; width: 100%; min-height: 72px; box-sizing: border-box; padding: 0; border: 0; background: none; color: inherit; font: inherit; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); resize: none; }
+.at-body:focus { outline: none; }
+.at-files:empty { display: none; }
+.at-file { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 10px; border-radius: var(--radius-lg); background: var(--at-sunken); animation: at-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes at-in { from { opacity: 0; transform: translateY(8px) scale(var(--press-scale)); } }
+.at-file-icon { display: grid; place-items: center; flex: none; width: 32px; height: 38px; border-radius: var(--radius-sm); background: var(--danger); color: var(--danger-foreground); font-size: calc(var(--text-caption) - 2px); font-weight: 800; }
+.at-file-name { flex: 1; min-width: 0; overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.at-file-name small { display: block; color: var(--at-muted); font-size: var(--text-caption); font-weight: 400; }
+.at-remove { flex: none; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--at-fill); color: var(--at-muted); font: 600 var(--text-title-sm)/1 inherit; cursor: pointer; }
+.at-remove:focus-visible, .at-clip:focus-visible, .at-send:focus-visible, .at-ask button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.at-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.at-clip { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--at-fill); color: var(--at-fg); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), color var(--duration-base), background-color var(--duration-base); }
+.at-clip svg { width: 22px; height: 22px; }
+.at-clip:active { transform: scale(var(--press-scale-sm)); }
+.at.is-hint .at-clip { color: var(--brand-foreground); background: var(--brand); animation: at-look 2.4s var(--ease-in-out) infinite; }
+@keyframes at-look { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-16deg); } 80% { transform: rotate(14deg); } 90% { transform: rotate(-6deg); } }
+.at-send-wrap { position: relative; }
+.at-send { height: 44px; padding: 0 26px; border: 0; border-radius: var(--radius-md); background: var(--at-accent); color: var(--at-on-accent); font: inherit; font-weight: 600; cursor: pointer; transform-origin: 50% 100%; transition: transform var(--spring-press-duration) var(--spring-press); }
+.at-send:active { transform: scale(var(--press-scale)); }
+.at-send.is-shrug { animation: at-shrug var(--spring-ui-duration) var(--spring-ui); }
+@keyframes at-shrug { 15% { transform: translateY(-6px) scaleX(0.94) scaleY(1.06); } 30% { transform: none; } 45% { transform: translateY(-6px) scaleX(0.94) scaleY(1.06); } 60% { transform: none; } }
+.at-shrug { position: absolute; right: 0; bottom: calc(100% + 8px); padding: 6px 10px; border-radius: var(--radius-lg); background: var(--at-fg); color: var(--at-bg); font: 600 var(--text-body)/1 var(--font-sans); white-space: nowrap; opacity: 0; transform: translateY(8px) scale(0.6); transform-origin: 80% 100%; pointer-events: none; transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.at-shrug::after { content: ""; position: absolute; right: 26px; top: 100%; border: 6px solid transparent; border-top-color: var(--at-fg); }
+.at.is-shrugging .at-shrug { opacity: 1; transform: none; }
+.at-ask { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: var(--brand-subtle); box-shadow: inset 0 0 0 1px var(--brand-border); animation: at-in var(--spring-ui-duration) var(--spring-ui) both; }
+.at-ask-text { font-weight: 500; }
+.at-ask-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.at-ask button { height: 36px; padding: 0 14px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; }
+.at-attach { background: var(--at-accent); color: var(--at-on-accent); }
+.at-anyway { background: var(--at-bg); color: var(--at-fg); box-shadow: inset 0 0 0 1px var(--brand-border); }
+.at-status { min-height: 18px; color: var(--at-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.at-status:empty { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .at.is-hint .at-clip, .at-send.is-shrug, .at-file, .at-ask { animation: none; }
+  .at-shrug { transition-duration: var(--duration-reduced); }
+}
+.at [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="at" data-mi="attachment-shrug" data-file="Q4 Numbers.pdf" data-size="2.4 MB">
+  <div class="at-fields">
+    <p class="at-row"><span>To</span><b>finance@company.com</b></p>
+    <p class="at-row"><span>Subject</span><b>Q4 numbers</b></p>
+  </div>
+  <textarea class="at-body" rows="3" aria-label="Message">Hi team, please see the attached deck with the Q4 numbers.</textarea>
+  <div class="at-files"></div>
+  <div class="at-bar">
+    <button type="button" class="at-clip" aria-label="Attach a file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 11.5 12 19.4a5 5 0 0 1-7.1-7.1l8.5-8.5a3.4 3.4 0 0 1 4.8 4.8l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4L15 7"/></svg></button>
+    <div class="at-send-wrap">
+      <span class="at-shrug" aria-hidden="true">¯\_(ツ)_/¯</span>
+      <button type="button" class="at-send">Send</button>
+    </div>
+  </div>
+  <div class="at-ask" hidden>
+    <p class="at-ask-text">You wrote “attached”, but nothing is attached.</p>
+    <div class="at-ask-actions">
+      <button type="button" class="at-attach">Attach File</button>
+      <button type="button" class="at-anyway">Send Anyway</button>
+    </div>
+  </div>
+  <p class="at-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Attachment Shrug — vanilla JS. Auto-initializes every [data-mi="attachment-shrug"].
+   If the message mentions an attachment and none is attached, the paperclip looks around while you type and
+   Send shrugs instead of sending. Call window.initAttachmentShrug(el) for elements added later. */
+(function () {
+  'use strict';
+  var MENTION = /\b(attach(ed|ment|ments|ing)?|enclosed|see the file|i('|’)ve included)\b/i;
+
+  function initAttachmentShrug(root) {
+    if (!root || root.__miShrug) return;
+    root.__miShrug = true;
+    var body = root.querySelector('.at-body'), files = root.querySelector('.at-files');
+    var clip = root.querySelector('.at-clip'), send = root.querySelector('.at-send');
+    var ask = root.querySelector('.at-ask'), attach = root.querySelector('.at-attach'), anyway = root.querySelector('.at-anyway');
+    var status = root.querySelector('.at-status');
+    var name = root.getAttribute('data-file') || 'File.pdf', size = root.getAttribute('data-size') || '';
+    var hasFile = false;
+
+    function missing() { return MENTION.test(body.value) && !hasFile; }
+    function hint() { root.classList.toggle('is-hint', missing()); }
+    function calm() { root.classList.remove('is-shrugging'); ask.hidden = true; }
+
+    function addFile() {
+      if (hasFile) return;
+      hasFile = true;
+      var f = document.createElement('div'); f.className = 'at-file';
+      var ic = document.createElement('span'); ic.className = 'at-file-icon'; ic.textContent = (name.split('.').pop() || '').toUpperCase();
+      var nm = document.createElement('span'); nm.className = 'at-file-name'; nm.textContent = name;
+      var sm = document.createElement('small'); sm.textContent = size; nm.appendChild(sm);
+      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'at-remove'; rm.setAttribute('aria-label', 'Remove ' + name); rm.textContent = '×';
+      rm.addEventListener('click', function () { f.remove(); hasFile = false; hint(); clip.focus(); });
+      f.append(ic, nm, rm);
+      files.appendChild(f);
+      calm(); hint();
+    }
+
+    body.addEventListener('input', function () { status.textContent = ''; hint(); if (!missing()) calm(); });
+    clip.addEventListener('click', addFile);
+    attach.addEventListener('click', function () { addFile(); send.focus(); });
+
+    send.addEventListener('click', function () {
+      if (missing()) {
+        send.classList.remove('is-shrug'); void send.offsetWidth; send.classList.add('is-shrug');
+        root.classList.add('is-shrugging');
+        ask.hidden = false;
+        status.textContent = '';
+        return;
+      }
+      calm();
+      status.textContent = hasFile ? 'Sent, with the attachment. Nobody has to reply “I think you forgot the file.”' : 'Sent.';
+    });
+    anyway.addEventListener('click', function () {
+      calm();
+      status.textContent = 'Sent without it. Expect a reply in about four minutes saying you forgot the file.';
+      send.focus();
+    });
+    hint();
+  }
+
+  window.initAttachmentShrug = initAttachmentShrug;
+  function boot() { document.querySelectorAll('[data-mi="attachment-shrug"]').forEach(initAttachmentShrug); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

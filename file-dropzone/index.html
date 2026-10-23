@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>File-Aware Dropzone · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* File-Aware Dropzone — knows what you are dropping and previews it the way that file wants.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.fd {
+  --fd-bg: var(--card);
+  --fd-fg: var(--foreground);
+  --fd-muted: var(--muted-foreground);
+  --fd-line: var(--border);
+  --fd-sunken: var(--subtle);
+  --fd-fill: var(--muted);
+  --fd-accent: var(--primary);
+  --fd-on-accent: var(--primary-foreground);
+  --fd-danger-text: var(--danger-text);
+  --fd-tone: var(--fd-accent);
+  --fd-on-tone: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--fd-bg);
+  color: var(--fd-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.fd[data-kind="csv"] { --fd-tone: var(--success); --fd-on-tone: var(--success-foreground); }
+.fd[data-kind="image"] { --fd-tone: var(--chart-6); --fd-on-tone: var(--on-chart-strong); }
+.fd[data-kind="pdf"] { --fd-tone: var(--danger); --fd-on-tone: var(--danger-foreground); }
+
+/* Zone */
+.fd-zone {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 210px;
+  border-radius: var(--radius-xl);
+  background: var(--fd-sunken);
+  cursor: pointer;
+  outline: none;
+  transition: transform var(--spring-ui-duration) var(--spring-ui), background-color var(--duration-base);
+}
+.fd-zone:focus-visible { box-shadow: 0 0 0 3px var(--fd-accent); }
+.fd-border { position: absolute; inset: 1px; width: calc(100% - 2px); height: calc(100% - 2px); overflow: visible; pointer-events: none; }
+.fd-border rect { fill: none; stroke: var(--fd-line); stroke-width: 1.5; stroke-dasharray: 7 6; transition: stroke var(--duration-base); }
+.fd.is-over .fd-zone { transform: scale(0.985); background: color-mix(in srgb, var(--fd-tone) 10%, transparent); }
+.fd.is-over .fd-border rect { stroke: var(--fd-tone); animation: fd-march var(--duration-slower) linear infinite; }
+@keyframes fd-march { to { stroke-dashoffset: -13; } }
+.fd-idle, .fd-over { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 24px; text-align: center; transition: opacity var(--duration-base), transform var(--spring-press-duration) var(--spring-press); }
+.fd-over { opacity: 0; transform: scale(var(--press-scale-sm)); pointer-events: none; }
+.fd.is-over .fd-idle { opacity: 0; transform: scale(1.04); }
+.fd.is-over .fd-over { opacity: 1; transform: none; }
+.fd-icon, .fd-over-icon { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 4px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--fd-bg); color: var(--fd-accent); box-shadow: var(--shadow-xs); }
+.fd-over-icon { background: var(--fd-tone); color: var(--fd-on-tone); animation: fd-breathe 1.2s var(--ease-in-out) infinite; }
+.fd-icon svg, .fd-over-icon svg { width: 24px; height: 24px; }
+@keyframes fd-breathe { 50% { transform: translateY(-4px); } }
+.fd-title, .fd-over-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.fd-sub { margin: 0; color: var(--fd-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.fd-choose { margin-top: 8px; padding: 6px 14px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--fd-accent); font-size: var(--text-body); font-weight: 600; }
+.fd-input { display: none; }
+.fd.has-file .fd-zone { display: none; }
+
+/* Result */
+.fd-result { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.fd-preview { position: relative; display: grid; place-items: center; min-height: 190px; overflow: hidden; border-radius: var(--radius-xl); background: var(--fd-sunken); }
+.fd-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 12px; }
+.fd-name { flex: 1 1 100%; margin: 0; overflow: hidden; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); text-overflow: ellipsis; white-space: nowrap; }
+.fd-info { flex: 1 1 auto; margin: 0; color: var(--fd-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; font-variant-numeric: tabular-nums; }
+.fd-actions { display: flex; gap: 8px; }
+.fd-actions button, .fd-try button {
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--fd-fill);
+  color: var(--fd-fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.fd-actions .fd-remove { background: none; color: var(--fd-danger-text); }
+.fd-actions button:active, .fd-try button:active { transform: scale(var(--press-scale)); }
+.fd-actions button:focus-visible, .fd-try button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fd-error { margin: 0; color: var(--fd-danger-text); font-size: var(--text-small); line-height: var(--leading-small); }
+.fd-error:empty { display: none; }
+.fd.is-error .fd-zone { animation: fd-shake var(--duration-slower) var(--ease-out); }
+@keyframes fd-shake { 20% { transform: translateX(-6px); } 45% { transform: translateX(5px); } 70% { transform: translateX(-3px); } }
+.fd-try { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding-top: 14px; border-top: 1px solid var(--fd-line); color: var(--fd-muted); font-size: var(--text-small); }
+.fd-try button { height: 28px; padding: 0 12px; font-weight: 400; }
+
+/* CSV: rows slide in */
+.fd-table { width: calc(100% - 24px); margin: 12px; overflow: hidden; border-radius: var(--radius-lg); background: var(--fd-bg); font-size: var(--text-caption); line-height: var(--leading-caption); border-collapse: collapse; }
+.fd-table th, .fd-table td { padding: 7px 10px; text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.fd-table th { color: var(--fd-muted); font-weight: 600; }
+.fd-table tr + tr td, .fd-table thead + tbody tr:first-child td { box-shadow: inset 0 1px 0 var(--fd-line); }
+.fd-table tbody tr { animation: fd-row var(--spring-ui-duration) var(--spring-ui) both; animation-delay: calc(var(--i, 0) * var(--duration-instant) + var(--duration-instant)); }
+@keyframes fd-row { from { opacity: 0; transform: translateY(10px); } }
+.fd-table-wrap { width: 100%; overflow-x: auto; }
+
+/* Image: develops like an instant photo */
+.fd-photo { margin: 18px; padding: 10px 10px 28px; background: var(--on-color); border-radius: var(--radius-xs); box-shadow: var(--shadow-lg); transform: rotate(-2deg); animation: fd-photo-in var(--spring-panel-duration) var(--spring-panel) both; }
+.fd-photo img { display: block; max-width: 220px; max-height: 150px; filter: blur(14px) saturate(0) brightness(1.5); transition: filter 1.8s var(--ease-out) var(--duration-base); }
+.fd-photo.is-developed img { filter: none; }
+@keyframes fd-photo-in { from { opacity: 0; transform: translateY(16px) rotate(4deg) scale(var(--press-scale-sm)); } }
+
+/* PDF: pages fan out */
+.fd-pages { position: relative; width: 120px; height: 150px; }
+.fd-page { position: absolute; inset: 0; padding: 14px 12px; box-sizing: border-box; border-radius: var(--radius-sm); background: var(--on-color); box-shadow: var(--shadow-md); transform-origin: 50% 100%; animation: fd-fan var(--spring-pop-duration) var(--spring-pop) both; }
+.fd-page::before { content: ""; display: block; height: 6px; width: 60%; margin-bottom: 10px; border-radius: var(--radius-xs); background: color-mix(in srgb, var(--fd-tone) 70%, var(--on-color)); }
+.fd-page::after { content: ""; display: block; height: 60px; background: repeating-linear-gradient(var(--border) 0 3px, transparent 3px 9px); border-radius: var(--radius-xs); }
+.fd-page:nth-child(1) { --r: -14deg; --tx: -26px; }
+.fd-page:nth-child(2) { --r: 0deg; --tx: 0px; animation-delay: var(--duration-instant); }
+.fd-page:nth-child(3) { --r: 14deg; --tx: 26px; animation-delay: var(--duration-fast); }
+.fd-page { transform: translateX(var(--tx)) rotate(var(--r)); }
+@keyframes fd-fan { from { transform: translateX(0) rotate(0deg); } }
+
+/* Anything else */
+.fd-generic { display: grid; place-items: center; width: 84px; height: 104px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--fd-bg); color: var(--fd-muted); font-size: var(--text-small); font-weight: 700; letter-spacing: normal; box-shadow: var(--shadow-md); animation: fd-photo-in var(--spring-pop-duration) var(--spring-pop) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fd-table tbody tr, .fd-photo, .fd-page, .fd-generic, .fd-over-icon, .fd.is-over .fd-border rect, .fd.is-error .fd-zone { animation: none !important; }
+  .fd-photo img { transition-duration: var(--duration-reduced); }
+}
+.fd [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset File-Aware Dropzone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="fd" data-mi="file-dropzone" data-max-mb="10">
+  <div class="fd-zone" tabindex="0" role="button" aria-label="Upload a file. CSV, image or PDF, up to 10 MB.">
+    <svg class="fd-border" aria-hidden="true"><rect width="100%" height="100%" rx="19"></rect></svg>
+    <div class="fd-idle">
+      <span class="fd-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+      </span>
+      <p class="fd-title">Drop a file to preview it</p>
+      <p class="fd-sub">CSV, image or PDF, up to 10 MB</p>
+      <span class="fd-choose">Choose File</span>
+    </div>
+    <div class="fd-over" aria-hidden="true">
+      <span class="fd-over-icon"></span>
+      <p class="fd-over-title">Drop to upload</p>
+    </div>
+    <input type="file" class="fd-input" tabindex="-1" aria-hidden="true">
+  </div>
+  <div class="fd-result" hidden>
+    <div class="fd-preview"></div>
+    <div class="fd-meta">
+      <p class="fd-name"></p>
+      <p class="fd-info"></p>
+      <div class="fd-actions">
+        <button type="button" class="fd-replace">Replace</button>
+        <button type="button" class="fd-remove">Remove</button>
+      </div>
+    </div>
+  </div>
+  <p class="fd-error" role="alert"></p>
+  <div class="fd-try"><span>Try</span><button type="button" data-sample="csv">Sample CSV</button><button type="button" data-sample="image">Sample Image</button><button type="button" data-sample="pdf">Sample PDF</button></div>
+</div>
+</div>
+<script>
+/* File-Aware Dropzone — vanilla JS. Auto-initializes every [data-mi="file-dropzone"].
+   Call window.initFileDropzone(el) for elements added later. */
+(function () {
+  'use strict';
+  var ICONS = {
+    csv: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M3.5 14.5h17M9.5 9.5v10"/></svg>',
+    image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.75"/><path d="m4 18 5-5 4 4 2.5-2.5L20 19"/></svg>',
+    pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4.5 4.5v11a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5Z"/><path d="M14 3.5V8h4.5"/><path d="M9 13h6M9 16.5h4"/></svg>',
+    file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>'
+  };
+  var OVER_TEXT = { csv: 'Drop to preview rows', image: 'Drop to develop the photo', pdf: 'Drop to fan out the pages', file: 'Drop to upload' };
+
+  function kindOf(type, name) {
+    type = (type || '').toLowerCase();
+    name = (name || '').toLowerCase();
+    if (type === 'text/csv' || /\.csv$/.test(name) || type === 'application/vnd.ms-excel') return 'csv';
+    if (type.indexOf('image/') === 0 || /\.(png|jpe?g|gif|webp|avif|heic)$/.test(name)) return 'image';
+    if (type === 'application/pdf' || /\.pdf$/.test(name)) return 'pdf';
+    return 'file';
+  }
+  function size(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+  function parseCSV(text) {
+    var rows = [], row = [], cell = '', q = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (q) {
+        if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+        else if (c === '"') q = false;
+        else cell += c;
+      } else if (c === '"') q = true;
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(cell); cell = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else cell += c;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows;
+  }
+
+  // ---- sample files so the demo works without anything on disk ----
+  function sample(kind, host) {
+    if (kind === 'csv') {
+      var plans = ['Starter', 'Pro', 'Team'], lines = ['date,workspace,plan,seats,mrr'];
+      for (var i = 0; i < 128; i++) {
+        var p = plans[i % 3];
+        lines.push('2026-' + String(1 + (i % 9)).padStart(2, '0') + '-' + String(1 + (i % 27)).padStart(2, '0') + ',' + ['Northwind', 'Atlas', 'Orbit', 'Nova'][i % 4] + ',' + p + ',' + (3 + (i * 7) % 40) + ',' + ((p === 'Team' ? 79 : p === 'Pro' ? 29 : 12) * (3 + (i * 7) % 40)));
+      }
+      return Promise.resolve(new File([lines.join('\n')], 'workspaces-q3.csv', { type: 'text/csv' }));
+    }
+    if (kind === 'image') {
+      return new Promise(function (resolve) {
+        var c = document.createElement('canvas'); c.width = 600; c.height = 400;
+        var g = c.getContext('2d');
+        // The sample picture is painted from the Outcraft palette tokens.
+        var tok = function (n) { var p = document.createElement('span'); p.style.cssText = 'display:none;color:var(--' + n + ')'; (host || document.body).appendChild(p); var v = getComputedStyle(p).color; p.remove(); return v; };
+        var sky = g.createLinearGradient(0, 0, 0, 400); sky.addColorStop(0, tok('orange')); sky.addColorStop(0.55, tok('pink')); sky.addColorStop(1, tok('aqua'));
+        g.fillStyle = sky; g.fillRect(0, 0, 600, 400);
+        g.fillStyle = tok('amber-9'); g.beginPath(); g.arc(420, 170, 54, 0, Math.PI * 2); g.fill();
+        g.fillStyle = tok('sage'); g.beginPath(); g.moveTo(0, 300); g.lineTo(150, 170); g.lineTo(260, 260); g.lineTo(380, 150); g.lineTo(600, 300); g.lineTo(600, 400); g.lineTo(0, 400); g.fill();
+        g.fillStyle = tok('olive'); g.beginPath(); g.moveTo(0, 340); g.lineTo(200, 250); g.lineTo(330, 320); g.lineTo(470, 240); g.lineTo(600, 330); g.lineTo(600, 400); g.lineTo(0, 400); g.fill();
+        c.toBlob(function (b) { resolve(new File([b], 'sunset-ridge.png', { type: 'image/png' })); }, 'image/png');
+      });
+    }
+    var pages = [];
+    for (var n = 1; n <= 12; n++) pages.push((n + 2) + ' 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >> endobj');
+    var pdf = '%PDF-1.4\n1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n2 0 obj << /Type /Pages /Count 12 >> endobj\n' + pages.join('\n') + '\n%%EOF';
+    return Promise.resolve(new File([pdf], 'pricing-proposal.pdf', { type: 'application/pdf' }));
+  }
+
+  function initFileDropzone(root) {
+    if (!root || root.__miDrop) return;
+    root.__miDrop = true;
+
+    var maxMB = Number(root.getAttribute('data-max-mb')) || 10;
+    var zone = root.querySelector('.fd-zone');
+    var input = root.querySelector('.fd-input');
+    var overIcon = root.querySelector('.fd-over-icon');
+    var overTitle = root.querySelector('.fd-over-title');
+    var result = root.querySelector('.fd-result');
+    var preview = root.querySelector('.fd-preview');
+    var nameEl = root.querySelector('.fd-name');
+    var info = root.querySelector('.fd-info');
+    var error = root.querySelector('.fd-error');
+    var url = null;
+    var depth = 0;
+
+    function setOver(kind) {
+      root.classList.toggle('is-over', !!kind);
+      if (kind) {
+        root.setAttribute('data-kind', kind);
+        overIcon.innerHTML = ICONS[kind];
+        overTitle.textContent = OVER_TEXT[kind];
+      } else if (!root.classList.contains('has-file')) {
+        root.removeAttribute('data-kind');
+      }
+    }
+    function fail(msg) {
+      error.textContent = msg;
+      root.classList.remove('is-error');
+      void root.offsetWidth;
+      root.classList.add('is-error');
+    }
+    function reset() {
+      if (url) { URL.revokeObjectURL(url); url = null; }
+      root.classList.remove('has-file');
+      root.removeAttribute('data-kind');
+      result.hidden = true;
+      preview.replaceChildren();
+      error.textContent = '';
+      input.value = '';
+    }
+
+    function show(file) {
+      error.textContent = '';
+      if (file.size > maxMB * 1048576) { fail('That file is ' + size(file.size) + '. The limit is ' + maxMB + ' MB.'); return; }
+      reset();
+      var kind = kindOf(file.type, file.name);
+      root.setAttribute('data-kind', kind);
+      root.classList.add('has-file');
+      result.hidden = false;
+      nameEl.textContent = file.name;
+      info.textContent = size(file.size);
+
+      if (kind === 'csv') {
+        file.slice(0, 262144).text().then(function (text) {
+          var rows = parseCSV(text);
+          var head = rows[0] || [], body = rows.slice(1);
+          var wrap = document.createElement('div'); wrap.className = 'fd-table-wrap';
+          var t = document.createElement('table'); t.className = 'fd-table';
+          var th = t.createTHead().insertRow();
+          head.slice(0, 5).forEach(function (h) { var c = document.createElement('th'); c.textContent = h; th.appendChild(c); });
+          var tb = t.createTBody();
+          body.slice(0, 4).forEach(function (r, i) {
+            var tr = tb.insertRow(); tr.style.setProperty('--i', i);
+            r.slice(0, 5).forEach(function (v) { tr.insertCell().textContent = v; });
+          });
+          wrap.appendChild(t);
+          preview.replaceChildren(wrap);
+          info.textContent = body.length.toLocaleString() + ' rows · ' + head.length + ' columns · ' + size(file.size);
+        });
+      } else if (kind === 'image') {
+        url = URL.createObjectURL(file);
+        var frame = document.createElement('div'); frame.className = 'fd-photo';
+        var img = new Image(); img.alt = 'Preview of ' + file.name;
+        img.onload = function () {
+          info.textContent = img.naturalWidth + ' × ' + img.naturalHeight + ' · ' + size(file.size);
+          requestAnimationFrame(function () { requestAnimationFrame(function () { frame.classList.add('is-developed'); }); });
+        };
+        img.onerror = function () { fail('This image could not be read.'); };
+        img.src = url;
+        frame.appendChild(img);
+        preview.replaceChildren(frame);
+      } else if (kind === 'pdf') {
+        var box = document.createElement('div'); box.className = 'fd-pages';
+        for (var i = 0; i < 3; i++) { var pg = document.createElement('div'); pg.className = 'fd-page'; box.appendChild(pg); }
+        preview.replaceChildren(box);
+        file.slice(0, 2097152).text().then(function (text) {
+          var n = (text.match(/\/Type\s*\/Page(?![s\w])/g) || []).length;
+          info.textContent = (n ? n + (n === 1 ? ' page · ' : ' pages · ') : '') + size(file.size);
+        });
+      } else {
+        var g = document.createElement('div'); g.className = 'fd-generic';
+        g.textContent = (file.name.split('.').pop() || 'FILE').slice(0, 4).toUpperCase();
+        preview.replaceChildren(g);
+      }
+    }
+
+    zone.addEventListener('click', function () { input.click(); });
+    zone.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+    });
+    input.addEventListener('change', function () { if (input.files && input.files[0]) show(input.files[0]); });
+
+    // Drag: read the type while the file is still in the air
+    zone.addEventListener('dragenter', function (e) {
+      e.preventDefault();
+      depth++;
+      var it = e.dataTransfer && e.dataTransfer.items && e.dataTransfer.items[0];
+      setOver(it ? kindOf(it.type, '') : 'file');
+    });
+    zone.addEventListener('dragover', function (e) { e.preventDefault(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'; });
+    zone.addEventListener('dragleave', function () { depth = Math.max(0, depth - 1); if (!depth) setOver(null); });
+    zone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      depth = 0;
+      setOver(null);
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) show(f);
+    });
+    // Dragging over the result swaps the file too
+    result.addEventListener('dragover', function (e) { e.preventDefault(); });
+    result.addEventListener('drop', function (e) {
+      e.preventDefault();
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) show(f);
+    });
+
+    root.querySelector('.fd-replace').addEventListener('click', function () { input.click(); });
+    root.querySelector('.fd-remove').addEventListener('click', function () { reset(); zone.focus(); });
+
+    root.querySelectorAll('[data-sample]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var kind = b.getAttribute('data-sample');
+        reset();
+        setOver(kind);
+        sample(kind, root).then(function (f) {
+          setTimeout(function () { setOver(null); show(f); }, 650);
+        });
+      });
+    });
+  }
+
+  window.initFileDropzone = initFileDropzone;
+  function boot() { document.querySelectorAll('[data-mi="file-dropzone"]').forEach(initFileDropzone); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initFileDropzone"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

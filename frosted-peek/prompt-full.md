@@ -1,0 +1,101 @@
+Build a "Frosted Peek" locked-feature preview in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
+
+WHAT IT DOES
+A premium chart sits under frost. Hovering or dragging across it opens a clear window that follows the pointer, so people can read real numbers month by month before they upgrade. Upgrading clears the frost completely.
+
+LAYOUT
+- Header: eyebrow "Revenue Forecast", the 12-month total blurred (filter: blur(7px)), and an Aqua-tinted "Pro" badge.
+- Chart: 200px tall, 14px corners, an area + line chart of 12 monthly values with month labels.
+- Footer: "Forecasts are part of Pro. Peek at any month for free." and a filled "Unlock Forecasts" button.
+
+THE FROST
+- An overlay with backdrop-filter: blur(8px) saturate(160%) and a 38% surface tint covers the chart.
+- Cut a soft vertical window into it with a mask: linear-gradient(to right, black up to x − w − 14px, rgba(0,0,0,1 − o) from x − w to x + w, black from x + w + 14px).
+- Register x (length), w (length) and o (number) with @property so they animate: o opens and closes the window with a ui spring (0.45s), x follows the pointer with a 120ms ease, w is 40px.
+
+THE LENS
+- A Frost frame marks the window: 16px radius, a 1px bright inner edge and a soft shadow, fading and scaling in with o.
+- Inside it: a dark pill label at the top ("Mar · $48.2k"), an Aqua 700 dot riding the line at the current month (springing to each new value), and a small Frost grip at the bottom with ⟷.
+- A Frost hint pill "Drag across to peek" sits in the middle while closed.
+
+INPUT
+- Mouse: open on enter, follow on move, close on leave. Touch: open on press, follow while dragging, close 900ms after release.
+- Keyboard: the chart is role="slider" (0–11). Focus opens the window; arrow keys, Home and End snap it to months; Escape closes. aria-valuetext reads "March, $48.2k forecast".
+
+UNLOCK
+- "Unlock Forecasts" sets w to the full chart width so the frost wipes away with a panel spring, unblurs the total, turns the badge green, and changes the note to "Pro trial started. Every month is yours for 14 days." The button becomes "Reset Demo".
+
+Reduced motion: 100ms linear transitions; the window still opens and moves.
+
+APPEARANCE (Outcraft Design System)
+- Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
+- Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
+- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float.
+- Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
+- Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
+- Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
+- Copy: title-case button labels, sentence-case body text, no emoji.
+- This one: the frost is a material (blur behind) over solid content; only the lens and its grip use Frost. The total and month labels use tabular numbers.
+
+DELIVER
+The component with values and month labels passed in as data, a demo chart, and short usage notes.
+
+OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables on the component root)
+--aqua: #79EEEC
+--aqua-700: #0B7573  (dark: #79EEEC)
+--ash: #646A66  (dark: #A3A8A4)
+--black: #000000
+--blur-md: 16px
+--blur-sm: 8px
+--border: #DCDED9  (dark: #313432)
+--brand: #79EEEC
+--brand-strong: #0B7573  (dark: #79EEEC)
+--brand-text: #0B7573  (dark: #79EEEC)
+--card: #FFFFFF  (dark: #161817)
+--duration-base: 200ms
+--duration-fast: 140ms
+--duration-reduced: 120ms
+--duration-slow: 320ms
+--font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+--foreground: #000000  (dark: #F3F2EE)
+--frost: rgba(255, 255, 255, 0.74)  (dark: rgba(21, 23, 22, 0.74))
+--frost-border: rgba(0, 0, 0, 0.08)  (dark: rgba(243, 242, 238, 0.1))
+--frost-saturate: 160%
+--green-11: #218358  (dark: #3dd68c)
+--green-3: #e6f6eb  (dark: #132d21)
+--leading-body: 22px
+--leading-caption: 16px
+--leading-h3: 32px
+--leading-small: 18px
+--line: #DCDED9  (dark: #313432)
+--mist: #ECEBE6  (dark: #2B2E2D)
+--muted: #ECEBE6  (dark: #2B2E2D)
+--muted-foreground: #646A66  (dark: #A3A8A4)
+--press-scale: 0.97
+--press-scale-sm: 0.94
+--primary: #000000  (dark: #79EEEC)
+--primary-foreground: #ffffff  (dark: #000000)
+--radius-full: 9999px
+--radius-lg: 12px
+--radius-md: 8px
+--radius-xl: 16px
+--ring: #0B7573  (dark: #79EEEC)
+--shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14)  (dark: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55))
+--shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07)  (dark: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3))
+--spring-panel: linear(0, 0.0198, 0.069, 0.1356, 0.211, 0.2893, 0.3667, 0.4407, 0.5096, 0.5727, 0.6297, 0.6805, 0.7255, 0.765, 0.7995, 0.8294, 0.8552, 0.8774, 0.8964, 0.9127, 0.9265, 0.9382, 0.9482, 0.9566, 0.9637, 0.9696, 0.9746, 0.9788, 0.9824, 0.9853, 0.9878, 0.9899, 0.9916, 0.993, 0.9942, 0.9952, 0.996, 0.9967, 0.9973, 0.9978, 1)
+--spring-panel-duration: 530ms
+--spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1)
+--spring-press-duration: 310ms
+--spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1)
+--spring-ui-duration: 460ms
+--success: #218358
+--success-subtle: #e6f6eb  (dark: #132d21)
+--success-text: #1f7b53  (dark: #3dd68c)
+--text-body: 15px
+--text-caption: 12px
+--text-h3: 24px
+--text-small: 13px
+--tracking-title: -0.015em
+--white: #FFFFFF  (dark: #161817)
+Fonts: Geist and Geist Mono from Google Fonts (fallback system-ui).

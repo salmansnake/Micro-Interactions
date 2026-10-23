@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Line Clear · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Line Clear — accepted meetings drop into the day like blocks. Fill every gap and the row "clears".
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ct {
+  --ct-bg: var(--card);
+  --ct-fg: var(--foreground);
+  --ct-muted: var(--muted-foreground);
+  --ct-line: var(--border);
+  --ct-sunken: var(--subtle);
+  --ct-fill: var(--muted);
+  --ct-accent: var(--primary);
+  --ct-on-accent: var(--primary-foreground);
+  --ct-row: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ct-bg);
+  color: var(--ct-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ct p { margin: 0; }
+.ct-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.ct-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.ct-free { color: var(--ct-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.ct.is-full .ct-free { color: var(--danger-text); font-weight: 600; }
+.ct-day { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 6px; padding: 8px; border-radius: var(--radius-lg); background: var(--ct-sunken); }
+.ct-hours { display: grid; grid-template-rows: repeat(8, var(--ct-row)); gap: 2px; color: var(--ct-muted); font-size: calc(var(--text-caption) - 1px); line-height: 1; text-align: right; font-variant-numeric: tabular-nums; }
+.ct-hours span { padding-top: 3px; }
+.ct-col { position: relative; height: calc(var(--ct-row) * 8 + 14px); overflow: hidden; border-radius: var(--radius-md); background: repeating-linear-gradient(180deg, transparent 0 calc(var(--ct-row) + 1px), var(--ct-line) calc(var(--ct-row) + 1px) calc(var(--ct-row) + 2px)); background-size: 100% calc(var(--ct-row) + 2px); }
+.ct-block { position: absolute; left: 0; right: 0; top: calc(var(--slot) * (var(--ct-row) + 2px)); height: var(--ct-row); box-sizing: border-box; padding: 0 10px; border-radius: var(--radius-sm); background: var(--c); color: var(--on-chart); font-size: var(--text-small); line-height: var(--ct-row); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: inset 0 1px 0 color-mix(in srgb, var(--on-color) 35%, transparent), inset 0 -2px 0 color-mix(in srgb, var(--black) 18%, transparent); }
+.ct-block.is-drop { animation: ct-drop var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes ct-drop { from { transform: translateY(calc((var(--slot) + 1) * (var(--ct-row) + 2px) * -1)); } }
+.ct-block.is-flash { animation: ct-flash var(--duration-slower) var(--ease-out) both; animation-delay: calc(var(--slot) * var(--duration-instant)); }
+@keyframes ct-flash { 0%, 100% { filter: none; } 30% { filter: brightness(2.4) saturate(0.2); transform: scaleX(1.02); } }
+.ct-block.is-out { animation: ct-out var(--duration-slower) var(--ease-in) forwards; }
+@keyframes ct-out { to { opacity: 0; transform: translateX(110%) rotate(6deg); } }
+.ct-block.is-lunch { background: repeating-linear-gradient(-45deg, var(--success-subtle) 0 10px, color-mix(in srgb, var(--success) 22%, var(--success-subtle)) 10px 20px); color: var(--success-text); box-shadow: inset 0 0 0 1px var(--success-border); }
+.ct-block.is-lunch::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: var(--radius-xs); background: currentColor; -webkit-mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Zm2 0h6V7a3 3 0 0 0-6 0Z'/%3E%3C/svg%3E"); mask: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Zm2 0h6V7a3 3 0 0 0-6 0Z'/%3E%3C/svg%3E"); vertical-align: -1px; }
+
+.ct-inv-title { margin-bottom: 6px !important; color: var(--ct-muted); font-size: var(--text-small); font-weight: 600; }
+.ct-list { margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--ct-sunken); }
+.ct-list:empty { display: none; }
+.ct-list li { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 8px 0 14px; }
+.ct-list li + li::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--ct-line); transform: scaleY(0.5); transform-origin: top; }
+.ct-list b { display: block; font-weight: 600; }
+.ct-list small { color: var(--ct-muted); font-size: var(--text-caption); }
+.ct-list button, .ct-lunch { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ct-accent); color: var(--ct-on-accent); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ct-list button:active, .ct-lunch:active { transform: scale(var(--press-scale-sm)); }
+.ct-list button:focus-visible, .ct-lunch:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ct-clear { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--success) 14%, transparent); animation: ct-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes ct-in { from { opacity: 0; transform: translateY(-6px); } }
+.ct-clear-text { font-size: var(--text-body); line-height: var(--leading-body); }
+.ct-lunch { align-self: flex-start; height: 40px; background: var(--success); }
+.ct-status { min-height: 18px; color: var(--ct-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ct-status:empty { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-block.is-drop, .ct-block.is-flash, .ct-block.is-out, .ct-clear { animation: none; }
+}
+.ct [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Line Clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="ct" data-mi="line-clear">
+  <div class="ct-head">
+    <p class="ct-title">Thursday</p>
+    <p class="ct-free">3 hours free</p>
+  </div>
+  <div class="ct-day">
+    <div class="ct-hours" aria-hidden="true"><span>9</span><span>10</span><span>11</span><span>12</span><span>1</span><span>2</span><span>3</span><span>4</span></div>
+    <div class="ct-col">
+      <div class="ct-block" data-slot="0" style="--c: var(--chart-1)">Standup</div>
+      <div class="ct-block" data-slot="1" style="--c: var(--chart-4)">Roadmap</div>
+      <div class="ct-block" data-slot="2" style="--c: var(--chart-5)">1:1 with Leo</div>
+      <div class="ct-block" data-slot="5" style="--c: var(--chart-2)">Design Review</div>
+      <div class="ct-block" data-slot="7" style="--c: var(--chart-3)">Weekly Sync</div>
+    </div>
+  </div>
+  <div class="ct-invites">
+    <p class="ct-inv-title">Invites</p>
+    <ul class="ct-list">
+      <li><span><b>Budget Check</b><small>12:00 PM · Priya</small></span><button type="button" data-slot="3" data-name="Budget Check" data-c="var(--chart-2)">Accept</button></li>
+      <li><span><b>Vendor Call</b><small>1:00 PM · Sam</small></span><button type="button" data-slot="4" data-name="Vendor Call" data-c="var(--chart-5)">Accept</button></li>
+      <li><span><b>Quick Sync</b><small>3:00 PM · Mira</small></span><button type="button" data-slot="6" data-name="Quick Sync" data-c="var(--chart-1)">Accept</button></li>
+    </ul>
+  </div>
+  <div class="ct-clear" hidden>
+    <p class="ct-clear-text"><b>Line clear.</b> No gaps from 9 to 5. Not even for lunch.</p>
+    <button type="button" class="ct-lunch">Protect 12:00 for Lunch</button>
+  </div>
+  <p class="ct-status" role="status" aria-live="polite"></p>
+</div>
+</div>
+<script>
+/* Line Clear — vanilla JS. Auto-initializes every [data-mi="line-clear"].
+   Blocks are hour slots 0–7 (9 AM to 5 PM). Accepting an invite drops it into its slot; when every slot is full the
+   day flashes like a cleared row and offers to protect lunch. Call window.initLineClear(el) for elements added later. */
+(function () {
+  'use strict';
+  var SLOTS = 8, LUNCH = 3;
+
+  function initLineClear(root) {
+    if (!root || root.__miLineClear) return;
+    root.__miLineClear = true;
+    var col = root.querySelector('.ct-col'), free = root.querySelector('.ct-free'), list = root.querySelector('.ct-list');
+    var clear = root.querySelector('.ct-clear'), lunch = root.querySelector('.ct-lunch'), status = root.querySelector('.ct-status');
+
+    function blocks() { return Array.prototype.slice.call(col.querySelectorAll('.ct-block:not(.is-out)')); }
+    col.querySelectorAll('.ct-block').forEach(function (b) { b.style.setProperty('--slot', b.getAttribute('data-slot')); });
+
+    function count() {
+      var n = SLOTS - blocks().length;
+      free.textContent = n === 0 ? 'No time free' : n + (n === 1 ? ' hour free' : ' hours free');
+      root.classList.toggle('is-full', n === 0);
+      return n;
+    }
+
+    function full() {
+      blocks().forEach(function (b) { b.classList.remove('is-drop', 'is-flash'); void b.offsetWidth; b.classList.add('is-flash'); });
+      setTimeout(function () { clear.hidden = false; lunch.focus(); }, 700);
+    }
+
+    list.addEventListener('click', function (e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      var slot = btn.getAttribute('data-slot');
+      var b = document.createElement('div');
+      b.className = 'ct-block is-drop';
+      b.setAttribute('data-slot', slot);
+      b.style.setProperty('--slot', slot);
+      b.style.setProperty('--c', btn.getAttribute('data-c'));
+      b.textContent = btn.getAttribute('data-name');
+      col.appendChild(b);
+      var li = btn.closest('li'), next = li.nextElementSibling || li.previousElementSibling;
+      li.remove();
+      if (!list.children.length) root.querySelector('.ct-invites').hidden = true;
+      if (next) next.querySelector('button').focus();
+      status.textContent = '';
+      if (count() === 0) setTimeout(full, 650);
+    });
+
+    lunch.addEventListener('click', function () {
+      var taken = blocks().filter(function (b) { return Number(b.getAttribute('data-slot')) === LUNCH; })[0];
+      var name = taken ? taken.textContent : 'that meeting';
+      if (taken) { taken.classList.add('is-out'); setTimeout(function () { taken.remove(); }, 440); }
+      setTimeout(function () {
+        var l = document.createElement('div');
+        l.className = 'ct-block is-lunch is-drop';
+        l.setAttribute('data-slot', LUNCH);
+        l.style.setProperty('--slot', LUNCH);
+        l.textContent = 'Lunch (Protected)';
+        col.appendChild(l);
+        count();
+        free.textContent = 'Lunch protected';
+        root.classList.remove('is-full');
+      }, 300);
+      clear.hidden = true;
+      status.textContent = 'Lunch protected. ' + name + ' moved to tomorrow, where it will also be fine.';
+    });
+    count();
+  }
+
+  window.initLineClear = initLineClear;
+  function boot() { document.querySelectorAll('[data-mi="line-clear"]').forEach(initLineClear); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initLineClear"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

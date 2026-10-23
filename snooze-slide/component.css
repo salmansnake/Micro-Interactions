@@ -1,0 +1,93 @@
+/* Snooze Slide — drag a notification right and the further you go, the later it comes back.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.sn {
+  --sn-bg: var(--card);
+  --sn-fg: var(--foreground);
+  --sn-muted: var(--muted-foreground);
+  --sn-line: var(--border);
+  --sn-sunken: var(--subtle);
+  --sn-fill: var(--muted);
+  --sn-accent: var(--primary);
+  --sn-indigo: var(--brand-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--sn-bg);
+  color: var(--sn-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.sn-title { margin: 0 0 2px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.sn-list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.sn-item { position: relative; border-radius: var(--radius-xl); overflow: hidden; }
+.sn-item.is-gone { animation: sn-collapse var(--duration-slower) var(--ease-out) forwards; }
+@keyframes sn-collapse { to { height: 0; margin-bottom: -8px; opacity: 0; } }
+/* The track revealed behind the card: deeper indigo the later it gets */
+.sn-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding-left: 18px;
+  background: color-mix(in srgb, var(--brand) calc(30% + var(--sn-step, 0) * 17%), var(--sn-sunken));
+  color: var(--brand-foreground);
+  transition: background-color var(--duration-base);
+}
+.sn-when { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 700; letter-spacing: var(--tracking-title); }
+.sn-time { font-size: var(--text-caption); line-height: var(--leading-caption); opacity: 0.9; }
+.sn-when.is-pop { animation: sn-pop var(--spring-pop-duration) var(--spring-pop); }
+@keyframes sn-pop { 40% { transform: scale(1.12); } 100% { transform: none; } }
+.sn-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border-radius: var(--radius-xl);
+  background: var(--sn-sunken);
+  background-color: color-mix(in srgb, var(--sn-fg) 4%, var(--sn-bg));
+  box-shadow: 0 0 0 1px var(--sn-line);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  transform: translateX(var(--sn-x, 0px));
+  outline: none;
+}
+.sn-card.is-settling { transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.sn-card:active { cursor: grabbing; }
+.sn-card:focus-visible { box-shadow: 0 0 0 3px var(--sn-accent); }
+.sn-avatar { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; color: var(--on-chart); font-weight: 700; }
+.sn-text { min-width: 0; }
+.sn-text p { margin: 0; font-size: var(--text-body); line-height: var(--leading-body); }
+.sn-text b { font-weight: 600; }
+.sn-text small { color: var(--sn-muted); font-size: var(--text-caption); }
+/* Snoozed pills */
+.sn-snoozed { display: flex; flex-direction: column; gap: 6px; }
+.sn-snoozed:empty { display: none; }
+.sn-pill { display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--sn-indigo) 12%, transparent); color: var(--sn-fg); font-size: var(--text-small); line-height: var(--leading-small); animation: sn-in var(--spring-ui-duration) var(--spring-ui) both; }
+.sn-pill svg { flex: none; width: 16px; height: 16px; color: var(--sn-indigo); }
+.sn-pill span { flex: 1; min-width: 0; }
+.sn-pill button { flex: none; height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--raised); color: var(--sn-accent); font: inherit; font-weight: 600; cursor: pointer; }
+.sn-pill button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@keyframes sn-in { from { opacity: 0; transform: translateY(-6px) scale(var(--press-scale)); } }
+.sn-hint { margin: 2px 4px 0; color: var(--sn-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+@media (prefers-reduced-motion: reduce) {
+  .sn-card.is-settling { transition-duration: var(--duration-reduced); }
+  .sn-item.is-gone, .sn-pill, .sn-when.is-pop { animation: none; }
+  .sn-item.is-gone { display: none; }
+}
+.sn [hidden] { display: none !important; }

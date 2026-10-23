@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick Question Stopwatch · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Quick Question Stopwatch — "quick question" starts a stopwatch that follows the thread it causes.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.qq {
+  --qq-bg: var(--card);
+  --qq-fg: var(--foreground);
+  --qq-muted: var(--muted-foreground);
+  --qq-line: var(--border);
+  --qq-sunken: var(--subtle);
+  --qq-fill: var(--muted);
+  --qq-accent: var(--primary);
+  --qq-on-accent: var(--primary-foreground);
+  --qq-tone: var(--brand-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--qq-bg);
+  color: var(--qq-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.qq p { margin: 0; }
+.qq[data-level="2"] { --qq-tone: var(--warning-text); }
+.qq[data-level="3"] { --qq-tone: var(--danger); }
+.qq-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 30px; }
+.qq-channel { font-weight: 700; }
+.qq-watch { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px 0 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--qq-tone) 14%, transparent); color: color-mix(in srgb, var(--qq-tone) 80%, var(--qq-fg)); font-size: var(--text-body); font-variant-numeric: tabular-nums; transition: background-color var(--duration-slower), color var(--duration-slower); animation: qq-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.qq-watch svg { width: 18px; height: 18px; }
+@keyframes qq-pop { from { opacity: 0; transform: scale(0.5); } }
+
+.qq-thread { display: flex; flex-direction: column; gap: 10px; height: 214px; padding: 12px; overflow-y: auto; border-radius: var(--radius-lg); background: var(--qq-sunken); scroll-behavior: smooth; }
+.qq-empty { margin: auto !important; color: var(--qq-muted); font-size: var(--text-small); text-align: center; }
+.qq-msg { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 2px 8px; animation: qq-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes qq-in { from { opacity: 0; transform: translateY(6px); } }
+.qq-av { grid-row: span 2; display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--c, var(--placeholder)); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+.qq-who { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; }
+.qq-who time { margin-left: 6px; color: var(--qq-muted); font-weight: 400; font-variant-numeric: tabular-nums; }
+.qq-text { font-size: var(--text-body); line-height: var(--leading-body); overflow-wrap: anywhere; }
+.qq-tag { display: inline-flex; align-items: center; margin-left: 6px; padding: 1px 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--qq-tone) 16%, transparent); color: color-mix(in srgb, var(--qq-tone) 80%, var(--qq-fg)); font-size: calc(var(--text-caption) - 1px); font-weight: 600; vertical-align: 1px; }
+.qq-verdict { min-height: 20px; font-weight: 600; color: color-mix(in srgb, var(--qq-tone) 80%, var(--qq-fg)); transition: color var(--duration-slower); }
+.qq-verdict:empty { min-height: 0; display: none; }
+.qq-form { display: flex; gap: 8px; }
+.qq-input { flex: 1 1 0; width: 0; min-width: 0; height: 44px; padding: 0 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-md); background: var(--card); color: inherit; font: inherit; }
+.qq-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+.qq-send, .qq-call { flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--qq-accent); color: var(--qq-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.qq-send:disabled { opacity: 0.4; cursor: default; }
+.qq-call { background: var(--success); animation: qq-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.qq-send:active, .qq-call:active { transform: scale(var(--press-scale)); }
+.qq-send:focus-visible, .qq-call:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .qq-watch, .qq-msg, .qq-call { animation: none; }
+  .qq-thread { scroll-behavior: auto; }
+}
+.qq [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Quick Question Stopwatch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="qq" data-mi="quick-question">
+  <header class="qq-head">
+    <p class="qq-channel"># launch-team</p>
+    <span class="qq-watch" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M10 2.75h4M18.5 6.5l1.5-1.5"/></svg>
+      <b class="qq-time">0:00</b>
+    </span>
+  </header>
+  <div class="qq-thread" aria-live="polite"></div>
+  <p class="qq-verdict"></p>
+  <form class="qq-form">
+    <input class="qq-input" type="text" value="Quick question about the launch date" aria-label="Message" autocomplete="off">
+    <button type="submit" class="qq-send">Send</button>
+  </form>
+  <button type="button" class="qq-call" hidden>Turn It Into a Call</button>
+</div>
+</div>
+<script>
+/* Quick Question Stopwatch — vanilla JS. Auto-initializes every [data-mi="quick-question"].
+   Sending a message that contains "quick question" starts a stopwatch; the demo then plays a scripted thread
+   in time-lapse. Call window.initQuickQuestion(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // [who, color, text, minutes after the question]
+  var REPLIES = [
+    ['Mira', 'var(--chart-2)', 'Depends. Which launch date?', 2],
+    ['Sam', 'var(--chart-1)', 'The one we moved, or the one before that?', 6],
+    ['Leo', 'var(--chart-3)', 'Wait, I thought we were launching in Q1', 13],
+    ['Mira', 'var(--chart-2)', 'Looping in Priya', 19],
+    ['Priya', 'var(--chart-3)', 'Can someone summarize the thread?', 31],
+    ['Sam', 'var(--chart-1)', 'Is this the same launch as the other thread?', 40],
+    ['Leo', 'var(--chart-3)', 'Quick question: what was the original question?', 47]
+  ];
+  var LEVELS = [[0, 'Still quick.'], [6, 'Getting less quick.'], [20, 'No longer quick.'], [40, 'This is a meeting now.']];
+
+  function initQuickQuestion(root) {
+    if (!root || root.__miQuick) return;
+    root.__miQuick = true;
+    var thread = root.querySelector('.qq-thread'), watch = root.querySelector('.qq-watch'), timeEl = root.querySelector('.qq-time');
+    var verdict = root.querySelector('.qq-verdict'), form = root.querySelector('.qq-form'), input = root.querySelector('.qq-input');
+    var send = root.querySelector('.qq-send'), call = root.querySelector('.qq-call');
+    var running = false, raf = 0, t0 = 0, idx = 0, people = {};
+    var MS_PER_MIN = reduce.matches ? 120 : 260; // time-lapse speed
+
+    function empty() { thread.replaceChildren(); var p = document.createElement('p'); p.className = 'qq-empty'; p.textContent = 'No messages yet. Ask something quick.'; thread.appendChild(p); }
+    function stamp(min) { var t = 14 * 60 + 2 + min; return (Math.floor(t / 60) % 12 || 12) + ':' + String(t % 60).padStart(2, '0'); }
+
+    function post(who, color, text, min, tag) {
+      var e = thread.querySelector('.qq-empty'); if (e) e.remove();
+      var m = document.createElement('div'); m.className = 'qq-msg';
+      var av = document.createElement('span'); av.className = 'qq-av'; av.style.setProperty('--c', color); av.textContent = who[0];
+      var w = document.createElement('p'); w.className = 'qq-who'; w.textContent = who;
+      var tm = document.createElement('time'); tm.textContent = stamp(min); w.appendChild(tm);
+      var tx = document.createElement('p'); tx.className = 'qq-text'; tx.textContent = text;
+      if (tag) { var g = document.createElement('span'); g.className = 'qq-tag'; g.textContent = tag; tx.appendChild(g); }
+      m.append(av, w, tx);
+      thread.appendChild(m);
+      thread.scrollTop = thread.scrollHeight;
+    }
+
+    function level(min) { var l = 0; LEVELS.forEach(function (x, i) { if (min >= x[0]) l = i; }); return l; }
+
+    function frame(now) {
+      var min = (now - t0) / MS_PER_MIN;
+      while (idx < REPLIES.length && min >= REPLIES[idx][3]) {
+        var r = REPLIES[idx++]; people[r[0]] = 1; post(r[0], r[1], r[2], r[3]);
+      }
+      var shown = Math.min(min, 47.2);
+      var secs = Math.floor(shown * 60);
+      timeEl.textContent = Math.floor(secs / 60) + ':' + String(secs % 60).padStart(2, '0');
+      var l = level(shown);
+      root.setAttribute('data-level', l);
+      verdict.textContent = LEVELS[l][1];
+      if (idx >= REPLIES.length && min >= 47.2) {
+        running = false;
+        verdict.textContent = 'Quick question: 47 minutes, ' + (Object.keys(people).length + 1) + ' people, 0 answers.';
+        call.hidden = false;
+        send.disabled = false;
+        return;
+      }
+      raf = requestAnimationFrame(frame);
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var text = input.value.trim();
+      if (!text || running) return;
+      if (thread.querySelector('.qq-msg') && call.hidden === false) empty();
+      call.hidden = true;
+      var quick = /quick question/i.test(text);
+      post('You', 'var(--chart-1)', text, 0, quick ? 'Quick question' : '');
+      input.value = '';
+      if (!quick) { verdict.textContent = 'Nice and direct. No stopwatch needed.'; root.setAttribute('data-level', 0); return; }
+      running = true; idx = 0; people = {};
+      send.disabled = true;
+      watch.hidden = false;
+      t0 = performance.now();
+      raf = requestAnimationFrame(frame);
+    });
+
+    call.addEventListener('click', function () {
+      verdict.textContent = 'Call started. Agenda: the quick question.';
+      call.hidden = true;
+      input.value = 'Quick question about the launch date';
+      watch.hidden = true;
+      empty();
+      root.setAttribute('data-level', 0);
+    });
+    empty();
+  }
+
+  window.initQuickQuestion = initQuickQuestion;
+  function boot() { document.querySelectorAll('[data-mi="quick-question"]').forEach(initQuickQuestion); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initQuickQuestion"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

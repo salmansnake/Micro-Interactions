@@ -1,0 +1,199 @@
+/* Heavy Save — the Save button gains weight with every unsaved change.
+   Outcraft Design System v2: an inset grouped form with a capsule Save button. */
+.hs {
+  --hs-page: var(--subtle);
+  --hs-bg: var(--card);
+  --hs-fg: var(--foreground);
+  --hs-muted: var(--muted-foreground);
+  --hs-line: var(--border);
+  --hs-fill: var(--muted);
+  --hs-accent: var(--primary);
+  --hs-on-accent: var(--primary-foreground);
+  --hs-green: var(--success);
+  --hs-warn: var(--warning);
+  --hs-shadow: var(--overlay);
+  --hs-w: 0; /* weight, set by JS: 0–5 */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 18px 16px 12px;
+  background: var(--hs-page);
+  color: var(--hs-fg);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 0 0 1px var(--hs-line), var(--shadow-lg);
+  font: 400 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans);
+  letter-spacing: var(--tracking-title);
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.hs-header { margin: 0; padding: 0 16px; color: var(--hs-muted); font-size: var(--text-body); line-height: var(--leading-body); font-weight: 600; letter-spacing: normal; }
+.hs-list { overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--hs-bg); }
+.hs-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 6px 16px;
+  cursor: text;
+}
+.hs-row + .hs-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 0;
+  height: 1px;
+  background: var(--hs-line);
+  transform: scaleY(0.5);
+  transform-origin: top;
+}
+.hs-label { position: relative; flex: none; display: flex; align-items: center; }
+.hs-dirty {
+  position: absolute;
+  left: -11px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hs-accent);
+  transform: scale(0);
+  transition: transform var(--spring-ui-duration) var(--spring-ui);
+}
+.hs .is-dirty .hs-dirty { transform: scale(1); }
+.hs input[type="text"],
+.hs select {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--hs-muted);
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: right;
+  text-align-last: right;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.hs select { cursor: pointer; padding-right: 18px; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 7px) 50%, calc(100% - 2px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+.hs input[type="text"]:focus { color: var(--hs-fg); }
+.hs-row:focus-within { background: color-mix(in srgb, var(--hs-accent) 6%, transparent); }
+.hs input[type="text"]:focus-visible,
+.hs select:focus-visible { box-shadow: 0 0 0 2px var(--hs-accent); }
+
+/* Switch: Outcraft 40×22, knob stretches while held */
+.hs-switch { position: relative; flex: none; width: 40px; height: 22px; margin-left: auto; }
+.hs-switch input { position: absolute; inset: -11px -2px; z-index: 1; width: calc(100% + 4px); height: calc(100% + 22px); margin: 0; opacity: 0; cursor: pointer; }
+.hs-track { position: absolute; inset: 0; border: 1px solid var(--input); border-radius: var(--radius-full); background: var(--muted); transition: background-color var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out); }
+.hs-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--raised);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--spring-ui-duration) var(--spring-ui), width var(--spring-press-duration) var(--spring-press);
+}
+.hs-switch input:checked ~ .hs-track { background: var(--switch-on); border-color: var(--switch-on); }
+.hs-switch input:checked ~ .hs-knob { transform: translateX(18px); background: var(--card); }
+.hs-switch input:active ~ .hs-knob { width: 20px; }
+.hs-switch input:checked:active ~ .hs-knob { transform: translateX(14px); }
+.hs-switch input:focus-visible ~ .hs-track { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* Bar */
+.hs-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; min-height: 52px; padding: 8px 0 8px 8px; }
+.hs-leave {
+  height: 32px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--hs-accent);
+  font: inherit;
+  font-size: var(--text-ui);
+  letter-spacing: normal;
+  cursor: pointer;
+}
+.hs-leave:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.hs-note {
+  flex: 1 1 120px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  min-width: 0;
+  margin: 0;
+  color: var(--hs-muted);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  letter-spacing: normal;
+  text-align: right;
+}
+.hs-note.is-warn { color: var(--hs-fg); font-weight: 600; }
+.hs-note button {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--hs-fill);
+  color: var(--hs-fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Save button: capsule, sinks with weight */
+.hs-btn { position: relative; flex: none; margin-left: auto; padding: 0; border: 0; border-radius: var(--radius-full); background: none; color: var(--hs-on-accent); font: inherit; cursor: pointer; }
+.hs-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 18px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  font-weight: 600;
+  letter-spacing: normal;
+  background: color-mix(in oklab, var(--hs-accent), var(--black) calc(var(--hs-w) * 5%));
+  transform: translateY(calc(var(--hs-w) * 1.6px));
+  box-shadow: 0 calc((7 - var(--hs-w)) * 1px) calc((16 - var(--hs-w) * 2) * 1px) -8px var(--hs-shadow);
+  transition: transform var(--spring-ui-duration) var(--spring-ui), box-shadow var(--duration-slower) var(--ease-out), background-color var(--duration-slow) var(--ease-out);
+}
+.hs-btn:focus-visible { outline: none; }
+.hs-btn:focus-visible .hs-face { outline: 2px solid var(--ring); outline-offset: 2px; }
+.hs-badge,
+.hs-badge-ghost {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--hs-on-accent) 26%, transparent);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+}
+.hs-badge-ghost { position: absolute; margin: 0; pointer-events: none; background: var(--hs-accent); color: var(--hs-on-accent); }
+.hs.is-clean .hs-btn { cursor: default; }
+.hs.is-clean .hs-face { background: var(--hs-fill); color: var(--hs-muted); box-shadow: none; }
+.hs.is-clean .hs-badge { display: none; }
+.hs.is-saving .hs-face { opacity: 0.8; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-face, .hs-dirty, .hs-knob { transition-duration: var(--duration-reduced) !important; transition-timing-function: linear !important; }
+}
+.hs [hidden] { display: none !important; }

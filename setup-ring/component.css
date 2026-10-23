@@ -1,0 +1,73 @@
+/* Setup Ring — finishing an onboarding step flies its check into a ring that fills one segment at a time.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.su {
+  --su-bg: var(--card);
+  --su-fg: var(--foreground);
+  --su-muted: var(--muted-foreground);
+  --su-line: var(--border);
+  --su-sunken: var(--subtle);
+  --su-fill: var(--muted);
+  --su-accent: var(--primary);
+  --su-green: var(--success);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--su-bg);
+  color: var(--su-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.su-head { display: flex; align-items: center; gap: 16px; }
+.su-ring { position: relative; flex: none; width: 72px; height: 72px; }
+.su-ring > svg:first-child { width: 72px; height: 72px; transform: rotate(-90deg); }
+.su-base { fill: none; stroke: var(--su-fill); stroke-width: 7; }
+.su-seg { fill: none; stroke: var(--su-accent); stroke-width: 7; stroke-linecap: round; opacity: 0; transition: stroke-dasharray var(--spring-ui-duration) var(--spring-ui), stroke var(--duration-slow), opacity var(--duration-fast); }
+.su-seg.is-on { opacity: 1; }
+.su-full { fill: var(--su-green); stroke: var(--su-green); stroke-width: 7; opacity: 0; transform-origin: 40px 40px; transform: scale(0.6); transition: opacity var(--duration-slow), transform var(--spring-pop-duration) var(--spring-pop); }
+.su.is-done .su-full { opacity: 1; transform: none; }
+.su.is-done .su-seg { stroke: var(--su-green); }
+.su-pct { position: absolute; inset: 0; display: grid; place-items: center; font-size: var(--text-body); font-weight: 700; font-variant-numeric: tabular-nums; transition: opacity var(--duration-base); }
+.su.is-done .su-pct { opacity: 0; }
+.su-done-mark { position: absolute; inset: 22px; width: 28px; height: 28px; color: var(--success-foreground); opacity: 0; transform: scale(0.4); transition: opacity var(--duration-base) var(--duration-fast), transform var(--spring-pop-duration) var(--spring-pop) var(--duration-fast); }
+.su.is-done .su-done-mark { opacity: 1; transform: none; }
+.su-ring.is-hit { animation: su-hit var(--spring-pop-duration) var(--spring-pop); }
+@keyframes su-hit { 30% { transform: scale(1.08); } 100% { transform: none; } }
+.su-title { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+.su-sub { margin: 2px 0 0; color: var(--su-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.su-list { display: flex; flex-direction: column; margin: 0; padding: 0; overflow: hidden; list-style: none; border-radius: var(--radius-lg); background: var(--su-sunken); }
+.su-task { position: relative; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 12px 8px 14px; box-sizing: border-box; }
+.su-task + .su-task::before { content: ""; position: absolute; top: 0; left: 48px; right: 0; height: 1px; background: var(--su-line); transform: scaleY(0.5); transform-origin: top; }
+.su-task > div { flex: 1; min-width: 0; }
+.su-task b { display: block; font-weight: 600; }
+.su-task small { color: var(--su-muted); font-size: var(--text-small); }
+.su-check { position: relative; flex: none; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--su-fill); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.su-check::after { content: ""; position: absolute; left: 7.5px; top: 4px; width: 5px; height: 10px; border: solid var(--primary-foreground); border-width: 0 2.2px 2.2px 0; transform: rotate(45deg) scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.su-task.is-done .su-check { background: var(--su-accent); box-shadow: none; }
+.su-task.is-done .su-check::after { transform: rotate(45deg) scale(1); }
+.su-task.is-done b { color: var(--su-muted); text-decoration: line-through; text-decoration-color: var(--su-fill); }
+.su-do { flex: none; height: 30px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--su-bg); color: var(--su-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.su-do:active { transform: scale(var(--press-scale)); }
+.su-do:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.su-task.is-done .su-do { opacity: 0; pointer-events: none; }
+.su-dot { position: absolute; z-index: 3; left: 0; top: 0; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--su-accent); box-shadow: 0 2px 6px color-mix(in srgb, var(--brand-strong) 40%, transparent); pointer-events: none; }
+.su.is-done .su-list { animation: su-fold var(--spring-ui-duration) var(--ease-out) forwards; }
+@keyframes su-fold { to { opacity: 0; transform: scaleY(0.6); transform-origin: top; } }
+.su-finish { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--su-green) 14%, transparent); animation: su-in var(--spring-ui-duration) var(--spring-ui) both; }
+.su-finish p { margin: 0; font-weight: 600; }
+.su-reset { height: 30px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--su-bg); color: var(--su-fg); font: inherit; font-weight: 600; cursor: pointer; }
+.su-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@keyframes su-in { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .su-ring.is-hit, .su.is-done .su-list, .su-finish { animation: none; }
+}
+.su [hidden] { display: none !important; }

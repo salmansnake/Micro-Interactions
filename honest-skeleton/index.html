@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honest Skeleton · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Honest Skeleton — shows what is known at once, says when a part is slow, and admits failure.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.hk {
+  --hk-bg: var(--card);
+  --hk-fg: var(--foreground);
+  --hk-muted: var(--muted-foreground);
+  --hk-line: var(--border);
+  --hk-sunken: var(--subtle);
+  --hk-fill: var(--muted);
+  --hk-accent: var(--primary);
+  --hk-warn: var(--warning);
+  --hk-danger-text: var(--danger-text);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+  color: var(--hk-fg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.hk-card { display: flex; flex-direction: column; gap: 18px; padding: 20px; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--hk-bg); }
+.hk-head { display: flex; align-items: center; gap: 12px; }
+.hk-avatar { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-lg); background: var(--hk-accent); color: var(--primary-foreground); font-size: var(--text-title); font-weight: 700; }
+.hk-id { min-width: 0; flex: 1; }
+.hk-name { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+.hk-label { margin: 0 0 8px; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; letter-spacing: normal; }
+.hk-part { position: relative; }
+
+/* Skeleton blocks: the shimmer speed is the expected wait */
+.hk-sk {
+  display: block;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--hk-fill) 0%, color-mix(in srgb, var(--hk-fill) 40%, transparent) 50%, var(--hk-fill) 100%) 0 0 / 200% 100%;
+  animation: hk-shimmer var(--hk-speed, 1.2s) linear infinite;
+}
+@keyframes hk-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.hk-wait {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  background: var(--hk-bg);
+  box-shadow: 0 0 0 1px var(--hk-line), var(--shadow-md);
+  color: var(--hk-muted);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  animation: hk-in var(--spring-ui-duration) var(--spring-ui) both;
+}
+.hk-wait::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--hk-warn); vertical-align: 1px; }
+@keyframes hk-in { from { opacity: 0; transform: translateY(-50%) scale(0.9); } }
+
+/* Arrival: content develops out of the skeleton */
+.hk-real { animation: hk-develop var(--spring-panel-duration) var(--spring-panel) both; }
+@keyframes hk-develop { from { opacity: 0; filter: blur(6px); transform: translateY(3px); } }
+
+.hk-meta { margin: 0; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.hk-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.hk-stat { display: flex; flex-direction: column; gap: 6px; min-height: 58px; box-sizing: border-box; padding: 10px 12px; border-radius: var(--radius-lg); background: var(--hk-sunken); }
+.hk-stat b { font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; font-variant-numeric: tabular-nums; }
+.hk-stat span { color: var(--hk-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.hk-rows { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.hk-rows li { display: flex; align-items: center; gap: 10px; min-height: 24px; }
+.hk-rows i { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--hk-fill); }
+.hk-rows .hk-who { display: grid; place-items: center; color: var(--on-chart); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
+.hk-rows small { margin-left: auto; color: var(--hk-muted); font-size: var(--text-caption); white-space: nowrap; }
+.hk-bars { display: flex; align-items: flex-end; gap: 4px; height: 72px; }
+.hk-bars span { flex: 1; border-radius: var(--radius-xs) var(--radius-xs) var(--radius-xs) var(--radius-xs); background: var(--hk-accent); opacity: 0.85; transform-origin: bottom; animation: hk-bar var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes hk-bar { from { transform: scaleY(0); } }
+.hk-error { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 72px; box-sizing: border-box; padding: 12px 14px; border-radius: var(--radius-lg); background: var(--hk-sunken); color: var(--hk-danger-text); font-size: var(--text-small); line-height: var(--leading-small); }
+.hk-error button, .hk-reload {
+  flex: none;
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--hk-fill);
+  color: var(--hk-fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.hk-error button:active, .hk-reload:active { transform: scale(var(--press-scale)); }
+.hk-error button:focus-visible, .hk-reload:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.hk-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; }
+.hk-note { margin: 0; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+@media (prefers-reduced-motion: reduce) {
+  .hk-sk { animation: none; }
+  .hk-real, .hk-wait, .hk-bars span { animation: none; }
+}
+.hk [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Honest Skeleton"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="hk" data-mi="honest-skeleton">
+  <article class="hk-card" aria-label="Atlas project">
+    <header class="hk-head">
+      <span class="hk-avatar" aria-hidden="true">A</span>
+      <div class="hk-id">
+        <p class="hk-name">Atlas</p>
+        <div class="hk-part" data-part="meta"></div>
+      </div>
+    </header>
+    <div class="hk-part hk-stats" data-part="stats"></div>
+    <section class="hk-section">
+      <p class="hk-label">Recent Activity</p>
+      <div class="hk-part" data-part="activity"></div>
+    </section>
+    <section class="hk-section">
+      <p class="hk-label">Requests, Last 14 Days</p>
+      <div class="hk-part" data-part="chart"></div>
+    </section>
+  </article>
+  <div class="hk-foot">
+    <p class="hk-note">The name shows at once because you clicked it in a list. Everything else says how it's doing.</p>
+    <button type="button" class="hk-reload">Reload</button>
+  </div>
+</div>
+</div>
+<script>
+/* Honest Skeleton — vanilla JS. Auto-initializes every [data-mi="honest-skeleton"].
+   Each part loads on its own: known data renders at once, slow parts say so, failed parts offer Retry.
+   Call window.initHonestSkeleton(el) for elements added later. */
+(function () {
+  'use strict';
+  var SLOW_AFTER = 1200; // ms before a part admits it is slow
+
+  function h(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function sk(width, height) {
+    var s = h('span', 'hk-sk');
+    s.style.width = width;
+    if (height) s.style.height = height;
+    return s;
+  }
+
+  // Each part: its skeleton, its real content, and how it behaves in the demo.
+  var PARTS = {
+    meta: {
+      speed: '0.9s',
+      skeleton: function () { var w = h('div'); w.style.paddingTop = '6px'; w.appendChild(sk('11em')); return w; },
+      real: function () { return h('p', 'hk-meta', 'Production · Updated 4 minutes ago'); }
+    },
+    stats: {
+      speed: '1s',
+      skeleton: function () {
+        var f = document.createDocumentFragment();
+        for (var i = 0; i < 3; i++) { var c = h('div', 'hk-stat'); c.appendChild(sk('60%', '18px')); c.appendChild(sk('80%', '10px')); f.appendChild(c); }
+        return f;
+      },
+      real: function () {
+        var f = document.createDocumentFragment();
+        [['3', 'Members'], ['128', 'Deploys'], ['99.98%', 'Uptime']].forEach(function (s) {
+          var c = h('div', 'hk-stat hk-real'); c.appendChild(h('b', null, s[0])); c.appendChild(h('span', null, s[1])); f.appendChild(c);
+        });
+        return f;
+      }
+    },
+    activity: {
+      speed: '1.6s',
+      skeleton: function () {
+        var ul = h('ul', 'hk-rows');
+        ['70%', '58%', '64%'].forEach(function (w) { var li = h('li'); li.appendChild(h('i')); li.appendChild(sk(w)); ul.appendChild(li); });
+        return ul;
+      },
+      real: function () {
+        var ul = h('ul', 'hk-rows hk-real');
+        [['M', 'var(--chart-2)', 'Mira deployed production', '2m'], ['S', 'var(--chart-4)', 'Sam updated roadmap-q4.csv', '1h'], ['Y', 'var(--chart-1)', 'You invited Alex', '3h']].forEach(function (r) {
+          var li = h('li'); var i = h('i', 'hk-who', r[0]); i.style.background = r[1];
+          li.appendChild(i); li.appendChild(h('span', null, r[2])); li.appendChild(h('small', null, r[3])); ul.appendChild(li);
+        });
+        return ul;
+      }
+    },
+    chart: {
+      speed: '1.4s',
+      skeleton: function () { return sk('100%', '72px'); },
+      real: function () {
+        var b = h('div', 'hk-bars hk-real');
+        [42, 55, 48, 61, 58, 70, 66, 74, 69, 80, 77, 85, 82, 92].forEach(function (v, i) {
+          var s = h('span'); s.style.height = v + '%'; s.style.animationDelay = (i * 30) + 'ms'; b.appendChild(s);
+        });
+        return b;
+      }
+    }
+  };
+  // Demo timing: when each part arrives, and whether its first attempt fails.
+  var PLAN = { meta: { at: 450 }, stats: { at: 800 }, activity: { at: 2300 }, chart: { at: 2600, failFirst: true } };
+
+  function initHonestSkeleton(root) {
+    if (!root || root.__miHonest) return;
+    root.__miHonest = true;
+    var timers = [];
+    var gen = 0;
+
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+    function load(name, attempt, token) {
+      var slot = root.querySelector('[data-part="' + name + '"]');
+      var part = PARTS[name], plan = PLAN[name];
+      slot.setAttribute('aria-busy', 'true');
+      slot.style.setProperty('--hk-speed', part.speed);
+      slot.replaceChildren(part.skeleton());
+      var at = attempt === 0 ? plan.at : 900;
+      if (at > SLOW_AFTER) {
+        later(function () {
+          if (token !== gen) return;
+          var w = h('span', 'hk-wait', 'Still loading');
+          slot.appendChild(w);
+          var started = performance.now();
+          var tick = setInterval(function () {
+            if (!w.isConnected || token !== gen) { clearInterval(tick); return; }
+            w.textContent = 'Still loading · ' + Math.round((SLOW_AFTER + performance.now() - started) / 1000) + 's';
+          }, 500);
+        }, SLOW_AFTER);
+      }
+      later(function () {
+        if (token !== gen) return;
+        slot.removeAttribute('aria-busy');
+        if (plan.failFirst && attempt === 0) {
+          var e = h('div', 'hk-error hk-real');
+          e.appendChild(h('span', null, 'Usage couldn’t load. Your other data is fine.'));
+          var b = h('button', null, 'Retry');
+          b.type = 'button';
+          b.addEventListener('click', function () { load(name, 1, token); });
+          e.appendChild(b);
+          slot.replaceChildren(e);
+          return;
+        }
+        if (name === 'stats') slot.className = 'hk-part hk-stats';
+        slot.replaceChildren(part.real());
+      }, at);
+    }
+
+    function start() {
+      timers.forEach(clearTimeout);
+      timers = [];
+      var token = ++gen;
+      Object.keys(PLAN).forEach(function (name) { load(name, 0, token); });
+    }
+
+    root.querySelector('.hk-reload').addEventListener('click', start);
+
+    var begun = false;
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting && !begun) { begun = true; start(); }
+      }, { threshold: 0.3 }).observe(root);
+      Object.keys(PLAN).forEach(function (name) {
+        var slot = root.querySelector('[data-part="' + name + '"]');
+        slot.style.setProperty('--hk-speed', PARTS[name].speed);
+        slot.replaceChildren(PARTS[name].skeleton());
+      });
+    } else start();
+  }
+
+  window.initHonestSkeleton = initHonestSkeleton;
+  function boot() { document.querySelectorAll('[data-mi="honest-skeleton"]').forEach(initHonestSkeleton); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initHonestSkeleton"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shortcut Reveal · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Shortcut Reveal — hold Ctrl / ⌘ to see every shortcut on the toolbar.
+   Outcraft Design System v2: grouped Frost toolbar over a document. */
+.sr {
+  --sr-bg: var(--card);
+  --sr-fg: var(--foreground);
+  --sr-muted: var(--muted-foreground);
+  --sr-line: var(--border);
+  --sr-fill: var(--muted);
+  --sr-hover: var(--muted);
+  --sr-accent: var(--primary);
+  --sr-on-accent: var(--primary-foreground);
+  --sr-success: var(--success);
+  --sr-on-success: var(--success-foreground);
+  --sr-glass: var(--frost);
+  --sr-glass-edge: var(--frost-border);
+  --sr-glass-rim: var(--frost-border);
+  --sr-glass-shadow: var(--shadow-lg);
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  overflow: hidden;
+  background: var(--sr-bg);
+  color: var(--sr-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: 0 0 0 1px var(--sr-line), var(--shadow-lg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.sr-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px; }
+.sr-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-full);
+  background: var(--sr-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: inset 0 0 0 1px var(--frost-border), var(--sr-glass-shadow);
+}
+.sr-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 34px;
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--sr-fg);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--duration-fast), color var(--duration-fast), transform var(--spring-press-duration) var(--spring-press);
+}
+.sr-btn:hover { background: var(--sr-hover); }
+.sr-btn:active { transform: scale(var(--press-scale-sm)); }
+.sr-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.sr-btn svg { flex: none; width: 16px; height: 16px; }
+.sr-btn.is-on { background: color-mix(in srgb, var(--sr-accent) 16%, transparent); color: var(--sr-accent); }
+.sr-btn.is-primary { margin-left: auto; height: 40px; padding: 0 18px; background: var(--sr-accent); color: var(--sr-on-accent); font-weight: 600; box-shadow: var(--sr-glass-shadow); }
+.sr-btn.is-primary:hover { background: color-mix(in oklab, var(--sr-accent), var(--black) 8%); }
+.sr-glyph-b { font-weight: 700; font-size: var(--text-body-lg); }
+.sr-glyph-i { font-family: ui-serif, Georgia, serif; font-style: italic; font-size: var(--text-title-sm); }
+
+/* Keycaps: dark HUD capsules */
+.sr-kbd {
+  position: absolute;
+  z-index: 3;
+  top: 100%;
+  left: 50%;
+  margin-top: 9px;
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+  background: var(--sr-fg);
+  color: var(--sr-bg);
+  font: 600 var(--text-caption)/var(--leading-caption) var(--font-sans);
+  letter-spacing: normal;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  transform: translate(-50%, -4px) scale(0.7);
+  pointer-events: none;
+  transition:
+    transform var(--spring-ui-duration) var(--spring-ui) var(--sr-delay, 0ms),
+    opacity var(--duration-fast) var(--ease-out) var(--sr-delay, 0ms),
+    background-color var(--duration-base);
+}
+.sr-kbd.is-low { margin-top: 36px; }
+.sr-kbd.is-low::before {
+  content: "";
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  width: 1px;
+  height: 25px;
+  background: var(--sr-fg);
+  opacity: 0.35;
+}
+.sr.is-revealed .sr-kbd { opacity: 1; transform: translate(-50%, 0) scale(1); }
+.sr-btn.is-learned .sr-kbd { background: var(--sr-success); color: var(--sr-on-success); }
+.sr-btn.is-flash { animation: sr-flash var(--duration-slower) var(--ease-out); }
+@keyframes sr-flash {
+  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--sr-accent) 60%, transparent); }
+  to { box-shadow: 0 0 0 10px transparent; }
+}
+
+/* Document */
+.sr-doc { display: flex; flex-direction: column; gap: 10px; min-height: 150px; padding: 20px 22px 18px; transition: opacity var(--duration-base), filter var(--duration-base); }
+.sr.is-revealed .sr-doc { opacity: 0.3; filter: blur(2px); }
+.sr-doc h4 { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 700; letter-spacing: var(--tracking-title); }
+.sr-doc p { margin: 0; max-width: 52ch; color: var(--sr-muted); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
+.sr-sel { padding: 0 2px; border-radius: var(--radius-xs); background: var(--highlight); color: var(--brand-foreground); }
+.sr-sel.is-bold { font-weight: 700; }
+.sr-sel.is-italic { font-style: italic; }
+
+.sr-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 12px 12px 22px;
+  border-top: 1px solid var(--sr-line);
+  color: var(--sr-muted);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  letter-spacing: normal;
+}
+.sr-hint kbd {
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--sr-fill);
+  color: var(--sr-fg);
+  font: 600 var(--text-caption)/var(--leading-caption) var(--font-sans);
+}
+.sr-hold {
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--sr-fill);
+  color: var(--sr-fg);
+  font: inherit;
+  font-size: var(--text-small);
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.sr-hold:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.sr-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 60px;
+  z-index: 4;
+  padding: 9px 16px;
+  border-radius: var(--radius-full);
+  background: var(--sr-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: inset 0 0 0 1px var(--frost-border), var(--sr-glass-shadow);
+  color: var(--sr-fg);
+  font-size: var(--text-small);
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 8px) scale(var(--press-scale));
+  pointer-events: none;
+  transition: opacity var(--duration-base), transform var(--spring-ui-duration) var(--spring-ui);
+}
+.sr-toast.is-open { opacity: 1; transform: translate(-50%, 0) scale(1); }
+
+@media (max-width: 460px) {
+  .sr-text { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sr-kbd { transition: opacity var(--duration-fast) linear !important; transform: translate(-50%, 0) scale(1) !important; }
+  .sr-btn.is-flash { animation: none; }
+}
+.sr [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Shortcut Reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="sr" data-mi="shortcut-reveal">
+  <div class="sr-toolbar" role="toolbar" aria-label="Editor actions">
+    <div class="sr-group">
+    <button type="button" class="sr-btn" data-shortcut="mod+k" data-action="search" data-name="Search" aria-label="Search">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+      <span class="sr-text">Search</span><kbd class="sr-kbd" aria-hidden="true"></kbd>
+    </button>
+    </div>
+    <div class="sr-group">
+    <button type="button" class="sr-btn" data-shortcut="mod+b" data-action="bold" data-name="Bold" aria-label="Bold" aria-pressed="false">
+      <span class="sr-glyph-b" aria-hidden="true">B</span><kbd class="sr-kbd" aria-hidden="true"></kbd>
+    </button>
+    <button type="button" class="sr-btn" data-shortcut="mod+i" data-action="italic" data-name="Italic" aria-label="Italic" aria-pressed="false">
+      <span class="sr-glyph-i" aria-hidden="true">I</span><kbd class="sr-kbd" aria-hidden="true"></kbd>
+    </button>
+    <button type="button" class="sr-btn" data-shortcut="mod+shift+m" data-action="comment" data-name="Comment" aria-label="Comment">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z"/></svg>
+      <kbd class="sr-kbd" aria-hidden="true"></kbd>
+    </button>
+    <button type="button" class="sr-btn" data-shortcut="mod+z" data-action="undo" data-name="Undo" aria-label="Undo">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4 2.5 7l3 3"/><path d="M2.5 7h7a4 4 0 0 1 0 8H8"/></svg>
+      <kbd class="sr-kbd" aria-hidden="true"></kbd>
+    </button>
+    </div>
+    <div class="sr-group">
+    <button type="button" class="sr-btn" data-shortcut="mod+shift+s" data-action="share" data-name="Share" aria-label="Share">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2.5M5 5.5l3-3 3 3"/><path d="M3 9v4.5h10V9"/></svg>
+      <span class="sr-text">Share</span><kbd class="sr-kbd" aria-hidden="true"></kbd>
+    </button>
+    </div>
+    <button type="button" class="sr-btn is-primary" data-shortcut="mod+enter" data-action="publish" data-name="Publish">
+      Publish<kbd class="sr-kbd" aria-hidden="true"></kbd>
+    </button>
+  </div>
+  <div class="sr-doc">
+    <h4>Launch notes</h4>
+    <p>We ship the new billing page on Monday. The <span class="sr-sel">annual plan</span> now shows its savings up front, and every invoice carries the workspace name.</p>
+    <p>Add open questions as comments before Friday.</p>
+  </div>
+  <div class="sr-foot">
+    <span class="sr-hint" aria-live="polite"></span>
+    <button type="button" class="sr-hold">Hold to show shortcuts</button>
+  </div>
+  <div class="sr-toast" role="status"></div>
+</div>
+</div>
+<script>
+/* Shortcut Reveal — vanilla JS. Auto-initializes every [data-mi="shortcut-reveal"].
+   Call window.initShortcutReveal(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var HOLD_MS = 320;
+  var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '';
+  var isMac = /mac|iphone|ipad|ipod/i.test(platform);
+  var MOD = isMac ? '⌘' : 'Ctrl';
+  var MODIFIER_KEYS = ['Shift', 'Alt', 'Control', 'Meta', 'CapsLock'];
+
+  function parse(combo) {
+    var parts = combo.toLowerCase().split('+');
+    return {
+      mod: parts.indexOf('mod') > -1,
+      shift: parts.indexOf('shift') > -1,
+      alt: parts.indexOf('alt') > -1,
+      key: parts[parts.length - 1]
+    };
+  }
+
+  function keycap(c) {
+    var k = c.key === 'enter' ? '↵' : c.key.toUpperCase();
+    if (isMac) return (c.alt ? '⌥' : '') + (c.shift ? '⇧' : '') + (c.mod ? '⌘' : '') + k;
+    var bits = [];
+    if (c.mod) bits.push('Ctrl');
+    if (c.alt) bits.push('Alt');
+    if (c.shift) bits.push('⇧');
+    bits.push(k);
+    return bits.join(' ');
+  }
+
+  function ariaKeys(c) {
+    var k = c.key === 'enter' ? 'Enter' : c.key.toUpperCase();
+    return (c.mod ? (isMac ? 'Meta+' : 'Control+') : '') + (c.alt ? 'Alt+' : '') + (c.shift ? 'Shift+' : '') + k;
+  }
+
+  function initShortcutReveal(root) {
+    if (!root || root.__miShortcut) return;
+    root.__miShortcut = true;
+
+    var items = Array.prototype.slice.call(root.querySelectorAll('[data-shortcut]')).map(function (b) {
+      var c = parse(b.getAttribute('data-shortcut'));
+      var kbd = b.querySelector('.sr-kbd');
+      kbd.textContent = keycap(c);
+      b.setAttribute('aria-keyshortcuts', ariaKeys(c));
+      return { b: b, c: c, kbd: kbd, action: b.getAttribute('data-action'), name: b.getAttribute('data-name') || b.textContent.trim() };
+    });
+    var hint = root.querySelector('.sr-hint');
+    var hold = root.querySelector('.sr-hold');
+    var toast = root.querySelector('.sr-toast');
+    var sel = root.querySelector('.sr-sel');
+
+    var revealed = false;
+    var everRevealed = false;
+    var holdTimer = 0;
+    var toastTimer = 0;
+    var comboUsed = false;
+    var onScreen = true;
+    var pointer = null;
+    var learned = {};
+    var history = [];
+
+    // ---------- hint ----------
+    function setHint() {
+      var n = Object.keys(learned).length;
+      var kbd = document.createElement('kbd');
+      kbd.textContent = MOD;
+      if (n > 0) hint.replaceChildren('Learned ' + n + ' of ' + items.length + ' shortcuts');
+      else if (everRevealed) hint.replaceChildren('Keep holding ', kbd, ' and press a letter');
+      else hint.replaceChildren('Hold ', kbd, ' to see every shortcut');
+    }
+
+    // ---------- reveal ----------
+    function reveal(from) {
+      if (revealed) return;
+      revealed = true;
+      var o = from || pointer;
+      if (!o) { var r0 = items[0].b.getBoundingClientRect(); o = { x: r0.left, y: r0.top }; }
+      items.forEach(function (it) {
+        var r = it.b.getBoundingClientRect();
+        var d = Math.hypot(r.left + r.width / 2 - o.x, r.top + r.height / 2 - o.y);
+        it.kbd.style.setProperty('--sr-delay', (reduce.matches ? 0 : Math.min(260, Math.round(d * 0.6))) + 'ms');
+      });
+      layoutKeycaps();
+      root.classList.add('is-revealed');
+      if (!everRevealed) { everRevealed = true; setHint(); }
+    }
+    // Drop a keycap to a second row when it would collide with its neighbour.
+    function layoutKeycaps() {
+      var prevRight = -Infinity;
+      var prevTop = null;
+      var prevLow = false;
+      items.forEach(function (it) {
+        var r = it.b.getBoundingClientRect();
+        var w = it.kbd.offsetWidth;
+        var left = r.left + r.width / 2 - w / 2;
+        var sameRow = prevTop !== null && Math.abs(r.top - prevTop) < 4;
+        var low = sameRow && !prevLow && left < prevRight + 4;
+        it.kbd.classList.toggle('is-low', low);
+        if (!low) prevRight = left + w;
+        prevLow = low;
+        prevTop = r.top;
+      });
+    }
+    function hide() {
+      clearTimeout(holdTimer);
+      if (!revealed) return;
+      revealed = false;
+      items.forEach(function (it) { it.kbd.style.setProperty('--sr-delay', '0ms'); });
+      root.classList.remove('is-revealed');
+    }
+
+    // ---------- actions ----------
+    function say(msg) {
+      clearTimeout(toastTimer);
+      toast.textContent = msg;
+      toast.classList.add('is-open');
+      toastTimer = setTimeout(function () { toast.classList.remove('is-open'); }, 1800);
+    }
+    function flash(b) {
+      b.classList.remove('is-flash');
+      void b.offsetWidth;
+      b.classList.add('is-flash');
+    }
+    function toggleStyle(cls, action, record) {
+      var on = !sel.classList.contains(cls);
+      sel.classList.toggle(cls, on);
+      var btn = root.querySelector('[data-action="' + action + '"]');
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (record !== false) history.push(function () { toggleStyle(cls, action, false); });
+      return on;
+    }
+    function perform(it) {
+      switch (it.action) {
+        case 'bold': return toggleStyle('is-bold', 'bold') ? 'Bold on' : 'Bold off';
+        case 'italic': return toggleStyle('is-italic', 'italic') ? 'Italic on' : 'Italic off';
+        case 'undo':
+          if (!history.length) return 'Nothing to undo';
+          history.pop()();
+          return 'Undone';
+        case 'search': return 'Search opened';
+        case 'comment': return 'Comment added';
+        case 'share': return 'Share settings opened';
+        case 'publish': return 'Published';
+        default: return it.name;
+      }
+    }
+    function run(it, viaKeyboard) {
+      flash(it.b);
+      var msg = perform(it);
+      if (viaKeyboard) {
+        learned[it.action] = true;
+        it.b.classList.add('is-learned');
+        setHint();
+        say(msg);
+      } else {
+        say(msg + ' · ' + keycap(it.c) + ' next time');
+      }
+    }
+
+    items.forEach(function (it) {
+      it.b.addEventListener('click', function () { run(it, false); });
+    });
+
+    // ---------- keyboard ----------
+    function isModKey(e) { return isMac ? e.key === 'Meta' : e.key === 'Control'; }
+    function modHeld(e) { return isMac ? e.metaKey : e.ctrlKey; }
+    function typingElsewhere() {
+      var a = document.activeElement;
+      if (!a || root.contains(a)) return false;
+      return a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName);
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (!onScreen || typingElsewhere()) return;
+      if (isModKey(e)) {
+        if (!e.repeat) {
+          comboUsed = false;
+          clearTimeout(holdTimer);
+          holdTimer = setTimeout(function () { if (!comboUsed) reveal(); }, HOLD_MS);
+        }
+        return;
+      }
+      if (!modHeld(e) || MODIFIER_KEYS.indexOf(e.key) > -1) return;
+      comboUsed = true; // a normal shortcut: don't flash the keycaps
+      if (!revealed) clearTimeout(holdTimer);
+      var key = e.key.toLowerCase();
+      for (var i = 0; i < items.length; i++) {
+        var c = items[i].c;
+        if (c.mod && c.key === key && c.shift === e.shiftKey && c.alt === e.altKey) {
+          e.preventDefault();
+          run(items[i], true);
+          return;
+        }
+      }
+    });
+    document.addEventListener('keyup', function (e) {
+      if (isModKey(e) || !modHeld(e)) hide();
+    });
+    window.addEventListener('blur', hide);
+    document.addEventListener('visibilitychange', function () { if (document.hidden) hide(); });
+
+    // ---------- pointer + touch ----------
+    root.addEventListener('pointermove', function (e) { pointer = { x: e.clientX, y: e.clientY }; });
+    root.addEventListener('pointerleave', function () { pointer = null; });
+
+    hold.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      try { hold.setPointerCapture(e.pointerId); } catch (err) {}
+      reveal({ x: e.clientX, y: e.clientY });
+    });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) { hold.addEventListener(t, hide); });
+    hold.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    hold.addEventListener('keydown', function (e) {
+      if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); reveal(); }
+    });
+    hold.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') hide(); });
+
+    // Only listen while the toolbar is on screen.
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[0].isIntersecting;
+        if (!onScreen) hide();
+      }, { threshold: 0.2 }).observe(root);
+    }
+
+    setHint();
+  }
+
+  window.initShortcutReveal = initShortcutReveal;
+  function boot() { document.querySelectorAll('[data-mi="shortcut-reveal"]').forEach(initShortcutReveal); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initShortcutReveal"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

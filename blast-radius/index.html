@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blast Radius · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Blast Radius — previews what a delete removes and what stays.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.br {
+  --br-page: var(--subtle);
+  --br-bg: var(--card);
+  --br-fg: var(--foreground);
+  --br-muted: var(--muted-foreground);
+  --br-line: var(--border);
+  --br-fill: var(--muted);
+  --br-danger: var(--danger);
+  --br-danger-text: var(--danger-text);
+  --br-on-danger: var(--danger-foreground);
+  --br-danger-soft: var(--danger-subtle);
+  --br-safe: var(--success);
+  --br-safe-text: var(--success-text);
+  --br-safe-soft: var(--success-subtle);
+  --br-tint: var(--primary);
+  --br-glass: var(--frost);
+  --br-glass-edge: var(--frost-border);
+  --br-glass-rim: var(--frost-border);
+  --br-glass-shadow: var(--shadow-lg);
+  --br-spring: var(--spring-ui);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+  width: 100%;
+  max-width: 580px;
+  overflow: hidden;
+  background: var(--br-page);
+  color: var(--br-fg);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 0 0 1px var(--br-line), var(--shadow-lg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar */
+.br-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 8px;
+  background: var(--br-bg);
+  border-right: 1px solid var(--br-line);
+}
+.br-side .br-label { padding: 0 8px; }
+.br-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: var(--radius-md);
+}
+.br-nav.is-active { background: var(--br-fill); font-weight: 600; }
+
+/* Main */
+.br-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 16px 16px 16px; }
+.br-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; padding: 0 4px; }
+.br-title { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 700; letter-spacing: var(--tracking-title); }
+.br-meta { color: var(--br-muted); font-size: var(--text-small); letter-spacing: normal; }
+.br-group { display: flex; flex-direction: column; gap: 4px; }
+.br-label { margin: 0; padding: 0 12px; color: var(--br-muted); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; letter-spacing: normal; }
+.br-list { display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--br-bg); }
+.br-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 40px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+}
+.br-row + .br-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 0;
+  height: 1px;
+  background: var(--br-line);
+  transform: scaleY(0.5);
+  transform-origin: top;
+}
+.br-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--br-safe); }
+.br-dot.is-idle { background: var(--br-muted); opacity: 0.6; }
+.br-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration-line: line-through;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1.5px;
+  transition: text-decoration-color var(--duration-base) var(--ease-out) var(--br-delay, 0ms);
+}
+.br-size { margin-left: auto; color: var(--br-muted); font-size: var(--text-small); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Doomed and kept states */
+.br [data-blast-member],
+.br [data-blast-keep] {
+  outline: 1.5px dashed transparent;
+  outline-offset: -3px;
+  transition:
+    outline-color var(--duration-base) var(--ease-out) var(--br-delay, 0ms),
+    background-color var(--duration-base) var(--ease-out) var(--br-delay, 0ms),
+    transform var(--spring-ui-duration) var(--br-spring) var(--br-delay, 0ms);
+}
+.br [data-blast-member]::after,
+.br [data-blast-keep]::after {
+  flex: none;
+  max-width: 0;
+  overflow: hidden;
+  padding: 2px 0;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    max-width var(--duration-slow) var(--ease-out) var(--br-delay, 0ms),
+    padding var(--duration-slow) var(--ease-out) var(--br-delay, 0ms),
+    opacity var(--duration-base) var(--ease-out) var(--br-delay, 0ms);
+}
+.br [data-blast-member]::after { content: "Deletes"; color: var(--br-danger-text); background: color-mix(in oklab, var(--danger-border) 55%, var(--br-danger-soft)); }
+.br [data-blast-keep]::after { content: "Stays"; color: var(--br-safe-text); background: var(--br-safe-soft); }
+.br .br-nav::after { display: none; }
+.br .br-doomed { outline-color: var(--br-danger); background-color: var(--br-danger-soft); transform: scale(0.985); }
+.br .br-doomed .br-name { text-decoration-color: var(--br-danger); color: var(--br-danger-text); }
+.br .br-safe { outline-color: var(--br-safe); }
+.br .br-doomed::after,
+.br .br-safe::after { max-width: 80px; padding: 2px 8px; opacity: 1; }
+.br .br-doomed + .br-row::before,
+.br .br-row.br-doomed::before,
+.br .br-safe + .br-row::before,
+.br .br-row.br-safe::before { opacity: 0; }
+
+/* Danger zone */
+.br-zone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding: 12px 12px 12px 16px;
+  border-radius: var(--radius-lg); border: 1px solid var(--border);
+  background: var(--br-bg);
+}
+.br-zone strong { display: block; font-size: var(--text-body); font-weight: 600; }
+.br-zone-text { flex: 1 1 0; min-width: 0; }
+.br-zone-note { margin: 2px 0 0; max-width: 34ch; color: var(--br-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.br-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  height: 36px;
+  overflow: hidden;
+  padding: 0 16px;
+  white-space: nowrap;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--br-danger-soft);
+  color: var(--br-danger);
+  font: inherit;
+  font-size: var(--text-ui);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--duration-base), color var(--duration-base), transform var(--spring-press-duration) var(--spring-press);
+}
+.br-btn:active { transform: scale(var(--press-scale)); }
+.br-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.br-btn.is-preview,
+.br-btn.is-armed { background: var(--br-danger); color: var(--br-on-danger); }
+.br-btn-label, .br-btn-count { position: relative; z-index: 1; }
+.br-btn-count {
+  max-width: 0;
+  overflow: hidden;
+  padding: 1px 0;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--br-on-danger) 24%, transparent);
+  font-size: var(--text-caption);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transition: max-width var(--duration-slow), padding var(--duration-slow), opacity var(--duration-base);
+}
+.br-btn.is-preview .br-btn-count { max-width: 70px; padding: 1px 7px; opacity: 1; }
+.br-btn.is-armed .br-btn-count { max-width: 0; padding: 1px 0; opacity: 0; }
+/* Armed: a lighter fill drains left to right over 3s */
+.br-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--br-on-danger) 22%, transparent);
+  transform: scaleX(0);
+  transform-origin: right;
+}
+.br-btn.is-armed::after { animation: br-fuse 3s linear forwards; }
+@keyframes br-fuse { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.br-btn:disabled { opacity: 0.4; cursor: default; background: var(--br-fill); color: var(--br-muted); transform: none; }
+
+/* After the delete: the header says so and the danger zone hands its place to the Undo banner */
+.br-title, .br-meta { transition: color var(--duration-base); }
+.br.is-deleted .br-title { color: var(--br-muted); }
+.br-zone { position: relative; }
+.br.is-deleted .br-zone { justify-content: center; padding: 0; border-color: transparent; background: transparent; }
+.br.is-deleted .br-zone-text, .br.is-deleted .br-zone > .br-btn { display: none; }
+.br.is-deleted .br-toast { position: static; transform: translateY(8px) scale(0.96); }
+.br.is-deleted .br-toast.is-open { transform: none; }
+
+/* Undo banner: Frost capsule, centered in the danger zone */
+.br-toast {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 6px 6px 18px;
+  border-radius: var(--radius-full);
+  background: var(--br-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: inset 0 0 0 1px var(--frost-border), var(--br-glass-shadow);
+  color: var(--br-fg);
+  font-size: var(--text-body);
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translate(-50%, -20%) scale(0.96);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform var(--spring-ui-duration) var(--br-spring), opacity var(--duration-base), visibility 0s linear var(--spring-ui-duration);
+}
+.br-toast.is-open { transform: translate(-50%, -50%); opacity: 1; visibility: visible; transition: transform var(--spring-ui-duration) var(--br-spring), opacity var(--duration-base), visibility 0s; }
+.br-toast button {
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--br-tint);
+  color: var(--primary-foreground);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.br-toast button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (max-width: 480px) {
+  .br { grid-template-columns: minmax(0, 1fr); }
+  .br-side { flex-direction: row; flex-wrap: wrap; align-items: center; border-right: 0; border-bottom: 1px solid var(--br-line); }
+  .br-side .br-label { width: 100%; }
+  .br-zone { flex-wrap: wrap; }
+  .br-zone-text { flex-basis: 100%; }
+  .br-zone-note { min-height: calc(var(--leading-small) * 2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .br *, .br *::after { transition-duration: var(--duration-reduced) !important; transition-delay: 0ms !important; transition-timing-function: linear !important; }
+}
+.br [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Blast Radius"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="br" data-mi="blast-radius">
+  <nav class="br-side" aria-label="Projects">
+    <p class="br-label">Projects</p>
+    <span class="br-nav is-active" data-blast-member="atlas"><span class="br-name">Atlas</span><span class="br-size">4</span></span>
+    <span class="br-nav"><span class="br-name">Nova</span><span class="br-size">14</span></span>
+    <span class="br-nav"><span class="br-name">Orbit</span><span class="br-size">3</span></span>
+  </nav>
+  <section class="br-main">
+    <header class="br-head">
+      <h3 class="br-title">Atlas</h3>
+      <span class="br-meta" data-blast-after="Deleted just now · Workspace items kept">Created Mar 4 · 3 members</span>
+    </header>
+    <div class="br-group">
+      <p class="br-label">Environments</p>
+      <div class="br-list">
+        <div class="br-row" data-blast-member="atlas"><span class="br-dot"></span><span class="br-name">production</span><span class="br-size">Live</span></div>
+        <div class="br-row" data-blast-member="atlas"><span class="br-dot is-idle"></span><span class="br-name">staging</span><span class="br-size">Idle</span></div>
+      </div>
+    </div>
+    <div class="br-group">
+      <p class="br-label">Files</p>
+      <div class="br-list">
+        <div class="br-row" data-blast-member="atlas"><span class="br-name">brand-guide.pdf</span><span class="br-size">2.4 MB</span></div>
+        <div class="br-row" data-blast-member="atlas"><span class="br-name">roadmap-q4.csv</span><span class="br-size">18 KB</span></div>
+      </div>
+    </div>
+    <div class="br-group">
+      <p class="br-label">Workspace</p>
+      <div class="br-list">
+        <div class="br-row" data-blast-keep="atlas"><span class="br-name">billing-webhook</span><span class="br-size">Shared</span></div>
+        <div class="br-row" data-blast-keep="atlas"><span class="br-name">3 team members</span><span class="br-size">Team</span></div>
+      </div>
+    </div>
+    <div class="br-zone">
+      <div class="br-zone-text">
+        <strong>Delete Atlas</strong>
+        <p class="br-zone-note">Deletes its environments and files. Workspace stays.</p>
+      </div>
+      <button type="button" class="br-btn" data-blast-trigger="atlas"><span class="br-btn-label">Delete Project</span><span class="br-btn-count">5 items</span></button>
+      <div class="br-toast" role="status"><span class="br-toast-text">Atlas deleted</span><button type="button" class="br-undo">Undo</button></div>
+    </div>
+  </section>
+</div>
+</div>
+<script>
+/* Blast Radius — vanilla JS. Auto-initializes every [data-mi="blast-radius"].
+   Call window.initBlastRadius(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function initBlastRadius(root) {
+    if (!root || root.__miBlast) return;
+    root.__miBlast = true;
+    root.querySelectorAll('[data-blast-trigger]').forEach(function (btn) { wire(root, btn); });
+  }
+
+  function wire(root, btn) {
+    var key = btn.getAttribute('data-blast-trigger');
+    var label = btn.querySelector('.br-btn-label');
+    var count = btn.querySelector('.br-btn-count');
+    var toast = root.querySelector('.br-toast');
+    var undo = root.querySelector('.br-undo');
+    var note = root.querySelector('.br-zone-note');
+    var idleText = label.textContent;
+    var idleNote = note ? note.textContent : '';
+    var armed = false;
+    var previewing = false;
+    var timer = 0;
+    var removed = [];
+    var removedGroups = [];
+
+    function list(attr) {
+      return Array.prototype.slice
+        .call(root.querySelectorAll('[' + attr + '="' + key + '"]'))
+        .filter(function (el) { return !el.hidden; });
+    }
+    function plural(n) { return n + (n === 1 ? ' item' : ' items'); }
+
+    // Ripple: delay grows with distance from the button.
+    function delayFor(el) {
+      if (reduce.matches) return 0;
+      var b = btn.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var d = Math.hypot(r.left + r.width / 2 - (b.left + b.width / 2), r.top + r.height / 2 - (b.top + b.height / 2));
+      return Math.min(Math.round(d * 0.35), 320);
+    }
+
+    function setPreview(on) {
+      if (on === previewing) return;
+      previewing = on;
+      var doomed = list('data-blast-member');
+      count.textContent = plural(doomed.length);
+      btn.classList.toggle('is-preview', on);
+      doomed.forEach(function (el) {
+        el.style.setProperty('--br-delay', (on ? delayFor(el) : 0) + 'ms');
+        el.classList.toggle('br-doomed', on);
+      });
+      list('data-blast-keep').forEach(function (el) {
+        el.style.setProperty('--br-delay', (on ? delayFor(el) + 60 : 0) + 'ms');
+        el.classList.toggle('br-safe', on);
+      });
+    }
+
+    function disarm() {
+      armed = false;
+      clearTimeout(timer);
+      btn.classList.remove('is-armed');
+      label.textContent = idleText;
+      if (note) note.textContent = idleNote;
+    }
+
+    function arm() {
+      armed = true;
+      btn.classList.add('is-armed');
+      var n = list('data-blast-member').length;
+      label.textContent = 'Delete ' + n + (n === 1 ? ' Item' : ' Items');
+      if (note) note.textContent = 'Click again within 3 seconds to confirm.';
+      timer = setTimeout(function () {
+        disarm();
+        if (!btn.matches(':hover') && document.activeElement !== btn) setPreview(false);
+      }, 3000);
+    }
+
+    function gapOf(el) { return parseFloat(getComputedStyle(el.parentElement).rowGap) || 0; }
+
+    // Sections whose every row is deleted collapse as a whole, label included.
+    function emptiedGroups(doomed) {
+      var groups = [];
+      doomed.forEach(function (el) {
+        var g = el.closest('.br-group');
+        if (!g || groups.indexOf(g) > -1) return;
+        var rows = Array.prototype.slice.call(g.querySelectorAll('.br-row'));
+        if (rows.every(function (r) { return doomed.indexOf(r) > -1; })) groups.push(g);
+      });
+      return groups;
+    }
+
+    function swapAfterText(on) {
+      root.querySelectorAll('[data-blast-after]').forEach(function (el) {
+        if (on) { el.__brBefore = el.textContent; el.textContent = el.getAttribute('data-blast-after'); }
+        else if (el.__brBefore != null) el.textContent = el.__brBefore;
+      });
+      root.classList.toggle('is-deleted', on);
+    }
+
+    function execute() {
+      var doomed = list('data-blast-member');
+      var groups = emptiedGroups(doomed);
+      var longest = 0;
+      list('data-blast-keep').forEach(function (el) { el.classList.remove('br-safe'); });
+      btn.classList.remove('is-preview');
+      previewing = false;
+      btn.disabled = true;
+      label.textContent = 'Deleted';
+      removed = doomed;
+      removedGroups = groups;
+
+      function finish() {
+        doomed.forEach(function (el) { el.hidden = true; el.classList.remove('br-doomed'); });
+        groups.forEach(function (g) { g.hidden = true; });
+        swapAfterText(true);
+        // Next frame, so the banner rises in from its closed pose.
+        if (toast) requestAnimationFrame(function () { requestAnimationFrame(function () { toast.classList.add('is-open'); }); });
+      }
+
+      if (reduce.matches || !btn.animate) { finish(); return; }
+
+      var rowAnims = doomed.map(function (el) {
+        var delay = delayFor(el);
+        var inGroup = groups.indexOf(el.closest('.br-group')) > -1;
+        var cs = getComputedStyle(el);
+        var open = { height: el.offsetHeight + 'px', paddingTop: cs.paddingTop, paddingBottom: cs.paddingBottom, marginTop: cs.marginTop, marginBottom: cs.marginBottom };
+        var shut = { height: '0px', paddingTop: '0px', paddingBottom: '0px', marginTop: '0px', marginBottom: '0px' };
+        el.style.overflow = 'hidden';
+        longest = Math.max(longest, delay + 460);
+        // Rows in a section that empties only fade; the section collapses after.
+        var frames = inGroup
+          ? [{ opacity: 0.85, transform: 'scale(0.985)' }, { opacity: 0, transform: 'scale(0.92)' }]
+          : [Object.assign({ opacity: 0.85, transform: 'scale(0.985)' }, open), Object.assign({ opacity: 0, transform: 'scale(0.92)', offset: 0.55 }, open), Object.assign({ opacity: 0, transform: 'scale(0.92)' }, shut)];
+        return el.animate(frames, { duration: inGroup ? 260 : 460, delay: delay, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+      });
+
+      Promise.all(rowAnims.map(function (a) { return a.finished; })).then(function () {
+        var groupAnims = groups.map(function (g) {
+          g.style.overflow = 'hidden';
+          return g.animate([
+            { height: g.offsetHeight + 'px', marginTop: '0px', opacity: 1 },
+            { height: '0px', marginTop: -gapOf(g) + 'px', opacity: 0 }
+          ], { duration: 280, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+        });
+        return Promise.all(groupAnims.map(function (a) { return a.finished; })).then(function () {
+          finish();
+          rowAnims.concat(groupAnims).forEach(function (a) { a.cancel(); });
+          groups.forEach(function (g) { g.style.overflow = ''; });
+        });
+      }).catch(function () {});
+    }
+
+    btn.addEventListener('pointerenter', function () { if (!btn.disabled) setPreview(true); });
+    btn.addEventListener('pointerleave', function () { if (!armed) setPreview(false); });
+    btn.addEventListener('focus', function () { if (!btn.disabled) setPreview(true); });
+    btn.addEventListener('blur', function () { disarm(); setPreview(false); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { disarm(); setPreview(false); }
+    });
+    btn.addEventListener('click', function () {
+      if (btn.disabled) return;
+      if (!armed) { setPreview(true); arm(); }
+      else { disarm(); execute(); }
+    });
+
+    if (undo) {
+      undo.addEventListener('click', function () {
+        toast.classList.remove('is-open');
+        swapAfterText(false);
+        var motion = !reduce.matches && !!btn.animate;
+        removedGroups.forEach(function (g) {
+          g.hidden = false;
+          if (!motion) return;
+          g.style.overflow = 'hidden';
+          g.animate([
+            { height: '0px', marginTop: -gapOf(g) + 'px', opacity: 0 },
+            { height: g.offsetHeight + 'px', marginTop: '0px', opacity: 1 }
+          ], { duration: 300, easing: 'cubic-bezier(.2,0,0,1)' }).finished.then(function () { g.style.overflow = ''; }).catch(function () {});
+        });
+        removed.forEach(function (el, i) {
+          el.hidden = false;
+          el.style.overflow = '';
+          if (motion) {
+            el.animate(
+              [{ opacity: 0, transform: 'translateY(-4px)' }, { opacity: 1, transform: 'none' }],
+              { duration: 260, delay: 120 + i * 40, easing: 'ease-out', fill: 'backwards' }
+            );
+          }
+        });
+        removed = [];
+        removedGroups = [];
+        btn.disabled = false;
+        label.textContent = idleText;
+      });
+    }
+  }
+
+  window.initBlastRadius = initBlastRadius;
+  function boot() { document.querySelectorAll('[data-mi="blast-radius"]').forEach(initBlastRadius); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initBlastRadius"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

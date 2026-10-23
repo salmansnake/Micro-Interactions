@@ -1,0 +1,52 @@
+/* Over-the-Shoulder Cursor — a teammate's cursor that lingers on your paragraph puts on reading glasses.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.oc {
+  --oc-bg: var(--card);
+  --oc-fg: var(--foreground);
+  --oc-muted: var(--muted-foreground);
+  --oc-line: var(--border);
+  --oc-sunken: var(--subtle);
+  --oc-accent: var(--primary);
+  --oc-c: var(--chart-1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--oc-bg);
+  color: var(--oc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.oc p { margin: 0; }
+.oc-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.oc-doc-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.oc-people { display: flex; }
+.oc-people span { display: grid; place-items: center; width: 26px; height: 26px; margin-left: -6px; border-radius: 50%; background: var(--c); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; box-shadow: 0 0 0 2px var(--oc-bg); }
+.oc-doc { position: relative; display: flex; flex-direction: column; gap: 14px; min-height: 190px; padding: 18px 18px 22px; overflow: hidden; border-radius: var(--radius-lg); background: var(--oc-sunken); }
+.oc-p { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
+.oc-edit { margin: -4px -6px !important; padding: 4px 6px; border-radius: var(--radius-md); outline: none; caret-color: var(--oc-accent); }
+.oc-edit:focus-visible, .oc-edit:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-strong) 40%, transparent); }
+.oc-other { color: var(--oc-muted); }
+
+/* The teammate's cursor */
+.oc-cursor { position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; transform: translate(var(--x, 300px), var(--y, 150px)) scale(var(--s, 1)); transform-origin: 3px 2px; }
+.oc-arrow { display: block; width: 20px; height: 20px; filter: drop-shadow(0 1px 2px color-mix(in srgb, var(--black) 25%, transparent)); }
+.oc-tag { position: absolute; left: 14px; top: 16px; display: inline-flex; align-items: center; justify-content: center; min-width: 48px; box-sizing: border-box; height: 22px; padding: 0 8px; border-radius: var(--radius-sm) var(--radius-md) var(--radius-md) var(--radius-md); background: var(--oc-c); color: var(--on-chart); font-size: var(--text-caption); font-weight: 600; white-space: nowrap; }
+.oc-glasses { flex: none; width: 0; height: 10px; margin-right: 0; opacity: 0; transform: translateY(-10px) rotate(-12deg); transition: width var(--spring-ui-duration) var(--spring-ui), margin var(--spring-ui-duration) var(--spring-ui), transform var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base); }
+.oc.is-reading .oc-glasses { width: 28px; margin-right: 5px; opacity: 1; transform: none; }
+.oc.is-squinting .oc-glasses { transform: translateY(1px) scale(1.12); }
+.oc.is-startled .oc-glasses { width: 0; margin-right: 0; opacity: 0; transform: translate(10px, 26px) rotate(140deg); transition-duration: var(--duration-slower); }
+.oc-status { min-height: 18px; color: var(--oc-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-glasses { transition-duration: var(--duration-reduced); }
+}
+.oc [hidden] { display: none !important; }

@@ -1,0 +1,58 @@
+<div class="ce" data-mi="could-be-email" data-start="10:00">
+  <div class="ce-fields">
+    <label class="ce-row">
+      <span class="ce-row-label">Title</span>
+      <input class="ce-title-input" type="text" value="Quick Sync" autocomplete="off" spellcheck="false">
+    </label>
+    <div class="ce-row">
+      <span class="ce-row-label" id="ce-dur-label">Duration</span>
+      <div class="ce-seg" role="radiogroup" aria-labelledby="ce-dur-label">
+        <button type="button" role="radio" data-min="15">15m</button>
+        <button type="button" role="radio" data-min="30" aria-checked="true">30m</button>
+        <button type="button" role="radio" data-min="45">45m</button>
+        <button type="button" role="radio" data-min="60">1h</button>
+      </div>
+    </div>
+    <div class="ce-row">
+      <span class="ce-row-label" id="ce-ppl-label">People</span>
+      <div class="ce-step" role="group" aria-labelledby="ce-ppl-label">
+        <button type="button" class="ce-minus" aria-label="Fewer people">−</button>
+        <output class="ce-people" aria-live="polite">6</output>
+        <button type="button" class="ce-plus" aria-label="More people">+</button>
+      </div>
+    </div>
+    <label class="ce-row ce-row--agenda">
+      <span class="ce-row-label">Agenda</span>
+      <textarea class="ce-agenda" rows="2" placeholder="What needs to be decided?"></textarea>
+    </label>
+  </div>
+
+  <div class="ce-cal" aria-hidden="true">
+    <span class="ce-hour" style="--y: 0">10 AM</span>
+    <span class="ce-hour" style="--y: 52">10:30</span>
+    <span class="ce-hour" style="--y: 104">11 AM</span>
+    <div class="ce-event">
+      <div class="ce-face"><b class="ce-ev-title">Quick Sync</b><span class="ce-ev-time">10:00–10:30 · 6 people</span></div>
+      <div class="ce-env">
+        <span class="ce-flap"></span>
+        <span class="ce-stamp"></span>
+        <span class="ce-env-to">To: 6 people</span>
+        <span class="ce-env-re">Re: Quick Sync</span>
+      </div>
+    </div>
+    <p class="ce-free">Free from 10:00 to 10:30</p>
+  </div>
+
+  <div class="ce-verdict" hidden>
+    <p class="ce-verdict-title">This could have been an email.</p>
+    <p class="ce-verdict-sub">It would give 6 people 3 hours back.</p>
+    <div class="ce-actions">
+      <button type="button" class="ce-send">Send as Email</button>
+      <button type="button" class="ce-keep">It Really Needs a Meeting</button>
+    </div>
+  </div>
+  <div class="ce-foot">
+    <p class="ce-status" role="status" aria-live="polite"></p>
+    <button type="button" class="ce-again" hidden>Start Over</button>
+  </div>
+</div>

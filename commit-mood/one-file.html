@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commit Mood Ring</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .cm so they never affect the rest of your page. */
+.cm {
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-mono: "Geist Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --leading-title: 28px;
+  --press-scale: 0.97;
+  --press-scale-sm: 0.94;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title: 20px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --danger: #ce2c31;
+  --foreground: var(--black);
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
+  --soft-ground: #F3F2EE;
+  --stone: #8A908C;
+  --subtle: var(--soft-ground);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .cm, .dark .cm {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --danger: #d4373c;
+  --foreground: #F3F2EE;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --soft-ground: #0C0D0C;
+  --stone: #7C827E;
+  --subtle: var(--soft-ground);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .cm {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --danger: #d4373c;
+    --foreground: #F3F2EE;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-color: #ffffff;
+    --orange: #FE8C5F;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --soft-ground: #0C0D0C;
+    --stone: #7C827E;
+    --subtle: var(--soft-ground);
+    --white: #161817;
+  }
+}
+
+/* Commit Mood Ring — commit messages slide from "fix" to "pls work" and the mood ring follows them into despair.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.cm {
+  --cm-bg: var(--card);
+  --cm-fg: var(--foreground);
+  --cm-muted: var(--muted-foreground);
+  --cm-line: var(--border);
+  --cm-sunken: var(--subtle);
+  --cm-fill: var(--muted);
+  --cm-accent: var(--primary);
+  --cm-on-accent: var(--primary-foreground);
+  --cm-mood: var(--aqua);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--cm-bg);
+  color: var(--cm-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.cm p { margin: 0; }
+.cm-head { display: flex; align-items: center; gap: 14px; }
+/* The ring: a silver band around a stone that changes color */
+.cm-ring { position: relative; flex: none; width: 52px; height: 52px; border-radius: 50%; background: conic-gradient(from 200deg, var(--muted), var(--card), var(--line-strong), var(--muted), var(--border), var(--muted)); box-shadow: var(--shadow-sm); }
+.cm-stone { position: absolute; inset: 6px; border-radius: 50%; background: var(--cm-mood); box-shadow: var(--shadow-sm); transition: background-color 1.2s var(--ease-out); overflow: hidden; }
+.cm-stone::after { content: ""; position: absolute; inset: -40%; background: conic-gradient(from 0deg, transparent 0 20%, color-mix(in srgb, var(--on-color) 35%, transparent) 28%, transparent 36% 70%, color-mix(in srgb, var(--on-color) 20%, transparent) 78%, transparent 86%); animation: cm-swirl 6s linear infinite; }
+@keyframes cm-swirl { to { transform: rotate(1turn); } }
+.cm.is-shift .cm-ring { animation: cm-pulse var(--spring-pop-duration) var(--spring-pop); }
+@keyframes cm-pulse { 30% { transform: scale(1.12); } }
+.cm-mood { font-size: var(--text-title); line-height: var(--leading-title); font-weight: 700; letter-spacing: var(--tracking-title); color: color-mix(in srgb, var(--cm-mood) 45%, var(--cm-fg)); transition: color 1.2s var(--ease-out); }
+.cm-sub { color: var(--cm-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+.cm-log { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--cm-sunken); }
+.cm-log li { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 40px; padding: 0 14px; animation: cm-in var(--spring-ui-duration) var(--spring-ui) both; }
+.cm-log li + li::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--cm-line); transform: scaleY(0.5); transform-origin: top; }
+@keyframes cm-in { from { opacity: 0; transform: translateY(-6px); } }
+.cm-log code { color: var(--cm-muted); font: var(--text-caption)/var(--leading-caption) var(--font-mono); }
+.cm-msg { overflow: hidden; font: var(--text-small)/var(--leading-small) var(--font-mono); text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0; }
+.cm-log time { color: var(--cm-muted); font-size: var(--text-caption); font-variant-numeric: tabular-nums; }
+.cm-log .cm-pause { display: block; min-height: 0; padding: 8px 14px; color: var(--cm-muted); font-size: var(--text-caption); text-align: center; }
+
+.cm-form { display: flex; gap: 8px; }
+.cm-input { flex: 1 1 0; width: 0; min-width: 0; height: 44px; padding: 0 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: inherit; font: var(--text-body)/var(--leading-body) var(--font-mono); letter-spacing: 0; }
+.cm-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cm-input::placeholder { color: var(--cm-muted); }
+.cm-commit { flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--cm-accent); color: var(--cm-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.cm-commit:active { transform: scale(var(--press-scale)); }
+.cm-commit:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cm-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cm-chips button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--cm-fill); color: var(--cm-fg); font: var(--text-small)/var(--leading-small) var(--font-mono); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.cm-chips button:active { transform: scale(var(--press-scale-sm)); }
+.cm-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cm-care { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--cm-mood) 12%, transparent); animation: cm-in var(--spring-ui-duration) var(--spring-ui) both; }
+.cm-care-text { font-size: var(--text-body); line-height: var(--leading-body); }
+.cm-break { align-self: flex-start; height: 36px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--cm-fg); color: var(--cm-bg); font: inherit; font-weight: 600; cursor: pointer; }
+.cm-break:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-stone::after, .cm.is-shift .cm-ring, .cm-log li, .cm-care { animation: none; }
+}
+.cm [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="cm" data-mi="commit-mood">
+  <header class="cm-head">
+    <span class="cm-ring" aria-hidden="true"><span class="cm-stone"></span></span>
+    <div class="cm-head-text">
+      <p class="cm-mood" aria-live="polite">Calm</p>
+      <p class="cm-sub">Your last few commits, read as feelings.</p>
+    </div>
+  </header>
+  <ol class="cm-log" aria-label="Recent commits">
+    <li><code>a1f9c2e</code><span class="cm-msg">Add invoice export to billing settings</span><time>2:01 PM</time></li>
+  </ol>
+  <form class="cm-form">
+    <input class="cm-input" type="text" placeholder="Commit message" aria-label="Commit message" autocomplete="off" spellcheck="false">
+    <button type="submit" class="cm-commit">Commit</button>
+  </form>
+  <div class="cm-chips" aria-label="Suggested messages">
+    <button type="button">fix</button><button type="button">fix again</button><button type="button">final fix</button><button type="button">pls work</button><button type="button">why</button>
+  </div>
+  <div class="cm-care" hidden>
+    <p class="cm-care-text"></p>
+    <button type="button" class="cm-break">Take a Break</button>
+  </div>
+</div>
+
+
+<script>
+/* Commit Mood Ring — vanilla JS. Auto-initializes every [data-mi="commit-mood"].
+   Each message gets a despair score from its words; the mood is the sum over the last four commits.
+   Call window.initCommitMood(el) for elements added later. */
+(function () {
+  'use strict';
+  var RULES = [
+    [/\bfix(e[sd])?\b/i, 1], [/\b(again|another|more)\b/i, 2], [/\b(final|actually|for real|real)\b/i, 2],
+    [/\b(pls|plz|please)\b/i, 3], [/\b(why|how|wtf)\b|\?{2,}/i, 3], [/\brevert\b/i, 2], [/!{2,}/, 1], [/\b(work|works|working)\b/i, 1]
+  ];
+  // Mood scale from calm to accepting fate. Colors are system colors, blended in order.
+  var MOODS = [
+    [0, 'Calm', 'aqua'], [2, 'Focused', 'sage'], [4, 'Concerned', 'pink'],
+    [6, 'Frustrated', 'orange'], [8, 'Bargaining', 'danger'], [11, 'Acceptance', 'stone']
+  ];
+  function score(msg) {
+    var s = 0;
+    RULES.forEach(function (r) { if (r[0].test(msg)) s += r[1]; });
+    var words = msg.trim().split(/\s+/).length;
+    if (words >= 4 && /^[A-Z]/.test(msg) && s < 2) s -= 2; // a real sentence calms things down
+    else if (msg.trim().length < 10) s += 1;
+    return s;
+  }
+  function hex() { return Math.random().toString(16).slice(2, 9).padEnd(7, '0'); }
+
+  function initCommitMood(root) {
+    if (!root || root.__miMood) return;
+    root.__miMood = true;
+    var log = root.querySelector('.cm-log'), form = root.querySelector('.cm-form'), input = root.querySelector('.cm-input');
+    var moodEl = root.querySelector('.cm-mood'), care = root.querySelector('.cm-care'), careText = root.querySelector('.cm-care-text');
+    var brk = root.querySelector('.cm-break');
+    var recent = [], minutes = 121, fixes = 0, last = 'Calm', since = 0;
+
+    function clock(m) { var h = Math.floor(m / 60) % 12 || 12; return h + ':' + String(m % 60).padStart(2, '0') + ' PM'; }
+
+    function render() {
+      var total = Math.max(0, recent.slice(-4).reduce(function (a, b) { return a + b; }, 0));
+      var mood = MOODS[0];
+      MOODS.forEach(function (m) { if (total >= m[0]) mood = m; });
+      root.style.setProperty('--cm-mood', 'var(--' + mood[2] + ')');
+      if (mood[1] !== last) {
+        moodEl.textContent = mood[1];
+        root.classList.remove('is-shift'); void root.offsetWidth; root.classList.add('is-shift');
+        last = mood[1];
+      }
+      var low = total >= 8;
+      care.hidden = !low;
+      if (low) careText.textContent = 'That’s ' + fixes + ' “fix” commits in ' + (minutes - since) + ' minutes. The bug will still be there after a glass of water.';
+    }
+
+    function commit(msg) {
+      msg = msg.trim();
+      if (!msg) return;
+      minutes += 1 + Math.floor(Math.random() * 3);
+      if (/\bfix/i.test(msg)) fixes++;
+      recent.push(score(msg));
+      var li = document.createElement('li');
+      var c = document.createElement('code'); c.textContent = hex();
+      var s = document.createElement('span'); s.className = 'cm-msg'; s.textContent = msg;
+      var t = document.createElement('time'); t.textContent = clock(minutes);
+      li.append(c, s, t);
+      log.appendChild(li);
+      while (log.children.length > 5) log.removeChild(log.firstElementChild);
+      render();
+    }
+
+    form.addEventListener('submit', function (e) { e.preventDefault(); commit(input.value); input.value = ''; input.focus(); });
+    root.querySelectorAll('.cm-chips button').forEach(function (b) { b.addEventListener('click', function () { commit(b.textContent); }); });
+    brk.addEventListener('click', function () {
+      recent = []; fixes = 0; minutes += 10; since = minutes;
+      var li = document.createElement('li'); li.className = 'cm-pause'; li.textContent = '10 minute break · water consumed';
+      log.appendChild(li);
+      while (log.children.length > 5) log.removeChild(log.firstElementChild);
+      render();
+      input.focus();
+    });
+    since = minutes;
+    render();
+  }
+
+  window.initCommitMood = initCommitMood;
+  function boot() { document.querySelectorAll('[data-mi="commit-mood"]').forEach(initCommitMood); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

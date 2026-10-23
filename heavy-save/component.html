@@ -1,0 +1,36 @@
+<form class="hs is-clean" data-mi="heavy-save" novalidate>
+  <p class="hs-header">Workspace</p>
+  <div class="hs-list">
+    <label class="hs-row">
+      <span class="hs-label"><i class="hs-dirty" aria-hidden="true"></i>Name</span>
+      <input type="text" id="hs-name" name="name" value="Northwind Studio" autocomplete="off">
+    </label>
+    <label class="hs-row">
+      <span class="hs-label"><i class="hs-dirty" aria-hidden="true"></i>URL</span>
+      <input type="text" id="hs-slug" name="slug" value="northwind" autocomplete="off">
+    </label>
+    <label class="hs-row">
+      <span class="hs-label"><i class="hs-dirty" aria-hidden="true"></i>Time Zone</span>
+      <select id="hs-tz" name="tz">
+        <option>America/Chicago</option>
+        <option>America/New_York</option>
+        <option>Europe/London</option>
+        <option>Asia/Tokyo</option>
+      </select>
+    </label>
+    <label class="hs-row">
+      <span class="hs-label"><i class="hs-dirty" aria-hidden="true"></i>Weekly Digest</span>
+      <span class="hs-switch">
+        <input type="checkbox" role="switch" id="hs-digest" name="digest" checked>
+        <span class="hs-track"></span><span class="hs-knob"></span>
+      </span>
+    </label>
+  </div>
+  <div class="hs-bar">
+    <button type="button" class="hs-leave">Go to Billing</button>
+    <p class="hs-note" role="status" aria-live="polite"></p>
+    <button type="submit" class="hs-btn" aria-disabled="true" aria-label="All changes saved">
+      <span class="hs-face"><span class="hs-btn-label">Saved</span><span class="hs-badge">0</span></span>
+    </button>
+  </div>
+</form>

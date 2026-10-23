@@ -1,0 +1,120 @@
+/* Pocket Progress — a long task's progress sheet shrinks into a pill so you can keep working.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.pp {
+  --pp-bg: var(--card);
+  --pp-fg: var(--foreground);
+  --pp-muted: var(--muted-foreground);
+  --pp-line: var(--border);
+  --pp-sunken: var(--subtle);
+  --pp-fill: var(--muted);
+  --pp-accent: var(--primary);
+  --pp-on-accent: var(--primary-foreground);
+  --pp-green: var(--success);
+  --pp-glass: var(--frost);
+  --pp-glass-edge: var(--frost-border);
+  --pp-glass-rim: var(--frost-border);
+  --pp-glass-shadow: var(--shadow-lg);
+  --pp-p: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+  min-height: 330px;
+  box-sizing: border-box;
+  padding: 20px 20px 72px;
+  overflow: hidden;
+  background: var(--pp-bg);
+  color: var(--pp-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.pp-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pp-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.pp-export, .pp-pocket, .pp-cancel {
+  height: 34px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--pp-accent);
+  color: var(--pp-on-accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base);
+}
+.pp-export:disabled { opacity: 0.4; cursor: default; }
+.pp-cancel { background: var(--pp-fill); color: var(--pp-fg); }
+.pp-export:active, .pp-pocket:active, .pp-cancel:active { transform: scale(var(--press-scale)); }
+.pp-export:focus-visible, .pp-pocket:focus-visible, .pp-cancel:focus-visible, .pp-pill:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.pp-rows { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--pp-sunken); }
+.pp-rows li { position: relative; display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; cursor: pointer; border-radius: var(--radius-lg); outline: none; transition: background-color var(--duration-fast); }
+.pp-rows li + li::before { content: ""; position: absolute; top: 0; left: 52px; right: 0; height: 1px; background: var(--pp-line); transform: scaleY(0.5); transform-origin: top; }
+.pp-rows li:hover { background: var(--pp-fill); }
+.pp-rows li:focus-visible { box-shadow: inset 0 0 0 2px var(--pp-accent); }
+.pp-rows li.is-picked { background: color-mix(in srgb, var(--brand) 14%, transparent); }
+.pp-rows small { margin-left: auto; color: var(--pp-muted); font-size: var(--text-small); }
+.pp-sq { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+/* The sheet */
+.pp-sheet {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 3;
+  padding: 18px;
+  border-radius: var(--radius-xl); border: 1px solid var(--border);
+  background: var(--pp-bg);
+  box-shadow: 0 0 0 1px var(--pp-line), var(--shadow-xl);
+  transform-origin: 100% 100%;
+}
+.pp-sheet.is-in { animation: pp-up var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes pp-up { from { opacity: 0; transform: translateY(24px) scale(var(--press-scale)); } }
+.pp-sheet-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.pp-sheet-sub { margin: 2px 0 14px; color: var(--pp-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.pp-track { height: 6px; overflow: hidden; border-radius: var(--radius-xs); background: var(--pp-fill); }
+.pp-track i { display: block; height: 100%; border-radius: var(--radius-xs); background: var(--pp-accent); transform-origin: left; transform: scaleX(var(--pp-p)); }
+.pp-sheet-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+/* The pill: Frost, docked bottom-right */
+.pp-pill {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px 0 10px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--pp-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: inset 0 0 0 1px var(--frost-border), var(--pp-glass-shadow);
+  color: var(--pp-fg);
+  font: inherit;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transform-origin: 100% 100%;
+}
+.pp-ring { width: 20px; height: 20px; transform: rotate(-90deg); }
+.pp-ring circle { fill: none; stroke: var(--pp-fill); stroke-width: 2.5; }
+.pp-ring .pp-ring-fg { stroke: var(--pp-accent); stroke-linecap: round; stroke-dasharray: 50.27; stroke-dashoffset: calc(50.27 * (1 - var(--pp-p))); }
+.pp.is-done .pp-pill { background: var(--pp-green); color: var(--on-color); box-shadow: var(--pp-glass-shadow); }
+.pp.is-done .pp-ring circle { stroke: color-mix(in srgb, var(--on-color) 40%, transparent); }
+.pp.is-done .pp-ring .pp-ring-fg { stroke: var(--on-color); }
+.pp-pill.is-ping { animation: pp-ping var(--spring-pop-duration) var(--spring-pop); }
+@keyframes pp-ping { 30% { transform: scale(1.12); } 100% { transform: none; } }
+.pp-status { position: absolute; left: 20px; bottom: 28px; margin: 0; max-width: 55%; color: var(--pp-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+@media (prefers-reduced-motion: reduce) {
+  .pp-sheet.is-in, .pp-pill.is-ping { animation: none; }
+}
+.pp [hidden] { display: none !important; }

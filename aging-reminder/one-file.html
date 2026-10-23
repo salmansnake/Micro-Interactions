@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aging Reminder</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .ar so they never affect the rest of your page. */
+.ar {
+  --duration-reduced: 120ms;
+  --duration-slower: 480ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale: 0.97;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --amber-11: #ab6400;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: var(--black);
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --olive-700: #6F6228;
+  --on-color: #ffffff;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --warning-text: #a15e00;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .ar, .dark .ar {
+  --amber-11: #ffca16;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --olive-700: #CBBB7E;
+  --on-color: #ffffff;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --warning-text: var(--amber-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .ar {
+    --amber-11: #ffca16;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --olive: #AA9856;
+    --olive-700: #CBBB7E;
+    --on-color: #ffffff;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --warning-text: var(--amber-11);
+    --white: #161817;
+  }
+}
+
+/* Aging Reminder — every snooze makes the reminder visibly older: yellowed, curled, taped, stained.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ar {
+  --ar-bg: var(--card);
+  --ar-fg: var(--foreground);
+  --ar-muted: var(--muted-foreground);
+  --ar-line: var(--border);
+  --ar-sunken: var(--subtle);
+  --ar-fill: var(--muted);
+  --ar-accent: var(--primary);
+  --ar-on-accent: var(--primary-foreground);
+  --ar-aged: color-mix(in srgb, var(--olive) 38%, var(--card));
+  --ar-age: 0;
+  --ar-tilt: 0deg;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ar-bg);
+  color: var(--ar-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ar p { margin: 0; }
+.ar-stage { padding: 18px 14px; border-radius: var(--radius-xl); background: var(--ar-sunken); }
+/* The card. Age blends white paper toward old paper and adds wear. */
+.ar-card {
+  position: relative;
+  padding: 16px 18px 18px;
+  border-radius: var(--radius-lg);
+  background:
+    repeating-linear-gradient(17deg, transparent 0 22px, color-mix(in srgb, var(--olive-700) calc(var(--ar-age) * 6%), transparent) 22px 23px, transparent 23px 51px),
+    repeating-linear-gradient(-31deg, transparent 0 34px, color-mix(in srgb, var(--olive-700) calc(var(--ar-age) * 5%), transparent) 34px 35px, transparent 35px 70px),
+    color-mix(in srgb, var(--ar-aged) calc(var(--ar-age) * 100%), var(--ar-bg));
+  color: var(--foreground);
+  box-shadow: var(--shadow-xs);
+  transform: rotate(var(--ar-tilt));
+  transition: transform var(--spring-pop-duration) var(--spring-pop), background-color var(--duration-slower), box-shadow var(--duration-slower), filter var(--duration-slower);
+  filter: saturate(calc(1 - var(--ar-age) * 0.25));
+}
+/* The corner curls up as it ages */
+.ar-card::after { content: ""; position: absolute; right: 0; bottom: 0; width: calc(var(--ar-age) * 34px); height: calc(var(--ar-age) * 34px); border-radius: var(--radius-lg) 0 var(--radius-lg) 0; background: linear-gradient(315deg, var(--ar-stage-bg, var(--subtle)) 50%, color-mix(in srgb, var(--olive) 60%, var(--ar-bg)) 50%, color-mix(in srgb, var(--olive) 22%, var(--ar-bg)) 100%); box-shadow: var(--shadow-xs); transition: width var(--spring-ui-duration) var(--spring-ui), height var(--spring-ui-duration) var(--spring-ui); }
+.ar-tape { position: absolute; left: 50%; top: -10px; width: 72px; height: 22px; margin-left: -36px; background: color-mix(in srgb, var(--on-color) 55%, transparent); box-shadow: var(--shadow-xs); transform: rotate(-4deg) scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.ar.is-taped .ar-tape { transform: rotate(-4deg) scale(1); }
+.ar-stain { position: absolute; right: 18px; top: 10px; width: 56px; height: 56px; border-radius: 50%; box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--olive-700) 22%, transparent), inset 0 0 0 7px color-mix(in srgb, var(--olive-700) 6%, transparent); opacity: 0; transform: scale(0.6); transition: opacity var(--duration-slower), transform var(--duration-slower); pointer-events: none; }
+.ar.is-stained .ar-stain { opacity: 1; transform: none; }
+.ar-kicker { color: var(--warning-text); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 700; }
+.ar-task { margin-top: 4px !important; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); opacity: calc(1 - var(--ar-age) * 0.2); }
+.ar-since { margin-top: 8px !important; color: var(--muted-foreground); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+.ar.is-done .ar-card { --ar-age: 0; --ar-tilt: 0deg; }
+.ar.is-done .ar-task { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--muted-foreground); }
+.ar.is-done .ar-card { animation: ar-fresh var(--spring-pop-duration) var(--spring-pop); }
+@keyframes ar-fresh { 30% { transform: scale(1.04); } }
+
+.ar-actions { display: flex; gap: 8px; }
+.ar-actions button { flex: 1; min-width: 0; height: 44px; padding: 0 12px; white-space: nowrap; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ar-snooze { background: var(--ar-fill); color: var(--ar-fg); }
+.ar-done { background: var(--ar-accent); color: var(--ar-on-accent); }
+.ar-actions button:active { transform: scale(var(--press-scale)); }
+.ar-actions button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ar-status { margin: 0; color: var(--ar-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* No message, no space: the card grows only when there is something to say */
+.ar-status:empty { display: none; }
+/* Narrow cards: slightly smaller button text so "Snooze (Seriously?)" stays on one line */
+.ar { container-type: inline-size; }
+@container (max-width: 320px) { .ar-actions button { padding: 0 8px; font-size: var(--text-small); } }
+.ar-short { display: none; }
+@container (max-width: 260px) { .ar-long { display: none; } .ar-short { display: inline; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ar-card, .ar-card::after, .ar-tape, .ar-stain { transition-duration: var(--duration-reduced); }
+  .ar.is-done .ar-card { animation: none; }
+}
+.ar [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="ar" data-mi="aging-reminder" data-who="Priya" data-start="10">
+  <div class="ar-stage">
+    <div class="ar-card">
+      <span class="ar-tape" aria-hidden="true"></span>
+      <span class="ar-stain" aria-hidden="true"></span>
+      <p class="ar-kicker">Reminder</p>
+      <p class="ar-task">Reply to Priya about the invoice</p>
+      <p class="ar-since">Due today at 10:00 AM</p>
+    </div>
+  </div>
+  <div class="ar-actions">
+    <button type="button" class="ar-snooze">Snooze 1 Hour</button>
+    <button type="button" class="ar-done">Done</button>
+  </div>
+  <p class="ar-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Aging Reminder — vanilla JS. Auto-initializes every [data-mi="aging-reminder"].
+   Age runs 0–1 over eight snoozes: paper yellows, the corner curls, tape appears at 3, a coffee ring at 5.
+   Call window.initAgingReminder(el) for elements added later. */
+(function () {
+  'use strict';
+  var MAX = 8;
+  var NOTES = { 3: 'It’s been taped back up.', 5: 'This reminder has seen things.', 7: 'It’s older than some of your projects.', 8: 'It’s now a historical document.' };
+
+  function initAgingReminder(root) {
+    if (!root || root.__miAge) return;
+    root.__miAge = true;
+    var who = root.getAttribute('data-who') || 'them';
+    var startHour = Number(root.getAttribute('data-start')) || 10;
+    var since = root.querySelector('.ar-since'), status = root.querySelector('.ar-status');
+    var snooze = root.querySelector('.ar-snooze'), done = root.querySelector('.ar-done');
+    var stage = root.querySelector('.ar-stage');
+    var n = 0, finished = false;
+
+    // The curl reveals the stage behind it, so it needs that color as an opaque value.
+    function nums(c) { return (c.match(/[\d.]+/g) || []).map(Number); }
+    function stageColor() {
+      var f = nums(getComputedStyle(stage).backgroundColor), b = nums(getComputedStyle(root).backgroundColor);
+      var a = f.length > 3 ? f[3] : 1;
+      root.style.setProperty('--ar-stage-bg', 'rgb(' + [0, 1, 2].map(function (i) { return Math.round(f[i] * a + (b[i] || 255) * (1 - a)); }).join(', ') + ')');
+    }
+    stageColor();
+    if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { setTimeout(stageColor, 50); });
+
+    function hour(h) { var hh = h % 24, ap = hh >= 12 ? 'PM' : 'AM'; return (hh % 12 || 12) + ':00 ' + ap; }
+
+    function render() {
+      var age = Math.min(1, n / MAX);
+      root.style.setProperty('--ar-age', age.toFixed(3));
+      root.style.setProperty('--ar-tilt', (n === 0 ? 0 : (n % 2 ? -1 : 1) * Math.min(3.5, 0.6 + n * 0.4)).toFixed(2) + 'deg');
+      root.classList.toggle('is-taped', n >= 3);
+      root.classList.toggle('is-stained', n >= 5);
+      since.textContent = n === 0 ? 'Due today at ' + hour(startHour)
+        : 'Snoozed ' + n + (n === 1 ? ' time' : ' times') + '. It’s now ' + hour(startHour + n) + (startHour + n >= 24 ? ', tomorrow' : '') + '.';
+      // Very narrow cards show just "Seriously?" so the label always fits on one line.
+      snooze.innerHTML = n >= MAX ? '<span class="ar-long">Snooze (Seriously?)</span><span class="ar-short">Seriously?</span>' : 'Snooze 1 Hour';
+      status.textContent = NOTES[n] || '';
+    }
+
+    snooze.addEventListener('click', function () { if (finished) return; n++; render(); });
+    done.addEventListener('click', function () {
+      if (finished) {
+        finished = false; n = 0;
+        root.classList.remove('is-done');
+        done.textContent = 'Done'; snooze.disabled = false;
+        render();
+        return;
+      }
+      finished = true;
+      root.classList.add('is-done');
+      snooze.disabled = true;
+      done.textContent = 'Undo';
+      status.textContent = n === 0 ? 'Done on time. Who are you?' : 'Done after ' + n + (n === 1 ? ' snooze' : ' snoozes') + '. ' + who + ' will be so relieved.';
+    });
+    render();
+  }
+
+  window.initAgingReminder = initAgingReminder;
+  function boot() { document.querySelectorAll('[data-mi="aging-reminder"]').forEach(initAgingReminder); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

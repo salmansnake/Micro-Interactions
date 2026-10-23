@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Due Heat · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Due Heat — due dates warm up continuously as they approach, pulsing faster the closer they get.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.dh {
+  --dh-bg: var(--card);
+  --dh-fg: var(--foreground);
+  --dh-muted: var(--muted-foreground);
+  --dh-line: var(--border);
+  --dh-sunken: var(--subtle);
+  --dh-fill: var(--muted);
+  --dh-accent: var(--primary);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--dh-bg);
+  color: var(--dh-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.dh-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.dh-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.dh-now { margin: 0; color: var(--dh-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.dh-list { margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--dh-sunken); }
+.dh-row { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 0 12px 0 16px; }
+.dh-row + .dh-row::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; height: 1px; background: var(--dh-line); transform: scaleY(0.5); transform-origin: top; }
+.dh-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* --dh-c is set by JS from the heat: gray → blue → orange → red, never through green. */
+.dh-chip {
+  --dh-c: var(--stone);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  padding: 4px 10px 4px 8px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--dh-c) 14%, transparent);
+  color: color-mix(in srgb, var(--dh-c) 72%, var(--black));
+  font-size: var(--text-small);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: background-color var(--duration-slow), color var(--duration-slow);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dh-chip { color: color-mix(in srgb, var(--dh-c) 70%, var(--on-color)); background: color-mix(in srgb, var(--dh-c) 22%, transparent); } }
+:root[data-theme="dark"] .dh-chip { color: color-mix(in srgb, var(--dh-c) 70%, var(--on-color)); background: color-mix(in srgb, var(--dh-c) 22%, transparent); }
+.dh-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--dh-c); }
+/* The pulse speeds up with heat; nothing pulses until the last day. */
+.dh-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: inherit; opacity: 0; }
+.dh-chip.is-warm .dh-dot::after { animation: dh-pulse var(--beat, 2s) var(--ease-out) infinite; }
+@keyframes dh-pulse { 0% { opacity: 0.6; transform: scale(1); } 100% { opacity: 0; transform: scale(2.6); } }
+.dh-chip.is-over { --dh-c: var(--danger); }
+.dh-row.is-overdue-new .dh-chip { animation: dh-shake var(--duration-slower) var(--ease-out); }
+@keyframes dh-shake { 25% { transform: translateX(-4px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-2px); } }
+.dh-time { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.dh-time-label { color: var(--dh-muted); font-size: var(--text-small); }
+.dh-range { width: 100%; accent-color: var(--dh-accent); }
+.dh-range:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: var(--radius-xs); }
+@media (prefers-reduced-motion: reduce) {
+  .dh-chip.is-warm .dh-dot::after, .dh-row.is-overdue-new .dh-chip { animation: none; }
+}
+.dh [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Due Heat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="dh" data-mi="due-heat">
+  <div class="dh-head">
+    <p class="dh-title">This Week</p>
+    <p class="dh-now" aria-live="polite"></p>
+  </div>
+  <ul class="dh-list">
+    <li class="dh-row" data-due-hours="70"><span class="dh-name">Draft Q4 roadmap</span><span class="dh-chip"><i class="dh-dot"></i><span class="dh-left"></span></span></li>
+    <li class="dh-row" data-due-hours="30"><span class="dh-name">Review pricing copy</span><span class="dh-chip"><i class="dh-dot"></i><span class="dh-left"></span></span></li>
+    <li class="dh-row" data-due-hours="9"><span class="dh-name">Send investor update</span><span class="dh-chip"><i class="dh-dot"></i><span class="dh-left"></span></span></li>
+    <li class="dh-row" data-due-hours="2.5"><span class="dh-name">Approve design QA</span><span class="dh-chip"><i class="dh-dot"></i><span class="dh-left"></span></span></li>
+  </ul>
+  <div class="dh-time">
+    <label class="dh-time-label" for="dh-range">Move time forward</label>
+    <input id="dh-range" class="dh-range" type="range" min="0" max="72" step="0.5" value="0">
+  </div>
+</div>
+</div>
+<script>
+/* Due Heat — vanilla JS. Auto-initializes every [data-mi="due-heat"].
+   Rows set data-due-hours (from now) or data-due (an ISO date). The range moves a pretend clock for the demo.
+   Call window.initDueHeat(el) for elements added later. */
+(function () {
+  'use strict';
+  var WINDOW_H = 72; // heat starts rising 3 days out
+  // Color stops along the heat scale (muted, info blue, warning amber, danger red; text tokens), blended in sRGB.
+  var STOPS = [[0, 'muted-foreground'], [0.3, 'info-text'], [0.72, 'warning-text'], [1, 'danger-text']];
+  // Reads a token as [r, g, b] so the scale follows the theme (Outcraft tokens, never hardcoded colors).
+  function tokenRGB(root, name) {
+    var p = document.createElement('span'); p.style.cssText = 'display:none;color:var(--' + name + ')';
+    root.appendChild(p); var m = getComputedStyle(p).color.match(/[\d.]+/g); root.removeChild(p);
+    return m ? m.slice(0, 3).map(Number) : [128, 128, 128];
+  }
+  // Re-read the tokens when the theme changes.
+  function onTheme(fn) {
+    new MutationObserver(function () { requestAnimationFrame(fn); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+    if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fn);
+  }
+  function colorAt(h, root) {
+    var S = STOPS.map(function (st) { return [st[0], tokenRGB(root, st[1])]; });
+    for (var i = 1; i < S.length; i++) {
+      if (h <= S[i][0]) {
+        var a = S[i - 1], b = S[i], t = (h - a[0]) / (b[0] - a[0]);
+        return 'rgb(' + a[1].map(function (v, k) { return Math.round(v + (b[1][k] - v) * t); }).join(', ') + ')';
+      }
+    }
+    return 'rgb(' + S[S.length - 1][1].join(', ') + ')';
+  }
+
+  function left(hours) {
+    var a = Math.abs(hours);
+    var txt = a < 1 ? Math.max(1, Math.round(a * 60)) + 'm' : a < 48 ? Math.round(a) + 'h' : Math.round(a / 24) + 'd';
+    return hours < 0 ? txt + ' overdue' : 'in ' + txt;
+  }
+
+  function initDueHeat(root) {
+    if (!root || root.__miHeat) return;
+    root.__miHeat = true;
+    var start = Date.now();
+    var rows = Array.prototype.slice.call(root.querySelectorAll('.dh-row')).map(function (r) {
+      var due = r.hasAttribute('data-due') ? new Date(r.getAttribute('data-due')).getTime() : start + Number(r.getAttribute('data-due-hours')) * 3600000;
+      return { el: r, chip: r.querySelector('.dh-chip'), label: r.querySelector('.dh-left'), due: due, over: false };
+    });
+    var range = root.querySelector('.dh-range');
+    var now = root.querySelector('.dh-now');
+
+    function render() {
+      var shift = range ? Number(range.value) : 0;
+      var t = start + shift * 3600000;
+      now.textContent = shift ? '+' + (shift % 1 ? shift.toFixed(1) : shift) + ' hours' : 'Now';
+      rows.forEach(function (r) {
+        var hours = (r.due - t) / 3600000;
+        // Heat eases in: barely warm three days out, hot in the final hours.
+        var heat = hours <= 0 ? 1 : Math.pow(Math.max(0, 1 - hours / WINDOW_H), 2.2);
+        r.chip.style.setProperty('--dh-c', colorAt(heat, root));
+        r.chip.classList.toggle('is-warm', hours > 0 && hours < 24);
+        r.chip.style.setProperty('--beat', (0.6 + Math.max(0, hours) / 24 * 1.8).toFixed(2) + 's');
+        var over = hours <= 0;
+        r.chip.classList.toggle('is-over', over);
+        if (over && !r.over) { r.el.classList.remove('is-overdue-new'); void r.el.offsetWidth; r.el.classList.add('is-overdue-new'); }
+        r.over = over;
+        r.label.textContent = left(hours);
+        r.chip.setAttribute('aria-label', 'Due ' + left(hours));
+      });
+    }
+
+    if (range) range.addEventListener('input', render);
+    setInterval(render, 30000); // real time keeps warming things up
+    render();
+    onTheme(render);
+  }
+
+  window.initDueHeat = initDueHeat;
+  function boot() { document.querySelectorAll('[data-mi="due-heat"]').forEach(initDueHeat); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initDueHeat"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

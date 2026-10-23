@@ -1,0 +1,99 @@
+/* Honest Skeleton — shows what is known at once, says when a part is slow, and admits failure.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.hk {
+  --hk-bg: var(--card);
+  --hk-fg: var(--foreground);
+  --hk-muted: var(--muted-foreground);
+  --hk-line: var(--border);
+  --hk-sunken: var(--subtle);
+  --hk-fill: var(--muted);
+  --hk-accent: var(--primary);
+  --hk-warn: var(--warning);
+  --hk-danger-text: var(--danger-text);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+  color: var(--hk-fg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.hk-card { display: flex; flex-direction: column; gap: 18px; padding: 20px; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--hk-bg); }
+.hk-head { display: flex; align-items: center; gap: 12px; }
+.hk-avatar { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-lg); background: var(--hk-accent); color: var(--primary-foreground); font-size: var(--text-title); font-weight: 700; }
+.hk-id { min-width: 0; flex: 1; }
+.hk-name { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+.hk-label { margin: 0 0 8px; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; letter-spacing: normal; }
+.hk-part { position: relative; }
+
+/* Skeleton blocks: the shimmer speed is the expected wait */
+.hk-sk {
+  display: block;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--hk-fill) 0%, color-mix(in srgb, var(--hk-fill) 40%, transparent) 50%, var(--hk-fill) 100%) 0 0 / 200% 100%;
+  animation: hk-shimmer var(--hk-speed, 1.2s) linear infinite;
+}
+@keyframes hk-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.hk-wait {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  background: var(--hk-bg);
+  box-shadow: 0 0 0 1px var(--hk-line), var(--shadow-md);
+  color: var(--hk-muted);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  animation: hk-in var(--spring-ui-duration) var(--spring-ui) both;
+}
+.hk-wait::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--hk-warn); vertical-align: 1px; }
+@keyframes hk-in { from { opacity: 0; transform: translateY(-50%) scale(0.9); } }
+
+/* Arrival: content develops out of the skeleton */
+.hk-real { animation: hk-develop var(--spring-panel-duration) var(--spring-panel) both; }
+@keyframes hk-develop { from { opacity: 0; filter: blur(6px); transform: translateY(3px); } }
+
+.hk-meta { margin: 0; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.hk-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.hk-stat { display: flex; flex-direction: column; gap: 6px; min-height: 58px; box-sizing: border-box; padding: 10px 12px; border-radius: var(--radius-lg); background: var(--hk-sunken); }
+.hk-stat b { font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; font-variant-numeric: tabular-nums; }
+.hk-stat span { color: var(--hk-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.hk-rows { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.hk-rows li { display: flex; align-items: center; gap: 10px; min-height: 24px; }
+.hk-rows i { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--hk-fill); }
+.hk-rows .hk-who { display: grid; place-items: center; color: var(--on-chart); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
+.hk-rows small { margin-left: auto; color: var(--hk-muted); font-size: var(--text-caption); white-space: nowrap; }
+.hk-bars { display: flex; align-items: flex-end; gap: 4px; height: 72px; }
+.hk-bars span { flex: 1; border-radius: var(--radius-xs) var(--radius-xs) var(--radius-xs) var(--radius-xs); background: var(--hk-accent); opacity: 0.85; transform-origin: bottom; animation: hk-bar var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes hk-bar { from { transform: scaleY(0); } }
+.hk-error { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 72px; box-sizing: border-box; padding: 12px 14px; border-radius: var(--radius-lg); background: var(--hk-sunken); color: var(--hk-danger-text); font-size: var(--text-small); line-height: var(--leading-small); }
+.hk-error button, .hk-reload {
+  flex: none;
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--hk-fill);
+  color: var(--hk-fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.hk-error button:active, .hk-reload:active { transform: scale(var(--press-scale)); }
+.hk-error button:focus-visible, .hk-reload:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.hk-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; }
+.hk-note { margin: 0; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+@media (prefers-reduced-motion: reduce) {
+  .hk-sk { animation: none; }
+  .hk-real, .hk-wait, .hk-bars span { animation: none; }
+}
+.hk [hidden] { display: none !important; }

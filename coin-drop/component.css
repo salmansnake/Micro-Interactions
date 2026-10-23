@@ -1,0 +1,147 @@
+/* Coin Drop — switching to yearly throws the savings into each plan as coins.
+   Outcraft Design System v2: one card holding the segmented control and the plan cards. */
+.cd {
+  --cd-bg: var(--card);
+  --cd-fg: var(--foreground);
+  --cd-muted: var(--muted-foreground);
+  --cd-line: var(--border);
+  --cd-track: var(--subtle);
+  --cd-thumb: var(--raised);
+  --cd-accent: var(--primary);
+  --cd-success: var(--success);
+  --cd-success-text: var(--success-text);
+  --cd-success-soft: var(--success-subtle);
+  --cd-gold: var(--olive);
+  --cd-gold-dark: var(--olive-700);
+  --cd-spring: var(--spring-ui);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 664px;
+  box-sizing: border-box;
+  padding: 20px;
+  border: 1px solid var(--cd-line);
+  border-radius: var(--radius-xl);
+  background: var(--cd-bg);
+  box-shadow: var(--shadow-sm);
+  color: var(--cd-fg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+/* Segmented control */
+.cd-toggle {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 2px;
+  border-radius: var(--radius-full);
+  background: var(--cd-track);
+}
+.cd-thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc(50% - 2px);
+  border-radius: var(--radius-full);
+  background: var(--cd-thumb);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--spring-ui-duration) var(--cd-spring);
+}
+.cd[data-period="yearly"] .cd-thumb { transform: translateX(100%); }
+.cd-toggle button {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--cd-fg);
+  font: inherit;
+  font-size: var(--text-small);
+  font-weight: 500;
+  letter-spacing: normal;
+  cursor: pointer;
+}
+.cd-toggle button[aria-checked="true"] { font-weight: 600; }
+.cd-toggle button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cd-pct { padding: 1px 6px; border-radius: var(--radius-full); background: var(--cd-success-soft); color: var(--cd-success-text); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-base); }
+/* On the gray track (Monthly selected) the pale green tint washes out, so it steps up; on the white thumb and in dark mode it stays the standard soft green */
+.cd[data-period="monthly"] .cd-pct { background: color-mix(in srgb, var(--success) 14%, var(--cd-track)); }
+:root[data-theme="dark"] .cd[data-period="monthly"] .cd-pct { background: var(--cd-success-soft); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cd[data-period="monthly"] .cd-pct { background: var(--cd-success-soft); } }
+/* Plans */
+.cd-plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(156px, 1fr)); gap: 12px; width: 100%; }
+.cd-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 16px 16px 14px;
+  border-radius: var(--radius-lg); border: 1px solid var(--border);
+  background: var(--cd-bg);
+}
+.cd-plan.is-featured { box-shadow: 0 0 0 2px var(--cd-accent); }
+.cd-name { margin: 0 0 4px; color: var(--cd-fg); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.cd-price { display: flex; align-items: baseline; margin: 0; }
+.cd-cur { align-self: flex-start; margin-top: 4px; font-size: var(--text-title); font-weight: 600; }
+.cd-amt { font-size: calc(var(--text-h1) + 4px); line-height: 1; font-weight: 600; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.cd-per { margin-left: 4px; color: var(--cd-muted); font-size: var(--text-body); }
+.cd-billed { margin: 4px 0 0; color: var(--cd-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; font-variant-numeric: tabular-nums; }
+.cd-tray {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  min-width: 0;
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
+  background: var(--cd-track);
+  color: var(--cd-muted);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  letter-spacing: normal;
+  transition: background-color var(--duration-slow), color var(--duration-slow);
+}
+.cd[data-period="yearly"] .cd-tray { background: var(--cd-success-soft); color: var(--cd-success-text); font-weight: 500; }
+.cd-tray b { font-weight: 700; font-variant-numeric: tabular-nums; }
+.cd-slot { flex: none; width: 18px; height: 5px; border-radius: var(--radius-xs); background: color-mix(in srgb, var(--cd-fg) 60%, transparent); }
+/* Coins */
+.cd-layer { position: absolute; inset: 0; z-index: 3; overflow: visible; pointer-events: none; }
+.cd-coin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--cd-gold) 35%, var(--on-color)), var(--cd-gold) 48%, var(--cd-gold-dark));
+  box-shadow: var(--shadow-xs);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.cd-coin::after {
+  content: "$";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--cd-gold-dark) 85%, transparent);
+  font: 700 calc(var(--text-caption) - 2px) / 1 var(--font-sans);
+}
+.cd-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  .cd-thumb, .cd-tray { transition-duration: var(--duration-reduced) !important; transition-timing-function: linear !important; }
+}
+.cd [hidden] { display: none !important; }

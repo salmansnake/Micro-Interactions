@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elastic Range</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .er so they never affect the rest of your page. */
+.er {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --duration-slower: 480ms;
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --radius-full: 9999px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --danger-text: #ca2b30;
+  --foreground: var(--black);
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --red-11: #ce2c31;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .er, .dark .er {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --danger-text: var(--red-11);
+  --foreground: #F3F2EE;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --red-11: #ff9592;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .er {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --card: var(--white);
+    --danger-text: var(--red-11);
+    --foreground: #F3F2EE;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --red-11: #ff9592;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --white: #161817;
+  }
+}
+
+/* Elastic Range — a date range stretches like a rubber band, and strains against booked nights.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.er {
+  --er-bg: var(--card);
+  --er-fg: var(--foreground);
+  --er-muted: var(--muted-foreground);
+  --er-line: var(--border);
+  --er-fill: var(--muted);
+  --er-accent: var(--primary);
+  --er-on-accent: var(--primary-foreground);
+  --er-red: var(--danger-text);
+  --er-cell: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 360px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--er-bg);
+  color: var(--er-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.er-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 4px 4px; }
+.er-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.er-rate { margin: 0; color: var(--er-muted); font-size: var(--text-small); }
+.er-week, .er-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.er-week span { color: var(--er-muted); font-size: var(--text-caption); font-weight: 600; text-align: center; }
+.er-grid { position: relative; row-gap: 4px; }
+.er-day {
+  position: relative;
+  z-index: 1;
+  height: var(--er-cell);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--er-fg);
+  font: inherit;
+  font-size: var(--text-title-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: color var(--duration-base);
+}
+.er-day:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.er-day.is-booked { color: var(--er-muted); text-decoration: line-through; cursor: not-allowed; }
+.er-day.is-end { color: var(--er-on-accent); font-weight: 600; }
+.er-day.is-blocked { color: var(--er-red); }
+/* Bands sit behind the days, one per week row; they stretch with a bouncy spring */
+.er-bands { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.er-band {
+  position: absolute;
+  height: var(--er-cell);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--brand) 16%, transparent);
+  opacity: 0;
+  transition: left var(--spring-pop-duration) var(--spring-pop), width var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base);
+}
+.er-band.is-on { opacity: 1; }
+.er-cap {
+  position: absolute;
+  width: var(--er-cell);
+  height: var(--er-cell);
+  border-radius: var(--radius-full);
+  background: var(--er-accent);
+  opacity: 0;
+  transition: left var(--spring-pop-duration) var(--spring-pop), top var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base), background-color var(--duration-base);
+}
+.er-cap.is-on { opacity: 1; }
+.er-cap.is-strain { animation: er-strain var(--duration-slower) var(--ease-out); }
+@keyframes er-strain { 30% { transform: scaleX(1.25) translateX(6%); } 60% { transform: scaleX(0.92); } 100% { transform: none; } }
+.er-bubble {
+  position: absolute;
+  z-index: 3;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: var(--er-fg);
+  color: var(--er-bg);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  transition: left var(--spring-pop-duration) var(--spring-pop), top var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base);
+}
+.er-bubble.is-on { opacity: 1; }
+.er-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; padding: 6px 4px 0; border-top: 1px solid var(--er-line); margin-top: 6px; }
+.er-summary { margin: 0; font-size: var(--text-small); line-height: var(--leading-small); color: var(--er-muted); }
+.er-summary b { color: var(--er-fg); font-weight: 600; }
+.er-summary .er-warn { color: var(--er-red); }
+.er-clear { flex: none; height: 30px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--er-fill); color: var(--er-fg); font: inherit; font-weight: 600; cursor: pointer; }
+.er-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .er-band, .er-cap, .er-bubble { transition-duration: var(--duration-reduced); transition-timing-function: linear; }
+  .er-cap.is-strain { animation: none; }
+}
+.er [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="er" data-mi="elastic-range" data-year="2026" data-month="10" data-booked="20,21" data-rate="180">
+  <div class="er-head">
+    <p class="er-title">November 2026</p>
+    <p class="er-rate">$180 per night</p>
+  </div>
+  <div class="er-week" aria-hidden="true"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+  <div class="er-grid" role="grid" aria-label="November 2026">
+    <div class="er-bands" aria-hidden="true"></div>
+    <span class="er-bubble" aria-hidden="true"></span>
+  </div>
+  <div class="er-foot">
+    <p class="er-summary" aria-live="polite">Choose a check-in date.</p>
+    <button type="button" class="er-clear" hidden>Clear</button>
+  </div>
+</div>
+
+
+<script>
+/* Elastic Range — vanilla JS. Auto-initializes every [data-mi="elastic-range"].
+   data-year, data-month (0-based), data-booked (days), data-rate (per night). Call window.initElasticRange(el) for later elements. */
+(function () {
+  'use strict';
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  function initElasticRange(root) {
+    if (!root || root.__miRange) return;
+    root.__miRange = true;
+    var year = Number(root.getAttribute('data-year')) || new Date().getFullYear();
+    var month = root.hasAttribute('data-month') ? Number(root.getAttribute('data-month')) : new Date().getMonth();
+    var booked = (root.getAttribute('data-booked') || '').split(',').filter(Boolean).map(Number);
+    var rate = Number(root.getAttribute('data-rate')) || 0;
+    var grid = root.querySelector('.er-grid');
+    var bandsBox = root.querySelector('.er-bands');
+    var bubble = root.querySelector('.er-bubble');
+    var summary = root.querySelector('.er-summary');
+    var clear = root.querySelector('.er-clear');
+    var mon = MONTHS[month].slice(0, 3);
+
+    var first = new Date(year, month, 1).getDay();
+    var days = new Date(year, month + 1, 0).getDate();
+    var cells = [];
+    for (var b = 0; b < first; b++) grid.insertBefore(document.createElement('span'), bubble);
+    for (var d = 1; d <= days; d++) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'er-day';
+      btn.textContent = d;
+      btn.setAttribute('data-day', d);
+      var isBooked = booked.indexOf(d) > -1;
+      if (isBooked) btn.classList.add('is-booked');
+      btn.setAttribute('aria-label', MONTHS[month] + ' ' + d + (isBooked ? ', booked' : ''));
+      btn.tabIndex = d === 1 ? 0 : -1;
+      grid.insertBefore(btn, bubble);
+      cells[d] = btn;
+    }
+    var rows = Math.ceil((first + days) / 7);
+    var bands = [];
+    for (var r = 0; r < rows; r++) { var band = document.createElement('span'); band.className = 'er-band'; bandsBox.appendChild(band); bands.push(band); }
+    var capA = document.createElement('span'); capA.className = 'er-cap';
+    var capB = document.createElement('span'); capB.className = 'er-cap';
+    bandsBox.append(capA, capB);
+
+    var start = null, end = null, picking = false;
+
+    function pos(day) { var c = cells[day]; return { x: c.offsetLeft, y: c.offsetTop, w: c.offsetWidth, h: c.offsetHeight }; }
+    function rowOf(day) { return Math.floor((first + day - 1) / 7); }
+    function firstBookedAfter(a) { var hit = null; booked.forEach(function (bd) { if (bd > a && (hit === null || bd < hit)) hit = bd; }); return hit; }
+
+    function placeCap(cap, day) {
+      if (!day) { cap.classList.remove('is-on'); return; }
+      var p = pos(day);
+      cap.style.left = p.x + (p.w - p.h) / 2 + 'px';
+      cap.style.top = p.y + 'px';
+      cap.classList.add('is-on');
+    }
+
+    function draw(a, z, strained) {
+      Object.keys(cells).forEach(function (k) { cells[k].classList.remove('is-end', 'is-blocked'); });
+      placeCap(capA, a);
+      placeCap(capB, z && z !== a ? z : null);
+      if (a) cells[a].classList.add('is-end');
+      if (z) cells[z].classList.add('is-end');
+      bands.forEach(function (band, r) {
+        if (!a || !z || z === a) { band.classList.remove('is-on'); return; }
+        var lo = Math.max(a, 1 + r * 7 - first), hi = Math.min(z, 7 * (r + 1) - first);
+        if (lo > hi) {
+          band.classList.remove('is-on');
+          var anchor = pos(r < rowOf(a) ? a : z);
+          band.style.left = anchor.x + 'px'; band.style.width = '0px'; band.style.top = anchor.y + 'px';
+          return;
+        }
+        var p1 = pos(lo), p2 = pos(hi);
+        band.style.top = p1.y + 'px';
+        band.style.left = (lo === a ? p1.x + (p1.w - p1.h) / 2 : p1.x) + 'px';
+        band.style.width = ((hi === z ? p2.x + (p2.w + p2.h) / 2 : p2.x + p2.w) - (lo === a ? p1.x + (p1.w - p1.h) / 2 : p1.x)) + 'px';
+        band.classList.add('is-on');
+      });
+      if (a && z && z > a) {
+        var nights = z - a;
+        var p = pos(z);
+        bubble.textContent = nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString() : '');
+        bubble.style.left = p.x + p.w / 2 + 'px';
+        bubble.style.top = p.y - 4 + 'px';
+        bubble.classList.add('is-on');
+      } else bubble.classList.remove('is-on');
+      if (strained) {
+        cells[strained].classList.add('is-blocked');
+        capB.classList.remove('is-strain'); void capB.offsetWidth; capB.classList.add('is-strain');
+      }
+    }
+
+    // While picking, the band follows the pointer but can't cross a booked night.
+    function preview(day) {
+      if (!picking || !start) return;
+      if (day <= start) { draw(start, null); return; }
+      var wall = firstBookedAfter(start);
+      if (wall !== null && day >= wall) {
+        draw(start, Math.max(start + 0, wall - 1) === start ? null : wall - 1, wall);
+        summary.replaceChildren(Object.assign(document.createElement('span'), { className: 'er-warn', textContent: mon + ' ' + wall + ' is booked, so your stay ends ' + mon + ' ' + (wall - 1) + '.' }));
+        return;
+      }
+      draw(start, day);
+      summarize(start, day, true);
+    }
+
+    function summarize(a, z, tentative) {
+      summary.replaceChildren();
+      if (!a) { summary.textContent = 'Choose a check-in date.'; return; }
+      if (!z) { summary.append('Check-in ', Object.assign(document.createElement('b'), { textContent: mon + ' ' + a }), '. Now choose check-out.'); return; }
+      var nights = z - a;
+      summary.append(Object.assign(document.createElement('b'), { textContent: mon + ' ' + a + ' – ' + mon + ' ' + z }), ' · ' + nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString() + ' total' : '') + (tentative ? '' : '.'));
+    }
+
+    function choose(day) {
+      if (booked.indexOf(day) > -1) return;
+      if (!picking || !start || day <= start) {
+        start = day; end = null; picking = true;
+        draw(start, null);
+        summarize(start, null);
+        clear.hidden = false;
+        return;
+      }
+      var wall = firstBookedAfter(start);
+      end = wall !== null && day >= wall ? wall - 1 : day;
+      if (end <= start) { start = day; end = null; draw(start, null); summarize(start, null); return; }
+      picking = false;
+      draw(start, end);
+      summarize(start, end);
+    }
+
+    grid.addEventListener('click', function (e) { var c = e.target.closest('.er-day'); if (c) choose(Number(c.getAttribute('data-day'))); });
+    grid.addEventListener('pointerover', function (e) { var c = e.target.closest('.er-day'); if (c) preview(Number(c.getAttribute('data-day'))); });
+    grid.addEventListener('pointerleave', function () { if (picking && start) { draw(start, null); summarize(start, null); } });
+    grid.addEventListener('focusin', function (e) { var c = e.target.closest('.er-day'); if (c) preview(Number(c.getAttribute('data-day'))); });
+    grid.addEventListener('keydown', function (e) {
+      var c = e.target.closest('.er-day'); if (!c) return;
+      var d0 = Number(c.getAttribute('data-day'));
+      var map = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+      if (map[e.key] == null) return;
+      e.preventDefault();
+      var nd = Math.max(1, Math.min(days, d0 + map[e.key]));
+      c.tabIndex = -1; cells[nd].tabIndex = 0; cells[nd].focus();
+    });
+    clear.addEventListener('click', function () {
+      start = end = null; picking = false;
+      draw(null, null);
+      summarize(null);
+      clear.hidden = true;
+    });
+    if (window.ResizeObserver) new ResizeObserver(function () { draw(start, end || null); }).observe(grid);
+  }
+
+  window.initElasticRange = initElasticRange;
+  function boot() { document.querySelectorAll('[data-mi="elastic-range"]').forEach(initElasticRange); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

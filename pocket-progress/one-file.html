@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket Progress</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .pp so they never affect the rest of your page. */
+.pp {
+  --blur-md: 16px;
+  --duration-base: 200ms;
+  --duration-fast: 140ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --frost-saturate: 160%;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale: 0.97;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --background: var(--canvas);
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --canvas: #FAFAF8;
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --foreground: var(--black);
+  --frost: rgba(255, 255, 255, 0.74);
+  --frost-border: rgba(0, 0, 0, 0.08);
+  --green-11: #218358;
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xl: 0 8px 16px -4px rgba(17, 17, 16, 0.08), 0 28px 56px -12px rgba(17, 17, 16, 0.22);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .pp, .dark .pp {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --background: var(--canvas);
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --canvas: #0B0C0B;
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --foreground: #F3F2EE;
+  --frost: rgba(21, 23, 22, 0.74);
+  --frost-border: rgba(243, 242, 238, 0.1);
+  --green-11: #3dd68c;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .pp {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --background: var(--canvas);
+    --black: #000000;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --canvas: #0B0C0B;
+    --card: var(--white);
+    --chart-1: var(--aqua);
+    --chart-2: var(--pink);
+    --chart-3: var(--orange);
+    --chart-4: var(--sage);
+    --foreground: #F3F2EE;
+    --frost: rgba(21, 23, 22, 0.74);
+    --frost-border: rgba(243, 242, 238, 0.1);
+    --green-11: #3dd68c;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-chart: #000000;
+    --on-color: #ffffff;
+    --orange: #FE8C5F;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --white: #161817;
+  }
+}
+
+/* Pocket Progress — a long task's progress sheet shrinks into a pill so you can keep working.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.pp {
+  --pp-bg: var(--card);
+  --pp-fg: var(--foreground);
+  --pp-muted: var(--muted-foreground);
+  --pp-line: var(--border);
+  --pp-sunken: var(--subtle);
+  --pp-fill: var(--muted);
+  --pp-accent: var(--primary);
+  --pp-on-accent: var(--primary-foreground);
+  --pp-green: var(--success);
+  --pp-glass: var(--frost);
+  --pp-glass-edge: var(--frost-border);
+  --pp-glass-rim: var(--frost-border);
+  --pp-glass-shadow: var(--shadow-lg);
+  --pp-p: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+  min-height: 330px;
+  box-sizing: border-box;
+  padding: 20px 20px 72px;
+  overflow: hidden;
+  background: var(--pp-bg);
+  color: var(--pp-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.pp-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pp-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.pp-export, .pp-pocket, .pp-cancel {
+  height: 34px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--pp-accent);
+  color: var(--pp-on-accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base);
+}
+.pp-export:disabled { opacity: 0.4; cursor: default; }
+.pp-cancel { background: var(--pp-fill); color: var(--pp-fg); }
+.pp-export:active, .pp-pocket:active, .pp-cancel:active { transform: scale(var(--press-scale)); }
+.pp-export:focus-visible, .pp-pocket:focus-visible, .pp-cancel:focus-visible, .pp-pill:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.pp-rows { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--pp-sunken); }
+.pp-rows li { position: relative; display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; cursor: pointer; border-radius: var(--radius-lg); outline: none; transition: background-color var(--duration-fast); }
+.pp-rows li + li::before { content: ""; position: absolute; top: 0; left: 52px; right: 0; height: 1px; background: var(--pp-line); transform: scaleY(0.5); transform-origin: top; }
+.pp-rows li:hover { background: var(--pp-fill); }
+.pp-rows li:focus-visible { box-shadow: inset 0 0 0 2px var(--pp-accent); }
+.pp-rows li.is-picked { background: color-mix(in srgb, var(--brand) 14%, transparent); }
+.pp-rows small { margin-left: auto; color: var(--pp-muted); font-size: var(--text-small); }
+.pp-sq { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+/* The sheet */
+.pp-sheet {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 3;
+  padding: 18px;
+  border-radius: var(--radius-xl); border: 1px solid var(--border);
+  background: var(--pp-bg);
+  box-shadow: 0 0 0 1px var(--pp-line), var(--shadow-xl);
+  transform-origin: 100% 100%;
+}
+.pp-sheet.is-in { animation: pp-up var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes pp-up { from { opacity: 0; transform: translateY(24px) scale(var(--press-scale)); } }
+.pp-sheet-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.pp-sheet-sub { margin: 2px 0 14px; color: var(--pp-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.pp-track { height: 6px; overflow: hidden; border-radius: var(--radius-xs); background: var(--pp-fill); }
+.pp-track i { display: block; height: 100%; border-radius: var(--radius-xs); background: var(--pp-accent); transform-origin: left; transform: scaleX(var(--pp-p)); }
+.pp-sheet-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+/* The pill: Frost, docked bottom-right */
+.pp-pill {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px 0 10px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--pp-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: inset 0 0 0 1px var(--frost-border), var(--pp-glass-shadow);
+  color: var(--pp-fg);
+  font: inherit;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transform-origin: 100% 100%;
+}
+.pp-ring { width: 20px; height: 20px; transform: rotate(-90deg); }
+.pp-ring circle { fill: none; stroke: var(--pp-fill); stroke-width: 2.5; }
+.pp-ring .pp-ring-fg { stroke: var(--pp-accent); stroke-linecap: round; stroke-dasharray: 50.27; stroke-dashoffset: calc(50.27 * (1 - var(--pp-p))); }
+.pp.is-done .pp-pill { background: var(--pp-green); color: var(--on-color); box-shadow: var(--pp-glass-shadow); }
+.pp.is-done .pp-ring circle { stroke: color-mix(in srgb, var(--on-color) 40%, transparent); }
+.pp.is-done .pp-ring .pp-ring-fg { stroke: var(--on-color); }
+.pp-pill.is-ping { animation: pp-ping var(--spring-pop-duration) var(--spring-pop); }
+@keyframes pp-ping { 30% { transform: scale(1.12); } 100% { transform: none; } }
+.pp-status { position: absolute; left: 20px; bottom: 28px; margin: 0; max-width: 55%; color: var(--pp-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+@media (prefers-reduced-motion: reduce) {
+  .pp-sheet.is-in, .pp-pill.is-ping { animation: none; }
+}
+.pp [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="pp" data-mi="pocket-progress" data-duration="9000">
+  <div class="pp-bar">
+    <p class="pp-title">Workspaces</p>
+    <button type="button" class="pp-export">Export CSV</button>
+  </div>
+  <ul class="pp-rows" aria-label="Workspaces">
+    <li tabindex="0"><span class="pp-sq" style="background: var(--chart-1); color: var(--on-chart)">N</span>Northwind<small>48 seats</small></li>
+    <li tabindex="0"><span class="pp-sq" style="background: var(--chart-4); color: var(--on-chart)">A</span>Atlas<small>12 seats</small></li>
+    <li tabindex="0"><span class="pp-sq" style="background: var(--chart-3); color: var(--on-chart)">O</span>Orbit<small>31 seats</small></li>
+    <li tabindex="0"><span class="pp-sq" style="background: var(--chart-2); color: var(--on-chart)">V</span>Nova<small>7 seats</small></li>
+  </ul>
+  <div class="pp-sheet" role="dialog" aria-label="Export progress" hidden>
+    <p class="pp-sheet-title">Exporting 12,400 Rows</p>
+    <p class="pp-sheet-sub">You can keep working while this runs.</p>
+    <div class="pp-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+    <div class="pp-sheet-actions">
+      <button type="button" class="pp-cancel">Cancel</button>
+      <button type="button" class="pp-pocket">Keep Working</button>
+    </div>
+  </div>
+  <button type="button" class="pp-pill" hidden aria-label="Export in progress. Open details.">
+    <svg class="pp-ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"></circle><circle class="pp-ring-fg" cx="10" cy="10" r="8"></circle></svg>
+    <span class="pp-pill-text">Exporting · 0%</span>
+  </button>
+  <p class="pp-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Pocket Progress — vanilla JS. Auto-initializes every [data-mi="pocket-progress"].
+   The demo fakes progress over data-duration ms; feed setProgress(0–1) from your real job instead.
+   Call window.initPocketProgress(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function initPocketProgress(root) {
+    if (!root || root.__miPocket) return;
+    root.__miPocket = true;
+    var DURATION = Number(root.getAttribute('data-duration')) || 9000;
+    var exportBtn = root.querySelector('.pp-export');
+    var sheet = root.querySelector('.pp-sheet');
+    var track = root.querySelector('.pp-track');
+    var title = root.querySelector('.pp-sheet-title');
+    var sub = root.querySelector('.pp-sheet-sub');
+    var pocketBtn = root.querySelector('.pp-pocket');
+    var cancelBtn = root.querySelector('.pp-cancel');
+    var pill = root.querySelector('.pp-pill');
+    var pillText = root.querySelector('.pp-pill-text');
+    var status = root.querySelector('.pp-status');
+    var p = 0, raf = 0, t0 = 0, running = false, done = false, pocketed = false;
+
+    function setProgress(v) {
+      p = Math.max(0, Math.min(1, v));
+      root.style.setProperty('--pp-p', p.toFixed(4));
+      var pct = Math.round(p * 100);
+      track.setAttribute('aria-valuenow', pct);
+      if (!done) pillText.textContent = 'Exporting · ' + pct + '%';
+      if (p >= 1 && !done) finish();
+    }
+
+    function tick(now) {
+      raf = 0;
+      if (!running) return;
+      var k = (now - t0) / DURATION;
+      // uneven, like real work: quick start, a slow middle, a quick end
+      setProgress(k < 1 ? k + Math.sin(k * Math.PI * 2) * 0.05 * (1 - k) : 1);
+      if (running && !done) raf = requestAnimationFrame(tick);
+    }
+
+    // Morph one element into another's box (FLIP).
+    function morph(fromEl, toEl, ms) {
+      if (reduce.matches) return;
+      var a = fromEl.getBoundingClientRect(), b = toEl.getBoundingClientRect();
+      var sx = a.width / b.width, sy = a.height / b.height;
+      toEl.animate([
+        { transform: 'translate(' + (a.right - b.right) + 'px,' + (a.bottom - b.bottom) + 'px) scale(' + sx + ',' + sy + ')', borderRadius: '22px', opacity: 0.6 },
+        { transform: 'none', opacity: 1 }
+      ], { duration: ms || 580, easing: 'cubic-bezier(.2,.9,.25,1.08)' });
+    }
+
+    function pocket() {
+      pocketed = true;
+      pill.hidden = false;
+      morph(sheet, pill);
+      sheet.hidden = true;
+      status.textContent = 'Export continues in the background.';
+      setTimeout(function () { if (status.textContent.indexOf('background') > -1) status.textContent = ''; }, 2600);
+      pill.focus({ preventScroll: true });
+    }
+    function unpocket() {
+      pocketed = false;
+      sheet.hidden = false;
+      sheet.classList.remove('is-in');
+      morph(pill, sheet, 520);
+      pill.hidden = true;
+      (done ? pocketBtn : pocketBtn).focus({ preventScroll: true });
+    }
+
+    function finish() {
+      done = true;
+      running = false;
+      root.classList.add('is-done');
+      title.textContent = 'Export Ready';
+      sub.textContent = 'workspaces.csv · 12,400 rows · 2.1 MB';
+      pocketBtn.textContent = 'Done';
+      cancelBtn.hidden = true;
+      pillText.textContent = 'Export Ready';
+      pill.setAttribute('aria-label', 'Export ready. Open details.');
+      status.textContent = 'Your export is ready.';
+      if (pocketed) { pill.classList.remove('is-ping'); void pill.offsetWidth; pill.classList.add('is-ping'); }
+    }
+
+    function reset() {
+      running = false; done = false; pocketed = false;
+      cancelAnimationFrame(raf); raf = 0;
+      root.classList.remove('is-done');
+      sheet.hidden = true; pill.hidden = true;
+      title.textContent = 'Exporting 12,400 Rows';
+      sub.textContent = 'You can keep working while this runs.';
+      pocketBtn.textContent = 'Keep Working';
+      cancelBtn.hidden = false;
+      pill.setAttribute('aria-label', 'Export in progress. Open details.');
+      setProgress(0);
+      exportBtn.disabled = false;
+    }
+
+    exportBtn.addEventListener('click', function () {
+      reset();
+      exportBtn.disabled = true;
+      sheet.hidden = false;
+      sheet.classList.remove('is-in'); void sheet.offsetWidth; sheet.classList.add('is-in');
+      running = true;
+      t0 = performance.now();
+      raf = requestAnimationFrame(tick);
+      pocketBtn.focus({ preventScroll: true });
+    });
+    pocketBtn.addEventListener('click', function () {
+      if (done) { reset(); status.textContent = ''; exportBtn.focus(); return; }
+      pocket();
+    });
+    cancelBtn.addEventListener('click', function () { reset(); status.textContent = 'Export canceled.'; exportBtn.focus(); });
+    pill.addEventListener('click', unpocket);
+    root.querySelector('.pp-rows').addEventListener('click', function (e) {
+      var li = e.target.closest('li'); if (li) li.classList.toggle('is-picked');
+    });
+    root.querySelector('.pp-rows').addEventListener('keydown', function (e) {
+      var li = e.target.closest('li'); if (li && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); li.classList.toggle('is-picked'); }
+    });
+    root.setProgress = setProgress;
+  }
+
+  window.initPocketProgress = initPocketProgress;
+  function boot() { document.querySelectorAll('[data-mi="pocket-progress"]').forEach(initPocketProgress); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

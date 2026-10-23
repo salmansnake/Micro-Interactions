@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghost Caret · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Ghost Caret — see a teammate's cursor and fresh words inside the field, and watch them wait for you.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.gc {
+  --gc-bg: var(--card);
+  --gc-fg: var(--foreground);
+  --gc-muted: var(--muted-foreground);
+  --gc-line: var(--border);
+  --gc-sunken: var(--subtle);
+  --gc-fill: var(--muted);
+  --gc-accent: var(--primary);
+  --gc-peer: var(--pop);
+  --gc-on-peer: var(--pop-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--gc-bg);
+  color: var(--gc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.gc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gc-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.gc-people { display: flex; }
+.gc-avatar { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 0 0 2px var(--gc-bg); color: var(--gc-on-peer); font-size: var(--text-caption); font-weight: 700; transition: opacity var(--duration-slow), transform var(--spring-ui-duration) var(--spring-ui); }
+.gc-avatar + .gc-avatar { margin-left: -6px; }
+.gc-avatar--you { background: var(--gc-accent); color: var(--primary-foreground); }
+.gc-avatar--peer { background: var(--gc-peer); }
+.gc.is-away .gc-avatar--peer { opacity: 0.35; transform: scale(0.85); }
+
+.gc-field { position: relative; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--input); transition: box-shadow var(--duration-base) var(--ease-out); }
+.gc-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.gc-mirror,
+.gc-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 14px 16px 16px;
+  border: 0;
+  font: 400 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans);
+  letter-spacing: var(--tracking-title);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: normal;
+  tab-size: 4;
+}
+.gc-mirror { position: absolute; inset: 0; color: transparent; pointer-events: none; }
+.gc-input { position: relative; z-index: 1; min-height: 120px; overflow: hidden; resize: none; background: transparent; color: var(--gc-fg); caret-color: var(--gc-accent); outline: none; }
+/* The peer's fresh text: a highlight that fades as it ages */
+.gc-new { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--gc-peer) calc(var(--a, 1) * 26%), transparent); }
+.gc-mark { display: inline-block; width: 0; }
+/* The peer's caret */
+.gc-caret {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 22px;
+  border-radius: var(--radius-xs);
+  background: var(--gc-peer);
+  pointer-events: none;
+  transition: opacity var(--duration-slower);
+}
+.gc-caret.is-gliding { transition: left var(--spring-ui-duration) var(--spring-ui), top var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-slower); }
+.gc-caret.is-idle { animation: gc-blink 1.1s steps(1) infinite; }
+@keyframes gc-blink { 50% { opacity: 0.25; } }
+.gc.is-away .gc-caret { opacity: 0; }
+.gc-flag {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 2px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full) var(--radius-full) var(--radius-full) var(--radius-xs);
+  background: var(--gc-peer);
+  color: var(--gc-on-peer);
+  font-size: calc(var(--text-caption) - 1px);
+  line-height: 14px;
+  font-weight: 600;
+  letter-spacing: normal;
+  white-space: nowrap;
+  transform-origin: 0 100%;
+  transition: transform var(--spring-ui-duration) var(--spring-ui);
+}
+.gc-caret.is-waiting::before {
+  content: "";
+  position: absolute;
+  inset: -4px -6px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--gc-peer) 18%, transparent);
+  animation: gc-halo 1.4s var(--ease-in-out) infinite;
+}
+@keyframes gc-halo { 50% { transform: scale(1.25); opacity: 0.4; } }
+.gc-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+.gc-status { flex: 1 1 auto; min-width: 0; margin: 0; color: var(--gc-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.gc-status b { color: var(--foreground); font-weight: 600; }
+.gc-replay { flex: none; height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--gc-fill); color: var(--gc-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.gc-replay:active { transform: scale(var(--press-scale)); }
+.gc-replay:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .gc-caret.is-gliding { transition: opacity var(--duration-fast); }
+  .gc-caret.is-idle, .gc-caret.is-waiting::before { animation: none; }
+}
+.gc [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Ghost Caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="gc" data-mi="ghost-caret" data-name="Mira">
+  <div class="gc-head">
+    <p class="gc-title">Launch Notes</p>
+    <div class="gc-people">
+      <span class="gc-avatar gc-avatar--you" title="You">Y</span>
+      <span class="gc-avatar gc-avatar--peer" title="Mira">M</span>
+    </div>
+  </div>
+  <div class="gc-field">
+    <div class="gc-mirror" aria-hidden="true"></div>
+    <textarea id="gc-input" class="gc-input" spellcheck="false" aria-label="Launch notes, shared with Mira">We ship the new billing page on Monday. The annual plan now shows its savings up front.
+
+Open questions go in comments before Friday.</textarea>
+    <div class="gc-caret" aria-hidden="true"><span class="gc-flag">Mira</span></div>
+  </div>
+  <div class="gc-foot">
+    <p class="gc-status" role="status" aria-live="polite"></p>
+    <button type="button" class="gc-replay">Replay</button>
+  </div>
+</div>
+</div>
+<script>
+/* Ghost Caret — vanilla JS. Auto-initializes every [data-mi="ghost-caret"].
+   The demo script plays a teammate; in production, feed applyRemote() from your sync layer.
+   Call window.initGhostCaret(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var FADE = 4000;   // ms a teammate's fresh text stays highlighted
+  var NEAR = 12;     // characters: closer than this and the teammate waits
+
+  function initGhostCaret(root) {
+    if (!root || root.__miGhost) return;
+    root.__miGhost = true;
+
+    var peer = root.getAttribute('data-name') || 'Mira';
+    var input = root.querySelector('.gc-input');
+    var mirror = root.querySelector('.gc-mirror');
+    var caret = root.querySelector('.gc-caret');
+    var flag = root.querySelector('.gc-flag');
+    var status = root.querySelector('.gc-status');
+    var replay = root.querySelector('.gc-replay');
+    var original = input.value;
+
+    var prev = original;
+    var owners = [];        // per character: time the teammate typed it, or 0
+    var at = 0;             // teammate's caret index
+    var gen = 0;            // cancels an old script on replay
+    var fadeTimer = 0;
+    var visible = false;
+    var started = false;
+
+    function zeros(n) { var a = []; for (var i = 0; i < n; i++) a.push(0); return a; }
+    owners = zeros(prev.length);
+
+    function say(state) {
+      var b = document.createElement('b');
+      b.textContent = peer;
+      var rest = { typing: ' is typing.', waiting: ' is waiting for you to finish here.', viewing: ' is viewing.', away: ' left. Their edits are saved.' }[state];
+      status.replaceChildren(b, document.createTextNode(rest));
+      flag.textContent = state === 'waiting' ? peer + ' · Waiting' : peer;
+      caret.classList.toggle('is-waiting', state === 'waiting');
+      caret.classList.toggle('is-idle', state === 'viewing');
+      root.classList.toggle('is-away', state === 'away');
+    }
+
+    function grow() {
+      input.style.height = 'auto';
+      input.style.height = input.scrollHeight + 'px';
+    }
+
+    function alpha(i, now) {
+      var t = owners[i];
+      if (!t) return 0;
+      var a = 1 - (now - t) / FADE;
+      return a <= 0 ? 0 : Math.ceil(a * 10) / 10;
+    }
+
+    // Mirror the text (transparent) with highlight runs and a marker at the teammate's caret.
+    function render() {
+      var v = input.value, now = performance.now(), live = false;
+      var frag = document.createDocumentFragment();
+      var marker = null;
+      var i = 0;
+      while (i <= v.length) {
+        if (i === at) {
+          marker = document.createElement('span');
+          marker.className = 'gc-mark';
+          marker.textContent = '​';
+          frag.appendChild(marker);
+        }
+        if (i === v.length) break;
+        var a = alpha(i, now), j = i + 1;
+        while (j < v.length && j !== at && alpha(j, now) === a) j++;
+        if (a > 0) {
+          live = true;
+          var s = document.createElement('span');
+          s.className = 'gc-new';
+          s.style.setProperty('--a', a);
+          s.textContent = v.slice(i, j);
+          frag.appendChild(s);
+        } else frag.appendChild(document.createTextNode(v.slice(i, j)));
+        i = j;
+      }
+      frag.appendChild(document.createTextNode('​'));
+      mirror.replaceChildren(frag);
+      grow();
+      if (marker) {
+        caret.style.left = (marker.offsetLeft - 1) + 'px';
+        caret.style.top = (marker.offsetTop + 2) + 'px';
+      }
+      clearTimeout(fadeTimer);
+      if (live) fadeTimer = setTimeout(render, 200);
+    }
+
+    // Keep the teammate's caret and highlights attached to the right characters as you edit.
+    input.addEventListener('input', function () {
+      var v = input.value;
+      var p = 0;
+      while (p < v.length && p < prev.length && v[p] === prev[p]) p++;
+      var s = 0;
+      while (s < v.length - p && s < prev.length - p && v[v.length - 1 - s] === prev[prev.length - 1 - s]) s++;
+      var removed = prev.length - p - s, inserted = v.length - p - s;
+      Array.prototype.splice.apply(owners, [p, removed].concat(zeros(inserted)));
+      if (at > p) at = at >= p + removed ? at + inserted - removed : p + inserted;
+      prev = v;
+      render();
+    });
+    ['keyup', 'click', 'focus', 'blur', 'select'].forEach(function (t) { input.addEventListener(t, function () { setTimeout(render, 0); }); });
+
+    // Apply one remote keystroke at the teammate's caret without moving yours.
+    function applyRemote(ch) {
+      var v = input.value;
+      var focused = document.activeElement === input;
+      var s = input.selectionStart, e = input.selectionEnd;
+      input.value = v.slice(0, at) + ch + v.slice(at);
+      owners.splice(at, 0, performance.now());
+      if (focused) {
+        if (s >= at) s += ch.length;
+        if (e >= at) e += ch.length;
+        input.setSelectionRange(s, e);
+      }
+      at += ch.length;
+      prev = input.value;
+      render();
+    }
+
+    function nearYou() {
+      if (document.activeElement !== input) return false;
+      return Math.abs(input.selectionStart - at) <= NEAR;
+    }
+
+    function wait(ms, token) {
+      return new Promise(function (resolve, reject) {
+        setTimeout(function () { token === gen ? resolve() : reject(); }, ms);
+      });
+    }
+    function whenVisible(token) {
+      return new Promise(function (resolve, reject) {
+        (function check() {
+          if (token !== gen) return reject();
+          if (visible) return resolve();
+          setTimeout(check, 300);
+        })();
+      });
+    }
+
+    function moveTo(index, token) {
+      caret.classList.add('is-gliding');
+      at = Math.max(0, Math.min(input.value.length, index));
+      render();
+      return wait(reduce.matches ? 60 : 620, token).then(function () { caret.classList.remove('is-gliding'); });
+    }
+
+    function type(text, token) {
+      var i = 0;
+      say('typing');
+      return new Promise(function (resolve, reject) {
+        (function next() {
+          if (token !== gen) return reject();
+          if (i >= text.length) return resolve();
+          if (!visible) return setTimeout(next, 300);
+          if (nearYou()) { say('waiting'); return setTimeout(next, 300); }
+          say('typing');
+          applyRemote(text[i++]);
+          var ch = text[i - 1];
+          setTimeout(next, (ch === ' ' ? 110 : 55) + Math.random() * 70);
+        })();
+      });
+    }
+
+    function find(str, after) {
+      var i = input.value.indexOf(str);
+      return i < 0 ? input.value.length : i + (after ? str.length : 0);
+    }
+
+    function script() {
+      var token = ++gen;
+      say('viewing');
+      whenVisible(token)
+        .then(function () { return wait(900, token); })
+        .then(function () { return moveTo(find('Monday.', true), token); })
+        .then(function () { return type(' Pricing goes live in every region at once.', token); })
+        .then(function () { say('viewing'); return wait(1400, token); })
+        .then(function () { return moveTo(find('up front.', true), token); })
+        .then(function () { return type(' Support has the FAQ ready.', token); })
+        .then(function () { say('viewing'); return wait(1400, token); })
+        .then(function () { return moveTo(find('Open questions', false), token); })
+        .then(function () { return type('Reminder: ', token); })
+        .then(function () { say('viewing'); return wait(6000, token); })
+        .then(function () { say('away'); })
+        .catch(function () {});
+    }
+
+    replay.addEventListener('click', function () {
+      gen++;
+      input.value = original;
+      prev = original;
+      owners = zeros(original.length);
+      at = 0;
+      render();
+      script();
+    });
+
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        visible = es[0].isIntersecting;
+        if (visible && !started) { started = true; script(); }
+      }, { threshold: 0.3 }).observe(root);
+    } else { visible = true; started = true; script(); }
+    if (window.ResizeObserver) new ResizeObserver(function () { render(); }).observe(input);
+
+    render();
+    root.applyRemote = applyRemote;
+  }
+
+  window.initGhostCaret = initGhostCaret;
+  function boot() { document.querySelectorAll('[data-mi="ghost-caret"]').forEach(initGhostCaret); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initGhostCaret"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

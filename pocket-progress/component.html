@@ -1,0 +1,26 @@
+<div class="pp" data-mi="pocket-progress" data-duration="9000">
+  <div class="pp-bar">
+    <p class="pp-title">Workspaces</p>
+    <button type="button" class="pp-export">Export CSV</button>
+  </div>
+  <ul class="pp-rows" aria-label="Workspaces">
+    <li tabindex="0"><span class="pp-sq" style="background: var(--chart-1); color: var(--on-chart)">N</span>Northwind<small>48 seats</small></li>
+    <li tabindex="0"><span class="pp-sq" style="background: var(--chart-4); color: var(--on-chart)">A</span>Atlas<small>12 seats</small></li>
+    <li tabindex="0"><span class="pp-sq" style="background: var(--chart-3); color: var(--on-chart)">O</span>Orbit<small>31 seats</small></li>
+    <li tabindex="0"><span class="pp-sq" style="background: var(--chart-2); color: var(--on-chart)">V</span>Nova<small>7 seats</small></li>
+  </ul>
+  <div class="pp-sheet" role="dialog" aria-label="Export progress" hidden>
+    <p class="pp-sheet-title">Exporting 12,400 Rows</p>
+    <p class="pp-sheet-sub">You can keep working while this runs.</p>
+    <div class="pp-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+    <div class="pp-sheet-actions">
+      <button type="button" class="pp-cancel">Cancel</button>
+      <button type="button" class="pp-pocket">Keep Working</button>
+    </div>
+  </div>
+  <button type="button" class="pp-pill" hidden aria-label="Export in progress. Open details.">
+    <svg class="pp-ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"></circle><circle class="pp-ring-fg" cx="10" cy="10" r="8"></circle></svg>
+    <span class="pp-pill-text">Exporting · 0%</span>
+  </button>
+  <p class="pp-status" role="status" aria-live="polite"></p>
+</div>

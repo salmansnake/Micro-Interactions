@@ -1,0 +1,26 @@
+<div class="lb" data-mi="lock-builder">
+  <div class="lb-top">
+    <svg class="lb-lock" viewBox="0 0 64 72" aria-hidden="true">
+      <path class="lb-shackle" d="M18 34V22a14 14 0 0 1 28 0v12"></path>
+      <rect class="lb-body" x="8" y="32" width="48" height="36" rx="10"></rect>
+      <rect class="lb-bolt" x="15" y="40" width="6" height="20" rx="3"></rect>
+      <rect class="lb-bolt" x="25" y="40" width="6" height="20" rx="3"></rect>
+      <rect class="lb-bolt" x="35" y="40" width="6" height="20" rx="3"></rect>
+      <rect class="lb-bolt" x="45" y="40" width="6" height="20" rx="3"></rect>
+    </svg>
+    <div>
+      <p class="lb-title">Create a Password</p>
+      <p class="lb-strength" aria-live="polite">Each rule you meet adds a bolt.</p>
+    </div>
+  </div>
+  <div class="lb-field">
+    <input id="lb-input" class="lb-input" type="password" autocomplete="new-password" spellcheck="false" placeholder="Password" aria-describedby="lb-rules">
+    <button type="button" class="lb-show" aria-pressed="false">Show</button>
+  </div>
+  <ul class="lb-rules" id="lb-rules">
+    <li data-rule="length"><span class="lb-tick" aria-hidden="true"></span>10 or more characters</li>
+    <li data-rule="case"><span class="lb-tick" aria-hidden="true"></span>Upper and lowercase letters</li>
+    <li data-rule="number"><span class="lb-tick" aria-hidden="true"></span>At least one number</li>
+    <li data-rule="symbol"><span class="lb-tick" aria-hidden="true"></span>At least one symbol</li>
+  </ul>
+</div>

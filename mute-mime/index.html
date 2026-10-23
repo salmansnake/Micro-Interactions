@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mute Mime · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Mute Mime — talk while muted and your sound waves hit an invisible glass box around your tile.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.mm {
+  --mm-bg: var(--card);
+  --mm-fg: var(--foreground);
+  --mm-muted: var(--muted-foreground);
+  --mm-fill: var(--muted);
+  --mm-accent: var(--primary);
+  --mm-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--mm-bg);
+  color: var(--mm-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.mm p { margin: 0; }
+/* A video tile. It stays dark in both themes, like a real call. */
+.mm-tile { position: relative; display: grid; place-items: center; height: 220px; overflow: hidden; border-radius: var(--radius-xl); background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--on-color) 18%, var(--black)), var(--black) 70%); box-shadow: inset 0 0 0 0 var(--success); transition: box-shadow var(--duration-slow); }
+.mm.is-live .mm-tile { box-shadow: inset 0 0 0 3px var(--success); }
+.mm-avatar { position: relative; z-index: 2; display: grid; place-items: center; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(160deg, var(--chart-1), var(--chart-2)); color: var(--on-chart); font-size: var(--text-title-sm); font-weight: 700; transition: transform var(--duration-base); }
+.mm.is-talking .mm-avatar { animation: mm-talk var(--duration-slow) var(--ease-in-out) infinite alternate; }
+@keyframes mm-talk { to { transform: scale(1.05); } }
+.mm-name { position: absolute; z-index: 3; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px 0 6px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 45%, transparent); color: var(--on-color); font-size: var(--text-small); font-weight: 600; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.mm-mic { width: 16px; height: 16px; color: var(--danger); }
+.mm.is-live .mm-mic { color: var(--on-color); }
+.mm.is-live .mm-slash { display: none; }
+
+/* The invisible box: only visible where a wave hits it */
+.mm-box { position: absolute; inset: 14px; z-index: 1; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--on-color) 0%, transparent), inset 0 0 0 0 color-mix(in srgb, var(--on-color) 0%, transparent); pointer-events: none; }
+.mm-box.is-hit { animation: mm-hit var(--duration-slower) var(--ease-out); }
+@keyframes mm-hit { 0% { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--on-color) 75%, transparent), inset 0 0 26px color-mix(in srgb, var(--aqua) 40%, transparent); } 100% { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--on-color) 0%, transparent), inset 0 0 0 color-mix(in srgb, var(--aqua) 0%, transparent); } }
+.mm-box::before, .mm-box::after { content: ""; position: absolute; width: 22px; height: 22px; border: 0 solid color-mix(in srgb, var(--on-color) 35%, transparent); }
+.mm-box::before { left: 0; top: 0; border-width: 1.5px 0 0 1.5px; border-top-left-radius: 10px; }
+.mm-box::after { right: 0; bottom: 0; border-width: 0 1.5px 1.5px 0; border-bottom-right-radius: 10px; }
+.mm:not(.is-talking) .mm-box::before, .mm:not(.is-talking) .mm-box::after, .mm.is-live .mm-box::before, .mm.is-live .mm-box::after { opacity: 0; }
+.mm-box::before, .mm-box::after { transition: opacity var(--duration-slow); }
+
+.mm-waves { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.mm-waves i { position: absolute; left: 50%; top: 50%; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--on-color) 55%, transparent); box-sizing: border-box; }
+.mm-waves i.is-boxed { animation: mm-boxed var(--mm-dur, 0.7s) var(--ease-out) forwards; }
+.mm-waves i.is-free { animation: mm-free 1.2s var(--ease-out) forwards; }
+@keyframes mm-boxed { 0% { transform: scale(1); opacity: 0.8; } 80% { transform: scale(var(--mm-stop, 2.4)); opacity: 0.8; } 100% { transform: scale(var(--mm-stop, 2.4)) scaleY(0.92); opacity: 0; } }
+@keyframes mm-free { 0% { transform: scale(1); opacity: 0.7; border-color: color-mix(in srgb, var(--success) 80%, transparent); } 100% { transform: scale(6); opacity: 0; border-color: color-mix(in srgb, var(--success) 40%, transparent); } }
+
+.mm-toast { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--danger) 12%, transparent); animation: mm-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes mm-in { from { opacity: 0; transform: translateY(-6px); } }
+.mm-toast-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
+.mm-unmute-inline { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--danger); color: var(--danger-foreground); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
+.mm-controls { display: flex; gap: 8px; }
+.mm-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; touch-action: none; -webkit-user-select: none; user-select: none; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-base); }
+.mm-controls button svg { width: 20px; height: 20px; }
+.mm-mute { flex: none; padding: 0 18px; background: var(--mm-fill); color: var(--mm-fg); }
+.mm-mute[aria-pressed="true"] { background: color-mix(in srgb, var(--danger) 16%, transparent); color: var(--danger-text); }
+.mm-talk { flex: 1; background: var(--mm-accent); color: var(--mm-on-accent); }
+.mm.is-talking .mm-talk { transform: scale(0.97); }
+.mm-controls button:focus-visible, .mm-unmute-inline:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mm.is-talking .mm-avatar, .mm-toast { animation: none; }
+  .mm-waves i.is-boxed, .mm-waves i.is-free { animation-duration: var(--duration-instant); }
+  .mm-box.is-hit { animation-duration: 0.8s; }
+}
+.mm [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Mute Mime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="mm" data-mi="mute-mime">
+  <div class="mm-tile">
+    <div class="mm-box" aria-hidden="true"></div>
+    <div class="mm-waves" aria-hidden="true"></div>
+    <span class="mm-avatar" aria-hidden="true">You</span>
+    <span class="mm-name"><svg class="mm-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/><path class="mm-slash" d="M4 4l16 16"/></svg>You</span>
+  </div>
+  <div class="mm-toast" hidden>
+    <p class="mm-toast-text" role="status" aria-live="polite">You’re on mute. You’ve been talking for <b class="mm-secs">2</b> seconds.</p>
+    <button type="button" class="mm-unmute-inline">Unmute</button>
+  </div>
+  <div class="mm-controls">
+    <button type="button" class="mm-mute" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg><span class="mm-mute-label">Unmute</span></button>
+    <button type="button" class="mm-talk">Hold to Talk</button>
+  </div>
+</div>
+</div>
+<script>
+/* Mute Mime — vanilla JS. Auto-initializes every [data-mi="mute-mime"].
+   The demo talks while you hold "Hold to Talk". In a real call, call root.talking(true/false) from your
+   voice-activity detector. Call window.initMuteMime(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function initMuteMime(root) {
+    if (!root || root.__miMime) return;
+    root.__miMime = true;
+    var tile = root.querySelector('.mm-tile'), box = root.querySelector('.mm-box'), waves = root.querySelector('.mm-waves');
+    var toast = root.querySelector('.mm-toast'), secsEl = root.querySelector('.mm-secs'), inline = root.querySelector('.mm-unmute-inline');
+    var mute = root.querySelector('.mm-mute'), muteLabel = root.querySelector('.mm-mute-label'), talk = root.querySelector('.mm-talk');
+    var muted = true, speaking = false, spawn = 0, started = 0, clock = 0;
+
+    function wave() {
+      var i = document.createElement('i');
+      if (muted) {
+        // Grow until the ring meets the box's top and bottom edges, then flash the glass.
+        var stop = (tile.clientHeight - 28) / 80;
+        i.style.setProperty('--mm-stop', stop.toFixed(2));
+        i.className = 'is-boxed';
+        setTimeout(function () { box.classList.remove('is-hit'); void box.offsetWidth; box.classList.add('is-hit'); }, reduce.matches ? 0 : 560);
+        setTimeout(function () { i.remove(); }, 800);
+      } else {
+        i.className = 'is-free';
+        setTimeout(function () { i.remove(); }, 1250);
+      }
+      waves.appendChild(i);
+    }
+
+    function tickClock() {
+      var s = Math.floor((performance.now() - started) / 1000);
+      secsEl.textContent = s;
+      if (muted && performance.now() - started > 1400) toast.hidden = false;
+    }
+
+    function talking(on) {
+      if (on === speaking) return;
+      speaking = on;
+      root.classList.toggle('is-talking', on);
+      clearInterval(spawn); clearInterval(clock);
+      if (on) {
+        started = performance.now();
+        wave();
+        spawn = setInterval(wave, 420);
+        clock = setInterval(tickClock, 250);
+      }
+    }
+
+    function setMuted(m) {
+      muted = m;
+      mute.setAttribute('aria-pressed', m ? 'true' : 'false');
+      muteLabel.textContent = m ? 'Unmute' : 'Mute';
+      root.classList.toggle('is-live', !m);
+      if (!m) toast.hidden = true;
+    }
+
+    talk.addEventListener('pointerdown', function (e) { if (e.button === 0) { talk.setPointerCapture && talk.setPointerCapture(e.pointerId); talking(true); } });
+    talk.addEventListener('pointerup', function () { talking(false); });
+    talk.addEventListener('pointercancel', function () { talking(false); });
+    talk.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); talking(true); } });
+    talk.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); talking(false); } });
+    mute.addEventListener('click', function () { setMuted(!muted); });
+    inline.addEventListener('click', function () { setMuted(false); talk.focus(); });
+
+    root.talking = talking;
+    root.setMuted = setMuted;
+    setMuted(true);
+  }
+
+  window.initMuteMime = initMuteMime;
+  function boot() { document.querySelectorAll('[data-mi="mute-mime"]').forEach(initMuteMime); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initMuteMime"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

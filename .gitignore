@@ -1,0 +1,27 @@
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+
+# Owner notes for AI assistants: kept local, not published
+RULES.md
+CLAUDE.md
+AGENTS.md
+
+# Private word list for the build check
+tools/private-words.txt
+
+# Never part of the deployed site
+_archive/
+node_modules/
+.vscode/
+.idea/
+.claude/
+.vercel/
+.env
+.env.*
+*.log
+*.zip
+*.bak
+*.tmp
+screenshots/

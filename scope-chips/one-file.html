@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scope Chips</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .sx so they never affect the rest of your page. */
+.sx {
+  --duration-base: 200ms;
+  --ease-in: cubic-bezier(0.5, 0, 0.78, 0.24);
+  --font-mono: "Geist Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --text-ui: 14px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --foreground: var(--black);
+  --green-11: #218358;
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xl: 0 8px 16px -4px rgba(17, 17, 16, 0.08), 0 28px 56px -12px rgba(17, 17, 16, 0.22);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .sx, .dark .sx {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --chart-1: var(--aqua);
+  --chart-2: var(--pink);
+  --chart-3: var(--orange);
+  --chart-4: var(--sage);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --on-chart: #000000;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .sx {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --chart-1: var(--aqua);
+    --chart-2: var(--pink);
+    --chart-3: var(--orange);
+    --chart-4: var(--sage);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --on-chart: #000000;
+    --orange: #FE8C5F;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --white: #161817;
+  }
+}
+
+/* Scope Chips — search filters like from:mira morph into colored chips as you type, and back into text when you delete into them.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.sx {
+  --sx-bg: var(--card);
+  --sx-fg: var(--foreground);
+  --sx-muted: var(--muted-foreground);
+  --sx-line: var(--border);
+  --sx-sunken: var(--subtle);
+  --sx-fill: var(--muted);
+  --sx-accent: var(--primary);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--sx-bg);
+  color: var(--sx-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.sx-field { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 44px; box-sizing: border-box; padding: 6px 10px 6px 34px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--input); box-shadow: var(--shadow-xs); position: relative; cursor: text; }
+.sx-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.sx-icon { position: absolute; left: 12px; top: 14px; width: 16px; height: 16px; color: var(--sx-muted); }
+.sx-chips { display: contents; }
+.sx-input { flex: 1 1 120px; min-width: 100px; height: 30px; padding: 0 2px; border: 0; background: transparent; color: var(--sx-fg); font: inherit; font-size: var(--text-title-sm); letter-spacing: var(--tracking-title); outline: none; }
+/* Chips: each filter key has its own color */
+.sx-chip {
+  --k: var(--sx-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 4px 0 10px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--k) 14%, transparent);
+  color: var(--sx-fg);
+  font-size: var(--text-ui);
+  white-space: nowrap;
+  transform-origin: left center;
+  animation: sx-chip var(--spring-pop-duration) var(--spring-pop) both;
+}
+.sx-chip[data-key="from"] { --k: var(--chart-2); }
+.sx-chip[data-key="in"] { --k: var(--sx-accent); }
+.sx-chip[data-key="is"] { --k: var(--success); }
+.sx-chip small { color: color-mix(in srgb, var(--k) 80%, var(--sx-fg)); font-size: var(--text-caption); font-weight: 600; }
+.sx-chip b { font-weight: 600; }
+.sx-chip button { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; color: inherit; opacity: 0.55; font-size: var(--text-body); line-height: 1; cursor: pointer; }
+.sx-chip button:hover { opacity: 1; background: color-mix(in srgb, var(--k) 20%, transparent); }
+.sx-chip button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; opacity: 1; }
+@keyframes sx-chip { 0% { transform: scaleX(0.6); opacity: 0.4; border-radius: var(--radius-xs); } 100% { transform: none; opacity: 1; } }
+.sx-chip.is-melting { animation: sx-melt var(--duration-base) var(--ease-in) forwards; }
+@keyframes sx-melt { to { transform: scaleX(0.6); opacity: 0; } }
+.sx-suggest { position: absolute; z-index: 4; left: 20px; right: 20px; top: 70px; margin: 0; padding: 6px; list-style: none; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--sx-bg); box-shadow: 0 0 0 1px var(--sx-line), var(--shadow-xl); animation: sx-pop var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes sx-pop { from { opacity: 0; transform: translateY(-4px); } }
+.sx-suggest li { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 10px; border-radius: var(--radius-md); cursor: pointer; }
+.sx-suggest li[aria-selected="true"] { background: var(--sx-accent); color: var(--primary-foreground); }
+.sx-suggest code { font: 500 var(--text-small)/var(--leading-small) var(--font-mono); }
+.sx-suggest small { margin-left: auto; opacity: 0.7; font-size: var(--text-caption); }
+.sx-tip { margin: 0 4px; color: var(--sx-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.sx-tip code { padding: 1px 5px; border-radius: var(--radius-xs); background: var(--sx-fill); color: var(--sx-fg); font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono); }
+.sx-results { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--sx-sunken); }
+.sx-results li { position: relative; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 14px; box-sizing: border-box; animation: sx-row var(--spring-ui-duration) var(--spring-ui) both; }
+.sx-results li + li::before { content: ""; position: absolute; top: 0; left: 48px; right: 0; height: 1px; background: var(--sx-line); transform: scaleY(0.5); transform-origin: top; }
+@keyframes sx-row { from { opacity: 0; transform: translateY(4px); } }
+.sx-results i { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 50%; color: var(--on-chart); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
+.sx-results div { min-width: 0; }
+.sx-results b { display: block; font-weight: 600; font-size: var(--text-ui); }
+.sx-results span { display: block; overflow: hidden; color: var(--sx-muted); font-size: var(--text-small); text-overflow: ellipsis; white-space: nowrap; }
+.sx-results small { margin-left: auto; flex: none; padding: 2px 8px; border-radius: var(--radius-full); background: var(--sx-fill); color: var(--sx-muted); font-size: calc(var(--text-caption) - 1px); }
+.sx-results .sx-none { justify-content: center; color: var(--sx-muted); font-size: var(--text-small); }
+@media (prefers-reduced-motion: reduce) {
+  .sx-chip, .sx-chip.is-melting, .sx-suggest, .sx-results li { animation: none; }
+}
+.sx [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="sx" data-mi="scope-chips">
+  <div class="sx-field">
+    <svg class="sx-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+    <span class="sx-chips"></span>
+    <input class="sx-input" type="text" placeholder="Search messages" aria-label="Search messages. Use from:, in: and is: to filter." autocomplete="off" spellcheck="false" aria-controls="sx-suggest" aria-autocomplete="list">
+  </div>
+  <ul class="sx-suggest" id="sx-suggest" role="listbox" hidden></ul>
+  <p class="sx-tip">Filters: <code>from:</code> <code>in:</code> <code>is:</code>. Type one and a space, or pick a suggestion.</p>
+  <ul class="sx-results" aria-live="polite"></ul>
+</div>
+
+
+<script>
+/* Scope Chips — vanilla JS. Auto-initializes every [data-mi="scope-chips"].
+   Filters are key:value tokens. Swap DATA and KEYS for your own. Call window.initScopeChips(el) for later elements. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var KEYS = {
+    from: { label: 'From', values: ['mira', 'sam', 'ali', 'stripe'] },
+    in: { label: 'In', values: ['billing', 'design', 'support'] },
+    is: { label: 'Is', values: ['unread', 'starred'] }
+  };
+  var COLORS = { mira: 'var(--chart-2)', sam: 'var(--chart-4)', ali: 'var(--chart-3)', stripe: 'var(--chart-1)' };
+  var DATA = [
+    { from: 'mira', in: 'design', unread: true, starred: false, title: 'Pricing page v3', text: 'New hero and the yearly savings tray' },
+    { from: 'sam', in: 'billing', unread: true, starred: true, title: 'Offsite expense', text: '$2,400 for the Austin trip, receipts attached' },
+    { from: 'stripe', in: 'billing', unread: false, starred: false, title: 'Payout sent', text: '$4,120 is on its way to your bank' },
+    { from: 'ali', in: 'support', unread: false, starred: true, title: 'Refund question', text: 'Customer asking about annual plan refunds' },
+    { from: 'mira', in: 'support', unread: false, starred: false, title: 'FAQ draft', text: 'First pass at billing questions' },
+    { from: 'sam', in: 'design', unread: true, starred: false, title: 'Icon set', text: 'Exported at 1x, 2x and 3x' }
+  ];
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function initScopeChips(root) {
+    if (!root || root.__miScope) return;
+    root.__miScope = true;
+    var field = root.querySelector('.sx-field');
+    var chipsBox = root.querySelector('.sx-chips');
+    var input = root.querySelector('.sx-input');
+    var suggest = root.querySelector('.sx-suggest');
+    var results = root.querySelector('.sx-results');
+    var filters = []; // [{key, value}]
+    var options = [], active = 0;
+
+    function chip(f) {
+      var c = document.createElement('span');
+      c.className = 'sx-chip';
+      c.setAttribute('data-key', f.key);
+      var k = document.createElement('small'); k.textContent = KEYS[f.key].label;
+      var v = document.createElement('b'); v.textContent = cap(f.value);
+      var x = document.createElement('button'); x.type = 'button'; x.textContent = '×';
+      x.setAttribute('aria-label', 'Remove filter ' + KEYS[f.key].label + ' ' + cap(f.value));
+      x.addEventListener('click', function () { remove(f, false); input.focus(); });
+      c.append(k, v, x);
+      return c;
+    }
+    function renderChips(animateLast) {
+      chipsBox.replaceChildren();
+      filters.forEach(function (f, i) {
+        var c = chip(f);
+        if (!animateLast || i !== filters.length - 1) c.style.animation = 'none';
+        chipsBox.appendChild(c);
+      });
+    }
+    function add(key, value) {
+      filters = filters.filter(function (f) { return f.key !== key || key === 'is'; });
+      if (filters.some(function (f) { return f.key === key && f.value === value; })) return;
+      filters.push({ key: key, value: value });
+      renderChips(true);
+      run();
+    }
+    // Deleting into a chip melts it back into editable text.
+    function remove(f, toText) {
+      var i = filters.indexOf(f);
+      if (i < 0) return;
+      var el = chipsBox.children[i];
+      var finish = function () {
+        filters.splice(i, 1);
+        renderChips(false);
+        if (toText) { input.value = f.key + ':' + f.value; input.setSelectionRange(input.value.length, input.value.length); }
+        run();
+        suggestFor();
+      };
+      if (reduce.matches || !el) { finish(); return; }
+      el.classList.add('is-melting');
+      setTimeout(finish, 220);
+    }
+
+    // Turn complete tokens in the input into chips.
+    function absorb(force) {
+      var parts = input.value.split(/\s+/);
+      var keep = [], changed = false;
+      parts.forEach(function (p, i) {
+        var m = /^(\w+):(\w+)$/.exec(p);
+        var complete = force || i < parts.length - 1;
+        if (m && KEYS[m[1].toLowerCase()] && complete) {
+          var key = m[1].toLowerCase(), val = m[2].toLowerCase();
+          var match = KEYS[key].values.filter(function (v) { return v.indexOf(val) === 0; })[0];
+          if (match) { add(key, match); changed = true; return; }
+        }
+        keep.push(p);
+      });
+      if (changed) input.value = keep.join(' ').replace(/^\s+/, '');
+    }
+
+    function suggestFor() {
+      var m = /(\w*):?(\w*)$/.exec(input.value);
+      var word = input.value.split(/\s+/).pop();
+      options = [];
+      var km = /^(\w+):(\w*)$/.exec(word);
+      if (km && KEYS[km[1].toLowerCase()]) {
+        var key = km[1].toLowerCase();
+        KEYS[key].values.filter(function (v) { return v.indexOf(km[2].toLowerCase()) === 0; }).forEach(function (v) { options.push({ key: key, value: v }); });
+      } else if (word && word.length >= 1) {
+        Object.keys(KEYS).forEach(function (k) { if (k.indexOf(word.toLowerCase()) === 0) options.push({ key: k, value: null }); });
+      }
+      active = 0;
+      suggest.replaceChildren();
+      options.forEach(function (o, i) {
+        var li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.id = 'sx-opt-' + i;
+        li.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        var code = document.createElement('code'); code.textContent = o.key + ':' + (o.value || '');
+        var small = document.createElement('small'); small.textContent = o.value ? KEYS[o.key].label + ' ' + cap(o.value) : 'Filter by ' + KEYS[o.key].label.toLowerCase();
+        li.append(code, small);
+        li.addEventListener('pointerdown', function (e) { e.preventDefault(); pick(i); });
+        suggest.appendChild(li);
+      });
+      suggest.hidden = options.length === 0;
+      if (options.length) input.setAttribute('aria-activedescendant', 'sx-opt-0'); else input.removeAttribute('aria-activedescendant');
+    }
+    function pick(i) {
+      var o = options[i];
+      if (!o) return;
+      var words = input.value.split(/\s+/); words.pop();
+      if (o.value) { input.value = words.join(' '); add(o.key, o.value); }
+      else input.value = (words.length ? words.join(' ') + ' ' : '') + o.key + ':';
+      suggestFor();
+      input.focus();
+    }
+
+    function run() {
+      var q = input.value.trim().toLowerCase();
+      var list = DATA.filter(function (d) {
+        return filters.every(function (f) { return f.key === 'is' ? d[f.value] : d[f.key] === f.value; }) &&
+          (!q || /\w+:/.test(q) || (d.title + ' ' + d.text).toLowerCase().indexOf(q) > -1);
+      });
+      results.replaceChildren();
+      if (!list.length) { var n = document.createElement('li'); n.className = 'sx-none'; n.textContent = 'No messages match these filters.'; results.appendChild(n); return; }
+      list.forEach(function (d, k) {
+        var li = document.createElement('li'); li.style.animationDelay = (k * 30) + 'ms';
+        var i = document.createElement('i'); i.textContent = d.from[0].toUpperCase(); i.style.background = COLORS[d.from];
+        var div = document.createElement('div');
+        var b = document.createElement('b'); b.textContent = d.title;
+        var s = document.createElement('span'); s.textContent = d.text;
+        div.append(b, s);
+        var tag = document.createElement('small'); tag.textContent = cap(d.in);
+        li.append(i, div, tag);
+        results.appendChild(li);
+      });
+    }
+
+    input.addEventListener('input', function () { absorb(false); suggestFor(); run(); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace' && !input.value && filters.length) { e.preventDefault(); remove(filters[filters.length - 1], true); return; }
+      if (!suggest.hidden && options.length) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          active = (active + (e.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+          Array.prototype.forEach.call(suggest.children, function (li, i) { li.setAttribute('aria-selected', i === active ? 'true' : 'false'); });
+          input.setAttribute('aria-activedescendant', 'sx-opt-' + active);
+          return;
+        }
+        if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); pick(active); return; }
+        if (e.key === 'Escape') { suggest.hidden = true; return; }
+      }
+      if (e.key === 'Enter') { e.preventDefault(); absorb(true); run(); }
+    });
+    input.addEventListener('blur', function () { setTimeout(function () { suggest.hidden = true; }, 120); });
+    field.addEventListener('click', function (e) { if (e.target === field || e.target === chipsBox) input.focus(); });
+    run();
+  }
+
+  window.initScopeChips = initScopeChips;
+  function boot() { document.querySelectorAll('[data-mi="scope-chips"]').forEach(initScopeChips); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+/* Terms Speedrun — scroll through the terms too fast and the checkbox admits what really happened.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ts {
+  --ts-bg: var(--card);
+  --ts-fg: var(--foreground);
+  --ts-muted: var(--muted-foreground);
+  --ts-line: var(--border);
+  --ts-sunken: var(--subtle);
+  --ts-fill: var(--muted);
+  --ts-accent: var(--primary);
+  --ts-on-accent: var(--primary-foreground);
+  --ts-tone: var(--ts-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ts-bg);
+  color: var(--ts-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ts p { margin: 0; }
+.ts-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ts-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+
+/* Live reading speed */
+.ts-meter { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--ts-tone) 14%, transparent); color: var(--ts-tone); font-size: var(--text-caption); font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; transition: background-color var(--duration-slow), color var(--duration-slow); }
+.ts-meter b { font-weight: 700; }
+.ts-mode:not(:empty)::before { content: "·"; margin: 0 5px; }
+.ts-mode { font-weight: 600; }
+.ts[data-speed="skim"] { --ts-tone: var(--warning-text); }
+.ts[data-speed="speedrun"] { --ts-tone: var(--danger-text); }
+.ts[data-speed="speedrun"] .ts-meter { animation: ts-buzz var(--duration-fast) linear infinite; }
+@keyframes ts-buzz { 50% { transform: translateX(0.6px); } }
+
+.ts-doc { height: 210px; padding: 4px 16px 16px; overflow-y: auto; overscroll-behavior: contain; border-radius: var(--radius-lg); background: var(--ts-sunken); color: var(--ts-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.ts-doc:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ts-doc h4 { margin: 14px 0 4px; color: var(--ts-fg); font-size: var(--text-small); font-weight: 600; }
+.ts-progress { height: 3px; margin-top: -6px; border-radius: var(--radius-xs); background: var(--ts-fill); overflow: hidden; }
+.ts-progress i { display: block; width: 0; height: 100%; background: var(--ts-tone); transition: background-color var(--duration-slow); }
+
+/* Checkbox row */
+.ts-agree { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; }
+.ts-check { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.ts-box { position: relative; flex: none; width: 24px; height: 24px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--ts-line); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.ts-box::after { content: ""; position: absolute; left: 8px; top: 4px; width: 6px; height: 11px; border: solid var(--ts-on-accent); border-width: 0 2.2px 2.2px 0; transform: rotate(45deg) scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.ts-check:checked + .ts-box { background: var(--ts-accent); box-shadow: none; }
+.ts-check:checked + .ts-box::after { transform: rotate(45deg) scale(1); }
+.ts-check:focus-visible + .ts-box { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ts-check:disabled + .ts-box { opacity: 0.45; }
+.ts-check:disabled ~ .ts-label { color: var(--ts-muted); }
+.ts-agree:has(.ts-check:disabled) { cursor: default; }
+.ts-label { transition: color var(--duration-base); }
+.ts-label.is-swap { animation: ts-swap var(--spring-ui-duration) var(--spring-ui); }
+@keyframes ts-swap { 0% { opacity: 0; transform: translateY(6px); filter: blur(2px); } }
+.ts.is-busted .ts-label { font-weight: 600; }
+
+.ts-result { display: flex; flex-direction: column; gap: 10px; animation: ts-swap var(--spring-ui-duration) var(--spring-ui) both; }
+.ts-record { padding: 10px 12px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--ts-tone) 12%, transparent); color: color-mix(in srgb, var(--ts-tone) 80%, var(--ts-fg)); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
+.ts:not(.is-busted) .ts-record { --ts-tone: var(--success-text); }
+.ts-tldr { padding: 12px 14px; border-radius: var(--radius-lg); background: var(--ts-sunken); font-size: var(--text-small); line-height: var(--leading-small); }
+.ts-tldr-title { margin-bottom: 4px !important; font-weight: 600; }
+.ts-tldr ul { margin: 0; padding-left: 18px; color: var(--ts-muted); }
+
+.ts-continue { height: 44px; border: 0; border-radius: var(--radius-md); background: var(--ts-accent); color: var(--ts-on-accent); font: inherit; font-size: var(--text-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.ts-continue:active { transform: scale(var(--press-scale)); }
+.ts-continue:disabled { opacity: 0.35; cursor: default; transform: none; }
+.ts-continue:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ts[data-speed="speedrun"] .ts-meter, .ts-label.is-swap, .ts-result { animation: none; }
+}
+.ts [hidden] { display: none !important; }

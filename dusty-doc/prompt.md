@@ -1,0 +1,26 @@
+Build a "Dusty Doc" for documents nobody has opened in years in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
+
+WHAT IT DOES
+A document untouched for years opens covered in dust, with a cobweb in the corner. Scrolling or swiping blows the dust away, and the page regains its color.
+
+BEHAVIOR
+1. A file header ("Q3 2022 Strategy (Draft)", "Last opened 3 years ago by you") and a 230px page on Soft ground with headings and secondary text. A canvas over the page holds about 520 dust specks, 0.5–3px in warm grays at 35–85% opacity. A thin cobweb SVG sits in the top-right corner.
+2. Age (stuck specks ÷ total) drives the content: sepia(0.55 × age), lower contrast and opacity, and a faint warm overlay.
+3. Scrolling releases a share of the stuck specks (1.2% per pixel scrolled, up to 50% per event). They fly in the scroll direction with random spread, slow with drag, drift down slightly and fade.
+4. Swiping across the page faster than 0.6 px/ms blows away the specks within 46px of the pointer in its direction of travel.
+5. Below 45% dust, the cobweb tumbles off (falls 60px, rotates 40°, fades). Below 4%, everything clears and the status says "Good as new. It still says "Q3 2022" though." A Let It Gather Dust link lets three more years pass, with dust settling back over a second.
+Only show it for files untouched for a long time. Reduced motion: dust settles back instantly.
+
+APPEARANCE (Outcraft Design System)
+- Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
+- Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
+- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float.
+- Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
+- Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
+- Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
+- Copy: title-case button labels, sentence-case body text, no emoji.
+- This one: the dust and cobweb are drawn, not photographic, and stay subtle enough to read through.
+
+DELIVER
+The component with speck count and the age threshold as inputs, the demo, and short usage notes.

@@ -1,0 +1,62 @@
+/* Exclamation Budget — three exclamation marks per message. Past that, they quietly turn into periods.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.eb {
+  --eb-bg: var(--card);
+  --eb-fg: var(--foreground);
+  --eb-muted: var(--muted-foreground);
+  --eb-line: var(--border);
+  --eb-sunken: var(--subtle);
+  --eb-fill: var(--muted);
+  --eb-accent: var(--primary);
+  --eb-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--eb-bg);
+  color: var(--eb-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.eb p { margin: 0; }
+.eb-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.eb-title { font-weight: 600; }
+/* The wallet: one token per exclamation mark */
+.eb-wallet { display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--radius-full); background: var(--eb-sunken); }
+.eb-wallet i { position: relative; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ai); box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--black) 15%, transparent); transition: transform var(--spring-pop-duration) var(--spring-pop), background-color var(--duration-slow), box-shadow var(--duration-slow); }
+.eb-wallet i::after { content: "!"; color: var(--ai-foreground); font: 800 var(--text-body)/1 var(--font-sans); font-style: normal; }
+.eb-wallet i.is-spent { background: transparent; box-shadow: inset 0 0 0 1.5px var(--eb-line); transform: scale(0.82); }
+.eb-wallet i.is-spent::after { color: var(--eb-muted); opacity: 0.4; }
+.eb-wallet i.is-pop { animation: eb-pop var(--duration-slower) var(--ease-out); }
+@keyframes eb-pop { 0% { transform: scale(1); } 40% { transform: scale(1.4) translateY(-6px); } 100% { transform: scale(0.82); } }
+
+.eb-input { display: block; width: 100%; min-height: 84px; box-sizing: border-box; padding: 12px 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: inherit; font: inherit; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); resize: none; }
+.eb-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+.eb-input.is-shrug { animation: eb-shrug var(--spring-ui-duration) var(--spring-ui); }
+@keyframes eb-shrug { 30% { transform: translateY(-4px) scaleY(1.02); } 60% { transform: translateY(1px); } }
+.eb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.eb-chips button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--eb-fill); color: var(--eb-fg); font: inherit; font-size: var(--text-small); font-weight: 500; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.eb-chips button:active { transform: scale(var(--press-scale-sm)); }
+.eb-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.eb-status { color: var(--eb-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+.eb.is-broke .eb-status { color: var(--eb-fg); font-weight: 500; }
+.eb-shop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--ai) 12%, transparent); animation: eb-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes eb-in { from { opacity: 0; transform: translateY(-6px); } }
+.eb-shop-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.eb-buy { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ai); color: var(--ai-foreground); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
+.eb-send { height: 44px; border: 0; border-radius: var(--radius-md); background: var(--eb-accent); color: var(--eb-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.eb-send:active, .eb-buy:active { transform: scale(var(--press-scale)); }
+.eb-send:focus-visible, .eb-buy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .eb-wallet i.is-pop, .eb-input.is-shrug, .eb-shop { animation: none; }
+}
+.eb [hidden] { display: none !important; }

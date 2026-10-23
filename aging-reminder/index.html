@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aging Reminder · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Aging Reminder — every snooze makes the reminder visibly older: yellowed, curled, taped, stained.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ar {
+  --ar-bg: var(--card);
+  --ar-fg: var(--foreground);
+  --ar-muted: var(--muted-foreground);
+  --ar-line: var(--border);
+  --ar-sunken: var(--subtle);
+  --ar-fill: var(--muted);
+  --ar-accent: var(--primary);
+  --ar-on-accent: var(--primary-foreground);
+  --ar-aged: color-mix(in srgb, var(--olive) 38%, var(--card));
+  --ar-age: 0;
+  --ar-tilt: 0deg;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ar-bg);
+  color: var(--ar-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ar p { margin: 0; }
+.ar-stage { padding: 18px 14px; border-radius: var(--radius-xl); background: var(--ar-sunken); }
+/* The card. Age blends white paper toward old paper and adds wear. */
+.ar-card {
+  position: relative;
+  padding: 16px 18px 18px;
+  border-radius: var(--radius-lg);
+  background:
+    repeating-linear-gradient(17deg, transparent 0 22px, color-mix(in srgb, var(--olive-700) calc(var(--ar-age) * 6%), transparent) 22px 23px, transparent 23px 51px),
+    repeating-linear-gradient(-31deg, transparent 0 34px, color-mix(in srgb, var(--olive-700) calc(var(--ar-age) * 5%), transparent) 34px 35px, transparent 35px 70px),
+    color-mix(in srgb, var(--ar-aged) calc(var(--ar-age) * 100%), var(--ar-bg));
+  color: var(--foreground);
+  box-shadow: var(--shadow-xs);
+  transform: rotate(var(--ar-tilt));
+  transition: transform var(--spring-pop-duration) var(--spring-pop), background-color var(--duration-slower), box-shadow var(--duration-slower), filter var(--duration-slower);
+  filter: saturate(calc(1 - var(--ar-age) * 0.25));
+}
+/* The corner curls up as it ages */
+.ar-card::after { content: ""; position: absolute; right: 0; bottom: 0; width: calc(var(--ar-age) * 34px); height: calc(var(--ar-age) * 34px); border-radius: var(--radius-lg) 0 var(--radius-lg) 0; background: linear-gradient(315deg, var(--ar-stage-bg, var(--subtle)) 50%, color-mix(in srgb, var(--olive) 60%, var(--ar-bg)) 50%, color-mix(in srgb, var(--olive) 22%, var(--ar-bg)) 100%); box-shadow: var(--shadow-xs); transition: width var(--spring-ui-duration) var(--spring-ui), height var(--spring-ui-duration) var(--spring-ui); }
+.ar-tape { position: absolute; left: 50%; top: -10px; width: 72px; height: 22px; margin-left: -36px; background: color-mix(in srgb, var(--on-color) 55%, transparent); box-shadow: var(--shadow-xs); transform: rotate(-4deg) scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.ar.is-taped .ar-tape { transform: rotate(-4deg) scale(1); }
+.ar-stain { position: absolute; right: 18px; top: 10px; width: 56px; height: 56px; border-radius: 50%; box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--olive-700) 22%, transparent), inset 0 0 0 7px color-mix(in srgb, var(--olive-700) 6%, transparent); opacity: 0; transform: scale(0.6); transition: opacity var(--duration-slower), transform var(--duration-slower); pointer-events: none; }
+.ar.is-stained .ar-stain { opacity: 1; transform: none; }
+.ar-kicker { color: var(--warning-text); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 700; }
+.ar-task { margin-top: 4px !important; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); opacity: calc(1 - var(--ar-age) * 0.2); }
+.ar-since { margin-top: 8px !important; color: var(--muted-foreground); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+.ar.is-done .ar-card { --ar-age: 0; --ar-tilt: 0deg; }
+.ar.is-done .ar-task { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--muted-foreground); }
+.ar.is-done .ar-card { animation: ar-fresh var(--spring-pop-duration) var(--spring-pop); }
+@keyframes ar-fresh { 30% { transform: scale(1.04); } }
+
+.ar-actions { display: flex; gap: 8px; }
+.ar-actions button { flex: 1; min-width: 0; height: 44px; padding: 0 12px; white-space: nowrap; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ar-snooze { background: var(--ar-fill); color: var(--ar-fg); }
+.ar-done { background: var(--ar-accent); color: var(--ar-on-accent); }
+.ar-actions button:active { transform: scale(var(--press-scale)); }
+.ar-actions button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ar-status { margin: 0; color: var(--ar-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* No message, no space: the card grows only when there is something to say */
+.ar-status:empty { display: none; }
+/* Narrow cards: slightly smaller button text so "Snooze (Seriously?)" stays on one line */
+.ar { container-type: inline-size; }
+@container (max-width: 320px) { .ar-actions button { padding: 0 8px; font-size: var(--text-small); } }
+.ar-short { display: none; }
+@container (max-width: 260px) { .ar-long { display: none; } .ar-short { display: inline; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ar-card, .ar-card::after, .ar-tape, .ar-stain { transition-duration: var(--duration-reduced); }
+  .ar.is-done .ar-card { animation: none; }
+}
+.ar [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Aging Reminder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="ar" data-mi="aging-reminder" data-who="Priya" data-start="10">
+  <div class="ar-stage">
+    <div class="ar-card">
+      <span class="ar-tape" aria-hidden="true"></span>
+      <span class="ar-stain" aria-hidden="true"></span>
+      <p class="ar-kicker">Reminder</p>
+      <p class="ar-task">Reply to Priya about the invoice</p>
+      <p class="ar-since">Due today at 10:00 AM</p>
+    </div>
+  </div>
+  <div class="ar-actions">
+    <button type="button" class="ar-snooze">Snooze 1 Hour</button>
+    <button type="button" class="ar-done">Done</button>
+  </div>
+  <p class="ar-status" role="status" aria-live="polite"></p>
+</div>
+</div>
+<script>
+/* Aging Reminder — vanilla JS. Auto-initializes every [data-mi="aging-reminder"].
+   Age runs 0–1 over eight snoozes: paper yellows, the corner curls, tape appears at 3, a coffee ring at 5.
+   Call window.initAgingReminder(el) for elements added later. */
+(function () {
+  'use strict';
+  var MAX = 8;
+  var NOTES = { 3: 'It’s been taped back up.', 5: 'This reminder has seen things.', 7: 'It’s older than some of your projects.', 8: 'It’s now a historical document.' };
+
+  function initAgingReminder(root) {
+    if (!root || root.__miAge) return;
+    root.__miAge = true;
+    var who = root.getAttribute('data-who') || 'them';
+    var startHour = Number(root.getAttribute('data-start')) || 10;
+    var since = root.querySelector('.ar-since'), status = root.querySelector('.ar-status');
+    var snooze = root.querySelector('.ar-snooze'), done = root.querySelector('.ar-done');
+    var stage = root.querySelector('.ar-stage');
+    var n = 0, finished = false;
+
+    // The curl reveals the stage behind it, so it needs that color as an opaque value.
+    function nums(c) { return (c.match(/[\d.]+/g) || []).map(Number); }
+    function stageColor() {
+      var f = nums(getComputedStyle(stage).backgroundColor), b = nums(getComputedStyle(root).backgroundColor);
+      var a = f.length > 3 ? f[3] : 1;
+      root.style.setProperty('--ar-stage-bg', 'rgb(' + [0, 1, 2].map(function (i) { return Math.round(f[i] * a + (b[i] || 255) * (1 - a)); }).join(', ') + ')');
+    }
+    stageColor();
+    if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { setTimeout(stageColor, 50); });
+
+    function hour(h) { var hh = h % 24, ap = hh >= 12 ? 'PM' : 'AM'; return (hh % 12 || 12) + ':00 ' + ap; }
+
+    function render() {
+      var age = Math.min(1, n / MAX);
+      root.style.setProperty('--ar-age', age.toFixed(3));
+      root.style.setProperty('--ar-tilt', (n === 0 ? 0 : (n % 2 ? -1 : 1) * Math.min(3.5, 0.6 + n * 0.4)).toFixed(2) + 'deg');
+      root.classList.toggle('is-taped', n >= 3);
+      root.classList.toggle('is-stained', n >= 5);
+      since.textContent = n === 0 ? 'Due today at ' + hour(startHour)
+        : 'Snoozed ' + n + (n === 1 ? ' time' : ' times') + '. It’s now ' + hour(startHour + n) + (startHour + n >= 24 ? ', tomorrow' : '') + '.';
+      // Very narrow cards show just "Seriously?" so the label always fits on one line.
+      snooze.innerHTML = n >= MAX ? '<span class="ar-long">Snooze (Seriously?)</span><span class="ar-short">Seriously?</span>' : 'Snooze 1 Hour';
+      status.textContent = NOTES[n] || '';
+    }
+
+    snooze.addEventListener('click', function () { if (finished) return; n++; render(); });
+    done.addEventListener('click', function () {
+      if (finished) {
+        finished = false; n = 0;
+        root.classList.remove('is-done');
+        done.textContent = 'Done'; snooze.disabled = false;
+        render();
+        return;
+      }
+      finished = true;
+      root.classList.add('is-done');
+      snooze.disabled = true;
+      done.textContent = 'Undo';
+      status.textContent = n === 0 ? 'Done on time. Who are you?' : 'Done after ' + n + (n === 1 ? ' snooze' : ' snoozes') + '. ' + who + ' will be so relieved.';
+    });
+    render();
+  }
+
+  window.initAgingReminder = initAgingReminder;
+  function boot() { document.querySelectorAll('[data-mi="aging-reminder"]').forEach(initAgingReminder); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initAgingReminder"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

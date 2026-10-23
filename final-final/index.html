@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>final_FINAL_v3 · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* final_FINAL_v3 — every save evolves the file name, the way everyone's file names evolve.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.fn {
+  --fn-bg: var(--card);
+  --fn-fg: var(--foreground);
+  --fn-muted: var(--muted-foreground);
+  --fn-line: var(--border);
+  --fn-sunken: var(--subtle);
+  --fn-fill: var(--muted);
+  --fn-accent: var(--primary);
+  --fn-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--fn-bg);
+  color: var(--fn-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.fn p { margin: 0; }
+.fn-file { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: var(--radius-xl); background: var(--fn-sunken); }
+.fn-icon { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: var(--radius-lg); background: var(--pop); color: var(--pop-foreground); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--black) 6%, transparent); }
+.fn-icon svg { width: 26px; height: 26px; }
+.fn-text { min-width: 0; }
+.fn-name { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); overflow-wrap: anywhere; }
+.fn-ext { color: var(--fn-muted); font-weight: 500; }
+.fn-caret { display: inline-block; width: 2px; height: 18px; margin: 0 1px -3px; border-radius: var(--radius-xs); background: var(--fn-accent); opacity: 0; }
+.fn.is-typing .fn-caret { opacity: 1; animation: fn-blink 0.9s steps(1) infinite; }
+@keyframes fn-blink { 50% { opacity: 0; } }
+.fn-meta { color: var(--fn-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.fn-save { display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px; border: 0; border-radius: var(--radius-md); background: var(--fn-accent); color: var(--fn-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.fn-save:active { transform: scale(var(--press-scale)); }
+.fn-save:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.fn-save kbd { padding: 2px 6px; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--on-color) 22%, transparent); font: 600 var(--text-caption)/var(--leading-caption) var(--font-sans); }
+.fn-folder { display: flex; flex-direction: column; gap: 6px; }
+.fn-folder-title { color: var(--fn-muted); font-size: var(--text-small); font-weight: 600; }
+.fn-list { margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--fn-sunken); }
+.fn-list li { position: relative; display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 6px 14px; color: var(--fn-muted); font-size: var(--text-small); line-height: var(--leading-small); overflow-wrap: anywhere; animation: fn-in var(--spring-ui-duration) var(--spring-ui) both; }
+.fn-list li::before { content: ""; flex: none; width: 14px; height: 10px; border-radius: var(--radius-xs); background: var(--ai); opacity: 0.7; }
+.fn-list li + li::after { content: ""; position: absolute; top: 0; left: 38px; right: 0; height: 1px; background: var(--fn-line); transform: scaleY(0.5); transform-origin: top; }
+.fn-list .fn-more { color: var(--fn-muted); font-style: normal; }
+.fn-list .fn-more::before { visibility: hidden; }
+@keyframes fn-in { from { opacity: 0; transform: translateY(-6px); } }
+.fn-status { min-height: 18px; color: var(--fn-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fn.is-typing .fn-caret, .fn-list li { animation: none; }
+}
+.fn [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset final_FINAL_v3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="fn" data-mi="final-final" data-base="Pitch Deck" data-ext=".pdf">
+  <div class="fn-file">
+    <span class="fn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M10 9H8M16 13H8M16 17H8"/></svg></span>
+    <div class="fn-text">
+      <p class="fn-name"><span class="fn-typed">Pitch Deck</span><span class="fn-caret" aria-hidden="true"></span><span class="fn-ext">.pdf</span></p>
+      <p class="fn-meta">24 pages · Saved just now</p>
+    </div>
+  </div>
+  <button type="button" class="fn-save">Save <kbd>⌘S</kbd></button>
+  <div class="fn-folder" hidden>
+    <p class="fn-folder-title">Also in This Folder</p>
+    <ul class="fn-list"></ul>
+  </div>
+  <p class="fn-status" role="status" aria-live="polite"></p>
+</div>
+</div>
+<script>
+/* final_FINAL_v3 — vanilla JS. Auto-initializes every [data-mi="final-final"].
+   Each save (button, or ⌘S / Ctrl+S inside the component) backspaces and retypes the name to its next stage.
+   Call window.initFinalFinal(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var SUFFIXES = ['', ' final', ' final_v2', ' FINAL', ' FINAL_final', ' FINAL_final_v3', ' FINAL_final_v3 (use this one)',
+    ' FINAL_final_v3 (use this one) (1)', ' FINAL_final_v3 (use this one) (1) EDITED', ''];
+  var NOTES = { 3: 'Confident.', 5: 'Very confident.', 6: 'This is the one.', 7: 'This is also the one.', 8: 'Nine files. One deck. Nobody knows which is real.', 9: 'Full circle. It’s just “Pitch Deck” again.' };
+
+  function initFinalFinal(root) {
+    if (!root || root.__miFinal) return;
+    root.__miFinal = true;
+    var base = root.getAttribute('data-base') || 'Untitled';
+    var ext = root.getAttribute('data-ext') || '';
+    var typed = root.querySelector('.fn-typed'), meta = root.querySelector('.fn-meta');
+    var save = root.querySelector('.fn-save'), folder = root.querySelector('.fn-folder'), list = root.querySelector('.fn-list');
+    var status = root.querySelector('.fn-status');
+    var stage = 0, busy = false, files = [];
+
+    function type(from, to, done) {
+      if (reduce.matches) { typed.textContent = to; done(); return; }
+      var keep = 0;
+      while (keep < from.length && keep < to.length && from[keep] === to[keep]) keep++;
+      var cur = from, typing = false;
+      root.classList.add('is-typing');
+      (function step() {
+        if (!typing && cur.length > keep) { cur = cur.slice(0, -1); typed.textContent = cur; setTimeout(step, 22); return; }
+        typing = true; // backspacing is done, now type forward
+        if (cur.length < to.length) { cur = to.slice(0, cur.length + 1); typed.textContent = cur; setTimeout(step, 38); return; }
+        root.classList.remove('is-typing');
+        done();
+      })();
+    }
+
+    function renderFolder() {
+      list.replaceChildren();
+      var shown = files.slice(-3).reverse();
+      shown.forEach(function (f) { var li = document.createElement('li'); li.textContent = f + ext; list.appendChild(li); });
+      if (files.length > 3) { var m = document.createElement('li'); m.className = 'fn-more'; m.textContent = 'and ' + (files.length - 3) + ' more'; list.appendChild(m); }
+      folder.hidden = files.length === 0;
+    }
+
+    function doSave() {
+      if (busy) return;
+      busy = true;
+      var oldName = base + SUFFIXES[stage];
+      if (stage < SUFFIXES.length - 1 && files.indexOf(oldName) < 0) files.push(oldName);
+      stage = (stage + 1) % SUFFIXES.length;
+      var newName = base + SUFFIXES[stage];
+      meta.textContent = '24 pages · Saving…';
+      status.textContent = '';
+      type(oldName, newName, function () {
+        busy = false;
+        meta.textContent = '24 pages · Saved just now';
+        status.textContent = NOTES[stage] || '';
+        if (stage === SUFFIXES.length - 1) { stage = 0; files = []; }
+        renderFolder();
+      });
+    }
+
+    save.addEventListener('click', doSave);
+    root.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') { e.preventDefault(); doSave(); }
+    });
+    typed.textContent = base;
+  }
+
+  window.initFinalFinal = initFinalFinal;
+  function boot() { document.querySelectorAll('[data-mi="final-final"]').forEach(initFinalFinal); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initFinalFinal"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

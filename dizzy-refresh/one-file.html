@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dizzy Refresh</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .dz so they never affect the rest of your page. */
+.dz {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --duration-slow: 320ms;
+  --duration-slower: 480ms;
+  --ease-in-out: cubic-bezier(0.62, 0, 0.32, 1);
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-h3: 32px;
+  --leading-small: 18px;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-h3: 24px;
+  --text-small: 13px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: var(--black);
+  --input: var(--line-strong);
+  --lift: #FFFFFF;
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--black);
+  --raised: var(--lift);
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --switch-on: var(--black);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .dz, .dark .dz {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --input: var(--line-strong);
+  --lift: #3F4341;
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--aqua);
+  --raised: var(--lift);
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --switch-on: var(--aqua);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .dz {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --input: var(--line-strong);
+    --lift: #3F4341;
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --primary: var(--aqua);
+    --raised: var(--lift);
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --switch-on: var(--aqua);
+    --white: #161817;
+  }
+}
+
+/* Dizzy Refresh — pull to refresh too many times and the spinner gets dizzy, then offers to just tell you.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.dz {
+  --dz-bg: var(--card);
+  --dz-fg: var(--foreground);
+  --dz-muted: var(--muted-foreground);
+  --dz-line: var(--border);
+  --dz-sunken: var(--subtle);
+  --dz-fill: var(--muted);
+  --dz-accent: var(--primary);
+  --dz-pull: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--dz-bg);
+  color: var(--dz-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.dz p { margin: 0; }
+.dz-head { display: flex; align-items: center; justify-content: space-between; }
+.dz-title { font-size: var(--text-h3); line-height: var(--leading-h3); font-weight: 700; letter-spacing: var(--tracking-title); }
+.dz-refresh { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--dz-fill); color: var(--dz-accent); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.dz-refresh svg { width: 20px; height: 20px; }
+.dz-refresh:active { transform: scale(0.9); }
+.dz-refresh:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.dz-viewport { position: relative; height: 236px; overflow: hidden; border-radius: var(--radius-lg); background: var(--dz-sunken); touch-action: none; cursor: grab; -webkit-user-select: none; user-select: none; }
+.dz-viewport:active { cursor: grabbing; }
+.dz-pull { position: absolute; left: 0; right: 0; top: 0; height: 60px; display: grid; place-items: center; }
+.dz-list { position: relative; margin: 0; padding: 0; list-style: none; background: var(--dz-bg); transform: translateY(calc(var(--dz-pull) * 1px)); transition: transform var(--spring-ui-duration) var(--spring-ui); min-height: 100%; }
+.dz.is-dragging .dz-list { transition: none; }
+.dz-list li { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 10px; padding: 10px 14px; }
+.dz-list li + li::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--dz-line); transform: scaleY(0.5); transform-origin: top; }
+.dz-list b { font-weight: 600; }
+.dz-list span { grid-column: 1; overflow: hidden; color: var(--dz-muted); font-size: var(--text-small); line-height: var(--leading-small); text-overflow: ellipsis; white-space: nowrap; }
+.dz-list time { grid-row: 1; grid-column: 2; color: var(--dz-muted); font-size: var(--text-caption); font-variant-numeric: tabular-nums; }
+
+/* Arc spinner: draws in as you pull, then spins */
+.dz-spinner { --dz-arc: 0; position: relative; width: 28px; height: 28px; transition: transform var(--duration-slow); }
+.dz-spinner svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.dz-spinner circle { fill: none; stroke-width: 2.5; }
+.dz-ring { stroke: var(--border); opacity: 0; transition: opacity var(--duration-base); }
+.dz-arc { stroke: var(--dz-fg); stroke-linecap: round; stroke-dasharray: var(--dz-arc) 100; transform: rotate(-90deg); transform-origin: 50% 50%; }
+.dz.is-loading .dz-ring { opacity: 1; }
+.dz.is-loading .dz-arc { stroke-dasharray: 28 100; }
+.dz.is-loading .dz-spinner { animation: dz-spin var(--duration-slower) linear infinite; }
+@keyframes dz-spin { to { transform: rotate(1turn); } }
+.dz.is-woozy.is-loading .dz-spinner { animation: dz-spin 0.9s linear infinite, dz-wobble 0.9s var(--ease-in-out) infinite; }
+@keyframes dz-wobble { 0%, 100% { translate: -3px 0; } 50% { translate: 3px 2px; } }
+.dz-eyes { position: absolute; left: 50%; top: 50%; display: flex; gap: 6px; margin: -6px 0 0 -15px; opacity: 0; transition: opacity var(--duration-base); }
+.dz-eyes i { position: relative; width: 12px; height: 12px; border-radius: 50%; background: var(--dz-bg); box-shadow: inset 0 0 0 1.5px var(--dz-fg); }
+.dz-eyes i::after { content: ""; position: absolute; left: 5px; top: 1.5px; width: 3px; height: 3px; border-radius: 50%; background: var(--dz-fg); transform-origin: 1.5px 4.5px; animation: dz-orbit var(--duration-slower) linear infinite; }
+.dz-eyes i + i::after { animation-direction: reverse; }
+@keyframes dz-orbit { to { transform: rotate(1turn); } }
+.dz.is-dizzy .dz-eyes { opacity: 1; }
+.dz.is-dizzy .dz-spinner { opacity: 0.25; }
+.dz.is-dizzy .dz-pull { animation: dz-sway 1.2s var(--ease-in-out) infinite; }
+@keyframes dz-sway { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+
+.dz-status { min-height: 36px; color: var(--dz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.dz.is-dizzy .dz-status { color: var(--dz-fg); font-weight: 500; }
+.dz-notify { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 12px 0 14px; border-radius: var(--radius-lg); background: var(--dz-sunken); cursor: pointer; animation: dz-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes dz-in { from { opacity: 0; transform: translateY(-6px); } }
+.dz-switch { appearance: none; -webkit-appearance: none; position: relative; flex: none; width: 40px; height: 22px; margin: 0; border: 1px solid var(--input); border-radius: var(--radius-full); background: var(--muted); cursor: pointer; transition: background-color var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out); }
+.dz-switch::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--raised); box-shadow: var(--shadow-sm); transition: transform var(--spring-ui-duration) var(--spring-ui), width var(--spring-press-duration) var(--spring-press); }
+.dz-switch:active::after { width: 20px; }
+.dz-switch:checked { background: var(--switch-on); border-color: var(--switch-on); }
+.dz-switch:checked::after { transform: translateX(18px); background: var(--card); }
+.dz-switch:checked:active::after { transform: translateX(14px); }
+.dz-switch:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dz.is-loading .dz-spinner, .dz.is-woozy.is-loading .dz-spinner, .dz.is-dizzy .dz-pull, .dz-eyes i::after, .dz-notify { animation: none; }
+  .dz-list { transition-duration: var(--duration-reduced); }
+}
+.dz [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="dz" data-mi="dizzy-refresh" data-last="2:14 PM">
+  <div class="dz-head">
+    <p class="dz-title">Inbox</p>
+    <button type="button" class="dz-refresh" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4v4h-4"/></svg></button>
+  </div>
+  <div class="dz-viewport">
+    <div class="dz-pull" aria-hidden="true">
+      <span class="dz-spinner"><svg viewBox="0 0 28 28" aria-hidden="true"><circle class="dz-ring" cx="14" cy="14" r="11"/><circle class="dz-arc" cx="14" cy="14" r="11" pathLength="100"/></svg></span>
+      <span class="dz-eyes"><i></i><i></i></span>
+    </div>
+    <ul class="dz-list">
+      <li><b>Mira Chen</b><span>Re: Launch plan</span><time>2:14 PM</time></li>
+      <li><b>Billing</b><span>Your invoice is ready</span><time>1:52 PM</time></li>
+      <li><b>Sam Rivera</b><span>Quick question</span><time>1:30 PM</time></li>
+      <li><b>Leo</b><span>Lunch?</span><time>12:02 PM</time></li>
+    </ul>
+  </div>
+  <p class="dz-status" role="status" aria-live="polite">Pull the list down to refresh.</p>
+  <label class="dz-notify" hidden>
+    <span>Tell Me When Something Arrives</span>
+    <input type="checkbox" class="dz-switch" role="switch">
+  </label>
+</div>
+
+
+<script>
+/* Dizzy Refresh — vanilla JS. Auto-initializes every [data-mi="dizzy-refresh"].
+   Drag the list down past 60px (or press the refresh button). Refreshes inside 20 seconds stack up: at 3 the
+   spinner gets woozy, at 5 it's dizzy and offers to notify you instead. Replace load() with your fetch.
+   Call window.initDizzyRefresh(el) for elements added later. */
+(function () {
+  'use strict';
+  var THRESHOLD = 60, WINDOW = 20000;
+
+  function initDizzyRefresh(root) {
+    if (!root || root.__miDizzy) return;
+    root.__miDizzy = true;
+    var vp = root.querySelector('.dz-viewport'), spinner = root.querySelector('.dz-spinner');
+    var btn = root.querySelector('.dz-refresh'), status = root.querySelector('.dz-status');
+    var notify = root.querySelector('.dz-notify'), sw = root.querySelector('.dz-switch');
+    var lastTime = root.getAttribute('data-last') || 'a while ago';
+    var startY = null, pull = 0, loading = false, times = [], calm = 0;
+
+    function setPull(px) {
+      pull = px;
+      root.style.setProperty('--dz-pull', px.toFixed(1));
+      // The arc draws itself as you pull; at the threshold it is three quarters round.
+      spinner.style.setProperty('--dz-arc', (Math.min(1, px / THRESHOLD) * 75).toFixed(1));
+    }
+
+    function load(done) { setTimeout(done, 900); }
+
+    function refresh() {
+      if (loading) return;
+      loading = true;
+      var now = Date.now();
+      times = times.filter(function (t) { return now - t < WINDOW; });
+      times.push(now);
+      var n = times.length;
+      root.classList.toggle('is-woozy', n >= 3);
+      root.classList.add('is-loading');
+      setPull(THRESHOLD);
+      clearTimeout(calm);
+      load(function () {
+        loading = false;
+        root.classList.remove('is-loading');
+        root.classList.toggle('is-dizzy', n >= 5);
+        if (n >= 5) {
+          status.textContent = 'Nothing new since ' + lastTime + '. I’ll tell you when there is. Please stop.';
+          notify.hidden = false;
+          setTimeout(function () { setPull(0); }, 1800);
+        } else {
+          status.textContent = n === 1 ? 'Nothing new. Last message arrived at ' + lastTime + '.'
+            : n === 2 ? 'Still nothing new since ' + lastTime + '.'
+            : n === 3 ? 'Nothing. The spinner is getting woozy.'
+            : 'Nothing. Again. The spinner needs a minute.';
+          setPull(0);
+        }
+        calm = setTimeout(function () { root.classList.remove('is-woozy', 'is-dizzy'); times = []; }, 8000);
+      });
+    }
+
+    vp.addEventListener('pointerdown', function (e) {
+      if (loading || e.button !== 0) return;
+      startY = e.clientY;
+      vp.setPointerCapture && vp.setPointerCapture(e.pointerId);
+      root.classList.add('is-dragging');
+    });
+    vp.addEventListener('pointermove', function (e) {
+      if (startY == null) return;
+      var dy = Math.max(0, e.clientY - startY);
+      setPull(Math.min(110, dy * 0.55)); // rubber-band resistance
+    });
+    function end() {
+      if (startY == null) return;
+      startY = null;
+      root.classList.remove('is-dragging');
+      if (pull >= THRESHOLD) refresh(); else setPull(0);
+    }
+    vp.addEventListener('pointerup', end);
+    vp.addEventListener('pointercancel', end);
+    btn.addEventListener('click', refresh);
+    sw.addEventListener('change', function () {
+      status.textContent = sw.checked ? 'Okay. You’ll get a notification. You can stop pulling now.' : 'Notifications off. Pull away.';
+      if (sw.checked) { root.classList.remove('is-dizzy', 'is-woozy'); times = []; }
+    });
+    setPull(0);
+  }
+
+  window.initDizzyRefresh = initDizzyRefresh;
+  function boot() { document.querySelectorAll('[data-mi="dizzy-refresh"]').forEach(initDizzyRefresh); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

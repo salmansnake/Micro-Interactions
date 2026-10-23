@@ -1,0 +1,63 @@
+/* Quick Question Stopwatch — "quick question" starts a stopwatch that follows the thread it causes.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.qq {
+  --qq-bg: var(--card);
+  --qq-fg: var(--foreground);
+  --qq-muted: var(--muted-foreground);
+  --qq-line: var(--border);
+  --qq-sunken: var(--subtle);
+  --qq-fill: var(--muted);
+  --qq-accent: var(--primary);
+  --qq-on-accent: var(--primary-foreground);
+  --qq-tone: var(--brand-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--qq-bg);
+  color: var(--qq-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.qq p { margin: 0; }
+.qq[data-level="2"] { --qq-tone: var(--warning-text); }
+.qq[data-level="3"] { --qq-tone: var(--danger); }
+.qq-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 30px; }
+.qq-channel { font-weight: 700; }
+.qq-watch { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px 0 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--qq-tone) 14%, transparent); color: color-mix(in srgb, var(--qq-tone) 80%, var(--qq-fg)); font-size: var(--text-body); font-variant-numeric: tabular-nums; transition: background-color var(--duration-slower), color var(--duration-slower); animation: qq-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.qq-watch svg { width: 18px; height: 18px; }
+@keyframes qq-pop { from { opacity: 0; transform: scale(0.5); } }
+
+.qq-thread { display: flex; flex-direction: column; gap: 10px; height: 214px; padding: 12px; overflow-y: auto; border-radius: var(--radius-lg); background: var(--qq-sunken); scroll-behavior: smooth; }
+.qq-empty { margin: auto !important; color: var(--qq-muted); font-size: var(--text-small); text-align: center; }
+.qq-msg { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 2px 8px; animation: qq-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes qq-in { from { opacity: 0; transform: translateY(6px); } }
+.qq-av { grid-row: span 2; display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--c, var(--placeholder)); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+.qq-who { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; }
+.qq-who time { margin-left: 6px; color: var(--qq-muted); font-weight: 400; font-variant-numeric: tabular-nums; }
+.qq-text { font-size: var(--text-body); line-height: var(--leading-body); overflow-wrap: anywhere; }
+.qq-tag { display: inline-flex; align-items: center; margin-left: 6px; padding: 1px 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--qq-tone) 16%, transparent); color: color-mix(in srgb, var(--qq-tone) 80%, var(--qq-fg)); font-size: calc(var(--text-caption) - 1px); font-weight: 600; vertical-align: 1px; }
+.qq-verdict { min-height: 20px; font-weight: 600; color: color-mix(in srgb, var(--qq-tone) 80%, var(--qq-fg)); transition: color var(--duration-slower); }
+.qq-verdict:empty { min-height: 0; display: none; }
+.qq-form { display: flex; gap: 8px; }
+.qq-input { flex: 1 1 0; width: 0; min-width: 0; height: 44px; padding: 0 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-md); background: var(--card); color: inherit; font: inherit; }
+.qq-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+.qq-send, .qq-call { flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--qq-accent); color: var(--qq-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.qq-send:disabled { opacity: 0.4; cursor: default; }
+.qq-call { background: var(--success); animation: qq-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.qq-send:active, .qq-call:active { transform: scale(var(--press-scale)); }
+.qq-send:focus-visible, .qq-call:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .qq-watch, .qq-msg, .qq-call { animation: none; }
+  .qq-thread { scroll-behavior: auto; }
+}
+.qq [hidden] { display: none !important; }

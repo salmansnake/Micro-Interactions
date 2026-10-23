@@ -1,0 +1,60 @@
+/* Autosave Appreciation — press ⌘S in an app that already autosaves and it thanks you for the gesture.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.av {
+  --av-bg: var(--card);
+  --av-fg: var(--foreground);
+  --av-muted: var(--muted-foreground);
+  --av-line: var(--border);
+  --av-sunken: var(--subtle);
+  --av-fill: var(--muted);
+  --av-accent: var(--primary);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--av-bg);
+  color: var(--av-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.av p { margin: 0; }
+.av-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.av-doc { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.av-saved { display: inline-flex; align-items: center; gap: 4px; color: var(--av-muted); font-size: var(--text-small); }
+.av-saved svg { width: 20px; height: 20px; }
+.av-check { transition: opacity var(--duration-base); }
+.av.is-saving .av-check { opacity: 0; }
+.av-field { position: relative; }
+.av-input { display: block; width: 100%; min-height: 130px; box-sizing: border-box; padding: 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: inherit; font: inherit; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); resize: none; }
+.av-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* Toast: a glass capsule that drops in over the field */
+.av-toast { position: absolute; left: 50%; top: 10px; z-index: 2; display: flex; align-items: center; gap: 8px; width: max-content; max-width: calc(100% - 20px); box-sizing: border-box; padding: 8px 14px; border-radius: var(--radius-full); background: var(--frost); box-shadow: var(--shadow-lg), inset 0 0 0 1px var(--frost-border); -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate)); backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate)); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; opacity: 0; transform: translate(-50%, -14px) scale(0.9); pointer-events: none; transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.av-toast::before { content: ""; flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--chart-3) no-repeat center / 10px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 2.8C20 15.8 12 21 12 21Z' fill='white'/%3E%3C/svg%3E"); }
+.av.is-thanked .av-toast { opacity: 1; transform: translate(-50%, 0); }
+.av-toast.is-bump { animation: av-bump var(--spring-pop-duration) var(--spring-pop); }
+@keyframes av-bump { 40% { transform: translate(-50%, 0) scale(1.06); } }
+.av-count { flex: none; color: var(--av-muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.av-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.av-hint { color: var(--av-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.av-hint kbd, .av-keys kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: var(--radius-xs); background: var(--av-bg); box-shadow: 0 1px 0 var(--av-line), 0 0 0 1px var(--av-line); color: var(--av-fg); font: 600 var(--text-caption)/var(--leading-caption) var(--font-sans); text-align: center; }
+.av-keys { display: inline-flex; flex: none; gap: 4px; align-items: center; height: 44px; padding: 0 12px; border: 0; border-radius: var(--radius-md); background: var(--av-fill); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.av-keys kbd { min-width: 26px; padding: 4px 6px; background: var(--raised); font-size: var(--text-body); line-height: var(--leading-body); }
+.av-keys:active { transform: scale(var(--press-scale-sm)); }
+.av-keys:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.av-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .av-toast { transition-duration: var(--duration-reduced); }
+  .av-toast.is-bump { animation: none; }
+}
+.av [hidden] { display: none !important; }

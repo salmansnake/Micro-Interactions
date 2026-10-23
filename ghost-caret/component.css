@@ -1,0 +1,114 @@
+/* Ghost Caret — see a teammate's cursor and fresh words inside the field, and watch them wait for you.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.gc {
+  --gc-bg: var(--card);
+  --gc-fg: var(--foreground);
+  --gc-muted: var(--muted-foreground);
+  --gc-line: var(--border);
+  --gc-sunken: var(--subtle);
+  --gc-fill: var(--muted);
+  --gc-accent: var(--primary);
+  --gc-peer: var(--pop);
+  --gc-on-peer: var(--pop-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--gc-bg);
+  color: var(--gc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.gc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gc-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.gc-people { display: flex; }
+.gc-avatar { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 0 0 2px var(--gc-bg); color: var(--gc-on-peer); font-size: var(--text-caption); font-weight: 700; transition: opacity var(--duration-slow), transform var(--spring-ui-duration) var(--spring-ui); }
+.gc-avatar + .gc-avatar { margin-left: -6px; }
+.gc-avatar--you { background: var(--gc-accent); color: var(--primary-foreground); }
+.gc-avatar--peer { background: var(--gc-peer); }
+.gc.is-away .gc-avatar--peer { opacity: 0.35; transform: scale(0.85); }
+
+.gc-field { position: relative; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--input); transition: box-shadow var(--duration-base) var(--ease-out); }
+.gc-field:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.gc-mirror,
+.gc-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 14px 16px 16px;
+  border: 0;
+  font: 400 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans);
+  letter-spacing: var(--tracking-title);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: normal;
+  tab-size: 4;
+}
+.gc-mirror { position: absolute; inset: 0; color: transparent; pointer-events: none; }
+.gc-input { position: relative; z-index: 1; min-height: 120px; overflow: hidden; resize: none; background: transparent; color: var(--gc-fg); caret-color: var(--gc-accent); outline: none; }
+/* The peer's fresh text: a highlight that fades as it ages */
+.gc-new { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--gc-peer) calc(var(--a, 1) * 26%), transparent); }
+.gc-mark { display: inline-block; width: 0; }
+/* The peer's caret */
+.gc-caret {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 22px;
+  border-radius: var(--radius-xs);
+  background: var(--gc-peer);
+  pointer-events: none;
+  transition: opacity var(--duration-slower);
+}
+.gc-caret.is-gliding { transition: left var(--spring-ui-duration) var(--spring-ui), top var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-slower); }
+.gc-caret.is-idle { animation: gc-blink 1.1s steps(1) infinite; }
+@keyframes gc-blink { 50% { opacity: 0.25; } }
+.gc.is-away .gc-caret { opacity: 0; }
+.gc-flag {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 2px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full) var(--radius-full) var(--radius-full) var(--radius-xs);
+  background: var(--gc-peer);
+  color: var(--gc-on-peer);
+  font-size: calc(var(--text-caption) - 1px);
+  line-height: 14px;
+  font-weight: 600;
+  letter-spacing: normal;
+  white-space: nowrap;
+  transform-origin: 0 100%;
+  transition: transform var(--spring-ui-duration) var(--spring-ui);
+}
+.gc-caret.is-waiting::before {
+  content: "";
+  position: absolute;
+  inset: -4px -6px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--gc-peer) 18%, transparent);
+  animation: gc-halo 1.4s var(--ease-in-out) infinite;
+}
+@keyframes gc-halo { 50% { transform: scale(1.25); opacity: 0.4; } }
+.gc-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+.gc-status { flex: 1 1 auto; min-width: 0; margin: 0; color: var(--gc-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.gc-status b { color: var(--foreground); font-weight: 600; }
+.gc-replay { flex: none; height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--gc-fill); color: var(--gc-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.gc-replay:active { transform: scale(var(--press-scale)); }
+.gc-replay:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .gc-caret.is-gliding { transition: opacity var(--duration-fast); }
+  .gc-caret.is-idle, .gc-caret.is-waiting::before { animation: none; }
+}
+.gc [hidden] { display: none !important; }

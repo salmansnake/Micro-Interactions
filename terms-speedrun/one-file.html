@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms Speedrun</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .ts so they never affect the rest of your page. */
+.ts {
+  --duration-base: 200ms;
+  --duration-fast: 140ms;
+  --duration-slow: 320ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --press-scale: 0.97;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --amber-11: #ab6400;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --danger-text: #ca2b30;
+  --foreground: var(--black);
+  --green-11: #218358;
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --red-11: #ce2c31;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success-text: #1f7b53;
+  --warning-text: #a15e00;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .ts, .dark .ts {
+  --amber-11: #ffca16;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --card: var(--white);
+  --danger-text: var(--red-11);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --red-11: #ff9592;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success-text: var(--green-11);
+  --warning-text: var(--amber-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .ts {
+    --amber-11: #ffca16;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --card: var(--white);
+    --danger-text: var(--red-11);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --red-11: #ff9592;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success-text: var(--green-11);
+    --warning-text: var(--amber-11);
+    --white: #161817;
+  }
+}
+
+/* Terms Speedrun — scroll through the terms too fast and the checkbox admits what really happened.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ts {
+  --ts-bg: var(--card);
+  --ts-fg: var(--foreground);
+  --ts-muted: var(--muted-foreground);
+  --ts-line: var(--border);
+  --ts-sunken: var(--subtle);
+  --ts-fill: var(--muted);
+  --ts-accent: var(--primary);
+  --ts-on-accent: var(--primary-foreground);
+  --ts-tone: var(--ts-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ts-bg);
+  color: var(--ts-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ts p { margin: 0; }
+.ts-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ts-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+
+/* Live reading speed */
+.ts-meter { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--ts-tone) 14%, transparent); color: var(--ts-tone); font-size: var(--text-caption); font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; transition: background-color var(--duration-slow), color var(--duration-slow); }
+.ts-meter b { font-weight: 700; }
+.ts-mode:not(:empty)::before { content: "·"; margin: 0 5px; }
+.ts-mode { font-weight: 600; }
+.ts[data-speed="skim"] { --ts-tone: var(--warning-text); }
+.ts[data-speed="speedrun"] { --ts-tone: var(--danger-text); }
+.ts[data-speed="speedrun"] .ts-meter { animation: ts-buzz var(--duration-fast) linear infinite; }
+@keyframes ts-buzz { 50% { transform: translateX(0.6px); } }
+
+.ts-doc { height: 210px; padding: 4px 16px 16px; overflow-y: auto; overscroll-behavior: contain; border-radius: var(--radius-lg); background: var(--ts-sunken); color: var(--ts-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.ts-doc:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ts-doc h4 { margin: 14px 0 4px; color: var(--ts-fg); font-size: var(--text-small); font-weight: 600; }
+.ts-progress { height: 3px; margin-top: -6px; border-radius: var(--radius-xs); background: var(--ts-fill); overflow: hidden; }
+.ts-progress i { display: block; width: 0; height: 100%; background: var(--ts-tone); transition: background-color var(--duration-slow); }
+
+/* Checkbox row */
+.ts-agree { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; }
+.ts-check { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.ts-box { position: relative; flex: none; width: 24px; height: 24px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--ts-line); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.ts-box::after { content: ""; position: absolute; left: 8px; top: 4px; width: 6px; height: 11px; border: solid var(--ts-on-accent); border-width: 0 2.2px 2.2px 0; transform: rotate(45deg) scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.ts-check:checked + .ts-box { background: var(--ts-accent); box-shadow: none; }
+.ts-check:checked + .ts-box::after { transform: rotate(45deg) scale(1); }
+.ts-check:focus-visible + .ts-box { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ts-check:disabled + .ts-box { opacity: 0.45; }
+.ts-check:disabled ~ .ts-label { color: var(--ts-muted); }
+.ts-agree:has(.ts-check:disabled) { cursor: default; }
+.ts-label { transition: color var(--duration-base); }
+.ts-label.is-swap { animation: ts-swap var(--spring-ui-duration) var(--spring-ui); }
+@keyframes ts-swap { 0% { opacity: 0; transform: translateY(6px); filter: blur(2px); } }
+.ts.is-busted .ts-label { font-weight: 600; }
+
+.ts-result { display: flex; flex-direction: column; gap: 10px; animation: ts-swap var(--spring-ui-duration) var(--spring-ui) both; }
+.ts-record { padding: 10px 12px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--ts-tone) 12%, transparent); color: color-mix(in srgb, var(--ts-tone) 80%, var(--ts-fg)); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
+.ts:not(.is-busted) .ts-record { --ts-tone: var(--success-text); }
+.ts-tldr { padding: 12px 14px; border-radius: var(--radius-lg); background: var(--ts-sunken); font-size: var(--text-small); line-height: var(--leading-small); }
+.ts-tldr-title { margin-bottom: 4px !important; font-weight: 600; }
+.ts-tldr ul { margin: 0; padding-left: 18px; color: var(--ts-muted); }
+
+.ts-continue { height: 44px; border: 0; border-radius: var(--radius-md); background: var(--ts-accent); color: var(--ts-on-accent); font: inherit; font-size: var(--text-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.ts-continue:active { transform: scale(var(--press-scale)); }
+.ts-continue:disabled { opacity: 0.35; cursor: default; transform: none; }
+.ts-continue:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ts[data-speed="speedrun"] .ts-meter, .ts-label.is-swap, .ts-result { animation: none; }
+}
+.ts [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="ts" data-mi="terms-speedrun" data-honest-wps="12">
+  <div class="ts-head">
+    <p class="ts-title">Terms of Service</p>
+    <span class="ts-meter" aria-hidden="true"><b class="ts-wps">0</b>&nbsp;words/sec<span class="ts-mode"></span></span>
+  </div>
+  <div class="ts-doc" tabindex="0" role="region" aria-label="Terms of Service">
+    <h4>1. Acceptance</h4>
+    <p>By creating an account, clicking Continue, or looking at this page for longer than strictly necessary, you agree to these Terms. If you do not agree, please close this tab gently.</p>
+    <h4>2. Your Account</h4>
+    <p>You are responsible for your account and everything that happens in it, including the dashboards you build at 2 AM and later deny. Keep your password secret. Do not write it on a sticky note, and if you do, do not stick it to your monitor.</p>
+    <h4>3. Your Content</h4>
+    <p>You own the files, notes and data you upload. You give us permission to store, copy and display them only so we can run the Service for you. We do not sell your content. We do not read your content, except your file names, which we cannot help noticing.</p>
+    <h4>4. Acceptable Use</h4>
+    <p>You agree not to use the Service to break the law, send spam, mine cryptocurrency, or train a rival product, a rival army or a parrot. You agree not to reverse engineer the Service, unless it is to tell us how to make it faster.</p>
+    <h4>5. Payments</h4>
+    <p>Paid plans renew automatically until you cancel. You can cancel at any time from Settings, in two clicks, with no phone call and no survey asking how it makes you feel. Refunds follow the rules on our pricing page.</p>
+    <h4>6. Availability</h4>
+    <p>We aim for the Service to be available 99.9% of the time. The remaining 0.1% is usually a Friday deploy, which we have promised each other we will stop doing.</p>
+    <h4>7. Changes</h4>
+    <p>We may update these Terms. When we make a material change, we will email you a summary a human can read in under a minute. Continuing to use the Service after a change means you accept it.</p>
+    <h4>8. A Small Reward</h4>
+    <p>If you have read this far, you are entitled to one high five from our support team. Ask for it by name. It is non-transferable and has no cash value.</p>
+    <h4>9. Termination</h4>
+    <p>You may stop using the Service at any time. We may suspend accounts that break these Terms. If we do, we will tell you why and let you export your data first.</p>
+    <h4>10. Liability</h4>
+    <p>The Service is provided as it is. To the extent the law allows, we are not liable for indirect losses, lost profits, or the meeting you scheduled in the wrong time zone.</p>
+    <h4>11. Privacy</h4>
+    <p>Our Privacy Policy explains what we collect and why. It is shorter than this document, and slightly more fun.</p>
+    <h4>12. Everything Else</h4>
+    <p>If any part of these Terms is found unenforceable, the rest still applies. These Terms are the entire agreement between you and us, except for the high five, which is a separate and sacred agreement.</p>
+  </div>
+  <div class="ts-progress" aria-hidden="true"><i></i></div>
+  <label class="ts-agree">
+    <input type="checkbox" class="ts-check" disabled>
+    <span class="ts-box" aria-hidden="true"></span>
+    <span class="ts-label">I have read and agree to the Terms of Service</span>
+  </label>
+  <div class="ts-result" hidden>
+    <p class="ts-record" role="status"></p>
+    <div class="ts-tldr" hidden>
+      <p class="ts-tldr-title">Since You’re in a Hurry</p>
+      <ul>
+        <li>You own your content, and we don’t sell it.</li>
+        <li>Cancel any time in Settings, in two clicks.</li>
+        <li>We’ll email a readable summary when these change.</li>
+      </ul>
+    </div>
+  </div>
+  <button type="button" class="ts-continue" disabled>Continue</button>
+</div>
+
+
+<script>
+/* Terms Speedrun — vanilla JS. Auto-initializes every [data-mi="terms-speedrun"].
+   Reading speed = words scrolled past per second. Reaching the end faster than data-honest-wps (default 12,
+   about 720 words a minute) counts as a speedrun. Call window.initTermsSpeedrun(el) for elements added later. */
+(function () {
+  'use strict';
+  var SKIM = 25, SPEEDRUN = 120; // live meter thresholds, words per second
+
+  function initTermsSpeedrun(root) {
+    if (!root || root.__miTerms) return;
+    root.__miTerms = true;
+    var doc = root.querySelector('.ts-doc'), wpsEl = root.querySelector('.ts-wps'), mode = root.querySelector('.ts-mode');
+    var bar = root.querySelector('.ts-progress i'), check = root.querySelector('.ts-check'), label = root.querySelector('.ts-label');
+    var result = root.querySelector('.ts-result'), record = root.querySelector('.ts-record'), tldr = root.querySelector('.ts-tldr');
+    var cont = root.querySelector('.ts-continue');
+    var honest = Number(root.getAttribute('data-honest-wps')) || 12;
+    var total = doc.textContent.trim().split(/\s+/).length;
+    var started = 0, done = false, samples = [], raf = 0, shown = 0;
+
+    function read() {
+      var max = doc.scrollHeight - doc.clientHeight;
+      return max > 0 ? Math.min(1, doc.scrollTop / max) : 1;
+    }
+
+    function speed(now) {
+      samples = samples.filter(function (s) { return now - s.t < 400; });
+      if (samples.length < 2) return 0;
+      var a = samples[0], b = samples[samples.length - 1];
+      return Math.max(0, (b.w - a.w) / Math.max(0.05, (b.t - a.t) / 1000));
+    }
+
+    // The meter eases toward the live speed and decays to zero when scrolling stops.
+    function loop(now) {
+      if (done) { raf = 0; return; } // the meter freezes on the final average
+      var target = speed(now);
+      shown += (target - shown) * 0.25;
+      if (shown < 0.5 && target === 0) shown = 0;
+      wpsEl.textContent = Math.round(shown).toLocaleString();
+      var s = shown >= SPEEDRUN ? 'speedrun' : shown >= SKIM ? 'skim' : '';
+      if (!done) root.setAttribute('data-speed', s);
+      mode.textContent = s === 'speedrun' ? 'Speedrunning' : s === 'skim' ? 'Skimming' : '';
+      if (shown > 0 || samples.length) raf = requestAnimationFrame(loop); else raf = 0;
+    }
+
+    function finish(now) {
+      done = true;
+      var secs = Math.max(0.1, (now - started) / 1000);
+      var avg = total / secs;
+      check.disabled = false;
+      cancelAnimationFrame(raf); raf = 0;
+      wpsEl.textContent = Math.round(avg).toLocaleString();
+      mode.textContent = avg >= SPEEDRUN ? 'Speedrunning' : avg > honest ? 'Skimming' : 'Reading';
+      result.hidden = false;
+      if (avg > honest) {
+        root.classList.add('is-busted');
+        root.setAttribute('data-speed', avg >= SPEEDRUN ? 'speedrun' : 'skim');
+        label.textContent = 'I have not read this, and we both know it.';
+        label.classList.remove('is-swap'); void label.offsetWidth; label.classList.add('is-swap');
+        record.textContent = 'You read ' + total.toLocaleString() + ' words in ' + secs.toFixed(1) + ' seconds. That’s ' + Math.round(avg).toLocaleString() + ' words per second.';
+        tldr.hidden = false;
+      } else {
+        root.setAttribute('data-speed', '');
+        record.textContent = 'You actually read all ' + total.toLocaleString() + ' words. Section 8 says you’re owed a high five.';
+      }
+    }
+
+    doc.addEventListener('scroll', function () {
+      var now = performance.now();
+      if (!started) started = now;
+      var p = read();
+      bar.style.width = (p * 100).toFixed(1) + '%';
+      samples.push({ t: now, w: p * total });
+      if (!raf) raf = requestAnimationFrame(loop);
+      if (!done && doc.scrollTop + doc.clientHeight >= doc.scrollHeight - 4) finish(now);
+    }, { passive: true });
+
+    check.addEventListener('change', function () { cont.disabled = !check.checked; });
+    cont.addEventListener('click', function () {
+      cont.textContent = root.classList.contains('is-busted') ? 'Welcome Aboard, Speedrunner' : 'Welcome Aboard';
+      cont.disabled = true;
+    });
+  }
+
+  window.initTermsSpeedrun = initTermsSpeedrun;
+  function boot() { document.querySelectorAll('[data-mi="terms-speedrun"]').forEach(initTermsSpeedrun); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

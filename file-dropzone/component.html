@@ -1,0 +1,31 @@
+<div class="fd" data-mi="file-dropzone" data-max-mb="10">
+  <div class="fd-zone" tabindex="0" role="button" aria-label="Upload a file. CSV, image or PDF, up to 10 MB.">
+    <svg class="fd-border" aria-hidden="true"><rect width="100%" height="100%" rx="19"></rect></svg>
+    <div class="fd-idle">
+      <span class="fd-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+      </span>
+      <p class="fd-title">Drop a file to preview it</p>
+      <p class="fd-sub">CSV, image or PDF, up to 10 MB</p>
+      <span class="fd-choose">Choose File</span>
+    </div>
+    <div class="fd-over" aria-hidden="true">
+      <span class="fd-over-icon"></span>
+      <p class="fd-over-title">Drop to upload</p>
+    </div>
+    <input type="file" class="fd-input" tabindex="-1" aria-hidden="true">
+  </div>
+  <div class="fd-result" hidden>
+    <div class="fd-preview"></div>
+    <div class="fd-meta">
+      <p class="fd-name"></p>
+      <p class="fd-info"></p>
+      <div class="fd-actions">
+        <button type="button" class="fd-replace">Replace</button>
+        <button type="button" class="fd-remove">Remove</button>
+      </div>
+    </div>
+  </div>
+  <p class="fd-error" role="alert"></p>
+  <div class="fd-try"><span>Try</span><button type="button" data-sample="csv">Sample CSV</button><button type="button" data-sample="image">Sample Image</button><button type="button" data-sample="pdf">Sample PDF</button></div>
+</div>

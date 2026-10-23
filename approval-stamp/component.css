@@ -1,0 +1,107 @@
+/* Approval Stamp — approving or declining lands an ink stamp with who and when, and it can be lifted off again.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.as {
+  --as-bg: var(--card);
+  --as-fg: var(--foreground);
+  --as-muted: var(--muted-foreground);
+  --as-line: var(--border);
+  --as-sunken: var(--subtle);
+  --as-fill: var(--muted);
+  --as-accent: var(--primary);
+  --as-on-accent: var(--primary-foreground);
+  --as-green: var(--success-text);
+  --as-red: var(--danger-text);
+  --as-ink: var(--as-green);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--as-bg);
+  color: var(--as-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.as.is-declined { --as-ink: var(--as-red); }
+.as-card { position: relative; padding: 16px; border-radius: var(--radius-xl); background: var(--as-sunken); transition: transform var(--spring-press-duration) var(--spring-press); }
+.as-card.is-hit { animation: as-hit var(--spring-pop-duration) var(--spring-pop); }
+@keyframes as-hit { 25% { transform: scale(0.985) translateY(2px); } 100% { transform: none; } }
+.as-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.as-avatar { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--chart-1); color: var(--on-chart); font-weight: 700; }
+.as-who, .as-when { margin: 0; }
+.as-who b { font-weight: 600; }
+.as-when { color: var(--as-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.as-amount { margin: 0; font-size: var(--text-h2); line-height: var(--leading-h2); font-weight: 700; letter-spacing: var(--tracking-title); font-variant-numeric: tabular-nums; }
+.as-what { margin: 2px 0 12px; color: var(--as-muted); }
+.as-lines { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--as-line); }
+.as-lines li { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--as-line); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.as-lines li span:first-child { color: var(--as-muted); }
+/* The stamp */
+.as-stamp {
+  position: absolute;
+  right: 16px;
+  top: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 14px 7px;
+  border: 3px solid var(--as-ink);
+  border-radius: var(--radius-lg);
+  color: var(--as-ink);
+  opacity: 0;
+  transform: rotate(-9deg) scale(2.2);
+  filter: blur(4px);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  /* worn ink: speckled mask */
+  -webkit-mask-image: radial-gradient(circle at 20% 30%, var(--black) 0 60%, transparent 61%), radial-gradient(var(--black) 60%, color-mix(in srgb, var(--black) 75%, transparent) 100%);
+  -webkit-mask-size: 7px 7px, 100% 100%;
+  -webkit-mask-composite: source-over;
+  mask-image: radial-gradient(circle at 20% 30%, var(--black) 0 60%, transparent 61%), radial-gradient(var(--black) 60%, color-mix(in srgb, var(--black) 75%, transparent) 100%);
+  mask-size: 7px 7px, 100% 100%;
+  mask-composite: add;
+}
+@media (prefers-color-scheme: dark) { .as-stamp { mix-blend-mode: normal; } }
+:root[data-theme="dark"] .as-stamp { mix-blend-mode: normal; }
+.as.is-stamped .as-stamp { animation: as-slam var(--duration-slower) cubic-bezier(0.2, 0.9, 0.3, 1.25) forwards; }
+@keyframes as-slam {
+  0% { opacity: 0; transform: rotate(-9deg) scale(2.2); filter: blur(4px); }
+  55% { opacity: 1; transform: rotate(-9deg) scale(var(--press-scale-sm)); filter: blur(0); }
+  100% { opacity: 0.9; transform: rotate(-9deg) scale(1); filter: blur(0); }
+}
+.as.is-lifting .as-stamp { animation: as-lift var(--spring-press-duration) var(--ease-in) forwards; }
+@keyframes as-lift { from { opacity: 0.9; transform: rotate(-9deg) scale(1); } to { opacity: 0; transform: rotate(-4deg) scale(1.3) translateY(-20px); filter: blur(2px); } }
+.as-stamp-word { font-size: var(--text-title); line-height: var(--leading-title); font-weight: 800; letter-spacing: var(--tracking-title); }
+.as-stamp-meta { font-size: calc(var(--text-caption) - 2px); line-height: 12px; font-weight: 600; letter-spacing: normal; white-space: nowrap; }
+.as-reason { display: flex; flex-direction: column; gap: 6px; animation: as-in var(--spring-ui-duration) var(--spring-ui) both; }
+@keyframes as-in { from { opacity: 0; transform: translateY(-6px); } }
+.as-reason-label { padding-left: 4px; color: var(--as-muted); font-size: var(--text-small); }
+.as-reason-input { height: 44px; padding: 0 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-md); background: var(--card); color: var(--as-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
+.as-reason-input:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.as-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.as-btn { height: 44px; border: 0; border-radius: var(--radius-md); font: inherit; font-size: var(--text-title-sm); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.as-btn:active { transform: scale(var(--press-scale)); }
+.as-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.as-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+.as-decline { background: var(--danger-subtle); color: var(--as-red); }
+/* Reason field open: same label, solid red, so it's clear the next press sends the decline */
+.as-decline.is-armed { background: var(--danger); color: var(--danger-foreground); }
+.as-approve { background: var(--success); color: var(--success-foreground); }
+.as-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 0; margin: 0; color: var(--as-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.as-status:empty { display: none; }
+.as-status button { flex: none; height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--as-fill); color: var(--as-fg); font: inherit; font-weight: 600; cursor: pointer; }
+.as-status button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .as.is-stamped .as-stamp { animation: none; opacity: 0.9; transform: rotate(-9deg); filter: none; }
+  .as.is-lifting .as-stamp { animation: none; opacity: 0; }
+  .as-card.is-hit, .as-reason { animation: none; }
+}
+.as [hidden] { display: none !important; }

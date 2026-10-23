@@ -1,0 +1,27 @@
+Build a "Pocket Progress" for long-running tasks in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
+
+WHAT IT DOES
+Starting a long export shows a progress sheet, but you're never stuck behind it: "Keep Working" morphs the sheet down into a small Frost pill in the corner that keeps tracking progress. When the job is done, the pill turns green and pings.
+
+BEHAVIOR
+1. "Export CSV" opens a sheet docked at the bottom of the panel (rises 24px and scales from 0.97, ui spring): "Exporting 12,400 Rows", "You can keep working while this runs.", a 6px progress bar (role progressbar), and Cancel / Keep Working.
+2. Progress comes from the job (demo: 9 seconds with a slightly uneven curve).
+3. Keep Working: FLIP-morph the sheet into the pill. Measure both boxes, show the pill, and animate it from the sheet's position and size (translate + scale from the bottom-right corner, overshooting curve) to its own, while the sheet hides. The content behind stays fully usable (demo rows can be selected).
+4. The pill is a Frost button with a 20px progress ring and "Exporting · 64%" in tabular numbers. Clicking it morphs back into the sheet.
+5. On completion: the sheet reads "Export Ready · workspaces.csv · 12,400 rows · 2.1 MB" with Done; if pocketed, the pill turns green, reads "Export Ready", and pings (scale 1.12 and back, pop). A status line announces it politely.
+6. Cancel resets everything and returns focus to Export.
+Reduced motion: no morph or ping; the sheet and pill swap directly.
+
+APPEARANCE (Outcraft Design System)
+- Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
+- Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
+- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float.
+- Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
+- Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
+- Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
+- Copy: title-case button labels, sentence-case body text, no emoji.
+- This one: the sheet is a 16px rounded white card with a large soft shadow; the pill is 40px tall and docks 20px from the corner.
+
+DELIVER
+The component with a setProgress(0–1) hook, the demo, and short usage notes.

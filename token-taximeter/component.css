@@ -1,0 +1,70 @@
+/* Token Taximeter — a taxi meter that runs as you type a prompt, so you see the cost before you send.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.tt {
+  --tt-bg: var(--card);
+  --tt-fg: var(--foreground);
+  --tt-muted: var(--muted-foreground);
+  --tt-line: var(--border);
+  --tt-sunken: var(--subtle);
+  --tt-fill: var(--muted);
+  --tt-accent: var(--primary);
+  --tt-thumb-c: var(--raised);
+  --tt-amber: var(--warning);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--tt-bg);
+  color: var(--tt-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+/* The meter: a dark display, always dark like real hardware */
+.tt-meter {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: var(--black);
+  color: var(--on-color);
+  box-shadow: var(--shadow-sm);
+}
+.tt-flag { grid-row: span 2; align-self: start; padding: 3px 8px; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--on-color) 10%, transparent); color: color-mix(in srgb, var(--on-color) 60%, transparent); font-size: calc(var(--text-caption) - 1px); font-weight: 700; letter-spacing: normal; transition: background-color var(--duration-base), color var(--duration-base); }
+.tt.is-running .tt-flag { background: var(--tt-amber); color: var(--black); }
+.tt-fare { justify-self: end; display: inline-flex; height: 40px; overflow: hidden; color: var(--tt-amber); font: 600 calc(var(--text-h2) + 4px) / 40px var(--font-mono); letter-spacing: 0; font-variant-numeric: tabular-nums; text-shadow: 0 0 12px color-mix(in srgb, var(--warning) 35%, transparent); }
+.tt-col { display: flex; flex-direction: column; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.tt-col span, .tt-fix { display: block; height: 40px; line-height: 40px; text-align: center; }
+.tt-tokens { justify-self: end; color: color-mix(in srgb, var(--on-color) 60%, transparent); font-size: var(--text-caption); line-height: var(--leading-caption); font-variant-numeric: tabular-nums; }
+.tt-meter.is-tick .tt-fare { animation: tt-tick var(--duration-base) var(--ease-out); }
+@keyframes tt-tick { 50% { text-shadow: 0 0 18px color-mix(in srgb, var(--warning) 80%, transparent); } }
+.tt-label { padding-left: 4px; color: var(--tt-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.tt-input { width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: var(--tt-fg); font: inherit; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); resize: vertical; outline: none; }
+.tt-input:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
+.tt-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.tt-seg { --n: 2; --i: 0; position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; padding: 2px; border-radius: var(--radius-md); background: var(--tt-sunken); }
+.tt-thumb { position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc((100% - 4px) / var(--n)); border-radius: var(--radius-sm); background: var(--tt-thumb-c); box-shadow: var(--shadow-sm); transform: translateX(calc(var(--i) * 100%)); transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.tt-seg button { position: relative; z-index: 1; height: 30px; padding: 0 16px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--tt-fg); font: inherit; font-size: var(--text-small); font-weight: 500; cursor: pointer; }
+.tt-seg button[aria-checked="true"] { font-weight: 600; }
+.tt-seg button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tt-budget { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.tt-bar { position: relative; display: flex; height: 8px; overflow: hidden; border-radius: var(--radius-xs); background: var(--tt-fill); }
+.tt-used { display: block; height: 100%; background: var(--tt-accent); transition: width var(--spring-ui-duration) var(--spring-ui); }
+.tt-next { display: block; height: 100%; background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--brand-strong) 55%, transparent) 0 3px, color-mix(in srgb, var(--brand) 25%, transparent) 3px 6px); transition: width var(--spring-ui-duration) var(--spring-ui); }
+.tt-budget-text { margin: 0; color: var(--tt-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+.tt-budget-text b { color: var(--tt-fg); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .tt-col, .tt-thumb, .tt-used, .tt-next { transition-duration: var(--duration-reduced); }
+  .tt-meter.is-tick .tt-fare { animation: none; }
+}
+.tt [hidden] { display: none !important; }

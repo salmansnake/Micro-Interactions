@@ -1,0 +1,84 @@
+/* Circle Back Boomerang — "let's circle back" flies off as a boomerang and returns as a reminder.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.cb {
+  --cb-bg: var(--card);
+  --cb-fg: var(--foreground);
+  --cb-muted: var(--muted-foreground);
+  --cb-line: var(--border);
+  --cb-sunken: var(--subtle);
+  --cb-fill: var(--muted);
+  --cb-accent: var(--primary);
+  --cb-on-accent: var(--primary-foreground);
+  position: relative;
+  overflow: clip;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--cb-bg);
+  color: var(--cb-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.cb p { margin: 0; }
+.cb-to { color: var(--cb-muted); font-size: var(--text-small); }
+.cb-to b { color: var(--cb-fg); font-weight: 600; }
+.cb-input { display: block; width: 100%; min-height: 92px; box-sizing: border-box; padding: 12px 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: inherit; font: inherit; line-height: 21px; resize: none; }
+.cb-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cb-hint { display: block; min-height: 20px; color: var(--cb-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.cb-hint:empty { display: none; }
+.cb-hint b { color: var(--ai-text); font-weight: 600; }
+.cb-hint i { display: inline-block; width: 18px; height: 18px; margin-right: 6px; vertical-align: -4px; background: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M6 8c9-4 20-3 28 3 1 1 0 3-1.5 2.5C26 11 19 11 14 14c-3 2-4.5 6-4 10.5.3 2-2 3-3 1.4C3 20 2 13 6 8Z' fill='%23ff9500'/%3E%3C/svg%3E"); animation: cb-wiggle 1.6s var(--ease-in-out) infinite; }
+@keyframes cb-wiggle { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(14deg); } }
+
+.cb-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.cb-status { flex: 1 1 180px; color: var(--cb-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.cb-send, .cb-ff, .cb-open, .cb-again { flex: none; height: 44px; padding: 0 20px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.cb-send, .cb-open { background: var(--cb-accent); color: var(--cb-on-accent); }
+.cb-ff, .cb-again { background: var(--cb-fill); color: var(--cb-fg); }
+.cb-ff { padding: 0 14px; }
+.cb-send:active, .cb-ff:active, .cb-open:active, .cb-again:active { transform: scale(var(--press-scale)); }
+.cb-send:focus-visible, .cb-ff:focus-visible, .cb-open:focus-visible, .cb-again:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.cb-reminder { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: var(--radius-xl); background: color-mix(in srgb, var(--ai) 22%, var(--cb-bg)); box-shadow: var(--shadow-md); animation: cb-catch var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes cb-catch { 0% { opacity: 0; transform: translateX(30px) rotate(3deg) scale(0.9); } }
+.cb-rem-kicker { color: var(--ai-text); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 700; }
+.cb-rem-text { font-size: var(--text-body); line-height: var(--leading-body); }
+.cb-rem-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.cb-rem-actions button { height: 36px; padding: 0 14px; }
+/* Gray dissolves into the tinted card, so the secondary button is raised (white in light) */
+.cb-rem-actions .cb-again { background: var(--raised); box-shadow: var(--shadow-xs); }
+/* Dark: orange reads stronger on dark, so the tint stays lighter; the button is a light wash of the tint instead of gray */
+:root[data-theme="dark"] .cb-reminder { background: color-mix(in srgb, var(--ai) 15%, var(--cb-bg)); } :root[data-theme="dark"] .cb-rem-actions .cb-again { background: color-mix(in srgb, var(--foreground) 14%, transparent); box-shadow: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cb-reminder { background: color-mix(in srgb, var(--ai) 15%, var(--cb-bg)); } :root:not([data-theme="light"]) .cb-rem-actions .cb-again { background: color-mix(in srgb, var(--foreground) 14%, transparent); box-shadow: none; } }
+
+/* The boomerang flies along a curve, spinning */
+.cb-boomerang { position: absolute; z-index: 3; left: 0; top: 0; width: 36px; height: 36px; pointer-events: none; opacity: 0; }
+.cb-boomerang svg { display: block; width: 100%; height: 100%; }
+.cb-boomerang.is-out { animation: cb-out 1.1s cubic-bezier(0.45, 0, 0.6, 1) forwards; }
+.cb-boomerang.is-back { animation: cb-back 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+@keyframes cb-out {
+  0% { opacity: 1; transform: translate(var(--x0), var(--y0)) rotate(0); }
+  45% { opacity: 1; transform: translate(calc(var(--x0) + 60px), calc(var(--y0) - 150px)) rotate(900deg); }
+  100% { opacity: 1; transform: translate(calc(var(--w) + 60px), calc(var(--y0) - 60px)) rotate(1800deg); }
+}
+@keyframes cb-back {
+  0% { opacity: 1; transform: translate(calc(var(--w) + 60px), -60px) rotate(0); }
+  55% { opacity: 1; transform: translate(calc(var(--w) * 0.5), -30px) rotate(-1000deg); }
+  85% { opacity: 1; transform: translate(var(--x1), var(--y1)) rotate(-1700deg); }
+  100% { opacity: 0; transform: translate(var(--x1), var(--y1)) rotate(-1800deg) scale(0.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cb-boomerang.is-out, .cb-boomerang.is-back { animation: none; opacity: 0; }
+  .cb-reminder, .cb-hint i { animation: none; }
+}
+.cb [hidden] { display: none !important; }

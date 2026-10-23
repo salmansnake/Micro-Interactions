@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refill Timer · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Refill Timer — a rate limit you can watch refill, instead of a dead button.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.rt {
+  --rt-bg: var(--card);
+  --rt-fg: var(--foreground);
+  --rt-muted: var(--muted-foreground);
+  --rt-line: var(--border);
+  --rt-sunken: var(--subtle);
+  --rt-fill-c: var(--muted);
+  --rt-accent: var(--primary);
+  --rt-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--rt-bg);
+  color: var(--rt-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.rt-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.rt-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.rt-sub { margin: 2px 0 0; color: var(--rt-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.rt-left { color: var(--rt-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+/* Each credit is a small tank that fills from the bottom */
+.rt-dots { display: flex; gap: 6px; }
+.rt-dot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--brand-strong) 40%, transparent);
+}
+.rt-dot i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--rt-f, 1) * 100%);
+  background: var(--rt-accent);
+}
+.rt-dot.is-ready { animation: rt-pop var(--spring-pop-duration) var(--spring-pop); }
+.rt-dot.is-spent { animation: rt-spend var(--spring-press-duration) var(--spring-press); }
+@keyframes rt-pop { 0% { transform: scale(1); } 40% { transform: scale(1.5); } 100% { transform: scale(1); } }
+@keyframes rt-spend { 0% { transform: scale(1); } 50% { transform: scale(0.6); } 100% { transform: scale(1); } }
+
+.rt-out { display: flex; flex-direction: column; gap: 6px; min-height: 120px; margin: 0; padding: 0; list-style: none; }
+.rt-out li {
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--rt-sunken);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  animation: rt-in var(--spring-ui-duration) var(--spring-ui) both;
+}
+.rt-out li.rt-empty { display: grid; place-items: center; min-height: 120px; box-sizing: border-box; background: none; border: 1px dashed var(--rt-line); color: var(--rt-muted); font-size: var(--text-small); animation: none; }
+@keyframes rt-in { from { opacity: 0; transform: translateY(-8px) scale(var(--press-scale-lg)); } }
+
+.rt-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; }
+.rt-note { flex: 1 1 160px; margin: 0; color: var(--rt-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.rt-btn {
+  position: relative;
+  flex: none;
+  min-width: 128px;
+  height: 40px;
+  overflow: hidden;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--rt-accent);
+  color: var(--rt-on-accent);
+  font: inherit;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color var(--duration-base), color var(--duration-base), transform var(--spring-press-duration) var(--spring-press);
+}
+.rt-btn:active { transform: scale(var(--press-scale)); }
+.rt-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.rt-label { position: relative; z-index: 1; }
+/* Empty: the button becomes the timer, refilling left to right */
+.rt-fill {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--brand) 22%, transparent);
+  transform: scaleX(var(--rt-p, 0));
+  transform-origin: left;
+  opacity: 0;
+}
+.rt.is-empty .rt-btn { background: var(--rt-fill-c); color: var(--rt-fg); cursor: default; }
+.rt.is-empty .rt-btn:active { transform: none; }
+.rt.is-empty .rt-fill { opacity: 1; }
+.rt-btn.is-ready { animation: rt-ready var(--spring-pop-duration) var(--spring-pop); }
+@keyframes rt-ready { 0% { transform: scale(1); } 40% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .rt-dot.is-ready, .rt-dot.is-spent, .rt-out li, .rt-btn.is-ready { animation: none; }
+}
+.rt [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Refill Timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="rt" data-mi="refill-timer" data-max="5" data-refill="3000">
+  <div class="rt-head">
+    <div>
+      <p class="rt-title">Headline Ideas</p>
+      <p class="rt-sub"><span class="rt-left">5 of 5</span> generations left</p>
+    </div>
+    <div class="rt-dots" aria-hidden="true"></div>
+  </div>
+  <ol class="rt-out" aria-live="polite" aria-label="Generated ideas">
+    <li class="rt-empty">Your ideas appear here.</li>
+  </ol>
+  <div class="rt-foot">
+    <p class="rt-note">One generation refills every 3 seconds in this demo.</p>
+    <button type="button" class="rt-btn"><span class="rt-fill" aria-hidden="true"></span><span class="rt-label">Generate</span></button>
+  </div>
+</div>
+</div>
+<script>
+/* Refill Timer — vanilla JS. Auto-initializes every [data-mi="refill-timer"].
+   data-max = credits, data-refill = ms per credit. Call window.initRefillTimer(el) for later elements. */
+(function () {
+  'use strict';
+  var IDEAS = [
+    'Yearly billing, with the savings up front',
+    'Delete with confidence',
+    'Your plan, at a glance',
+    'Every change, saved',
+    'Shortcuts you will actually use',
+    'Pricing that explains itself',
+    'Errors that point at the problem',
+    'Uploads that know what you dropped'
+  ];
+
+  function initRefillTimer(root) {
+    if (!root || root.__miRefill) return;
+    root.__miRefill = true;
+
+    var max = Number(root.getAttribute('data-max')) || 5;
+    var refill = Number(root.getAttribute('data-refill')) || 3000;
+    var dotsBox = root.querySelector('.rt-dots');
+    var left = root.querySelector('.rt-left');
+    var out = root.querySelector('.rt-out');
+    var btn = root.querySelector('.rt-btn');
+    var label = root.querySelector('.rt-label');
+    var credits = max;
+    var last = 0;
+    var raf = 0;
+    var ideaIx = 0;
+    var shownWhole = max;
+
+    var dots = [];
+    for (var i = 0; i < max; i++) {
+      var d = document.createElement('span');
+      d.className = 'rt-dot';
+      d.appendChild(document.createElement('i'));
+      dotsBox.appendChild(d);
+      dots.push(d);
+    }
+
+    function bump(elm, cls) {
+      elm.classList.remove(cls);
+      void elm.offsetWidth;
+      elm.classList.add(cls);
+    }
+
+    function render() {
+      var whole = Math.floor(credits + 1e-6);
+      dots.forEach(function (d, i) {
+        var f = Math.max(0, Math.min(1, credits - i));
+        d.style.setProperty('--rt-f', f.toFixed(3));
+      });
+      left.textContent = whole + ' of ' + max;
+      var empty = whole < 1;
+      root.classList.toggle('is-empty', empty);
+      btn.setAttribute('aria-disabled', empty ? 'true' : 'false');
+      if (empty) {
+        var frac = credits - whole;
+        var secs = Math.ceil(((1 - frac) * refill) / 1000);
+        label.textContent = 'Next in ' + secs + 's';
+        btn.style.setProperty('--rt-p', frac.toFixed(3));
+      } else {
+        label.textContent = 'Generate';
+      }
+      if (whole > shownWhole) {
+        bump(dots[whole - 1], 'is-ready');
+        if (shownWhole === 0) bump(btn, 'is-ready');
+      }
+      shownWhole = whole;
+    }
+
+    function tick(now) {
+      raf = 0;
+      if (last) credits = Math.min(max, credits + (now - last) / refill);
+      last = now;
+      render();
+      if (credits < max) raf = requestAnimationFrame(tick);
+      else last = 0;
+    }
+    function start() { if (!raf && credits < max) { last = 0; raf = requestAnimationFrame(tick); } }
+
+    btn.addEventListener('click', function () {
+      if (credits < 1) return;
+      var spent = Math.floor(credits + 1e-6) - 1;
+      credits -= 1;
+      shownWhole = Math.floor(credits + 1e-6);
+      bump(dots[spent], 'is-spent');
+      var empty = out.querySelector('.rt-empty');
+      if (empty) empty.remove();
+      var li = document.createElement('li');
+      li.textContent = IDEAS[ideaIx++ % IDEAS.length];
+      out.insertBefore(li, out.firstChild);
+      while (out.children.length > 3) out.lastChild.remove();
+      render();
+      start();
+    });
+
+    render();
+  }
+
+  window.initRefillTimer = initRefillTimer;
+  function boot() { document.querySelectorAll('[data-mi="refill-timer"]').forEach(initRefillTimer); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initRefillTimer"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

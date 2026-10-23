@@ -1,0 +1,93 @@
+/* LGTM (Didn't Look) — approve a huge pull request in seconds and the stamp tells the truth.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.lg {
+  --lg-bg: var(--card);
+  --lg-fg: var(--foreground);
+  --lg-muted: var(--muted-foreground);
+  --lg-line: var(--border);
+  --lg-sunken: var(--subtle);
+  --lg-fill: var(--muted);
+  --lg-accent: var(--primary);
+  --lg-green: var(--success-text);
+  --lg-red: var(--danger-text);
+  --lg-ink: var(--warning-text);
+  position: relative;
+  overflow: clip;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--lg-bg);
+  color: var(--lg-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.lg p { margin: 0; }
+.lg.is-honest { --lg-ink: var(--lg-green); }
+.lg-head { display: flex; align-items: center; gap: 12px; }
+.lg-icon { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: color-mix(in srgb, var(--success) 16%, transparent); color: var(--lg-green); }
+.lg-icon svg { width: 20px; height: 20px; }
+.lg-head-text { min-width: 0; }
+.lg-title { font-weight: 600; }
+.lg-meta { color: var(--lg-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.lg-stats { display: flex; align-items: baseline; gap: 10px; font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; }
+.lg-add { color: var(--lg-green); }
+.lg-del { color: var(--lg-red); }
+.lg-files { margin-left: auto; color: var(--lg-muted); font-weight: 500; }
+.lg-files b { color: var(--lg-fg); }
+.lg-diff { contain: inline-size; height: 150px; padding: 4px 0 10px; overflow: auto; border-radius: var(--radius-lg); background: var(--lg-sunken); }
+.lg-diff:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.lg-file { position: sticky; top: -4px; padding: 8px 12px 4px; background: linear-gradient(var(--lg-sunken), var(--lg-sunken)), var(--lg-bg); font: 600 var(--text-caption)/var(--leading-caption) var(--font-mono); }
+.lg-l { display: block; overflow: hidden; padding: 1px 12px; font: var(--text-caption)/var(--leading-caption) var(--font-mono); text-overflow: ellipsis; white-space: pre; }
+.lg-l--add { background: color-mix(in srgb, var(--success) 12%, transparent); }
+.lg-l--del { background: color-mix(in srgb, var(--danger) 10%, transparent); }
+.lg-more { padding: 10px 12px 0; color: var(--lg-muted); font-size: var(--text-caption); }
+.lg-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.lg-timer { color: var(--lg-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.lg-approve, .lg-undo { flex: none; height: 44px; padding: 0 22px; border: 0; border-radius: var(--radius-md); background: var(--success); color: var(--success-foreground); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.lg-approve:active, .lg-undo:active { transform: scale(var(--press-scale)); }
+.lg-approve:disabled { opacity: 0.4; cursor: default; }
+.lg-approve:focus-visible, .lg-undo:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.lg-undo { height: 32px; padding: 0 12px; background: none; color: var(--lg-accent); }
+.lg-after { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 36px; }
+.lg-status { color: var(--lg-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The stamp lands on the diff */
+.lg-stamp {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px 8px;
+  border: 3px solid var(--lg-ink);
+  border-radius: var(--radius-lg);
+  color: var(--lg-ink);
+  background: color-mix(in srgb, var(--lg-bg) 70%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-9deg);
+  -webkit-mask-image: radial-gradient(circle at 30% 40%, var(--black) 60%, color-mix(in srgb, var(--black) 75%, transparent) 61%, var(--black) 70%);
+  mask-image: radial-gradient(circle at 30% 40%, var(--black) 60%, color-mix(in srgb, var(--black) 75%, transparent) 61%, var(--black) 70%);
+}
+.lg-stamp-word { font: 800 calc(var(--text-display) - 4px) / 1 var(--font-sans); letter-spacing: normal; }
+.lg-stamp-sub { margin-top: 2px; font-size: var(--text-body); font-weight: 700; }
+.lg.is-stamped .lg-stamp { animation: lg-slam var(--duration-slower) cubic-bezier(0.2, 0.9, 0.3, 1.25) forwards; }
+@keyframes lg-slam { 0% { opacity: 0; transform: translate(-50%, -50%) rotate(-9deg) scale(2.2); filter: blur(4px); } 70% { opacity: 0.95; transform: translate(-50%, -50%) rotate(-9deg) scale(var(--press-scale-sm)); filter: none; } 100% { opacity: 0.92; transform: translate(-50%, -50%) rotate(-9deg) scale(1); filter: none; } }
+.lg.is-stamped .lg-diff { animation: lg-dip var(--duration-slower) var(--ease-out); }
+@keyframes lg-dip { 40% { transform: scale(0.985) translateY(2px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .lg.is-stamped .lg-stamp { animation: none; opacity: 0.92; transform: translate(-50%, -50%) rotate(-9deg); filter: none; }
+  .lg.is-stamped .lg-diff { animation: none; }
+}
+.lg [hidden] { display: none !important; }

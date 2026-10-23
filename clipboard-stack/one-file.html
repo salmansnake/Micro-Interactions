@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clipboard Stack</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .cs so they never affect the rest of your page. */
+.cs {
+  --duration-base: 200ms;
+  --duration-fast: 140ms;
+  --ease-in: cubic-bezier(0.5, 0, 0.78, 0.24);
+  --font-mono: "Geist Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --leading-title-sm: 24px;
+  --leading-ui: 20px;
+  --press-scale: 0.97;
+  --press-scale-sm: 0.94;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --text-ui: 14px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --background: var(--canvas);
+  --black: #000000;
+  --border: var(--line);
+  --canvas: #FAFAF8;
+  --card: var(--white);
+  --foreground: var(--black);
+  --green-11: #218358;
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-md: 0 2px 4px -1px rgba(17, 17, 16, 0.05), 0 6px 14px -3px rgba(17, 17, 16, 0.09);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-xl: 0 8px 16px -4px rgba(17, 17, 16, 0.08), 0 28px 56px -12px rgba(17, 17, 16, 0.22);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success-text: #1f7b53;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .cs, .dark .cs {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --background: var(--canvas);
+  --black: #000000;
+  --border: var(--line);
+  --canvas: #0B0C0B;
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success-text: var(--green-11);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .cs {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --background: var(--canvas);
+    --black: #000000;
+    --border: var(--line);
+    --canvas: #0B0C0B;
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success-text: var(--green-11);
+    --white: #161817;
+  }
+}
+
+/* Clipboard Stack — copied text flies into a clipboard that keeps your recent copies.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.cs {
+  --cs-bg: var(--card);
+  --cs-fg: var(--foreground);
+  --cs-muted: var(--muted-foreground);
+  --cs-line: var(--border);
+  --cs-sunken: var(--subtle);
+  --cs-fill: var(--muted);
+  --cs-accent: var(--primary);
+  --cs-on-accent: var(--primary-foreground);
+  --cs-green: var(--success-text);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--cs-bg);
+  color: var(--cs-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.cs-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cs-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+.cs-dock-wrap { position: relative; }
+.cs-dock {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--cs-fill);
+  color: var(--cs-fg);
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press);
+}
+.cs-dock svg { position: relative; z-index: 1; width: 22px; height: 22px; }
+.cs-dock:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cs-dock.is-hit { animation: cs-hit var(--spring-pop-duration) var(--spring-pop); }
+@keyframes cs-hit { 30% { transform: scale(1.14); } 100% { transform: scale(1); } }
+/* Paper slips peeking out of the clipboard, one per copy (up to three) */
+.cs-cards { position: absolute; inset: 0; }
+.cs-cards i {
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 15px;
+  height: 18px;
+  margin-left: -7.5px;
+  border-radius: var(--radius-xs);
+  background: var(--cs-bg);
+  box-shadow: 0 0 0 1px var(--cs-line), var(--shadow-xs);
+  opacity: 0;
+  transform: translateY(4px) rotate(0deg);
+  transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-base);
+}
+.cs[data-count="1"] .cs-cards i:nth-child(1),
+.cs[data-count="2"] .cs-cards i:nth-child(-n+2),
+.cs.is-many .cs-cards i { opacity: 1; }
+.cs-cards i:nth-child(1) { transform: translate(-7px, -4px) rotate(-14deg); }
+.cs-cards i:nth-child(2) { transform: translate(7px, -4px) rotate(12deg); }
+.cs-cards i:nth-child(3) { transform: translate(0, -8px) rotate(-3deg); }
+.cs-badge {
+  position: absolute;
+  z-index: 2;
+  top: -2px;
+  right: -2px;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  background: var(--cs-accent);
+  color: var(--cs-on-accent);
+  font-size: calc(var(--text-caption) - 1px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transform: scale(0);
+  transition: transform var(--spring-pop-duration) var(--spring-pop);
+}
+.cs.has-items .cs-badge { transform: scale(1); }
+
+/* Popover */
+.cs-pop {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 280px;
+  max-width: calc(100vw - 48px);
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: var(--radius-xl);
+  background: var(--cs-bg);
+  box-shadow: 0 0 0 1px var(--cs-line), var(--shadow-xl);
+  transform-origin: top right;
+  animation: cs-pop var(--spring-ui-duration) var(--spring-ui) both;
+}
+@keyframes cs-pop { from { opacity: 0; transform: scale(var(--press-scale-sm)); } }
+.cs-pop { padding: 10px; }
+.cs-pop:focus { outline: none; }
+.cs-pop-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 2px 6px 6px; min-height: 28px; }
+.cs-pop-title { margin: 0; color: var(--cs-muted); font-size: var(--text-small); font-weight: 600; }
+.cs-clear { height: 28px; padding: 0 8px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--cs-fg); font: 500 var(--text-caption)/1 var(--font-sans); cursor: pointer; transition: background-color var(--duration-fast); }
+.cs-clear:hover { background: var(--cs-sunken); }
+.cs-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
+.cs:not(.has-items) .cs-clear { display: none; }
+.cs-pop-empty { margin: 2px 6px 4px; color: var(--cs-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.cs.has-items .cs-pop-empty { display: none; }
+.cs-list { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.cs-list li { display: flex; align-items: center; gap: 2px; border-radius: var(--radius-md); }
+.cs-list li:hover, .cs-list li:focus-within { background: var(--cs-sunken); }
+.cs-again {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0;
+  padding: 6px 4px 6px 8px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--cs-fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.cs-again:focus-visible, .cs-x:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+.cs-list code { overflow: hidden; font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+.cs-list small { overflow: hidden; color: var(--cs-muted); font-size: var(--text-caption); line-height: var(--leading-caption); text-overflow: ellipsis; white-space: nowrap; }
+/* Remove one copy */
+.cs-x { flex: none; display: grid; place-items: center; width: 28px; height: 28px; margin-right: 4px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--cs-muted); cursor: pointer; transition: color var(--duration-fast), background-color var(--duration-fast); }
+.cs-x svg { width: 14px; height: 14px; }
+.cs-x:hover { color: var(--cs-fg); background: var(--cs-line); }
+.cs-list li.is-out { animation: cs-out var(--duration-base) var(--ease-in) forwards; }
+@keyframes cs-out { to { opacity: 0; transform: translateX(12px); } }
+.cs-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Rows */
+.cs-rows { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--cs-sunken); }
+.cs-row { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 14px; }
+.cs-row + .cs-row::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--cs-line); transform: scaleY(0.5); transform-origin: top; }
+.cs-row > div { min-width: 0; }
+.cs-label { margin: 0; color: var(--cs-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.cs-value { display: inline-flex; align-items: center; gap: 6px; font: 500 var(--text-ui)/var(--leading-ui) var(--font-mono); letter-spacing: 0; }
+.cs-swatch { width: 12px; height: 12px; border-radius: var(--radius-xs); background: var(--aqua); }
+.cs-copy {
+  flex: none;
+  min-width: 72px;
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--cs-bg);
+  color: var(--cs-accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--spring-press-duration) var(--spring-press), color var(--duration-base);
+}
+.cs-copy:active { transform: scale(var(--press-scale)); }
+.cs-copy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cs-copy.is-done, .cs-copy.is-done:active { background: var(--primary); color: var(--primary-foreground); transform: none; }
+[data-theme="dark"] .cs-copy.is-done, [data-theme="dark"] .cs-copy.is-done:active { background: var(--foreground); color: var(--background); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cs-copy.is-done { background: var(--foreground); color: var(--background); } }
+/* The flying slip */
+.cs-slip {
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  top: 0;
+  max-width: 180px;
+  overflow: hidden;
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  background: var(--cs-bg);
+  box-shadow: 0 0 0 1px var(--cs-line), var(--shadow-md);
+  color: var(--cs-fg);
+  font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-dock.is-hit, .cs-pop, .cs-list li.is-out { animation: none; }
+}
+.cs [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="cs" data-mi="clipboard-stack">
+  <div class="cs-head">
+    <p class="cs-title">Developer Settings</p>
+    <div class="cs-dock-wrap">
+      <button type="button" class="cs-dock" aria-haspopup="true" aria-expanded="false" aria-label="Recent copies, 0 items">
+        <span class="cs-cards" aria-hidden="true"><i></i><i></i><i></i></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="4.5" width="13" height="16" rx="2.5"/><path d="M9 4.5V3.8c0-.7.6-1.3 1.3-1.3h3.4c.7 0 1.3.6 1.3 1.3v.7"/></svg>
+        <span class="cs-badge" aria-hidden="true">0</span>
+      </button>
+      <div class="cs-pop" role="dialog" aria-label="Recent copies" tabindex="-1" hidden>
+        <div class="cs-pop-head"><p class="cs-pop-title">Recent Copies</p><button type="button" class="cs-clear">Clear All</button></div>
+        <ul class="cs-list"></ul>
+        <p class="cs-pop-empty">Things you copy here stay for this session.</p>
+        <p class="cs-sr" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+  <ul class="cs-rows">
+    <li class="cs-row"><div><p class="cs-label">API Key</p><code class="cs-value">sk_live_4f9a…c21e</code></div><button type="button" class="cs-copy" data-copy="sk_live_4f9a8d2b7e61c21e">Copy</button></li>
+    <li class="cs-row"><div><p class="cs-label">Invite Link</p><code class="cs-value">atlas.app/join/7HQ2</code></div><button type="button" class="cs-copy" data-copy="https://atlas.app/join/7HQ2">Copy</button></li>
+    <li class="cs-row"><div><p class="cs-label">Brand Color</p><code class="cs-value"><span class="cs-swatch"></span>#79EEEC</code></div><button type="button" class="cs-copy" data-copy="#79EEEC">Copy</button></li>
+    <li class="cs-row"><div><p class="cs-label">Webhook Secret</p><code class="cs-value">whsec_91b0…ff04</code></div><button type="button" class="cs-copy" data-copy="whsec_91b07a3cd5e2ff04">Copy</button></li>
+  </ul>
+</div>
+
+
+<script>
+/* Clipboard Stack — vanilla JS. Auto-initializes every [data-mi="clipboard-stack"].
+   Any [data-copy] button inside the root copies its value. Call window.initClipboardStack(el) for later elements. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var KEEP = 5;
+
+  function ago(t) {
+    var s = Math.round((Date.now() - t) / 1000);
+    if (s < 10) return 'Just now';
+    if (s < 60) return s + ' seconds ago';
+    var m = Math.round(s / 60);
+    return m + (m === 1 ? ' minute ago' : ' minutes ago');
+  }
+
+  function writeClipboard(text) {
+    try { return navigator.clipboard.writeText(text).catch(function () {}); } catch (e) { return Promise.resolve(); }
+  }
+
+  function initClipboardStack(root) {
+    if (!root || root.__miClip) return;
+    root.__miClip = true;
+    var dock = root.querySelector('.cs-dock');
+    var badge = root.querySelector('.cs-badge');
+    var pop = root.querySelector('.cs-pop');
+    var list = root.querySelector('.cs-list');
+    var clear = root.querySelector('.cs-clear');
+    var sr = root.querySelector('.cs-sr');
+    var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    var stack = []; // newest first: { text, label, t }
+
+    function render() {
+      root.setAttribute('data-count', String(Math.min(stack.length, 3)));
+      root.classList.toggle('has-items', stack.length > 0);
+      root.classList.toggle('is-many', stack.length >= 3);
+      badge.textContent = stack.length;
+      dock.setAttribute('aria-label', 'Recent copies, ' + stack.length + (stack.length === 1 ? ' item' : ' items'));
+      list.replaceChildren();
+      stack.forEach(function (item) {
+        var li = document.createElement('li');
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'cs-again';
+        var code = document.createElement('code'); code.textContent = item.text;
+        var small = document.createElement('small'); small.textContent = item.label + ' · ' + ago(item.t);
+        b.append(code, small);
+        b.addEventListener('click', function () {
+          writeClipboard(item.text);
+          add(item.text, item.label, null);
+          var top = list.querySelector('.cs-again');
+          if (top) { top.querySelector('small').textContent = item.label + ' · Copied again'; top.focus(); }
+        });
+        var x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'cs-x';
+        x.setAttribute('aria-label', 'Remove ' + item.label);
+        x.innerHTML = X;
+        x.addEventListener('click', function () { remove(item.text, li); });
+        li.append(b, x);
+        list.appendChild(li);
+      });
+    }
+
+    // Remove one copy: the count drops by one, the rest stay.
+    function remove(text, li) {
+      var i = stack.findIndex(function (s) { return s.text === text; });
+      if (i < 0) return;
+      var label = stack[i].label;
+      function finish() {
+        stack.splice(i, 1);
+        render();
+        var rest = list.querySelectorAll('.cs-x');
+        (rest[Math.min(i, rest.length - 1)] || pop).focus();
+        sr.textContent = label + ' removed';
+      }
+      if (reduce.matches) { finish(); return; }
+      li.classList.add('is-out');
+      setTimeout(finish, 180);
+    }
+
+    // Clear everything: the badge goes away and the paper slips fold back in.
+    clear.addEventListener('click', function () {
+      stack = [];
+      render();
+      pop.focus();
+      sr.textContent = 'All copies cleared';
+    });
+    function add(text, label, from) {
+      stack = stack.filter(function (s) { return s.text !== text; });
+      stack.unshift({ text: text, label: label, t: Date.now() });
+      stack = stack.slice(0, KEEP);
+      if (!from || reduce.matches) { render(); bump(); return; }
+      fly(text, from, function () { render(); bump(); });
+    }
+
+    function bump() {
+      dock.classList.remove('is-hit');
+      void dock.offsetWidth;
+      dock.classList.add('is-hit');
+    }
+
+    function fly(text, from, done) {
+      var o = root.getBoundingClientRect();
+      var a = from.getBoundingClientRect();
+      var b = dock.getBoundingClientRect();
+      var slip = document.createElement('span');
+      slip.className = 'cs-slip';
+      slip.textContent = text;
+      root.appendChild(slip);
+      var sw = slip.offsetWidth, shh = slip.offsetHeight;
+      var x0 = a.left + a.width / 2 - o.left - sw / 2, y0 = a.top + a.height / 2 - o.top - shh / 2;
+      var x1 = b.left + b.width / 2 - o.left - sw / 2, y1 = b.top + b.height / 2 - o.top - shh / 2;
+      var frames = [];
+      for (var i = 0; i <= 12; i++) {
+        var t = i / 12;
+        var x = x0 + (x1 - x0) * t, y = y0 + (y1 - y0) * t - Math.sin(t * Math.PI) * 60;
+        var s = t < 0.15 ? 0.8 + t / 0.15 * 0.2 : 1 - Math.max(0, t - 0.6) / 0.4 * 0.8;
+        frames.push({ transform: 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) rotate(' + (-8 * Math.sin(t * Math.PI)).toFixed(1) + 'deg) scale(' + s.toFixed(3) + ')', opacity: t > 0.9 ? (1 - t) * 10 : 1 });
+      }
+      slip.animate(frames, { duration: 620, easing: 'cubic-bezier(.35,.1,.5,1)', fill: 'forwards' }).finished.then(function () { slip.remove(); done(); });
+    }
+
+    root.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-copy]');
+      if (!btn || !root.contains(btn)) return;
+      var text = btn.getAttribute('data-copy');
+      var row = btn.closest('.cs-row');
+      var label = row && row.querySelector('.cs-label') ? row.querySelector('.cs-label').textContent : 'Copied';
+      writeClipboard(text);
+      add(text, label, btn);
+      var old = btn.getAttribute('data-label') || btn.textContent;
+      btn.setAttribute('data-label', old);
+      btn.textContent = 'Copied';
+      btn.classList.add('is-done');
+      setTimeout(function () { btn.textContent = old; btn.classList.remove('is-done'); }, 1400);
+    });
+
+    function setOpen(on) {
+      pop.hidden = !on;
+      dock.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (on) { render(); var first = list.querySelector('.cs-again'); if (first) first.focus(); else pop.focus(); }
+    }
+    dock.addEventListener('click', function () { setOpen(pop.hidden); });
+    root.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { setOpen(false); dock.focus(); } });
+    document.addEventListener('pointerdown', function (e) {
+      if (!pop.hidden && !pop.contains(e.target) && !dock.contains(e.target)) setOpen(false);
+    });
+
+    render();
+  }
+
+  window.initClipboardStack = initClipboardStack;
+  function boot() { document.querySelectorAll('[data-mi="clipboard-stack"]').forEach(initClipboardStack); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

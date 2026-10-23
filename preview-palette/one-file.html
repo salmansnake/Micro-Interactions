@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview Palette</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .pv so they never affect the rest of your page. */
+.pv {
+  --blur-md: 16px;
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --duration-slow: 320ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --frost-saturate: 160%;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-title-sm: 17px;
+  --accent: var(--mist);
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --foreground: var(--black);
+  --frost: rgba(255, 255, 255, 0.74);
+  --frost-border: rgba(0, 0, 0, 0.08);
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-xl: 0 8px 16px -4px rgba(17, 17, 16, 0.08), 0 28px 56px -12px rgba(17, 17, 16, 0.22);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .pv, .dark .pv {
+  --accent: var(--mist);
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --frost: rgba(21, 23, 22, 0.74);
+  --frost-border: rgba(243, 242, 238, 0.1);
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --olive: #AA9856;
+  --on-color: #ffffff;
+  --orange: #FE8C5F;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .pv {
+    --accent: var(--mist);
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --frost: rgba(21, 23, 22, 0.74);
+    --frost-border: rgba(243, 242, 238, 0.1);
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --olive: #AA9856;
+    --on-color: #ffffff;
+    --orange: #FE8C5F;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --white: #161817;
+  }
+}
+
+/* Preview Palette — a command palette that previews each command live on the page before you commit.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.pv {
+  --pv-bg: var(--card);
+  --pv-fg: var(--foreground);
+  --pv-muted: var(--muted-foreground);
+  --pv-line: var(--border);
+  --pv-sunken: var(--subtle);
+  --pv-fill: var(--muted);
+  --pv-accent: var(--primary);
+  --pv-glass: var(--frost);
+  --pv-glass-edge: var(--frost-border);
+  --pv-glass-rim: var(--frost-border);
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  min-height: 380px;
+  color: var(--pv-fg);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+/* The mini app the commands act on. Its own theme so previews are visible. */
+.pv-app {
+  /* The mini app keeps its own scheme, so it uses only colors that stay fixed across themes. */
+  --a: color-mix(in srgb, var(--aqua) 45%, var(--black));
+  --app-on-a: var(--on-color);
+  --app-bg: var(--on-color);
+  --app-fg: var(--black);
+  --app-muted: color-mix(in srgb, var(--black) 62%, var(--on-color));
+  --app-row: color-mix(in srgb, var(--black) 5%, var(--on-color));
+  --pad: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border-radius: var(--radius-xl); border: 1px solid var(--border);
+  background: var(--app-bg);
+  color: var(--app-fg);
+  box-shadow: 0 0 0 1px var(--pv-line);
+  transition: background-color var(--spring-press-duration), color var(--spring-press-duration), box-shadow var(--duration-slow), padding var(--spring-ui-duration) var(--spring-ui);
+}
+.pv-app[data-scheme="dark"] { --a: var(--aqua); --app-on-a: var(--black); --app-bg: color-mix(in srgb, var(--black) 91%, var(--on-color)); --app-fg: var(--on-color); --app-muted: color-mix(in srgb, var(--on-color) 64%, var(--black)); --app-row: color-mix(in srgb, var(--black) 84%, var(--on-color)); }
+.pv-app[data-accent="sage"] { --a: color-mix(in srgb, var(--sage) 50%, var(--black)); }
+.pv-app[data-scheme="dark"][data-accent="sage"] { --a: var(--sage); }
+.pv-app[data-accent="orange"] { --a: color-mix(in srgb, var(--orange) 55%, var(--black)); }
+.pv-app[data-scheme="dark"][data-accent="orange"] { --a: var(--orange); }
+.pv-app[data-accent="olive"] { --a: color-mix(in srgb, var(--olive) 55%, var(--black)); }
+.pv-app[data-scheme="dark"][data-accent="olive"] { --a: var(--olive); }
+.pv-app[data-density="compact"] { --pad: 7px; padding: 12px; gap: 8px; }
+.pv-app.is-previewing { box-shadow: 0 0 0 2px var(--pv-accent), 0 0 0 6px color-mix(in srgb, var(--brand) 18%, transparent); }
+.pv-app-bar { display: flex; align-items: center; gap: 10px; }
+.pv-logo { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--a); color: var(--app-on-a); font-weight: 700; transition: background-color var(--spring-press-duration); }
+.pv-app-name { font-weight: 600; }
+.pv-badge { padding: 2px 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--brand) 16%, transparent); color: var(--app-fg); font-size: calc(var(--text-caption) - 1px); font-weight: 700; opacity: 0; transform: scale(0.8); transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.pv-app.is-previewing .pv-badge { opacity: 1; transform: none; }
+.pv-open { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 6px 0 12px; border: 0; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--app-fg) 8%, transparent); color: var(--app-fg); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
+.pv-open kbd, .pv-help kbd { padding: 1px 6px; border-radius: var(--radius-sm); background: color-mix(in srgb, currentColor 12%, transparent); font: 600 calc(var(--text-caption) - 1px) / 16px var(--font-sans); }
+.pv-open:focus-visible, .pv-cta:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.pv-items { position: relative; display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--app-row); transition: background-color var(--spring-press-duration); }
+.pv-items li { display: flex; align-items: center; gap: 10px; padding: var(--pad) 14px; transition: padding var(--spring-ui-duration) var(--spring-ui); }
+.pv-items li + li { box-shadow: inset 0 1px 0 color-mix(in srgb, var(--app-fg) 18%, transparent); }
+.pv-items i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--a); transition: background-color var(--spring-press-duration); }
+.pv-items small { margin-left: auto; color: var(--app-muted); font-size: var(--text-caption); }
+.pv-cta { align-self: flex-start; height: 34px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--a); color: var(--app-on-a); font: inherit; font-weight: 600; cursor: pointer; transition: background-color var(--spring-press-duration); }
+/* The palette: a glass sheet over the app */
+.pv-palette {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 64px;
+  width: min(340px, calc(100% - 24px));
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--pv-glass);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate));
+  box-shadow: 0 0 0 1px var(--pv-glass-rim), var(--shadow-xl);
+  transform: translateX(-50%);
+  animation: pv-in var(--spring-ui-duration) var(--spring-ui) both;
+}
+@keyframes pv-in { from { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.97); } }
+.pv-input { width: 100%; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-bottom: 1px solid var(--pv-line); background: transparent; color: var(--pv-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
+.pv-list { max-height: 210px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; }
+.pv-group { padding: 8px 10px 4px; color: var(--pv-muted); font-size: var(--text-caption); font-weight: 600; }
+.pv-opt { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 10px; border-radius: var(--radius-md); cursor: pointer; }
+.pv-opt[aria-selected="true"] { background: var(--pv-accent); color: var(--primary-foreground); }
+.pv-opt .pv-sw { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--black) 10%, transparent); }
+.pv-opt .pv-cur { margin-left: auto; font-size: var(--text-caption); opacity: 0.7; }
+.pv-help { margin: 0; padding: 8px 14px 10px; border-top: 1px solid var(--pv-line); color: var(--pv-muted); font-size: var(--text-caption); }
+.pv-status { margin: 10px 4px 0; min-height: 18px; color: var(--pv-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+@media (prefers-reduced-motion: reduce) {
+  .pv-palette { animation: none; }
+  .pv-app, .pv-items li { transition-duration: var(--duration-reduced); }
+}
+.pv [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="pv" data-mi="preview-palette">
+  <div class="pv-app" data-scheme="light" data-accent="aqua" data-density="comfortable" data-sort="recent">
+    <div class="pv-app-bar">
+      <span class="pv-logo">A</span>
+      <span class="pv-app-name">Atlas</span>
+      <span class="pv-badge" aria-hidden="true">Previewing</span>
+      <button type="button" class="pv-open" aria-haspopup="dialog">Commands <kbd>⌘K</kbd></button>
+    </div>
+    <ul class="pv-items">
+      <li data-name="Billing page" data-recent="1"><i></i><span>Billing page</span><small>Edited 2m ago</small></li>
+      <li data-name="Onboarding flow" data-recent="2"><i></i><span>Onboarding flow</span><small>Edited 1h ago</small></li>
+      <li data-name="API reference" data-recent="3"><i></i><span>API reference</span><small>Edited 3h ago</small></li>
+      <li data-name="Changelog" data-recent="4"><i></i><span>Changelog</span><small>Edited yesterday</small></li>
+    </ul>
+    <button type="button" class="pv-cta">New Page</button>
+  </div>
+  <div class="pv-palette" role="dialog" aria-label="Command palette" hidden>
+    <input class="pv-input" type="text" placeholder="Type a command" aria-label="Type a command" aria-controls="pv-list" autocomplete="off" spellcheck="false">
+    <ul class="pv-list" id="pv-list" role="listbox"></ul>
+    <p class="pv-help"><kbd>↑</kbd><kbd>↓</kbd> preview · <kbd>↵</kbd> apply · <kbd>esc</kbd> revert</p>
+  </div>
+  <p class="pv-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Preview Palette — vanilla JS. Auto-initializes every [data-mi="preview-palette"].
+   Highlighting a command previews it on .pv-app; Enter commits, Escape reverts. ⌘K / Ctrl+K opens it while focus is inside.
+   Call window.initPreviewPalette(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var COMMANDS = [
+    { group: 'Appearance', label: 'Dark Mode', key: 'scheme', value: 'dark', sw: 'var(--black)' },
+    { group: 'Appearance', label: 'Light Mode', key: 'scheme', value: 'light', sw: 'var(--on-color)' },
+    { group: 'Accent', label: 'Aqua', key: 'accent', value: 'aqua', sw: 'var(--aqua)' },
+    { group: 'Accent', label: 'Sage', key: 'accent', value: 'sage', sw: 'var(--sage)' },
+    { group: 'Accent', label: 'Orange', key: 'accent', value: 'orange', sw: 'var(--orange)' },
+    { group: 'Accent', label: 'Olive', key: 'accent', value: 'olive', sw: 'var(--olive)' },
+    { group: 'Density', label: 'Compact', key: 'density', value: 'compact' },
+    { group: 'Density', label: 'Comfortable', key: 'density', value: 'comfortable' },
+    { group: 'Sort Pages', label: 'By Name', key: 'sort', value: 'name' },
+    { group: 'Sort Pages', label: 'By Most Recent', key: 'sort', value: 'recent' }
+  ];
+
+  function initPreviewPalette(root) {
+    if (!root || root.__miPalette) return;
+    root.__miPalette = true;
+    var app = root.querySelector('.pv-app');
+    var palette = root.querySelector('.pv-palette');
+    var input = root.querySelector('.pv-input');
+    var list = root.querySelector('.pv-list');
+    var status = root.querySelector('.pv-status');
+    var opener = root.querySelector('.pv-open');
+    var items = root.querySelector('.pv-items');
+    // The mini app starts in the page's theme and follows it until someone picks a scheme.
+    function pageDark() { var t = document.documentElement.getAttribute('data-theme'); return t === 'dark' || (t !== 'light' && !!window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
+    var committed = { scheme: pageDark() ? 'dark' : 'light', accent: 'aqua', density: 'comfortable', sort: 'recent' }, pickedScheme = false;
+    function followPage() { if (pickedScheme) return; committed.scheme = pageDark() ? 'dark' : 'light'; if (!root.querySelector('.pv-app.is-previewing')) apply(committed); }
+    new MutationObserver(followPage).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', followPage);
+    var shown = [], active = -1;
+
+    // Reorder rows with FLIP so sorting is visible.
+    function sortRows(by) {
+      var rows = Array.prototype.slice.call(items.children);
+      var before = rows.map(function (r) { return r.getBoundingClientRect().top; });
+      rows.slice().sort(function (a, b) {
+        return by === 'name' ? a.getAttribute('data-name').localeCompare(b.getAttribute('data-name')) : a.getAttribute('data-recent') - b.getAttribute('data-recent');
+      }).forEach(function (r) { items.appendChild(r); });
+      if (reduce.matches) return;
+      rows.forEach(function (r, i) {
+        var dy = before[i] - r.getBoundingClientRect().top;
+        if (dy) r.animate([{ transform: 'translateY(' + dy + 'px)' }, { transform: 'none' }], { duration: 460, easing: 'cubic-bezier(.2,.9,.25,1.05)' });
+      });
+    }
+    function apply(state) {
+      app.setAttribute('data-scheme', state.scheme);
+      app.setAttribute('data-accent', state.accent);
+      app.setAttribute('data-density', state.density);
+      if (app.getAttribute('data-sort') !== state.sort) { app.setAttribute('data-sort', state.sort); sortRows(state.sort); }
+    }
+    function previewOf(cmd) { var s = Object.assign({}, committed); if (cmd) s[cmd.key] = cmd.value; return s; }
+
+    function render() {
+      var q = input.value.trim().toLowerCase();
+      shown = COMMANDS.filter(function (c) { return !q || (c.group + ' ' + c.label).toLowerCase().indexOf(q) > -1; });
+      list.replaceChildren();
+      var lastGroup = '';
+      shown.forEach(function (c, i) {
+        if (c.group !== lastGroup) {
+          var g = document.createElement('li'); g.className = 'pv-group'; g.setAttribute('role', 'presentation'); g.textContent = c.group; list.appendChild(g);
+          lastGroup = c.group;
+        }
+        var li = document.createElement('li');
+        li.className = 'pv-opt'; li.id = 'pv-opt-' + i; li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', i === active ? 'true' : 'false');
+        if (c.sw) { var sw = document.createElement('span'); sw.className = 'pv-sw'; sw.style.background = c.sw; li.appendChild(sw); }
+        li.appendChild(document.createTextNode(c.label));
+        if (committed[c.key] === c.value) { var cur = document.createElement('span'); cur.className = 'pv-cur'; cur.textContent = 'Current'; li.appendChild(cur); }
+        li.addEventListener('pointerenter', function () { highlight(i); });
+        li.addEventListener('click', function () { highlight(i); commit(); });
+        list.appendChild(li);
+      });
+      if (active >= shown.length) active = shown.length - 1;
+    }
+    function highlight(i) {
+      active = i;
+      list.querySelectorAll('.pv-opt').forEach(function (o, k) { o.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+      var cmd = shown[i];
+      if (cmd) {
+        input.setAttribute('aria-activedescendant', 'pv-opt-' + i);
+        var el = list.querySelector('#pv-opt-' + i); if (el) el.scrollIntoView({ block: 'nearest' });
+      }
+      apply(previewOf(cmd));
+      app.classList.toggle('is-previewing', !!cmd && committed[cmd.key] !== cmd.value);
+    }
+    function open() {
+      palette.hidden = false;
+      opener.setAttribute('aria-expanded', 'true');
+      input.value = '';
+      active = -1;
+      render();
+      input.focus();
+    }
+    function close(revert) {
+      if (palette.hidden) return;
+      palette.hidden = true;
+      opener.setAttribute('aria-expanded', 'false');
+      app.classList.remove('is-previewing');
+      if (revert) { apply(committed); status.textContent = 'Preview cleared.'; }
+      opener.focus({ preventScroll: true });
+    }
+    function commit() {
+      var cmd = shown[active];
+      if (!cmd) return;
+      committed[cmd.key] = cmd.value;
+      if (cmd.key === 'scheme') pickedScheme = true;
+      apply(committed);
+      status.textContent = cmd.group + ' set to ' + cmd.label + '.';
+      close(false);
+    }
+
+    opener.addEventListener('click', function () { palette.hidden ? open() : close(true); });
+    input.addEventListener('input', function () { active = shown.length ? 0 : -1; render(); highlight(shown.length ? 0 : -1); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); highlight(Math.min(shown.length - 1, active + 1)); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); highlight(Math.max(0, active - 1)); }
+      else if (e.key === 'Enter') { e.preventDefault(); commit(); }
+      else if (e.key === 'Escape') { e.preventDefault(); close(true); }
+    });
+    list.addEventListener('pointerleave', function () { if (!palette.hidden) { active = -1; highlight(-1); } });
+    root.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); palette.hidden ? open() : close(true); }
+    });
+    document.addEventListener('pointerdown', function (e) { if (!palette.hidden && !palette.contains(e.target) && !opener.contains(e.target)) close(true); });
+    followPage();
+  }
+
+  window.initPreviewPalette = initPreviewPalette;
+  function boot() { document.querySelectorAll('[data-mi="preview-palette"]').forEach(initPreviewPalette); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

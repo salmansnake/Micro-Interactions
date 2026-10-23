@@ -1,0 +1,64 @@
+/* Rubber Duck Gate — before you file a bug, a rubber duck asks you to explain it. It nods along.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.rd {
+  --rd-bg: var(--card);
+  --rd-fg: var(--foreground);
+  --rd-muted: var(--muted-foreground);
+  --rd-line: var(--border);
+  --rd-sunken: var(--subtle);
+  --rd-fill: var(--muted);
+  --rd-accent: var(--primary);
+  --rd-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--rd-bg);
+  color: var(--rd-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.rd p { margin: 0; }
+.rd-form { border-radius: var(--radius-lg); background: var(--rd-sunken); }
+.rd-field { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 16px 12px; }
+.rd-field + .rd-field::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; height: 1px; background: var(--rd-line); transform: scaleY(0.5); transform-origin: top; }
+.rd-field-label { color: var(--rd-muted); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 500; transition: color var(--duration-base); }
+.rd-field:focus-within .rd-field-label { color: var(--rd-accent); }
+.rd-title, .rd-desc { padding: 0; border: 0; background: none; color: inherit; font: inherit; resize: none; }
+.rd-title { font-weight: 600; }
+.rd-title:focus, .rd-desc:focus { outline: none; }
+.rd-desc::placeholder { color: var(--rd-muted); }
+.rd.is-ducking .rd-desc-label { color: var(--warning-text); }
+
+.rd-duck-row { display: flex; align-items: flex-end; gap: 10px; animation: rd-up var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes rd-up { from { opacity: 0; transform: translateY(24px) scale(0.9); } }
+.rd-duck { flex: none; width: 64px; height: 56px; transform-origin: 50% 90%; }
+.rd-duck svg { display: block; width: 100%; height: 100%; }
+.rd-duck.is-nod { animation: rd-nod var(--spring-ui-duration) var(--spring-ui); }
+@keyframes rd-nod { 30% { transform: rotate(9deg) translateY(2px); } 60% { transform: rotate(-3deg); } }
+.rd-duck.is-joy { animation: rd-joy var(--spring-pop-duration) var(--spring-pop); }
+@keyframes rd-joy { 40% { transform: translateY(-18px) rotate(-200deg); } 100% { transform: rotate(-360deg); } }
+.rd-say { position: relative; flex: 1; padding: 10px 14px; border-radius: var(--radius-xl) var(--radius-xl) var(--radius-xl) var(--radius-sm); background: color-mix(in srgb, var(--warning) 22%, var(--rd-bg)); font-size: var(--text-body); line-height: var(--leading-body); }
+
+.rd-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.rd-actions button { flex: 1 1 auto; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.rd-actions button:active { transform: scale(var(--press-scale)); }
+.rd-actions button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.rd-submit, .rd-solved { background: var(--rd-accent); color: var(--rd-on-accent); }
+.rd-file { background: var(--rd-fill); color: var(--rd-fg); }
+.rd-foot { color: var(--rd-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.rd-foot b { color: var(--rd-fg); font-variant-numeric: tabular-nums; }
+.rd.is-closed .rd-form { opacity: 0.5; transition: opacity var(--duration-slow); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-duck-row, .rd-duck.is-nod, .rd-duck.is-joy { animation: none; }
+}
+.rd [hidden] { display: none !important; }

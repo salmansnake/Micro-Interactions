@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leaning Empty State</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .le so they never affect the rest of your page. */
+.le {
+  --duration-slow: 320ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-title: 28px;
+  --press-scale: 0.97;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-small: 13px;
+  --text-title: 20px;
+  --text-title-sm: 17px;
+  --tracking-title: -0.015em;
+  --ai: var(--orange);
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --chart-2: var(--pink);
+  --foreground: var(--black);
+  --green-11: #218358;
+  --line: #DCDED9;
+  --mist: #ECEBE6;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-md: 0 2px 4px -1px rgba(17, 17, 16, 0.05), 0 6px 14px -3px rgba(17, 17, 16, 0.09);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --success: var(--green-11);
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .le, .dark .le {
+  --ai: var(--orange);
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --border: var(--line);
+  --brand: var(--aqua);
+  --card: var(--white);
+  --chart-2: var(--pink);
+  --foreground: #F3F2EE;
+  --green-11: #3dd68c;
+  --line: #313432;
+  --mist: #2B2E2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --success: #218358;
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .le {
+    --ai: var(--orange);
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --border: var(--line);
+    --brand: var(--aqua);
+    --card: var(--white);
+    --chart-2: var(--pink);
+    --foreground: #F3F2EE;
+    --green-11: #3dd68c;
+    --line: #313432;
+    --mist: #2B2E2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --orange: #FE8C5F;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --success: #218358;
+    --white: #161817;
+  }
+}
+
+/* Leaning Empty State — the empty screen's illustration leans toward the button as you get close.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.le {
+  --le-bg: var(--card);
+  --le-fg: var(--foreground);
+  --le-muted: var(--muted-foreground);
+  --le-line: var(--border);
+  --le-sunken: var(--subtle);
+  --le-fill: var(--muted);
+  --le-accent: var(--primary);
+  --le-on-accent: var(--primary-foreground);
+  --le-pull: 0;
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 28px 24px;
+  background: var(--le-bg);
+  color: var(--le-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+}
+.le-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.le-art { position: relative; width: 240px; height: 132px; margin-bottom: 10px; perspective: 600px; }
+.le-tile {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: var(--le-bg);
+  box-shadow: 0 0 0 1px var(--le-line), var(--shadow-md);
+  transform: translate(var(--tx, 0px), var(--ty, 0px)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) rotate(var(--r0, 0deg));
+  transition: transform var(--spring-ui-duration) var(--spring-ui), box-shadow var(--duration-slow);
+  will-change: transform;
+}
+.le-tile i { display: block; height: 6px; border-radius: var(--radius-xs); background: var(--le-fill); }
+.le-tile i:first-child { width: 60%; background: color-mix(in srgb, var(--tile, var(--le-accent)) 70%, transparent); }
+.le-tile i:nth-child(2) { width: 85%; }
+.le-tile i:nth-child(3) { width: 45%; }
+.le-tile--a { left: 6px; top: 34px; width: 72px; height: 66px; --r0: -8deg; --tile: var(--ai); }
+.le-tile--b { left: 70px; top: 4px; width: 64px; height: 52px; --r0: 5deg; --tile: var(--success); }
+.le-tile--c { left: 128px; top: 40px; width: 76px; height: 70px; --r0: -3deg; --tile: var(--le-accent); }
+.le-tile--d { left: 186px; top: 8px; width: 52px; height: 48px; --r0: 10deg; --tile: var(--chart-2); }
+.le-title { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+.le-body { margin: 0 0 12px; max-width: 30ch; color: var(--le-muted); font-size: var(--text-body); line-height: var(--leading-body); }
+.le-cta {
+  height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--le-accent);
+  color: var(--le-on-accent);
+  font: inherit;
+  font-size: var(--text-title-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-title);
+  cursor: pointer;
+  box-shadow: 0 0 0 calc(var(--le-pull) * 6px) color-mix(in srgb, var(--brand) 16%, transparent);
+  transition: transform var(--spring-press-duration) var(--spring-press), box-shadow var(--duration-slow);
+}
+.le-cta:active { transform: scale(var(--press-scale)); }
+.le-cta:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* After creating */
+.le-filled { text-align: left; }
+.le-list-title { margin: 0 0 10px; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+.le-list { margin: 0 0 16px; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--le-sunken); }
+.le-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.le-item-icon { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--le-accent); color: var(--le-on-accent); font-weight: 700; }
+.le-item b { display: block; font-weight: 600; }
+.le-item small { color: var(--le-muted); font-size: var(--text-small); }
+.le-item.is-new { animation: le-arrive var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes le-arrive { from { opacity: 0; transform: translateY(-24px) scale(0.9); } }
+.le-reset { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--le-fill); color: var(--le-fg); font: inherit; font-weight: 600; cursor: pointer; }
+.le-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .le-tile { transition: none; }
+  .le-item.is-new { animation: none; }
+}
+.le [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="le" data-mi="leaning-empty-state">
+  <div class="le-empty">
+    <div class="le-art" aria-hidden="true">
+      <span class="le-tile le-tile--a"><i></i><i></i><i></i></span>
+      <span class="le-tile le-tile--b"><i></i><i></i></span>
+      <span class="le-tile le-tile--c"><i></i><i></i><i></i></span>
+      <span class="le-tile le-tile--d"><i></i><i></i></span>
+    </div>
+    <p class="le-title">No Projects Yet</p>
+    <p class="le-body">Projects keep your environments, files and teammates in one place.</p>
+    <button type="button" class="le-cta">New Project</button>
+  </div>
+  <div class="le-filled" hidden>
+    <p class="le-list-title">Projects</p>
+    <ul class="le-list">
+      <li class="le-item"><span class="le-item-icon">U</span><span><b>Untitled Project</b><small>Created just now</small></span></li>
+    </ul>
+    <button type="button" class="le-reset">Reset Demo</button>
+  </div>
+</div>
+
+
+<script>
+/* Leaning Empty State — vanilla JS. Auto-initializes every [data-mi="leaning-empty-state"].
+   Call window.initLeaningEmptyState(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var RANGE = 320; // px from the button where the lean starts
+
+  function initLeaningEmptyState(root) {
+    if (!root || root.__miLean) return;
+    root.__miLean = true;
+    var empty = root.querySelector('.le-empty');
+    var filled = root.querySelector('.le-filled');
+    var cta = root.querySelector('.le-cta');
+    var tiles = Array.prototype.slice.call(root.querySelectorAll('.le-tile'));
+    var raf = 0, px = 0, py = 0;
+
+    function lean(pull) {
+      var c = cta.getBoundingClientRect();
+      var cx = c.left + c.width / 2, cy = c.top + c.height / 2;
+      root.style.setProperty('--le-pull', pull.toFixed(3));
+      tiles.forEach(function (t) {
+        var r = t.getBoundingClientRect();
+        var dx = cx - (r.left + r.width / 2), dy = cy - (r.top + r.height / 2);
+        var len = Math.hypot(dx, dy) || 1;
+        var ux = dx / len, uy = dy / len;
+        // Tilt so the tile's face turns toward the button, and drift a little toward it.
+        t.style.setProperty('--rx', (-uy * 22 * pull).toFixed(2) + 'deg');
+        t.style.setProperty('--ry', (ux * 22 * pull).toFixed(2) + 'deg');
+        t.style.setProperty('--tx', (ux * 8 * pull).toFixed(2) + 'px');
+        t.style.setProperty('--ty', (uy * 8 * pull).toFixed(2) + 'px');
+      });
+    }
+
+    function frame() {
+      raf = 0;
+      var c = cta.getBoundingClientRect();
+      var d = Math.hypot(px - (c.left + c.width / 2), py - (c.top + c.height / 2));
+      lean(Math.max(0, Math.min(1, 1 - d / RANGE)));
+    }
+
+    root.addEventListener('pointermove', function (e) {
+      if (reduce.matches || empty.hidden) return;
+      px = e.clientX; py = e.clientY;
+      if (!raf) raf = requestAnimationFrame(frame);
+    });
+    root.addEventListener('pointerleave', function () { lean(0); });
+    cta.addEventListener('focus', function () { if (!reduce.matches) lean(1); });
+    cta.addEventListener('blur', function () { lean(0); });
+
+    cta.addEventListener('click', function () {
+      var c = cta.getBoundingClientRect();
+      var done = function () {
+        empty.hidden = true;
+        filled.hidden = false;
+        var item = filled.querySelector('.le-item');
+        item.classList.remove('is-new');
+        void item.offsetWidth;
+        item.classList.add('is-new');
+        filled.querySelector('.le-reset').focus();
+      };
+      if (reduce.matches) { done(); return; }
+      // The tiles gather into the button, then the first project arrives.
+      tiles.forEach(function (t, i) {
+        var r = t.getBoundingClientRect();
+        var dx = c.left + c.width / 2 - (r.left + r.width / 2), dy = c.top + c.height / 2 - (r.top + r.height / 2);
+        t.animate([
+          { transform: getComputedStyle(t).transform, opacity: 1 },
+          { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(0.2) rotate(' + (i % 2 ? 40 : -40) + 'deg)', opacity: 0 }
+        ], { duration: 420, delay: i * 50, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
+      });
+      cta.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.08)', offset: 0.7 }, { transform: 'scale(1)' }], { duration: 600, delay: 260 });
+      setTimeout(done, 620);
+    });
+
+    root.querySelector('.le-reset').addEventListener('click', function () {
+      filled.hidden = true;
+      empty.hidden = false;
+      tiles.forEach(function (t) { t.getAnimations().forEach(function (a) { a.cancel(); }); });
+      lean(0);
+      cta.focus();
+    });
+  }
+
+  window.initLeaningEmptyState = initLeaningEmptyState;
+  function boot() { document.querySelectorAll('[data-mi="leaning-empty-state"]').forEach(initLeaningEmptyState); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

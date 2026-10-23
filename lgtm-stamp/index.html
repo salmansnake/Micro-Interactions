@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LGTM (Didn&#x27;t Look) · Micro Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* LGTM (Didn't Look) — approve a huge pull request in seconds and the stamp tells the truth.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.lg {
+  --lg-bg: var(--card);
+  --lg-fg: var(--foreground);
+  --lg-muted: var(--muted-foreground);
+  --lg-line: var(--border);
+  --lg-sunken: var(--subtle);
+  --lg-fill: var(--muted);
+  --lg-accent: var(--primary);
+  --lg-green: var(--success-text);
+  --lg-red: var(--danger-text);
+  --lg-ink: var(--warning-text);
+  position: relative;
+  overflow: clip;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--lg-bg);
+  color: var(--lg-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.lg p { margin: 0; }
+.lg.is-honest { --lg-ink: var(--lg-green); }
+.lg-head { display: flex; align-items: center; gap: 12px; }
+.lg-icon { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: color-mix(in srgb, var(--success) 16%, transparent); color: var(--lg-green); }
+.lg-icon svg { width: 20px; height: 20px; }
+.lg-head-text { min-width: 0; }
+.lg-title { font-weight: 600; }
+.lg-meta { color: var(--lg-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.lg-stats { display: flex; align-items: baseline; gap: 10px; font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; }
+.lg-add { color: var(--lg-green); }
+.lg-del { color: var(--lg-red); }
+.lg-files { margin-left: auto; color: var(--lg-muted); font-weight: 500; }
+.lg-files b { color: var(--lg-fg); }
+.lg-diff { contain: inline-size; height: 150px; padding: 4px 0 10px; overflow: auto; border-radius: var(--radius-lg); background: var(--lg-sunken); }
+.lg-diff:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.lg-file { position: sticky; top: -4px; padding: 8px 12px 4px; background: linear-gradient(var(--lg-sunken), var(--lg-sunken)), var(--lg-bg); font: 600 var(--text-caption)/var(--leading-caption) var(--font-mono); }
+.lg-l { display: block; overflow: hidden; padding: 1px 12px; font: var(--text-caption)/var(--leading-caption) var(--font-mono); text-overflow: ellipsis; white-space: pre; }
+.lg-l--add { background: color-mix(in srgb, var(--success) 12%, transparent); }
+.lg-l--del { background: color-mix(in srgb, var(--danger) 10%, transparent); }
+.lg-more { padding: 10px 12px 0; color: var(--lg-muted); font-size: var(--text-caption); }
+.lg-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.lg-timer { color: var(--lg-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+.lg-approve, .lg-undo { flex: none; height: 44px; padding: 0 22px; border: 0; border-radius: var(--radius-md); background: var(--success); color: var(--success-foreground); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
+.lg-approve:active, .lg-undo:active { transform: scale(var(--press-scale)); }
+.lg-approve:disabled { opacity: 0.4; cursor: default; }
+.lg-approve:focus-visible, .lg-undo:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.lg-undo { height: 32px; padding: 0 12px; background: none; color: var(--lg-accent); }
+.lg-after { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 36px; }
+.lg-status { color: var(--lg-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The stamp lands on the diff */
+.lg-stamp {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px 8px;
+  border: 3px solid var(--lg-ink);
+  border-radius: var(--radius-lg);
+  color: var(--lg-ink);
+  background: color-mix(in srgb, var(--lg-bg) 70%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-9deg);
+  -webkit-mask-image: radial-gradient(circle at 30% 40%, var(--black) 60%, color-mix(in srgb, var(--black) 75%, transparent) 61%, var(--black) 70%);
+  mask-image: radial-gradient(circle at 30% 40%, var(--black) 60%, color-mix(in srgb, var(--black) 75%, transparent) 61%, var(--black) 70%);
+}
+.lg-stamp-word { font: 800 calc(var(--text-display) - 4px) / 1 var(--font-sans); letter-spacing: normal; }
+.lg-stamp-sub { margin-top: 2px; font-size: var(--text-body); font-weight: 700; }
+.lg.is-stamped .lg-stamp { animation: lg-slam var(--duration-slower) cubic-bezier(0.2, 0.9, 0.3, 1.25) forwards; }
+@keyframes lg-slam { 0% { opacity: 0; transform: translate(-50%, -50%) rotate(-9deg) scale(2.2); filter: blur(4px); } 70% { opacity: 0.95; transform: translate(-50%, -50%) rotate(-9deg) scale(var(--press-scale-sm)); filter: none; } 100% { opacity: 0.92; transform: translate(-50%, -50%) rotate(-9deg) scale(1); filter: none; } }
+.lg.is-stamped .lg-diff { animation: lg-dip var(--duration-slower) var(--ease-out); }
+@keyframes lg-dip { 40% { transform: scale(0.985) translateY(2px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .lg.is-stamped .lg-stamp { animation: none; opacity: 0.92; transform: translate(-50%, -50%) rotate(-9deg); filter: none; }
+  .lg.is-stamped .lg-diff { animation: none; }
+}
+.lg [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset LGTM (Didn&#x27;t Look)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="lg" data-mi="lgtm-stamp" data-files="48" data-honest-seconds="20">
+  <header class="lg-head">
+    <span class="lg-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="5.5" r="2.2"/><circle cx="6" cy="18.5" r="2.2"/><circle cx="18" cy="18.5" r="2.2"/><path d="M6 7.7v8.6M18 16.3V11a4 4 0 0 0-4-4h-3.5M12.5 4.5 10 7l2.5 2.5"/></svg></span>
+    <div class="lg-head-text">
+      <p class="lg-title">Refactor billing service</p>
+      <p class="lg-meta">#482 · Sam wants to merge 31 commits</p>
+    </div>
+  </header>
+  <div class="lg-stats">
+    <span class="lg-add">+2,114</span><span class="lg-del">−1,387</span>
+    <span class="lg-files"><b class="lg-viewed">0</b> of 48 files viewed</span>
+  </div>
+  <div class="lg-diff" tabindex="0" role="region" aria-label="Changes">
+    <p class="lg-file">billing/invoice.ts</p>
+    <code class="lg-l lg-l--del">- export function total(items) {</code>
+    <code class="lg-l lg-l--add">+ export function total(items: LineItem[]): Money {</code>
+    <code class="lg-l">    return items.reduce((sum, i) =&gt; sum + i.amount, 0)</code>
+    <code class="lg-l lg-l--add">+   // TODO: handle currencies (later)</code>
+    <p class="lg-file">billing/tax.ts</p>
+    <code class="lg-l lg-l--del">- const RATE = 0.17</code>
+    <code class="lg-l lg-l--add">+ const RATE = getRate(region) ?? 0.17 // trust me</code>
+    <code class="lg-l lg-l--add">+ if (region === 'mars') throw new Error('later')</code>
+    <p class="lg-file">billing/legacy/do-not-touch.js</p>
+    <code class="lg-l lg-l--del">- // do not touch</code>
+    <code class="lg-l lg-l--add">+ // touched it</code>
+    <p class="lg-file">package-lock.json</p>
+    <code class="lg-l lg-l--add">+ 1,904 lines nobody will ever read</code>
+    <p class="lg-more">and 44 more files</p>
+  </div>
+  <div class="lg-foot">
+    <p class="lg-timer">Open for 0.0 seconds</p>
+    <button type="button" class="lg-approve">Approve</button>
+  </div>
+  <div class="lg-stamp" aria-hidden="true"><span class="lg-stamp-word">LGTM</span><span class="lg-stamp-sub">(Didn’t Look)</span></div>
+  <div class="lg-after">
+    <p class="lg-status" role="status" aria-live="polite"></p>
+    <button type="button" class="lg-undo" hidden>Undo</button>
+  </div>
+</div>
+</div>
+<script>
+/* LGTM (Didn't Look) — vanilla JS. Auto-initializes every [data-mi="lgtm-stamp"].
+   Files viewed follow how far the diff is scrolled. Approving before data-honest-seconds with under 80% of
+   files viewed stamps "(Didn't Look)". Call window.initLgtmStamp(el) for elements added later. */
+(function () {
+  'use strict';
+
+  function initLgtmStamp(root) {
+    if (!root || root.__miLgtm) return;
+    root.__miLgtm = true;
+    var files = Number(root.getAttribute('data-files')) || 48;
+    var honestSecs = Number(root.getAttribute('data-honest-seconds')) || 20;
+    var diff = root.querySelector('.lg-diff'), viewedEl = root.querySelector('.lg-viewed');
+    var timer = root.querySelector('.lg-timer'), approve = root.querySelector('.lg-approve');
+    var sub = root.querySelector('.lg-stamp-sub'), status = root.querySelector('.lg-status'), undo = root.querySelector('.lg-undo');
+    var opened = 0, viewed = 0, raf = 0, stamped = false;
+
+    function tick() {
+      if (!opened || stamped) return;
+      timer.textContent = 'Open for ' + ((performance.now() - opened) / 1000).toFixed(1) + ' seconds';
+      raf = requestAnimationFrame(tick);
+    }
+    function start() { opened = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); }
+
+    diff.addEventListener('scroll', function () {
+      var max = diff.scrollHeight - diff.clientHeight;
+      var v = Math.round((max > 0 ? diff.scrollTop / max : 1) * files);
+      if (v > viewed) { viewed = v; viewedEl.textContent = viewed; }
+    }, { passive: true });
+
+    approve.addEventListener('click', function () {
+      if (stamped) return;
+      stamped = true;
+      cancelAnimationFrame(raf);
+      var secs = opened ? (performance.now() - opened) / 1000 : 0;
+      var honest = viewed >= files * 0.8 || secs >= honestSecs;
+      root.classList.toggle('is-honest', honest);
+      sub.textContent = honest ? '(Actually Looked)' : '(Didn’t Look)';
+      root.classList.remove('is-stamped'); void root.offsetWidth; root.classList.add('is-stamped');
+      approve.disabled = true;
+      status.textContent = honest
+        ? 'Approved after viewing ' + viewed + ' of ' + files + ' files. A rare and beautiful thing.'
+        : 'Approved in ' + secs.toFixed(1) + ' seconds with ' + viewed + ' of ' + files + ' files viewed. Sam is thrilled.';
+      undo.hidden = false;
+    });
+
+    undo.addEventListener('click', function () {
+      stamped = false;
+      root.classList.remove('is-stamped', 'is-honest');
+      approve.disabled = false;
+      status.textContent = '';
+      undo.hidden = true;
+      approve.focus();
+      start();
+    });
+
+    // The clock starts when the review is actually on screen.
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (en) {
+        if (en.some(function (e) { return e.isIntersecting; })) { io.disconnect(); start(); }
+      }, { threshold: 0.5 });
+      io.observe(root);
+    } else start();
+  }
+
+  window.initLgtmStamp = initLgtmStamp;
+  function boot() { document.querySelectorAll('[data-mi="lgtm-stamp"]').forEach(initLgtmStamp); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initLgtmStamp"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>
