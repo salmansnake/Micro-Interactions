@@ -272,6 +272,9 @@ def build_site(reg, site):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(site['title'])}</title>
+<link rel="icon" type="image/svg+xml" href="icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icons/outcraft-icon-180x180-light.png">
 <meta name="description" content="{esc(site['intro'].replace('[[', '').replace(']]', ''))}">
 {FONTS}
 <script>try{{var t=localStorage.getItem('oc-theme');if(t)document.documentElement.setAttribute('data-theme',t);}}catch(e){{}}</script>
@@ -403,6 +406,9 @@ def build_pages(reg):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(it['name'])} · Micro Interactions</title>
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="../icons/outcraft-icon-180x180-light.png">
 {FONTS}
 <link rel="stylesheet" href="../outcraft-tokens.css">
 <style>
