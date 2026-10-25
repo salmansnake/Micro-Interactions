@@ -1,7 +1,7 @@
 Build a "Point-at-Error" email field in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
 
 WHAT IT DOES
-When an email is invalid, the message under the field draws a thin line up to the exact character that's wrong, highlights that character, and offers a one-tap fix when the fix is certain.
+When an email is invalid, the field highlights the exact character that's wrong, and the message appears in a callout under the field whose small pointer sits right under that character, with a one-tap fix when the fix is certain.
 
 VALIDATION (return the index and length of the problem)
 - A space anywhere: point at the first space. "Remove the space. Email addresses can't contain spaces." Fix: remove all spaces.
@@ -16,16 +16,16 @@ VALIDATION (return the index and length of the problem)
 DRAWING
 - Measure character positions with canvas measureText using the input's computed font, minus the input's scrollLeft. Clamp the mark inside the visible text area.
 - The highlight sits behind the text: a transparent input over a red-3 box with a 2px red underline.
-- An SVG overlay draws a cubic curve from just left of the message text to the bottom center of the highlighted characters, ending in a 2.5px dot. Animate the stroke (dash offset) over 420ms so it travels up to the character.
+- The message is a callout: a soft tint of the error's color (red, or amber for a soft warning) with 12px corners, flush with the field's left edge, hugging its content with equal 14px padding left and right (it widens only when the pointer must reach further right). The Fix button always sits on its own line under the message, whatever the message length. A 10px pointer (a rotated square in the same tint) on its top edge sits exactly under the center of the highlighted characters, kept at least 18px from the callout's corners, and glides when the character moves. The callout fades in from 4px above over 300ms. No line crosses any text. The Fix button inside is a lighter shade of the panel's own color (a 65% white wash in light mode, a 14% wash of the text color in dark mode, never solid white or gray), with colored text.
 - Recalculate on input scroll, caret movement and resize.
 
 TIMING
-- Validate on blur, on Enter, and after an 800ms pause in typing. Hide the line while the person types.
+- Validate on blur, on Enter, and after an 800ms pause in typing. Hide the callout while the person types.
 - Valid input shows a quiet "Looks good." in the success color.
 
 ACCESSIBILITY
-- aria-invalid on the input; the message is linked with aria-describedby and announced politely. The line and highlight are aria-hidden.
-- prefers-reduced-motion: no stroke animation.
+- aria-invalid on the input; the message is linked with aria-describedby and announced politely. The highlight is aria-hidden.
+- prefers-reduced-motion: no fade or glide; the callout simply appears.
 
 Theme with CSS variables: danger, danger-soft, warn, warn-soft, success, accent, surface, sunken, text, muted, line.
 
@@ -55,18 +55,19 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --canvas: #FAFAF8  (dark: #0B0C0B)
 --card: #FFFFFF  (dark: #161817)
 --danger: #ce2c31  (dark: #d4373c)
---danger-soft: color-mix(in srgb, #ce2c31 16%, transparent)  (dark: color-mix(in srgb, #d4373c 30%, transparent))
 --danger-soft-foreground: #AC2529  (dark: #ff9592)
 --danger-text: #ca2b30  (dark: #ff9592)
 --duration-base: 200ms
 --duration-reduced: 120ms
 --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1)
+--fill-on-tint: color-mix(in srgb, #FFFFFF 65%, transparent)  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
 --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
 --foreground: #000000  (dark: #F3F2EE)
 --green-11: #218358  (dark: #3dd68c)
 --input: #C6C9C3  (dark: #434744)
 --leading-body: 22px
 --leading-small: 18px
+--lift: #FFFFFF  (dark: #3F4341)
 --line: #DCDED9  (dark: #313432)
 --line-strong: #C6C9C3  (dark: #434744)
 --mist: #ECEBE6  (dark: #2B2E2D)
@@ -74,10 +75,12 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --muted-foreground: #646A66  (dark: #A3A8A4)
 --press-scale: 0.97
 --primary: #000000  (dark: #79EEEC)
+--radius-lg: 12px
 --radius-md: 8px
 --radius-sm: 6px
 --radius-xl: 16px
 --radius-xs: 4px
+--raised: #FFFFFF  (dark: #3F4341)
 --red-11: #ce2c31  (dark: #ff9592)
 --ring: #0B7573  (dark: #79EEEC)
 --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07)  (dark: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3))
@@ -85,11 +88,15 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --soft-ground: #F3F2EE  (dark: #0C0D0C)
 --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1)
 --spring-press-duration: 310ms
+--spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1)
+--spring-ui-duration: 460ms
 --subtle: #F3F2EE  (dark: #0C0D0C)
 --success-text: #1f7b53  (dark: #3dd68c)
 --text-body: 15px
 --text-small: 13px
 --tint-c: 0.4  (dark: 0.45)
+--tint-ink-l: 0.48  (dark: 1)
+--tint-ink-min: 0  (dark: 0.75)
 --tint-l: 0.92  (dark: 0.32)
 --warning: #ffc53d
 --warning-text: #a15e00  (dark: #ffca16)

@@ -1,7 +1,7 @@
 Build a "Point-at-Error" email field in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
 
 WHAT IT DOES
-When an email is invalid, the message under the field draws a thin line up to the exact character that's wrong, highlights that character, and offers a one-tap fix when the fix is certain.
+When an email is invalid, the field highlights the exact character that's wrong, and the message appears in a callout under the field whose small pointer sits right under that character, with a one-tap fix when the fix is certain.
 
 VALIDATION (return the index and length of the problem)
 - A space anywhere: point at the first space. "Remove the space. Email addresses can't contain spaces." Fix: remove all spaces.
@@ -16,16 +16,16 @@ VALIDATION (return the index and length of the problem)
 DRAWING
 - Measure character positions with canvas measureText using the input's computed font, minus the input's scrollLeft. Clamp the mark inside the visible text area.
 - The highlight sits behind the text: a transparent input over a red-3 box with a 2px red underline.
-- An SVG overlay draws a cubic curve from just left of the message text to the bottom center of the highlighted characters, ending in a 2.5px dot. Animate the stroke (dash offset) over 420ms so it travels up to the character.
+- The message is a callout: a soft tint of the error's color (red, or amber for a soft warning) with 12px corners, flush with the field's left edge, hugging its content with equal 14px padding left and right (it widens only when the pointer must reach further right). The Fix button always sits on its own line under the message, whatever the message length. A 10px pointer (a rotated square in the same tint) on its top edge sits exactly under the center of the highlighted characters, kept at least 18px from the callout's corners, and glides when the character moves. The callout fades in from 4px above over 300ms. No line crosses any text. The Fix button inside is a lighter shade of the panel's own color (a 65% white wash in light mode, a 14% wash of the text color in dark mode, never solid white or gray), with colored text.
 - Recalculate on input scroll, caret movement and resize.
 
 TIMING
-- Validate on blur, on Enter, and after an 800ms pause in typing. Hide the line while the person types.
+- Validate on blur, on Enter, and after an 800ms pause in typing. Hide the callout while the person types.
 - Valid input shows a quiet "Looks good." in the success color.
 
 ACCESSIBILITY
-- aria-invalid on the input; the message is linked with aria-describedby and announced politely. The line and highlight are aria-hidden.
-- prefers-reduced-motion: no stroke animation.
+- aria-invalid on the input; the message is linked with aria-describedby and announced politely. The highlight is aria-hidden.
+- prefers-reduced-motion: no fade or glide; the callout simply appears.
 
 Theme with CSS variables: danger, danger-soft, warn, warn-soft, success, accent, surface, sunken, text, muted, line.
 

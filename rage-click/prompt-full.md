@@ -6,7 +6,7 @@ Click a busy button over and over and it notices: it calms you down, tells you t
 BEHAVIOR
 1. A file card (red document icon, "Q3 Revenue Report", "2,418 rows · PDF") above a full-width 44px filled button, "Export PDF".
 2. First click starts one export (5 seconds in the demo): the button turns Soft ground with an arc spinner and "Exporting…", and a 4px progress bar fills.
-3. Every extra click while busy is counted, never queued: a red "×3" counter pill bumps on the button's right edge and the button nudges sideways. The first few say "Still working on it. About 3 seconds left."
+3. Every extra click while busy is counted, never queued: a red "×3" counter pill (its text exactly centered in the circle) bumps on the button's right edge and the button nudges sideways. The first few say "Still working on it. About 3 seconds left."
 4. Four or more extra clicks within 1.5 seconds is a rage click: the message becomes "Okay, okay. I heard you. It's still exporting, about 2 seconds left. Only one export was started." and a stress ball panel springs up (pop spring).
 5. The stress ball is a 76px orange sphere (radial gradient, inner shadow) with two small eyes and a smile. Press and hold to squeeze: it flattens to scale(1.26, 0.68) from its bottom in 0.12s, the eyes squint and the mouth stretches. Release and it springs back with the pop spring. A counter reads "3 squeezes", and at 10 adds "You're doing great." Space and Enter squeeze too.
 6. Past 12 extra clicks: "Clicking faster won't make it faster. But it's sweet that you care."

@@ -23,7 +23,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   --pv-line: var(--border);
   --pv-sunken: var(--subtle);
   --pv-fill: var(--muted);
-  --pv-accent: var(--primary);
+  /* The product's accent, one source for everything: the app, the palette's highlight and the previewing ring. It follows the app's data-accent, including while a new accent is being previewed */
+  --pv-a: var(--aqua);
   --pv-glass: var(--frost);
   --pv-glass-edge: var(--frost-border);
   --pv-glass-rim: var(--frost-border);
@@ -46,8 +47,10 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 /* The mini app the commands act on. Its own theme so previews are visible. */
 .pv-app {
   /* The mini app keeps its own scheme, so it uses only colors that stay fixed across themes. */
-  --a: color-mix(in srgb, var(--aqua) 45%, var(--black));
-  --app-on-a: var(--on-color);
+  /* Accents are the true palette colors in both schemes, the same as their swatches, with black text */
+  --a: var(--pv-a);
+  --app-on-a: var(--black);
+  --app-tint-l: 0.92; /* the badge's tint follows the app's own scheme, not the site's theme */
   --app-bg: var(--on-color);
   --app-fg: var(--black);
   --app-muted: color-mix(in srgb, var(--black) 62%, var(--on-color));
@@ -63,19 +66,16 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   box-shadow: 0 0 0 1px var(--pv-line);
   transition: background-color var(--spring-press-duration), color var(--spring-press-duration), box-shadow var(--duration-slow), padding var(--spring-ui-duration) var(--spring-ui);
 }
-.pv-app[data-scheme="dark"] { --a: var(--aqua); --app-on-a: var(--black); --app-bg: color-mix(in srgb, var(--black) 91%, var(--on-color)); --app-fg: var(--on-color); --app-muted: color-mix(in srgb, var(--on-color) 64%, var(--black)); --app-row: color-mix(in srgb, var(--black) 84%, var(--on-color)); }
-.pv-app[data-accent="sage"] { --a: color-mix(in srgb, var(--sage) 50%, var(--black)); }
-.pv-app[data-scheme="dark"][data-accent="sage"] { --a: var(--sage); }
-.pv-app[data-accent="orange"] { --a: color-mix(in srgb, var(--orange) 55%, var(--black)); }
-.pv-app[data-scheme="dark"][data-accent="orange"] { --a: var(--orange); }
-.pv-app[data-accent="olive"] { --a: color-mix(in srgb, var(--olive) 55%, var(--black)); }
-.pv-app[data-scheme="dark"][data-accent="olive"] { --a: var(--olive); }
+.pv-app[data-scheme="dark"] { --app-tint-l: 0.32; --app-bg: color-mix(in srgb, var(--black) 91%, var(--on-color)); --app-fg: var(--on-color); --app-muted: color-mix(in srgb, var(--on-color) 64%, var(--black)); --app-row: color-mix(in srgb, var(--black) 84%, var(--on-color)); }
+.pv:has(.pv-app[data-accent="sage"]) { --pv-a: var(--sage); }
+.pv:has(.pv-app[data-accent="orange"]) { --pv-a: var(--orange); }
+.pv:has(.pv-app[data-accent="olive"]) { --pv-a: var(--olive); }
 .pv-app[data-density="compact"] { --pad: 7px; padding: 12px; gap: 8px; }
-.pv-app.is-previewing { box-shadow: 0 0 0 2px var(--pv-accent), 0 0 0 6px color-mix(in srgb, var(--brand) 18%, transparent); }
+.pv-app.is-previewing { box-shadow: 0 0 0 2px var(--pv-a), 0 0 0 6px color-mix(in srgb, var(--pv-a) 22%, transparent); }
 .pv-app-bar { display: flex; align-items: center; gap: 10px; }
 .pv-logo { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--a); color: var(--app-on-a); font-weight: 700; transition: background-color var(--spring-press-duration); }
 .pv-app-name { font-weight: 600; }
-.pv-badge { padding: 2px 8px; border-radius: var(--radius-full); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: var(--app-fg); font-size: calc(var(--text-caption) - 1px); font-weight: 700; opacity: 0; transform: scale(0.8); transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.pv-badge { padding: 2px 8px; border-radius: var(--radius-full); background: oklch(from var(--a) var(--app-tint-l) calc(c * 0.4) h); color: var(--app-fg); font-size: calc(var(--text-caption) - 1px); font-weight: 700; opacity: 0; transform: scale(0.8); transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
 .pv-app.is-previewing .pv-badge { opacity: 1; transform: none; }
 .pv-open { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 6px 0 12px; border: 0; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--app-fg) 8%, transparent); color: var(--app-fg); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
 .pv-open kbd, .pv-help kbd { padding: 1px 6px; border-radius: var(--radius-sm); background: color-mix(in srgb, currentColor 12%, transparent); font: 600 calc(var(--text-caption) - 1px) / 16px var(--font-sans); }
@@ -112,7 +112,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .pv-list { flex: 1 1 auto; min-height: 0; max-height: 210px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; }
 .pv-group { padding: 8px 10px 4px; color: var(--pv-muted); font-size: var(--text-caption); font-weight: 600; }
 .pv-opt { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 10px; border-radius: var(--radius-md); cursor: pointer; }
-.pv-opt[aria-selected="true"] { background: var(--pv-accent); color: var(--primary-foreground); }
+/* The highlighted command uses the product's accent with black text, in light and dark, never the site's Aqua or black */
+.pv-opt[aria-selected="true"] { background: var(--pv-a); color: var(--black); }
 .pv-opt .pv-sw { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--black) 10%, transparent); }
 .pv-opt .pv-cur { margin-left: auto; font-size: var(--text-caption); opacity: 0.7; }
 .pv-help { flex: none; margin: 0; padding: 8px 14px 10px; border-top: 1px solid var(--pv-line); color: var(--pv-muted); font-size: var(--text-caption); }

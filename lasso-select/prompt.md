@@ -23,7 +23,7 @@ APPEARANCE (Outcraft Design System)
 - Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
 - Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
 - Copy: title-case button labels, sentence-case body text, no emoji.
-- This one: the area is a 16px rounded Soft ground surface; tiles are 12px rounded; the check badge is an 18px black circle with a white tick (Aqua in dark mode).
+- This one: the area is a 16px rounded Soft ground surface; tiles are 12px rounded; the check badge is an 18px circle in the accent (black in light, Aqua in dark) holding the 12px Lucide check in the accent's text color (white on black, black on Aqua).
 
 DELIVER
 The component, the demo grid of 12 files, and short usage notes.

@@ -22,7 +22,7 @@ APPEARANCE (Outcraft Design System)
 - Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
 - Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
 - Copy: title-case button labels, sentence-case body text, no emoji.
-- This one: the field is an 8px rounded white box with a 1px Line border with a search icon; chips are 30px pills tinted with their key color at 14%.
+- This one: the field is an 8px rounded white box with a 1px Line border with a search icon; chips are 30px pills in the fixed-lightness tint of their key color (From Pink, In Aqua, Is green).
 
 DELIVER
 The component with keys, values and data as configuration, the demo inbox, and short usage notes.

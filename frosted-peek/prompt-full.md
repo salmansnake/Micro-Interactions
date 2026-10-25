@@ -14,7 +14,7 @@ THE FROST
 - Register x (length), w (length) and o (number) with @property so they animate: o opens and closes the window with a ui spring (0.45s), x follows the pointer with a 120ms ease, w is 40px.
 
 THE LENS
-- A Frost frame marks the window: 16px radius, a 1px bright inner edge and a soft shadow, fading and scaling in with o.
+- A Frost frame marks the window: 12px radius (never rounder than the 12px chart it slides inside), a 1px bright inner edge and a soft shadow, fading and scaling in with o.
 - Inside it: a dark pill label at the top ("Mar · $48.2k"), an Aqua 700 dot riding the line at the current month (springing to each new value), and a small Frost grip at the bottom with ⟷.
 - A Frost hint pill "Drag across to peek" sits in the middle while closed.
 

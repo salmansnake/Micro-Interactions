@@ -5,7 +5,7 @@ Choosing seats feels concrete: avatars stack up as you add people, prices roll l
 
 BEHAVIOR
 1. Tiers: 1–9 seats $12, 10–24 seats $10, 25+ seats $8 per seat per month (configurable).
-2. A stepper: 44px round − and + buttons around a large editable number (40px bold, tabular). Arrow Up/Down in the number also step. Clamp 1–99.
+2. A stepper: 44px round buttons with the Lucide minus and plus icons (20px) around a large editable number (40px bold, tabular). Arrow Up/Down in the number also step. Clamp 1–99.
 3. An avatar stack in the header: overlapping 30px circles with initials and colors, each with a 2px ring in the card color, overlapping by only 4px so no face ever covers another's initials; up to 6 shown, then a "+n" circle that sits on top of its neighbor so its "+" is never covered. New avatars pop in with a pop spring; removed ones shrink away.
 4. Price per seat and total each render as an odometer: one column of digits 0–9 per position, translated with a ui spring to the new digit.
 5. A three-segment tier bar shows all tiers; the current one is a raised white thumb. On entering a new tier it bounces (scale 1.08) and a green chip says "Tier unlocked: you now pay $10 per seat" (or "Back to $12 per seat" going down).

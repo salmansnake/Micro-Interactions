@@ -35,10 +35,12 @@
 .rw-live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .rw.is-past .rw-live { background: oklch(from var(--rw-orange) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--warning-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); }
 .rw-doc { min-height: 132px; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--rw-sunken); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); white-space: pre-wrap; transition: background-color var(--duration-slow); }
-.rw.is-past .rw-doc { background: color-mix(in srgb, var(--rw-orange) 6%, var(--rw-sunken)); }
+/* Viewing the past: the document stays an inset (below the card) and only turns warm. A 6% amber mix lifted the dark inset to the card's own shade */
+.rw.is-past .rw-doc { background: oklch(from var(--rw-orange) var(--tint-inset-l) calc(c * 0.12) h); }
 .rw-doc .rw-h { font-weight: 700; font-size: var(--text-title); }
-.rw-ins { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--success) 22%, transparent); color: var(--rw-fg); animation: rw-in var(--spring-ui-duration) var(--spring-ui) both; }
-.rw-del { border-radius: var(--radius-xs); background: oklch(from var(--danger) var(--tint-l) calc(c * var(--tint-c)) h); color: var(--rw-red); text-decoration: line-through; animation: rw-out var(--duration-slower) var(--ease-out) both; }
+/* Added and removed words step clearly away from the document in both themes (--tint-mark-l), and their text stays readable on them */
+.rw-ins { border-radius: var(--radius-xs); background: oklch(from var(--success) var(--tint-mark-l) calc(c * var(--tint-c)) h); color: var(--rw-fg); animation: rw-in var(--spring-ui-duration) var(--spring-ui) both; }
+.rw-del { border-radius: var(--radius-xs); background: oklch(from var(--danger) var(--tint-mark-l) calc(c * var(--tint-c)) h); color: oklch(from var(--rw-red) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); text-decoration: line-through; animation: rw-out var(--duration-slower) var(--ease-out) both; }
 @keyframes rw-in { from { opacity: 0; filter: blur(3px); } }
 @keyframes rw-out { from { opacity: 0; } }
 .rw-meta { display: flex; align-items: center; gap: 10px; min-height: 32px; }

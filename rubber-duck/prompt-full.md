@@ -5,7 +5,7 @@ Before you file a bug, a rubber duck pops up and asks you to explain it first. I
 
 BEHAVIOR
 1. A grouped form: Title ("Export button does nothing") and a "What happens?" text area, then a File Bug button and the footnote "The duck has closed 37% of bugs before they were filed."
-2. The first File Bug press doesn't file. A rubber duck (simple amber SVG: body, head, orange beak, eye) springs up from below beside a pale amber speech bubble: "Before you file it, explain it to me. Step by step." The field label becomes "Explain it to the duck" and focus moves to it.
+2. The first File Bug press doesn't file. A rubber duck (simple amber SVG: body, head, orange beak, and a black eye with a small white highlight; the duck looks the same in light and dark mode) springs up from below beside an amber-tinted speech bubble (the fixed-lightness tint: pale in light mode, deep in dark mode): "Before you file it, explain it to me. Step by step." The field label becomes "Explain it to the duck" and focus moves to it.
 3. Each finished sentence (". ", "? ", "! " or a new line) makes the duck nod (rotate 9° and back) and changes the bubble: "Mm-hm.", "Go on.", "And then what happens?", "Interesting.", "Wait. Say that part again."
 4. After two sentences, two pills appear: "I Figured It Out" and "Still Broken, File It".
    - Figured it out: the duck does a happy backflip (jump and a full spin), says "Quack. Bug closed before it existed." and the percentage goes up by 1.

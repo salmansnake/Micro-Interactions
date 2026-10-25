@@ -60,9 +60,7 @@
     var input = root.querySelector('.pe-input');
     var field = root.querySelector('.pe-field');
     var mark = root.querySelector('.pe-mark');
-    var svg = root.querySelector('.pe-line');
-    var path = svg.querySelector('path');
-    var dot = svg.querySelector('circle');
+    var msg = root.querySelector('.pe-msg');
     var text = root.querySelector('.pe-msg-text');
     var fixBtn = root.querySelector('.pe-fix');
     var ctx = document.createElement('canvas').getContext('2d');
@@ -97,27 +95,15 @@
       mark.style.width = b.w + 'px';
       mark.classList.toggle('is-gap', !!current.gap);
 
-      var rr = root.getBoundingClientRect();
+      // The bubble's pointer sits right under the problem characters, kept clear of its rounded corners.
       var fr = field.getBoundingClientRect();
-      var tr = text.getBoundingClientRect();
-      var ox = rr.left + root.clientLeft;
-      var oy = rr.top + root.clientTop;
-      var markBottom = parseFloat(getComputedStyle(mark).bottom) || 7;
-      var ex = fr.left + field.clientLeft + b.x + b.w / 2 - ox;
-      var ey = fr.top + field.clientTop + field.clientHeight - markBottom + 2 - oy;
-      var sx = tr.left - 6 - ox;
-      var sy = tr.top + 10 - oy;
-      path.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + (sx - 12) + ' ' + sy + ' ' + ex + ' ' + (ey + 22) + ' ' + ex + ' ' + ey);
-      dot.setAttribute('cx', ex);
-      dot.setAttribute('cy', ey);
-
-      if (animate && !reduce.matches && path.animate) {
-        var L = path.getTotalLength();
-        path.style.strokeDasharray = L + ' ' + L;
-        path.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: 420, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'both' });
-        dot.animate([{ opacity: 0 }, { opacity: 0, offset: 0.8 }, { opacity: 1 }], { duration: 460, fill: 'both' });
-      } else {
-        path.style.strokeDasharray = 'none';
+      msg.style.minWidth = '';
+      var mr = msg.getBoundingClientRect();
+      var px = fr.left + field.clientLeft + b.x + b.w / 2 - mr.left;
+      if (px + 18 > mr.width) { msg.style.minWidth = Math.ceil(px + 18) + 'px'; mr = msg.getBoundingClientRect(); }
+      msg.style.setProperty('--pe-x', Math.max(18, Math.min(px, mr.width - 18)) + 'px');
+      if (animate && !reduce.matches && msg.animate) {
+        msg.animate([{ opacity: 0, transform: 'translateY(-4px)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.3,.7,.3,1)' });
       }
     }
 
@@ -135,6 +121,7 @@
       } else {
         text.textContent = ok ? 'Looks good.' : '';
         fixBtn.hidden = true;
+        msg.style.minWidth = '';
         input.removeAttribute('aria-invalid');
       }
     }

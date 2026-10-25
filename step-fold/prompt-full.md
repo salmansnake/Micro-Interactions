@@ -6,7 +6,7 @@ Each finished step folds up into a compact summary chip at the top, so the form 
 BEHAVIOR
 1. Steps (demo): Choose a Plan (three radio cards), How Many Seats? (a stepper), Billing Email (a field). Each is a 16px rounded section with a numbered title and a Continue button.
 2. Steps not reached yet show only their title in a light outline. The current step is open.
-3. Continue folds the step away: rotateX to −80° and scaleY 0.4 around its top edge with fading (0.42s, accelerating), then a chip pops into the row at the top (springs from below, scaled and tilted): a check, the step name ("Plan"), and the answer ("Pro").
+3. Continue folds the step away: rotateX to −80° and scaleY 0.4 around its top edge with fading (0.48s, the slower duration token, accelerating), then a chip pops into the row at the top (springs from below, scaled and tilted): a check, the step name ("Plan"), and the answer ("Pro").
 4. The next unfinished step unfolds (rotateX −70° → 0, ui spring) and its first control gets focus.
 5. Clicking a chip unfolds that step for editing; its chip disappears while it's open. Continue folds it back.
 6. Validate before folding (for example, a malformed email gets a red ring and focus).

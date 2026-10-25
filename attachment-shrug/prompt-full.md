@@ -9,7 +9,7 @@ BEHAVIOR
 3. Send with nothing attached:
    - The button shrugs: it rises 6px twice, slightly narrower and taller, anchored at the bottom.
    - A dark speech bubble pops up above it with "¯\_(ツ)_/¯" on a pop spring.
-   - An Aqua-tinted panel (no border) says "You wrote "attached", but nothing is attached." with Attach File (black primary) and Send Anyway (white in light, a light wash of the text color in dark, no border) buttons.
+   - An Aqua-tinted panel (no border) says "You wrote "attached", but nothing is attached." with Attach File (black primary) and Send Anyway (a lighter shade of the panel's own color (a 65% white wash in light mode, a 14% wash of the text color in dark mode, never solid white or gray), no border) buttons.
 4. Attach File (or the paperclip) slides in a file chip (red PDF tile, "Q4 Numbers.pdf", "2.4 MB", a round remove button with the Lucide `x` icon, 16px) and calms everything down. Send then says "Sent, with the attachment. Nobody has to reply "I think you forgot the file.""
 5. Send Anyway: "Sent without it. Expect a reply in about four minutes saying you forgot the file."
 Reduced motion: no glancing or shrugging; the bubble fades in.
@@ -41,7 +41,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --duration-base: 200ms
 --duration-reduced: 120ms
 --ease-in-out: cubic-bezier(0.62, 0, 0.32, 1)
---fill-on-tint: #FFFFFF  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
+--fill-on-tint: color-mix(in srgb, #FFFFFF 65%, transparent)  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
 --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
 --foreground: #000000  (dark: #F3F2EE)
 --input: #C6C9C3  (dark: #434744)

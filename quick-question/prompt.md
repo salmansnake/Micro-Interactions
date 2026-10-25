@@ -16,7 +16,7 @@ BEHAVIOR
    - "Quick question: what was the original question?"
    Each reply has a colored square avatar, a name and a time, and slides up 6px.
 4. The stopwatch counts up in m:ss. A verdict under the thread changes with it: "Still quick." (Aqua 700), "Getting less quick." at 6 min (amber), "No longer quick." at 20, and "This is a meeting now." at 40 (red).
-5. At the end: "Quick question: 47 minutes, 5 people, 0 answers." and a green "Turn It Into a Call" button, which says "Call started. Agenda: the quick question." Messages without the phrase just post: "Nice and direct. No stopwatch needed."
+5. At the end: "Quick question: 47 minutes, 5 people, 0 answers." and a green "Turn It Into a Call" button (white text in light and dark mode), which says "Call started. Agenda: the quick question." Messages without the phrase just post: "Nice and direct. No stopwatch needed."
 Reduced motion: faster time-lapse, no pop or slide.
 
 APPEARANCE (Outcraft Design System)

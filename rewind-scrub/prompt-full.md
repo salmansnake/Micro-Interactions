@@ -6,9 +6,9 @@ Instead of a list of timestamps, drag a scrubber back through a document's histo
 BEHAVIOR
 1. Versions are an ordered list: text, author (name and color), time ago, and a short description ("added the pricing line").
 2. A slider (range input) with one tick per version sits under the document. The thumb is a white 22px knob with a Line border that grows while dragged; ticks before it turn Aqua 700, the current one grows. A dark pill above the thumb shows the time ago.
-3. The document shows the selected version with that version's change highlighted against the one before it, using a word-level diff (longest common subsequence on words and spaces): added words in green, removed words struck through in red. Highlights fade in.
+3. The document shows the selected version with that version's change highlighted against the one before it, using a word-level diff (longest common subsequence on words and spaces): added words in green, removed words struck through in red, each on a highlight that steps clearly away from the document in both themes (about OKLCH L 0.88 in light and 0.32 in dark). Highlights fade in.
 4. Below the document: the author's avatar and "Mira added the pricing line · 48 minutes ago".
-5. The header badge reads "Live" in green at the latest version and "Viewing Version 4" in amber anywhere else; the document background tints slightly amber in the past.
+5. The header badge reads "Live" in green at the latest version and "Viewing Version 4" in amber anywhere else; in the past the document background turns warm amber while staying an inset (a little below the card's lightness in both themes, about OKLCH L 0.955 in light and 0.15 in dark); never mix amber into it by a percentage, which lifts the dark inset to the card's own shade so it disappears.
 6. In the past, a "Restore This Version" button pops in. Restoring adds a new latest version ("You restored version 4 · Just now") instead of deleting history, and returns to Live.
 7. Give the slider aria-valuetext like "Version 4 of 8, Mira added the pricing line, 48 minutes ago".
 Reduced motion: no fades.
@@ -91,7 +91,9 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --tint-c: 0.4  (dark: 0.45)
 --tint-ink-l: 0.48  (dark: 1)
 --tint-ink-min: 0  (dark: 0.75)
+--tint-inset-l: 0.955  (dark: 0.15)
 --tint-l: 0.92  (dark: 0.32)
+--tint-mark-l: 0.88  (dark: 0.32)
 --tracking-title: -0.015em
 --warning: #ffc53d
 --warning-text: #a15e00  (dark: #ffca16)
