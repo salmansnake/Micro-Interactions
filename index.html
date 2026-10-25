@@ -902,18 +902,21 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 :root[data-theme="dark"] .try { background: var(--card); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .try { background: var(--card); } }
 .try svg { flex: none; width: 18px; height: 18px; margin-top: 1px; color: var(--foreground); }
-.try p { margin: 0; color: var(--body); font: var(--text-small)/var(--leading-small) var(--font-sans); }
+.try p { margin: 0; color: var(--body); font: var(--text-small)/var(--leading-ui) var(--font-sans); }
 .try b { display: block; color: var(--foreground); font-weight: 600; }
 .spec { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px var(--space-4); margin: var(--space-5) 0 0; font: var(--text-small)/var(--leading-small) var(--font-sans); }
+.spec dd:has(.ui-ref) { line-height: var(--leading-ui); }
 .spec dt { color: var(--muted-foreground); }
 .spec dd { margin: 0; color: var(--foreground); }
 /* A label from the interaction (a button, option or message) named in the text: a small chip, so "Hold {Hold to Talk}" never reads as a typo */
 /* A little space on each side so a chip never touches the next chip or a comma */
-.ui-ref { display: inline-block; margin: 0 2px; padding: 0 6px; border-radius: var(--radius-sm); background: var(--muted); color: var(--foreground); font-weight: 600; line-height: inherit; white-space: nowrap; }
+/* A chip is shorter than its line (text size + 4px) and the lines holding chips leave room for it, so chips on lines
+   above and below each other always have about 3px between them (12c) */
+.ui-ref { display: inline-block; margin: 0 2px; padding: 1px 6px; border-radius: var(--radius-sm); background: var(--muted); color: var(--foreground); font-weight: 600; line-height: calc(1em + 2px); white-space: nowrap; }
 .try .ui-ref { background: var(--fill-on-subtle); } /* a clear gray step from the Try it box: darker in light, lighter in dark (button rule 9); white dissolved into it */
 /* An icon-only control: the same icon the interaction draws, at text size, in the same chip */
-.ui-ref--icon { padding: 0 5px; }
-.ui-ref--icon svg { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.17em; stroke-width: 2; }
+.ui-ref--icon { display: inline-flex; align-items: center; box-sizing: border-box; height: calc(1em + 4px); padding: 0 5px; vertical-align: -0.22em; } /* exactly a text chip's height */
+.ui-ref--icon svg { display: block; width: 1.05em; height: 1.05em; stroke-width: 2; }
 .info-actions { flex: none; display: grid; gap: var(--space-2); padding: var(--space-4) var(--space-6) var(--space-6); border-top: 1px solid var(--border); }
 .info-actions .oc-btn svg { width: 16px; height: 16px; }
 .mobile-browse { display: none; }
