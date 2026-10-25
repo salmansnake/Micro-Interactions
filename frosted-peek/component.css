@@ -9,11 +9,9 @@
   --fp-muted: var(--muted-foreground);
   --fp-line: var(--border);
   --fp-fill: var(--muted);
+  --fp-sunken: var(--subtle);
   --fp-accent: var(--primary);
   --fp-on-accent: var(--primary-foreground);
-  --fp-green: var(--success);
-  --fp-green-text: var(--success-text);
-  --fp-green-soft: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h);
   --fp-glass-edge: var(--frost-border);
   --fp-glass: var(--frost);
   --fp-glass-shadow: var(--shadow-lg);
@@ -40,7 +38,6 @@
 .fp-secret { display: inline-block; color: var(--fp-fg); font-size: var(--text-h3); line-height: var(--leading-h3); font-weight: 700; letter-spacing: var(--tracking-title); filter: blur(7px); transition: filter var(--spring-panel-duration) var(--spring-panel); }
 .fp.is-unlocked .fp-secret { filter: none; }
 .fp-badge { flex: none; padding: 3px 10px; border-radius: var(--radius-full); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--brand-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-slow), color var(--duration-slow); }
-.fp.is-unlocked .fp-badge { background: var(--fp-green-soft); color: oklch(from var(--fp-green-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); }
 
 /* Chart + frost */
 .fp-chart {
@@ -51,7 +48,9 @@
   height: 200px;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--brand) 4%, var(--fp-bg));
+  /* A soft neutral inset, just visible against the card in both themes: the inset gray mixed 40% toward the card.
+     The chart's own line and area carry the color (10b.41) */
+  background: color-mix(in oklab, var(--fp-sunken) 60%, var(--fp-bg));
   cursor: ew-resize;
   touch-action: pan-y;
   outline: none;
@@ -61,7 +60,9 @@
 .fp-chart.is-dragging { transition: --fp-o var(--spring-ui-duration) var(--spring-ui), --fp-w var(--spring-panel-duration) var(--spring-panel); }
 .fp-svg { position: absolute; inset: 0 0 22px; width: 100%; height: calc(100% - 22px); }
 .fp-svg .fp-grid { stroke: var(--fp-line); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.fp-svg .fp-area { fill: color-mix(in srgb, var(--brand) 16%, transparent); }
+/* The area under the line is a soft Aqua: the highlight tint (L 0.88 light, 0.32 dark) moved 15% toward the chart box,
+   a clear step from the box and quieter than the line */
+.fp-svg .fp-area { fill: color-mix(in oklab, oklch(from var(--brand) var(--tint-mark-l) calc(c * var(--tint-c)) h) 85%, color-mix(in oklab, var(--fp-sunken) 60%, var(--fp-bg))); }
 .fp-svg .fp-line { fill: none; stroke: var(--brand-strong); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .fp-months { position: absolute; left: 0; right: 0; bottom: 4px; display: flex; color: var(--fp-muted); font-size: calc(var(--text-caption) - 1px); line-height: 13px; }
 .fp-months span { flex: 1; text-align: center; }
@@ -108,7 +109,7 @@
 }
 .fp-dot {
   position: absolute;
-  left: 50%;
+  left: calc(50% + var(--fp-dx, 0px));
   top: var(--fp-y, 50%);
   width: 10px;
   height: 10px;
@@ -157,7 +158,8 @@
 .fp.is-unlocked .fp-hint { opacity: 0; transform: translate(-50%, -50%) scale(var(--press-scale-sm)); }
 
 .fp-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; }
-.fp-note { flex: 1 1 200px; margin: 0; color: var(--fp-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+/* A two-sentence note beside a button reads as a short two-line paragraph, never one long line */
+.fp-note { flex: 1 1 200px; max-width: 30ch; margin: 0; color: var(--fp-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
 .fp-cta {
   height: 36px;
   padding: 0 18px;
@@ -176,4 +178,6 @@
 @media (prefers-reduced-motion: reduce) {
   .fp-chart, .fp-secret, .fp-dot { transition-duration: var(--duration-reduced) !important; transition-timing-function: linear !important; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.fp :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .fp [hidden] { display: none !important; }

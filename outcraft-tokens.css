@@ -60,6 +60,7 @@
   --muted: var(--mist);
   --muted-hover: var(--mist-strong);
   --raised: var(--lift); /* a surface sitting on a muted track: segmented thumbs, switch knobs, slider thumbs. White in light; lighter than the track in dark, never darker. */
+  --fill-on-subtle: color-mix(in oklab, var(--muted) 95%, var(--foreground)); /* a gray button or control on a gray inset panel (--subtle): a clear gray step darker than the panel in light (L 0.89 on 0.96). Not --muted (only 0.02 apart) and not white (it matches the card around the panel and looks see-through). Lighter than the panel in dark. Also the track of a segmented control on a gray panel, and tags on one. Gray text on it uses --muted-on-tint. */
   --muted-foreground: var(--ash);
   --placeholder: var(--stone);
   --accent: var(--mist);
@@ -141,6 +142,10 @@
   --tint-inset-l: 0.955; /* a tinted inset (a sunken box that takes a color, like a past-version document): it keeps the inset's depth below the card and only gains the hue: oklch(from var(--x) var(--tint-inset-l) calc(c * 0.12) h) */
   --tint-ink-l: 0.48; /* colored text on a tint stays between --tint-ink-min and this lightness: oklch(from var(--x) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h). Keeps it above 4.5:1 on the tint. */
   --tint-ink-min: 0; /* light: no floor, only the cap darkens pale text */
+  --mark-thickness: 2px; /* every underline mark (dotted "unsure" words, flags): one thickness, so dots are the same size on every word */
+  --mark-offset: 4px;
+  --mark-l-weak: 0.62; /* a graded mark shows strength by lightness only: oklch(from var(--x) calc(var(--mark-l-weak) + (var(--mark-l-strong) - var(--mark-l-weak)) * strength) c h). Weak stays above 3:1, strong is about 7:1 or more. */
+  --mark-l-strong: 0.42;
   --muted-on-tint: var(--body); /* secondary text on a tint: the gray muted text drops under 4.5:1 there */
   --hover: color-mix(in srgb, var(--muted) 50%, transparent); /* hover on a list row, tab or option: a lighter step than the selected fill (--muted), so the two never look the same */
   --inverse: var(--primary); /* the strongest neutral fill: black in light, off-white in dark (not Aqua). Copied states, a hint that must stand out. */
@@ -217,6 +222,7 @@
   --muted: var(--mist);
   --muted-hover: var(--mist-strong);
   --raised: var(--lift);
+  --fill-on-subtle: var(--muted); /* dark: the gray fill is already a clear step lighter than the inset; not --raised, which is the thumb color on a track */
   --muted-foreground: var(--ash);
   --placeholder: var(--stone);
   --accent: var(--mist);
@@ -298,6 +304,8 @@
   --tint-mark-l: 0.32;
   --tint-ink-l: 1; /* dark: no cap */
   --tint-ink-min: 0.75; /* dark: a floor, so a dark color (green, Aqua 700) is lifted enough to read on the dark tint */
+  --mark-l-weak: 0.55; /* dark: brighter is stronger */
+  --mark-l-strong: 0.87;
   --muted-on-tint: var(--muted-foreground);
   --inverse: var(--foreground);
   --inverse-foreground: var(--background);
@@ -368,6 +376,7 @@
     --muted: var(--mist);
     --muted-hover: var(--mist-strong);
     --raised: var(--lift);
+    --fill-on-subtle: var(--muted);
     --muted-foreground: var(--ash);
     --placeholder: var(--stone);
     --accent: var(--mist);
@@ -449,6 +458,8 @@
     --tint-mark-l: 0.32;
     --tint-ink-l: 1;
     --tint-ink-min: 0.75;
+    --mark-l-weak: 0.55;
+    --mark-l-strong: 0.87;
     --muted-on-tint: var(--muted-foreground);
     --inverse: var(--foreground);
     --inverse-foreground: var(--background);

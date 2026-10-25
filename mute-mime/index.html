@@ -44,10 +44,11 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 /* A video tile. It stays dark in both themes, like a real call. */
 .mm-tile { position: relative; display: grid; place-items: center; height: 220px; overflow: hidden; border-radius: var(--radius-xl); background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--on-color) 18%, var(--black)), var(--black) 70%); box-shadow: inset 0 0 0 0 var(--success); transition: box-shadow var(--duration-slow); }
 .mm.is-live .mm-tile { box-shadow: inset 0 0 0 3px var(--success); }
-.mm-avatar { position: relative; z-index: 2; display: grid; place-items: center; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(160deg, var(--chart-1), var(--chart-2)); color: var(--on-chart); font-size: var(--text-title-sm); font-weight: 700; transition: transform var(--duration-base); }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered. 16px splits evenly in the 80px circle at 1x and 2x (17px sat high) */
+.mm-avatar { position: relative; z-index: 2; display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(160deg, var(--chart-1), var(--chart-2)); color: var(--on-chart); font-size: var(--text-body-lg); font-weight: 700; transition: transform var(--duration-base); }
 .mm.is-talking .mm-avatar { animation: mm-talk var(--duration-slow) var(--ease-in-out) infinite alternate; }
 @keyframes mm-talk { to { transform: scale(1.05); } }
-.mm-name { position: absolute; z-index: 3; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px 0 6px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 45%, transparent); color: var(--on-color); font-size: var(--text-small); font-weight: 600; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.mm-name { position: absolute; z-index: 3; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px 0 6px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 45%, transparent); color: var(--on-color); font-size: var(--text-small); font-weight: 600; -webkit-backdrop-filter: blur(var(--blur-sm)); backdrop-filter: blur(var(--blur-sm)); }
 .mm-mic { width: 16px; height: 16px; color: var(--danger); }
 .mm.is-live .mm-mic { color: var(--on-color); }
 .mm.is-live .mm-slash { display: none; }
@@ -71,7 +72,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 
 .mm-toast { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: oklch(from var(--danger) var(--tint-l) calc(c * var(--tint-c)) h); animation: mm-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes mm-in { from { opacity: 0; transform: translateY(-6px); } }
-.mm-toast-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
+.mm-toast-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; text-wrap: balance; }
+/* One balanced paragraph; the count never splits from its unit */
+.mm-keep { white-space: nowrap; }
 .mm-unmute-inline { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--danger); color: var(--danger-foreground); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
 .mm-controls { display: flex; gap: 8px; }
 .mm-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; touch-action: none; -webkit-user-select: none; user-select: none; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-base); }
@@ -87,6 +90,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   .mm-waves i.is-boxed, .mm-waves i.is-free { animation-duration: var(--duration-instant); }
   .mm-box.is-hit { animation-duration: 0.8s; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.mm :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .mm [hidden] { display: none !important; }
 
 </style>
@@ -118,7 +123,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     <span class="mm-name"><svg class="mm-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/><path class="mm-slash" d="M4 4l16 16"/></svg>You</span>
   </div>
   <div class="mm-toast" hidden>
-    <p class="mm-toast-text" role="status" aria-live="polite">You’re on mute. You’ve been talking for <b class="mm-secs">2</b> seconds.</p>
+    <p class="mm-toast-text" role="status" aria-live="polite">You’re on mute. You’ve been talking for <span class="mm-keep"><b class="mm-secs">2</b> <span class="mm-unit">seconds</span>.</span></p>
     <button type="button" class="mm-unmute-inline">Unmute</button>
   </div>
   <div class="mm-controls">
@@ -135,11 +140,56 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initMuteMime(root) {
     if (!root || root.__miMime) return;
     root.__miMime = true;
+    evenLines(root);
     var tile = root.querySelector('.mm-tile'), box = root.querySelector('.mm-box'), waves = root.querySelector('.mm-waves');
-    var toast = root.querySelector('.mm-toast'), secsEl = root.querySelector('.mm-secs'), inline = root.querySelector('.mm-unmute-inline');
+    var toast = root.querySelector('.mm-toast'), secsEl = root.querySelector('.mm-secs'), unitEl = root.querySelector('.mm-unit'), inline = root.querySelector('.mm-unmute-inline');
     var mute = root.querySelector('.mm-mute'), muteLabel = root.querySelector('.mm-mute-label'), talk = root.querySelector('.mm-talk');
     var muted = true, speaking = false, spawn = 0, started = 0, clock = 0;
 
@@ -162,6 +212,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     function tickClock() {
       var s = Math.floor((performance.now() - started) / 1000);
       secsEl.textContent = s;
+      unitEl.textContent = s === 1 ? 'second' : 'seconds';
       if (muted && performance.now() - started > 1400) toast.hidden = false;
     }
 

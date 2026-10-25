@@ -30,7 +30,9 @@
 }
 .ax p { margin: 0; }
 .ax-head { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--ax-line); }
-.ax-avatar { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--chart-2); color: var(--on-chart); font-weight: 700; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.ax-avatar { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--chart-2); color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; }
 .ax-name { font-weight: 600; }
 .ax-presence { color: var(--ax-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
 
@@ -88,4 +90,6 @@
   .ax-dots i, .ax[data-stage="4"] .ax-dots, .ax-msg--them { animation: none; }
   .ax-bubble { transition-duration: var(--duration-reduced); transition-timing-function: linear; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ax :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ax [hidden] { display: none !important; }

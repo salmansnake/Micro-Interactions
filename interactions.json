@@ -31,7 +31,7 @@
       "topic": "Files and Data",
       "new": false,
       "summary": "Hover a delete button and everything that goes with it is marked across the page, along with everything that stays.",
-      "tryit": "Hover Delete Project, then click it twice. Undo brings it all back.",
+      "tryit": "Hover {Delete Project}, then click it twice. {Undo} brings it all back.",
       "specs": [
         {
           "label": "Trigger",
@@ -58,8 +58,8 @@
       "type": "Useful",
       "topic": "Files and Data",
       "new": false,
-      "summary": "The Save button sinks and darkens with every unsaved change. Try to leave, and it tugs you back.",
-      "tryit": "Edit two or three rows, tap Go to Billing, then Save.",
+      "summary": "The {Save} button sinks and darkens with every unsaved change. Try to leave, and it tugs you back.",
+      "tryit": "Edit two or three rows, tap {Go to Billing}, then {Save}.",
       "specs": [
         {
           "label": "Weight",
@@ -86,8 +86,8 @@
       "type": "Useful",
       "topic": "Forms and Input",
       "new": false,
-      "summary": "The error message draws a line to the exact character that broke the email, and offers a fix when the fix is certain.",
-      "tryit": "Pick an example under the field, or type your own address.",
+      "summary": "The error message points at the exact character that broke the email, and offers a fix when the fix is certain.",
+      "tryit": "Press {sarah@@acme.io} or another example under the field, or type your own address.",
       "specs": [
         {
           "label": "Checks",
@@ -95,7 +95,7 @@
         },
         {
           "label": "Pointer",
-          "value": "Draws to the character in 420ms"
+          "value": "A callout points at the character"
         },
         {
           "label": "Typos",
@@ -115,7 +115,7 @@
       "topic": "Billing and Plans",
       "new": false,
       "summary": "Switch to yearly and the savings fall into each plan as coins. The counter climbs as they land.",
-      "tryit": "Switch to Yearly, then back to Monthly.",
+      "tryit": "Switch to {Yearly}, then back to {Monthly}.",
       "specs": [
         {
           "label": "Coins",
@@ -143,7 +143,7 @@
       "topic": "Search and Navigation",
       "new": false,
       "summary": "Hold Ctrl or ⌘ and every shortcut on the toolbar appears, rippling out from your pointer. Use one and it is marked learned.",
-      "tryit": "Hold Ctrl (⌘ on Mac) and press B. On a phone, press and hold the button at the bottom.",
+      "tryit": "Hold Ctrl (⌘ on Mac) and press B. On a phone, press and hold {Hold to show shortcuts}.",
       "specs": [
         {
           "label": "Trigger",
@@ -171,7 +171,7 @@
       "topic": "Forms and Input",
       "new": false,
       "summary": "Type past the limit and the extra characters spill off the line, each hanging lower than the last. Trim lets them fall away.",
-      "tryit": "Press Keep Typing for Me, or type past 80 characters. Then press Trim.",
+      "tryit": "Press {Keep Typing for Me}, or type past 80 characters. Then press {Trim}.",
       "specs": [
         {
           "label": "Limit",
@@ -179,7 +179,7 @@
         },
         {
           "label": "Spill",
-          "value": "0.45px lower per extra character"
+          "value": "Every line slopes down, 1 to 9px"
         },
         {
           "label": "Warning",
@@ -199,7 +199,7 @@
       "topic": "Billing and Plans",
       "new": false,
       "summary": "A Pro chart under frost. Drag across it to open a clear window and read real numbers before you pay.",
-      "tryit": "Hover or drag across the chart. Use the arrow keys after tabbing to it. Then press Unlock Forecasts.",
+      "tryit": "Hover or drag across the chart. Use the arrow keys after tabbing to it. Then press {Unlock Forecasts}.",
       "specs": [
         {
           "label": "Window",
@@ -227,7 +227,7 @@
       "topic": "Loading and Status",
       "new": false,
       "summary": "Run out of generations and the button becomes the timer, filling as the next credit returns while each dot refills like a tank.",
-      "tryit": "Press Generate five times fast, then watch it refill.",
+      "tryit": "Press {Generate} five times fast, then watch it refill.",
       "specs": [
         {
           "label": "Credits",
@@ -255,7 +255,7 @@
       "topic": "Files and Data",
       "new": false,
       "summary": "It knows what you are dropping before you let go, then previews each type its own way: rows slide in, photos develop, pages fan out.",
-      "tryit": "Drag a CSV, image or PDF over it, or press a sample button.",
+      "tryit": "Drag a CSV, image or PDF over it, or press {Sample CSV}, {Sample Image} or {Sample PDF}.",
       "specs": [
         {
           "label": "Detection",
@@ -283,7 +283,7 @@
       "topic": "Teams and Sharing",
       "new": false,
       "summary": "A teammate's cursor and fresh words live inside the field. Put your cursor near theirs and they politely wait for you.",
-      "tryit": "Watch Mira type, then click near her caret. Press Replay to watch again.",
+      "tryit": "Watch Mira type, then click near her caret. Press {Replay} to watch again.",
       "specs": [
         {
           "label": "Highlight",
@@ -310,8 +310,8 @@
       "type": "Useful",
       "topic": "Loading and Status",
       "new": false,
-      "summary": "Known data shows at once, each part shimmers at its own pace, slow parts say so, and a failed part offers Retry instead of shimmering forever.",
-      "tryit": "Watch it load, then press Retry on the chart. Press Reload to replay.",
+      "summary": "Known data shows at once, each part shimmers at its own pace, slow parts say so, and a failed part offers {Retry} instead of shimmering forever.",
+      "tryit": "Watch it load, then press {Retry} on the chart. Press {Reload} to replay.",
       "specs": [
         {
           "label": "Known Data",
@@ -327,7 +327,7 @@
         },
         {
           "label": "Failure",
-          "value": "Inline Retry, rest unaffected"
+          "value": "Inline {Retry}, rest unaffected"
         }
       ]
     },
@@ -339,7 +339,7 @@
       "topic": "Search and Navigation",
       "new": false,
       "summary": "A search with no results morphs your typo, letter by letter, into the closest real match, then shows its results.",
-      "tryit": "Pick an example, or type a misspelled setting. Press Tab to accept.",
+      "tryit": "Press {biling} or another example, or type a misspelled setting. Press Tab to accept.",
       "specs": [
         {
           "label": "Match",
@@ -367,7 +367,7 @@
       "topic": "Files and Data",
       "new": false,
       "summary": "Copied text flies into a clipboard that keeps your last five copies, so an earlier one is one click away.",
-      "tryit": "Copy two or three values, then open the clipboard.",
+      "tryit": "Press {Copy} on two or three values, then press {icon:Recent copies}.",
       "specs": [
         {
           "label": "Flight",
@@ -395,7 +395,7 @@
       "topic": "Loading and Status",
       "new": false,
       "summary": "The illustration on an empty screen turns toward the button as your pointer gets close. Click and the tiles gather into your first project.",
-      "tryit": "Move toward New Project, then click it.",
+      "tryit": "Move toward {New Project}, then click it.",
       "specs": [
         {
           "label": "Range",
@@ -479,7 +479,7 @@
       "topic": "Billing and Plans",
       "new": false,
       "summary": "Avatars stack as you add seats, prices roll like an odometer, and crossing a volume tier is celebrated.",
-      "tryit": "Press + until you reach 10 seats.",
+      "tryit": "Press {icon:Add a seat} until you reach 10 seats.",
       "specs": [
         {
           "label": "Tiers",
@@ -519,7 +519,7 @@
         },
         {
           "label": "Release",
-          "value": "Card slides off, pill with Undo"
+          "value": "Card slides off, pill with {Undo}"
         },
         {
           "label": "Keyboard",
@@ -535,7 +535,7 @@
       "topic": "Loading and Status",
       "new": false,
       "summary": "Finishing a setup step flies its check into a ring that fills one segment at a time. Complete it and the ring becomes a badge.",
-      "tryit": "Press Done on each step.",
+      "tryit": "Press {Done} on each step.",
       "specs": [
         {
           "label": "Segments",
@@ -563,7 +563,7 @@
       "topic": "Forms and Input",
       "new": false,
       "summary": "The date range stretches like a rubber band toward your pointer, and strains against a booked night instead of allowing an impossible stay.",
-      "tryit": "Click Nov 12, then point at Nov 24.",
+      "tryit": "Click November {12}, then point at {24}.",
       "specs": [
         {
           "label": "Band",
@@ -591,7 +591,7 @@
       "topic": "Loading and Status",
       "new": false,
       "summary": "Changes made offline pile up in a visible queue, then fly to the cloud one by one when you reconnect.",
-      "tryit": "Switch Online off, check two tasks, then switch it back on.",
+      "tryit": "Switch {Online} off, check two tasks, then switch it back on.",
       "specs": [
         {
           "label": "Offline",
@@ -619,7 +619,7 @@
       "topic": "Loading and Status",
       "new": false,
       "summary": "A long export's progress sheet morphs into a small Frost pill so you can keep working. It pings when the job is done.",
-      "tryit": "Press Export CSV, then Keep Working. Click rows while it runs.",
+      "tryit": "Press {Export CSV}, then {Keep Working}. Click rows while it runs.",
       "specs": [
         {
           "label": "Morph",
@@ -675,7 +675,7 @@
       "topic": "Teams and Sharing",
       "new": false,
       "summary": "Invites fold into paper planes and fly off. Addresses that can't be invited boomerang back as red chips with the reason.",
-      "tryit": "Press Fill Sample Emails, then Send Invites.",
+      "tryit": "Press {Fill Sample Emails}, then {Send Invites}.",
       "specs": [
         {
           "label": "Input",
@@ -703,7 +703,7 @@
       "topic": "Search and Navigation",
       "new": false,
       "summary": "A command palette that previews each command live on the page before you commit. Escape puts everything back.",
-      "tryit": "Open Commands, arrow through the options, then press Enter or Escape.",
+      "tryit": "Open {Commands}, arrow through the options, then press Enter or Escape.",
       "specs": [
         {
           "label": "Preview",
@@ -711,7 +711,7 @@
         },
         {
           "label": "Signal",
-          "value": "Aqua ring and Previewing badge"
+          "value": "Accent ring and {Previewing} badge"
         },
         {
           "label": "Revert",
@@ -731,7 +731,7 @@
       "topic": "Billing and Plans",
       "new": false,
       "summary": "A taxi meter runs as you type a prompt, so you see what it will cost, and how much of the budget it uses, before you send it.",
-      "tryit": "Type into the prompt, then switch to Smart and Long.",
+      "tryit": "Type into the prompt, then switch to {Smart} and {Long}.",
       "specs": [
         {
           "label": "Fare",
@@ -759,7 +759,7 @@
       "topic": "Teams and Sharing",
       "new": false,
       "summary": "Approving or declining lands an ink stamp with who decided and when. Undo lifts it back off.",
-      "tryit": "Press Approve, then Undo. Try Decline, which asks for a reason first.",
+      "tryit": "Press {Approve}, then {Undo}. Try {Decline}, which asks for a reason first.",
       "specs": [
         {
           "label": "Stamp",
@@ -815,7 +815,7 @@
       "topic": "Files and Data",
       "new": false,
       "summary": "Archived messages fly into a little drawer that visibly fills up. Open it to put anything back.",
-      "tryit": "Archive two messages, then open the drawer and restore one.",
+      "tryit": "Press {Archive} on two messages, then open the drawer and press {Restore} on one.",
       "specs": [
         {
           "label": "Flight",
@@ -843,7 +843,7 @@
       "topic": "Search and Navigation",
       "new": false,
       "summary": "When a table re-sorts, each row glides to its new place and leaves a fading trail showing where it came from and how far it moved.",
-      "tryit": "Click MRR, then Account, then MRR again.",
+      "tryit": "Click {MRR}, then {Account}, then {MRR} again.",
       "specs": [
         {
           "label": "Motion",
@@ -871,7 +871,7 @@
       "topic": "Forms and Input",
       "new": false,
       "summary": "Finished steps fold up into summary chips, so the form stays short and every answer is one tap away from editing.",
-      "tryit": "Continue through the steps, then tap a chip to change an answer.",
+      "tryit": "Press {Continue} through the steps, then tap a chip to change an answer.",
       "specs": [
         {
           "label": "Fold",
@@ -899,7 +899,7 @@
       "topic": "Files and Data",
       "new": false,
       "summary": "Drag back through a document's history and watch each edit undo itself in place, with who made it and when.",
-      "tryit": "Drag the scrubber left, then press Restore This Version.",
+      "tryit": "Drag the scrubber left, then press {Restore This Version}.",
       "specs": [
         {
           "label": "Diff",
@@ -911,7 +911,7 @@
         },
         {
           "label": "State",
-          "value": "Live or Viewing Version n"
+          "value": "{Live} or {Viewing Version n}"
         },
         {
           "label": "Restore",
@@ -927,7 +927,7 @@
       "topic": "Meetings and Calendar",
       "new": false,
       "summary": "Due dates warm up continuously as they approach, from calm gray to blue, amber and red, and pulse faster in the final day.",
-      "tryit": "Drag Move Time Forward slowly to the right.",
+      "tryit": "Drag {Move Time Forward} slowly to the right.",
       "specs": [
         {
           "label": "Heat",
@@ -983,7 +983,7 @@
       "topic": "Teams and Sharing",
       "new": false,
       "summary": "Choosing who can open a link climbs a ladder, and a crowd beside it shows exactly how many people that lets in.",
-      "tryit": "Click each rung from Only You up to Anyone with the Link.",
+      "tryit": "Click each rung from {Only You} up to {Anyone with the Link}.",
       "specs": [
         {
           "label": "Ladder",
@@ -1011,7 +1011,7 @@
       "topic": "Meetings and Calendar",
       "new": true,
       "summary": "A short meeting with no agenda quietly folds itself into an envelope, and works out how many hours sending it would give back.",
-      "tryit": "Wait a second. Then try It Really Needs a Meeting, or type an agenda.",
+      "tryit": "Wait a second. Then try {It Really Needs a Meeting}, or type an agenda.",
       "specs": [
         {
           "label": "Rule",
@@ -1039,7 +1039,7 @@
       "topic": "Messages and Email",
       "new": true,
       "summary": "The typing indicator gets more nervous the longer they type. It grows, speeds up, shakes, deletes everything, and sends \"yes\".",
-      "tryit": "Watch it play, then press Replay.",
+      "tryit": "Watch it play, then press {Replay}.",
       "specs": [
         {
           "label": "Stages",
@@ -1067,7 +1067,7 @@
       "topic": "Loading and Status",
       "new": true,
       "summary": "Click a busy button again and again and it notices, tells you how long is really left, promises only one job started, and hands you a stress ball.",
-      "tryit": "Press Export PDF, then click it five times fast. Squeeze the ball.",
+      "tryit": "Press {Export PDF}, then click it five times fast. Squeeze the ball.",
       "specs": [
         {
           "label": "Rage",
@@ -1095,7 +1095,7 @@
       "topic": "AI",
       "new": true,
       "summary": "Ask the assistant \"Are you sure?\" and it changes its answer, while its confidence badge shrinks, turns red and starts to sweat.",
-      "tryit": "Press Are You Sure? until it pulls itself together.",
+      "tryit": "Press {Are You Sure?} until it pulls itself together.",
       "specs": [
         {
           "label": "Badge",
@@ -1151,7 +1151,7 @@
       "topic": "Developer Tools",
       "new": true,
       "summary": "Approve a 2,000-line pull request seconds after opening it, and the approval stamp tells everyone what really happened.",
-      "tryit": "Press Approve right away. Then Undo, scroll the whole diff and approve again.",
+      "tryit": "Press {Approve} right away. Then {Undo}, scroll the whole diff and approve again.",
       "specs": [
         {
           "label": "Timer",
@@ -1178,8 +1178,8 @@
       "type": "Secretly Useful",
       "topic": "Developer Tools",
       "new": true,
-      "summary": "After 4 PM on a Friday, Deploy puts on a hard hat and caution tape, makes you hold it for two seconds, and offers Monday instead.",
-      "tryit": "Hold Deploy for two seconds, or let go early. Try Tue 11 AM for comparison.",
+      "summary": "After 4 PM on a Friday, {Deploy} puts on a hard hat and caution tape, makes you hold it for two seconds, and offers Monday instead.",
+      "tryit": "Hold {Deploy} for two seconds, or let go early. Try {Tue 11 AM} for comparison.",
       "specs": [
         {
           "label": "Risky",
@@ -1207,7 +1207,7 @@
       "topic": "Developer Tools",
       "new": true,
       "summary": "Commit messages are read as feelings. From “fix” to “pls work”, the mood ring slides from calm aqua to quiet acceptance.",
-      "tryit": "Tap fix, fix again, final fix and pls work in order.",
+      "tryit": "Tap {fix}, {fix again}, {final fix} and {pls work} in order.",
       "specs": [
         {
           "label": "Score",
@@ -1235,7 +1235,7 @@
       "topic": "Developer Tools",
       "new": true,
       "summary": "Before you file a bug, a rubber duck asks you to explain it first. It nods along, and half the time you solve it yourself.",
-      "tryit": "Press File Bug, then explain the problem in two sentences.",
+      "tryit": "Press {File Bug}, then explain the problem in two sentences.",
       "specs": [
         {
           "label": "Gate",
@@ -1263,7 +1263,7 @@
       "topic": "Files and Data",
       "new": true,
       "summary": "Every save renames the file one step further: final, final_v2, FINAL, FINAL_final_v3 (use this one)… and back to where it started.",
-      "tryit": "Press Save over and over, or ⌘S with focus inside.",
+      "tryit": "Press {Save} over and over, or ⌘S with focus inside.",
       "specs": [
         {
           "label": "Stages",
@@ -1291,7 +1291,7 @@
       "topic": "Messages and Email",
       "new": true,
       "summary": "Passive-aggressive phrases drop the temperature of your message until it frosts over. One button warms it up with friendlier words.",
-      "tryit": "Add a phrase chip and watch the frost spread, then press Warm It Up.",
+      "tryit": "Press {As previously mentioned} and watch the frost spread, then press {Warm It Up}.",
       "specs": [
         {
           "label": "Start",
@@ -1319,7 +1319,7 @@
       "topic": "Messages and Email",
       "new": true,
       "summary": "Start a message with “quick question” and a stopwatch starts too, following the thread until it admits this is a meeting now.",
-      "tryit": "Press Send and watch the thread unfold.",
+      "tryit": "Press {Send} and watch the thread unfold.",
       "specs": [
         {
           "label": "Trigger",
@@ -1335,7 +1335,7 @@
         },
         {
           "label": "Ending",
-          "value": "Turn It Into a Call"
+          "value": "{Turn It Into a Call}"
         }
       ]
     },
@@ -1347,7 +1347,7 @@
       "topic": "Messages and Email",
       "new": true,
       "summary": "“Let’s circle back next week” becomes a boomerang. Send it and it spins away, then flies back a week later as a reminder.",
-      "tryit": "Press Send, then Skip Ahead a Week.",
+      "tryit": "Press {Send}, then {Skip Ahead a Week}.",
       "specs": [
         {
           "label": "Phrases",
@@ -1375,7 +1375,7 @@
       "topic": "Messages and Email",
       "new": true,
       "summary": "You get three exclamation marks per message. Spend them, and any more quietly turn into periods while the field shrugs.",
-      "tryit": "Tap Add “!”, then Add “!!!”.",
+      "tryit": "Tap {Add “!”}, then {Add “!!!”}. Then buy {3 More for $0.99}.",
       "specs": [
         {
           "label": "Budget",
@@ -1383,7 +1383,7 @@
         },
         {
           "label": "Overflow",
-          "value": "Extra ones become periods"
+          "value": "Extra ones become periods, once"
         },
         {
           "label": "Refund",
@@ -1391,7 +1391,7 @@
         },
         {
           "label": "Shop",
-          "value": "3 more for $0.99 (not really)"
+          "value": "3 more for $0.99, once (pretend charge)"
         }
       ]
     },
@@ -1402,8 +1402,8 @@
       "type": "Secretly Useful",
       "topic": "Messages and Email",
       "new": true,
-      "summary": "Write “see the attached deck” with nothing attached and the Send button shrugs at you instead of sending.",
-      "tryit": "Press Send. Then attach the file and send again.",
+      "summary": "Write “see the attached deck” with nothing attached and the {Send} button shrugs at you instead of sending.",
+      "tryit": "Press {Send}. Then press {Attach File} and send again.",
       "specs": [
         {
           "label": "Detects",
@@ -1419,7 +1419,7 @@
         },
         {
           "label": "Choice",
-          "value": "Attach File or Send Anyway"
+          "value": "{Attach File} or {Send Anyway}"
         }
       ]
     },
@@ -1431,7 +1431,7 @@
       "topic": "Meetings and Calendar",
       "new": true,
       "summary": "Talk while muted and your voice bounces off an invisible glass box around your tile, like a mime. Then it tells you you’re on mute.",
-      "tryit": "Hold Hold to Talk for two seconds. Then unmute and hold again.",
+      "tryit": "Hold {Hold to Talk} for two seconds. Then press {Unmute} and hold again.",
       "specs": [
         {
           "label": "Waves",
@@ -1459,7 +1459,7 @@
       "topic": "Meetings and Calendar",
       "new": true,
       "summary": "Turning your camera off draws red velvet theater curtains across your tile. Turning it on opens the show with a spotlight.",
-      "tryit": "Turn the camera off, wait a second, then turn it back on.",
+      "tryit": "Press {Turn Camera Off}, wait a second, then press {Turn Camera On}.",
       "specs": [
         {
           "label": "Curtains",
@@ -1487,7 +1487,7 @@
       "topic": "Meetings and Calendar",
       "new": true,
       "summary": "Once a meeting runs past its end time, the progress bar becomes a burning fuse, with a running count of person-minutes.",
-      "tryit": "Drag Move Time Forward past 30 minutes.",
+      "tryit": "Drag {Move Time Forward} past 30 minutes.",
       "specs": [
         {
           "label": "Before",
@@ -1503,7 +1503,7 @@
         },
         {
           "label": "Nudge",
-          "value": "End button pulses at 5 min"
+          "value": "{End Meeting for All} pulses at 5 min"
         }
       ]
     },
@@ -1515,7 +1515,7 @@
       "topic": "Meetings and Calendar",
       "new": true,
       "summary": "Accepted meetings drop into your day like falling blocks. Fill every gap and the day flashes like a cleared line, then offers to protect lunch.",
-      "tryit": "Accept all three invites, then protect lunch.",
+      "tryit": "Press {Accept} on all three invites, then {Protect 12:00 for Lunch}.",
       "specs": [
         {
           "label": "Drop",
@@ -1626,8 +1626,8 @@
       "type": "Pure Joke",
       "topic": "Messages and Email",
       "new": true,
-      "summary": "The opposite of the button that runs away. Unsubscribe slides toward your cursor, grows, and says “Yes, This One.” One click, done.",
-      "tryit": "Move your mouse toward Unsubscribe and let it come to you.",
+      "summary": "The opposite of the button that runs away. {Unsubscribe} slides toward your cursor, grows, and says {Yes, This One}. One click, done.",
+      "tryit": "Move your mouse toward {Unsubscribe} and let it come to you.",
       "specs": [
         {
           "label": "Range",
@@ -1639,7 +1639,7 @@
         },
         {
           "label": "Labels",
-          "value": "Over Here, then Yes, This One"
+          "value": "{Over Here}, then {Yes, This One}"
         },
         {
           "label": "Exit",
@@ -1655,7 +1655,7 @@
       "topic": "Loading and Status",
       "new": true,
       "summary": "Pull to refresh again and again and the spinner gets woozy, then dizzy with spinning eyes, then offers to just tell you when something arrives.",
-      "tryit": "Pull the list down, or press refresh five times quickly.",
+      "tryit": "Pull the list down, or press {icon:Refresh} five times quickly.",
       "specs": [
         {
           "label": "Pull",
@@ -1682,8 +1682,8 @@
       "type": "Secretly Useful",
       "topic": "Messages and Email",
       "new": true,
-      "summary": "Every snooze makes the reminder visibly older: yellowed, curled, taped back up, coffee-stained. Done snaps it fresh again.",
-      "tryit": "Press Snooze 1 Hour five or six times, then Done.",
+      "summary": "Every snooze makes the reminder visibly older: yellowed, curled, taped back up, coffee-stained. {Done} snaps it fresh again.",
+      "tryit": "Press {Snooze 1 Hour} five or six times, then {Done}.",
       "specs": [
         {
           "label": "Age",
@@ -1710,8 +1710,8 @@
       "type": "Pure Joke",
       "topic": "Billing and Plans",
       "new": true,
-      "summary": "Reach for Cancel and it swaps places with Keep My Plan, so you land on Keep instead. Five times. Then it gets tired, walks back, and lets you leave.",
-      "tryit": "Move your mouse onto Cancel Subscription. Keep chasing it.",
+      "summary": "Reach for {Cancel Subscription} and it swaps places with {Keep My Plan}, so you land on Keep instead. Five times. Then it gets tired, walks back, and lets you leave.",
+      "tryit": "Move your mouse onto {Cancel Subscription}. Keep chasing it.",
       "specs": [
         {
           "label": "Swaps",

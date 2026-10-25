@@ -83,4 +83,6 @@
   .tm-ch.is-del, .tm-ch.is-ins, .tm-ch.is-sub, .tm-results li { animation: none; }
   .tm-ch.is-del { display: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.tm :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .tm [hidden] { display: none !important; }

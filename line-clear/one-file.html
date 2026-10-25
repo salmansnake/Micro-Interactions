@@ -20,6 +20,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
   --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --leading-body: 22px;
+  --leading-caption: 16px;
   --leading-small: 18px;
   --leading-title-sm: 24px;
   --press-scale-sm: 0.94;
@@ -28,6 +29,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --radius-sm: 6px;
   --radius-xl: 16px;
   --radius-xs: 4px;
+  --space-2: 8px;
   --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
   --spring-pop-duration: 680ms;
   --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
@@ -202,7 +204,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 }
 .ct p { margin: 0; }
 .ct-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.ct-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.ct-title { text-box: trim-start cap alphabetic; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .ct-free { color: var(--ct-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
 .ct.is-full .ct-free { color: var(--danger-text); font-weight: 600; }
 .ct-day { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 6px; padding: 8px; border-radius: var(--radius-lg); background: var(--ct-sunken); }
@@ -222,10 +225,11 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .ct-inv-title { margin-bottom: 6px !important; color: var(--ct-muted); font-size: var(--text-small); font-weight: 600; }
 .ct-list { margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--ct-sunken); }
 .ct-list:empty { display: none; }
-.ct-list li { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 8px 0 14px; }
+.ct-list li { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: var(--space-2) 8px var(--space-2) 14px; box-sizing: border-box; }
 .ct-list li + li::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--ct-line); transform: scaleY(0.5); transform-origin: top; }
 .ct-list b { display: block; font-weight: 600; }
-.ct-list small { color: var(--ct-muted); font-size: var(--text-caption); }
+/* Title and detail: each line keeps its own leading, 2px apart, with equal space above and below (10b.38) */
+.ct-list small { display: block; margin-top: 2px; color: var(--ct-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
 .ct-list button, .ct-lunch { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ct-accent); color: var(--ct-on-accent); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .ct-list button:active, .ct-lunch:active { transform: scale(var(--press-scale-sm)); }
 .ct-list button:focus-visible, .ct-lunch:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -239,6 +243,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 @media (prefers-reduced-motion: reduce) {
   .ct-block.is-drop, .ct-block.is-flash, .ct-block.is-out, .ct-clear { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ct :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ct [hidden] { display: none !important; }
 
 </style>
@@ -284,9 +290,54 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   'use strict';
   var SLOTS = 8, LUNCH = 3;
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initLineClear(root) {
     if (!root || root.__miLineClear) return;
     root.__miLineClear = true;
+    evenLines(root);
     var col = root.querySelector('.ct-col'), free = root.querySelector('.ct-free'), list = root.querySelector('.ct-list');
     var clear = root.querySelector('.ct-clear'), lunch = root.querySelector('.ct-lunch'), status = root.querySelector('.ct-status');
 

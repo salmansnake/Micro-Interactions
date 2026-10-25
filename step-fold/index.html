@@ -66,6 +66,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
    Its strokes span y 6 to 17 on the 24 grid, half a unit above middle, so it moves down that half unit. */
 .fo-chip i svg { display: block; width: 14px; height: 14px; translate: 0 calc(100% / 48); }
 .fo-chip small { color: var(--fo-muted); font-size: var(--text-caption); }
+.fo-nowrap { white-space: nowrap; } /* "per seat" stays together, so a narrow card never leaves "seat" alone */
 .fo-chip b { font-weight: 600; }
 .fo-chip:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @keyframes fo-chip { from { opacity: 0; transform: translateY(14px) scale(0.7) rotateX(60deg); } }
@@ -79,18 +80,22 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .fo-step.is-waiting { background: none; box-shadow: inset 0 0 0 1px var(--fo-fill); }
 .fo-step.is-waiting .fo-step-title { color: var(--fo-muted); }
 .fo-step-title { display: flex; align-items: center; gap: 10px; margin: 0; padding: 14px 16px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
-.fo-step-title span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--fo-fill); font-size: var(--text-small); }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   Its 13px digits leave an even split above and below at 1x and 2x */
+.fo-step-title span { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; width: 24px; height: 24px; border-radius: 50%; background: var(--fo-fill); font-size: var(--text-small); }
 .fo-step:not(.is-waiting) .fo-step-title span { background: var(--fo-accent); color: var(--fo-on-accent); }
 .fo-body { display: flex; flex-direction: column; gap: 12px; padding: 0 16px 16px; }
 .fo-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .fo-plan { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--fo-bg); box-shadow: 0 0 0 1px var(--fo-fill); cursor: pointer; transition: box-shadow var(--duration-base); }
 .fo-plan input { position: absolute; opacity: 0; }
 .fo-plan b { font-weight: 600; }
-.fo-plan small { color: var(--fo-muted); font-size: var(--text-caption); }
+.fo-plan small { color: var(--fo-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
 .fo-plan:has(input:checked) { box-shadow: 0 0 0 2px var(--fo-accent); }
 .fo-plan:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
 .fo-stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
-.fo-stepper button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fo-fill); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
+/* On the gray step panel the − and + use the fill for gray panels: a clear step darker than the panel in light, lighter in dark.
+   The plain gray fill nearly matched the panel, and white matched the card around it and looked see-through (button rule 9) */
+.fo-stepper button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fill-on-subtle); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
 .fo-stepper button svg { display: block; width: 18px; height: 18px; }
 .fo-stepper button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .fo-seats { min-width: 2ch; font-size: var(--text-h2); line-height: var(--leading-h2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
@@ -106,6 +111,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 @media (prefers-reduced-motion: reduce) {
   .fo-chip, .fo-step.is-folding, .fo-step.is-unfolding, .fo-done { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.fo :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .fo [hidden] { display: none !important; }
 
 </style>
@@ -135,9 +142,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     <p class="fo-step-title"><span>1</span>Choose a Plan</p>
     <div class="fo-body">
       <div class="fo-plans" role="radiogroup" aria-label="Plan">
-        <label class="fo-plan"><input type="radio" name="fo-plan" value="Starter"><b>Starter</b><small>$12 per seat</small></label>
-        <label class="fo-plan"><input type="radio" name="fo-plan" value="Pro" checked><b>Pro</b><small>$29 per seat</small></label>
-        <label class="fo-plan"><input type="radio" name="fo-plan" value="Team"><b>Team</b><small>$79 per seat</small></label>
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Starter"><b>Starter</b><small>$12 <span class="fo-nowrap">per seat</span></small></label>
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Pro" checked><b>Pro</b><small>$29 <span class="fo-nowrap">per seat</span></small></label>
+        <label class="fo-plan"><input type="radio" name="fo-plan" value="Team"><b>Team</b><small>$79 <span class="fo-nowrap">per seat</span></small></label>
       </div>
       <button type="button" class="fo-next">Continue</button>
     </div>
@@ -171,9 +178,54 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var PRICES = { Starter: 12, Pro: 29, Team: 79 };
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initStepFold(root) {
     if (!root || root.__miFold) return;
     root.__miFold = true;
+    evenLines(root);
     var steps = Array.prototype.slice.call(root.querySelectorAll('.fo-step'));
     var chips = root.querySelector('.fo-chips');
     var done = root.querySelector('.fo-done');

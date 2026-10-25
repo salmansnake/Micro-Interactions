@@ -161,6 +161,12 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 .spec { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px var(--space-4); margin: var(--space-5) 0 0; font: var(--text-small)/var(--leading-small) var(--font-sans); }
 .spec dt { color: var(--muted-foreground); }
 .spec dd { margin: 0; color: var(--foreground); }
+/* A label from the interaction (a button, option or message) named in the text: a small chip, so "Hold {Hold to Talk}" never reads as a typo */
+.ui-ref { display: inline-block; padding: 0 6px; border-radius: var(--radius-sm); background: var(--muted); color: var(--foreground); font-weight: 600; line-height: inherit; white-space: nowrap; }
+.try .ui-ref { background: var(--raised); } /* raised on the gray Try it box, per 10a */
+/* An icon-only control: the same icon the interaction draws, at text size, in the same chip */
+.ui-ref--icon { padding: 0 5px; }
+.ui-ref--icon svg { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.17em; stroke-width: 2; }
 .info-actions { flex: none; display: grid; gap: var(--space-2); padding: var(--space-4) var(--space-6) var(--space-6); border-top: 1px solid var(--border); }
 .info-actions .oc-btn svg { width: 16px; height: 16px; }
 .mobile-browse { display: none; }

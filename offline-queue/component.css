@@ -32,7 +32,8 @@
 }
 .oq-head { display: flex; align-items: center; gap: 12px; }
 .oq-titles { flex: 1; min-width: 0; }
-.oq-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.oq-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .oq-state { display: flex; align-items: center; gap: 6px; margin: 2px 0 0; color: var(--oq-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .oq-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--oq-green); transition: background-color var(--duration-slow); }
 .oq.is-offline .oq-dot { background: var(--oq-orange); }
@@ -91,4 +92,6 @@
 @media (prefers-reduced-motion: reduce) {
   .oq-row.is-new, .oq-queue, .oq-chip, .oq-cloud.is-hit { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.oq :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .oq [hidden] { display: none !important; }

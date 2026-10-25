@@ -32,7 +32,8 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
-.pi-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.pi-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .pi-sub { margin: 0 0 4px; color: var(--pi-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .pi-box { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 52px; box-sizing: border-box; padding: 8px; border: 1px solid var(--input); border-radius: var(--radius-md); background: var(--card); box-shadow: var(--shadow-xs); cursor: text; transition: box-shadow var(--duration-base), border-color var(--duration-base); }
 .pi-box:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
@@ -66,4 +67,6 @@
 @media (prefers-reduced-motion: reduce) {
   .pi-chip, .pi-chip.is-back { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.pi :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .pi [hidden] { display: none !important; }

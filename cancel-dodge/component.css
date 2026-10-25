@@ -81,4 +81,6 @@
   .cn.is-blink .cn-cancel, .cn.is-blink .cn-keep { opacity: 0; }
   .cn-again:active { transform: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.cn :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .cn [hidden] { display: none !important; }

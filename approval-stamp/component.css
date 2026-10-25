@@ -34,7 +34,9 @@
 .as-card.is-hit { animation: as-hit var(--spring-pop-duration) var(--spring-pop); }
 @keyframes as-hit { 25% { transform: scale(0.985) translateY(2px); } 100% { transform: none; } }
 .as-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.as-avatar { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--chart-1); color: var(--on-chart); font-weight: 700; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.as-avatar { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--chart-1); color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; }
 .as-who, .as-when { margin: 0; }
 .as-who b { font-weight: 600; }
 .as-when { color: var(--as-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
@@ -104,4 +106,6 @@
   .as.is-lifting .as-stamp { animation: none; opacity: 0; }
   .as-card.is-hit, .as-reason { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.as :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .as [hidden] { display: none !important; }

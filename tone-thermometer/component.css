@@ -81,4 +81,6 @@
   .tn-temp.is-drop, .tn-fix { animation: none; }
   .tn-field, .tn-frost { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.tn :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .tn [hidden] { display: none !important; }

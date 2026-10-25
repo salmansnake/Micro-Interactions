@@ -25,11 +25,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   --fp-muted: var(--muted-foreground);
   --fp-line: var(--border);
   --fp-fill: var(--muted);
+  --fp-sunken: var(--subtle);
   --fp-accent: var(--primary);
   --fp-on-accent: var(--primary-foreground);
-  --fp-green: var(--success);
-  --fp-green-text: var(--success-text);
-  --fp-green-soft: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h);
   --fp-glass-edge: var(--frost-border);
   --fp-glass: var(--frost);
   --fp-glass-shadow: var(--shadow-lg);
@@ -56,7 +54,6 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .fp-secret { display: inline-block; color: var(--fp-fg); font-size: var(--text-h3); line-height: var(--leading-h3); font-weight: 700; letter-spacing: var(--tracking-title); filter: blur(7px); transition: filter var(--spring-panel-duration) var(--spring-panel); }
 .fp.is-unlocked .fp-secret { filter: none; }
 .fp-badge { flex: none; padding: 3px 10px; border-radius: var(--radius-full); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--brand-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-slow), color var(--duration-slow); }
-.fp.is-unlocked .fp-badge { background: var(--fp-green-soft); color: oklch(from var(--fp-green-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); }
 
 /* Chart + frost */
 .fp-chart {
@@ -67,7 +64,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   height: 200px;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--brand) 4%, var(--fp-bg));
+  /* A soft neutral inset, just visible against the card in both themes: the inset gray mixed 40% toward the card.
+     The chart's own line and area carry the color (10b.41) */
+  background: color-mix(in oklab, var(--fp-sunken) 60%, var(--fp-bg));
   cursor: ew-resize;
   touch-action: pan-y;
   outline: none;
@@ -77,7 +76,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .fp-chart.is-dragging { transition: --fp-o var(--spring-ui-duration) var(--spring-ui), --fp-w var(--spring-panel-duration) var(--spring-panel); }
 .fp-svg { position: absolute; inset: 0 0 22px; width: 100%; height: calc(100% - 22px); }
 .fp-svg .fp-grid { stroke: var(--fp-line); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.fp-svg .fp-area { fill: color-mix(in srgb, var(--brand) 16%, transparent); }
+/* The area under the line is a soft Aqua: the highlight tint (L 0.88 light, 0.32 dark) moved 15% toward the chart box,
+   a clear step from the box and quieter than the line */
+.fp-svg .fp-area { fill: color-mix(in oklab, oklch(from var(--brand) var(--tint-mark-l) calc(c * var(--tint-c)) h) 85%, color-mix(in oklab, var(--fp-sunken) 60%, var(--fp-bg))); }
 .fp-svg .fp-line { fill: none; stroke: var(--brand-strong); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .fp-months { position: absolute; left: 0; right: 0; bottom: 4px; display: flex; color: var(--fp-muted); font-size: calc(var(--text-caption) - 1px); line-height: 13px; }
 .fp-months span { flex: 1; text-align: center; }
@@ -124,7 +125,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 .fp-dot {
   position: absolute;
-  left: 50%;
+  left: calc(50% + var(--fp-dx, 0px));
   top: var(--fp-y, 50%);
   width: 10px;
   height: 10px;
@@ -173,7 +174,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .fp.is-unlocked .fp-hint { opacity: 0; transform: translate(-50%, -50%) scale(var(--press-scale-sm)); }
 
 .fp-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; }
-.fp-note { flex: 1 1 200px; margin: 0; color: var(--fp-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+/* A two-sentence note beside a button reads as a short two-line paragraph, never one long line */
+.fp-note { flex: 1 1 200px; max-width: 30ch; margin: 0; color: var(--fp-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
 .fp-cta {
   height: 36px;
   padding: 0 18px;
@@ -192,6 +194,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 @media (prefers-reduced-motion: reduce) {
   .fp-chart, .fp-secret, .fp-dot { transition-duration: var(--duration-reduced) !important; transition-timing-function: linear !important; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.fp :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .fp [hidden] { display: none !important; }
 
 </style>
@@ -257,9 +261,54 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     return n;
   }
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initFrostedPeek(root) {
     if (!root || root.__miPeek) return;
     root.__miPeek = true;
+    evenLines(root);
 
     var values = root.getAttribute('data-values') ? root.getAttribute('data-values').split(',').map(Number) : VALUES;
     var months = root.getAttribute('data-months') ? root.getAttribute('data-months').split(',') : MONTHS;
@@ -281,13 +330,16 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     var lo = Math.min.apply(null, values) * 0.9, hi = Math.max.apply(null, values) * 1.04;
     function px(i) { return (i + 0.5) * (W / values.length); }
     function py(v) { return padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB); }
-    [0.33, 0.66].forEach(function (f) {
-      svg.appendChild(el('line', { class: 'fp-grid', x1: 0, x2: W, y1: padT + f * (H - padT - padB), y2: padT + f * (H - padT - padB) }));
+    // Three grid lines split the plot into four equal bands, from the top of the chart to the area's baseline
+    [0.25, 0.5, 0.75].forEach(function (f) {
+      svg.appendChild(el('line', { class: 'fp-grid', x1: px(0), x2: px(values.length - 1), y1: f * H, y2: f * H }));
     });
     var pts = values.map(function (v, i) { return px(i).toFixed(1) + ' ' + py(v).toFixed(1); });
-    var first = py(values[0]).toFixed(1), last = py(values[values.length - 1]).toFixed(1);
-    svg.appendChild(el('path', { class: 'fp-area', d: 'M0 ' + H + ' L0 ' + first + ' L' + pts.join(' L') + ' L' + W + ' ' + last + ' L' + W + ' ' + H + ' Z' }));
-    svg.appendChild(el('path', { class: 'fp-line', d: 'M0 ' + first + ' L' + pts.join(' L') + ' L' + W + ' ' + last }));
+    // The line (and the grid lines above) run from the first month's point to the last, never to the chart's edges: the frost's
+    // blur repeats the edge pixels, so a line touching the edge showed through as a sharp stub
+    var x0 = px(0).toFixed(1), x1 = px(values.length - 1).toFixed(1);
+    svg.appendChild(el('path', { class: 'fp-area', d: 'M' + x0 + ' ' + H + ' L' + pts.join(' L') + ' L' + x1 + ' ' + H + ' Z' }));
+    svg.appendChild(el('path', { class: 'fp-line', d: 'M' + pts.join(' L') }));
     monthRow.replaceChildren.apply(monthRow, months.map(function (m) { var s = document.createElement('span'); s.textContent = m; return s; }));
 
     function money(v) { return '$' + v.toFixed(1) + 'k'; }
@@ -298,6 +350,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       x = Math.max(half, Math.min(w - half, x));
       chart.style.setProperty('--fp-x', x + 'px');
       var i = Math.max(0, Math.min(values.length - 1, Math.floor(x / (w / values.length))));
+      // The dot sits on the month's point, not under the pointer, so it stays on the line between months
+      lens.style.setProperty('--fp-dx', ((i + 0.5) * (w / values.length) - x).toFixed(1) + 'px');
       if (i !== index || !tip.textContent) {
         index = i;
         tip.textContent = months[i] + ' · ' + money(values[i]);

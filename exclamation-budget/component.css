@@ -36,6 +36,9 @@
 .eb-wallet i.is-spent { background: transparent; box-shadow: inset 0 0 0 1.5px var(--eb-line); transform: scale(0.82); }
 .eb-wallet i.is-spent::after { color: var(--eb-muted); opacity: 0.4; }
 .eb-wallet i.is-pop { animation: eb-pop var(--duration-slower) var(--ease-out); }
+/* Bought coins drop into the wallet */
+.eb-wallet i.is-new { animation: eb-new var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes eb-new { from { opacity: 0; transform: translateY(-10px) scale(0.4); } }
 @keyframes eb-pop { 0% { transform: scale(1); } 40% { transform: scale(1.4) translateY(-6px); } 100% { transform: scale(0.82); } }
 
 .eb-input { display: block; width: 100%; min-height: 84px; box-sizing: border-box; padding: 12px 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: inherit; font: inherit; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); resize: none; }
@@ -45,6 +48,8 @@
 .eb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .eb-chips button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--eb-fill); color: var(--eb-fg); font: inherit; font-size: var(--text-small); font-weight: 500; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .eb-chips button:active { transform: scale(var(--press-scale-sm)); }
+/* With the budget spent, the "!" chips are off until more are bought */
+.eb-chips button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 .eb-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .eb-status { color: var(--eb-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
 .eb.is-broke .eb-status { color: var(--eb-fg); font-weight: 500; }
@@ -57,6 +62,8 @@
 .eb-send:focus-visible, .eb-buy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .eb-wallet i.is-pop, .eb-input.is-shrug, .eb-shop { animation: none; }
+  .eb-wallet i.is-pop, .eb-wallet i.is-new, .eb-input.is-shrug, .eb-shop { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.eb :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .eb [hidden] { display: none !important; }

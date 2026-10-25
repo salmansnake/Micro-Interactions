@@ -67,4 +67,6 @@
   .tt-col, .tt-thumb, .tt-used, .tt-next { transition-duration: var(--duration-reduced); }
   .tt-meter.is-tick .tt-fare { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.tt :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .tt [hidden] { display: none !important; }

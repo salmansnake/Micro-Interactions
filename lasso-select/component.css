@@ -9,6 +9,7 @@
   --ls-fill: var(--muted);
   --ls-accent: var(--primary);
   --ls-on-accent: var(--primary-foreground);
+  --ls-ok: var(--success-text);
   --ls-glass: var(--frost);
   --ls-glass-edge: var(--frost-border);
   --ls-glass-rim: var(--frost-border);
@@ -31,7 +32,8 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
-.ls-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.ls-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .ls-hint { margin: 2px 0 0; color: var(--ls-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .ls-area { position: relative; padding: 12px; border-radius: var(--radius-xl); background: var(--ls-sunken); touch-action: none; user-select: none; -webkit-user-select: none; cursor: crosshair; outline: none; }
 .ls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
@@ -109,7 +111,26 @@
   animation: ls-bar var(--spring-ui-duration) var(--spring-ui) both;
 }
 @keyframes ls-bar { from { opacity: 0; transform: translateY(10px) scale(var(--press-scale)); } }
-.ls-bar-text { margin-right: 6px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ls-bar-text { position: relative; display: inline-flex; align-items: center; gap: 6px; margin-right: 6px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ls-bar-icon:empty { display: none; }
+.ls-bar-icon svg { display: block; width: 16px; height: 16px; }
+/* Move and Download: a quiet scene, smaller than the lasso itself. The icon drifts the way the files go, a hairline fills under
+   the text, and the selected files hop right (Move) or dip down (Download), one after another */
+.ls-bar-text::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; border-radius: var(--radius-full); background: currentColor; opacity: 0; transform: scaleX(0); transform-origin: left; }
+.ls.is-moving .ls-bar-text::after, .ls.is-downloading .ls-bar-text::after { opacity: 0.25; animation: ls-run 1100ms var(--ease-out) forwards; }
+@keyframes ls-run { to { transform: scaleX(1); } }
+.ls.is-moving .ls-bar-icon svg { animation: ls-drift 550ms var(--ease-in-out) infinite; }
+@keyframes ls-drift { 50% { transform: translateX(3px); } }
+.ls.is-downloading .ls-bar-icon svg { animation: ls-dip 550ms var(--ease-in-out) infinite; }
+@keyframes ls-dip { 50% { transform: translateY(2px); } }
+.ls.is-done .ls-bar-icon { color: var(--ls-ok); }
+.ls.is-done .ls-bar-icon svg { translate: 0 calc(100% / 48); animation: ls-tick var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes ls-tick { from { transform: scale(0.4); opacity: 0; } }
+.ls.is-moving .ls-grid li.is-carried i { animation: ls-hop 700ms var(--ease-in-out) calc(var(--ls-i, 0) * 60ms) both; }
+@keyframes ls-hop { 45% { transform: translateX(6px) rotate(4deg); } }
+.ls.is-downloading .ls-grid li.is-carried i { animation: ls-sink 700ms var(--ease-in-out) calc(var(--ls-i, 0) * 60ms) both; }
+@keyframes ls-sink { 45% { transform: translateY(4px) scale(0.96); } }
+.ls.is-busy .ls-act { opacity: 0.55; cursor: default; }
 .ls-act, .ls-clear { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--ls-fill); color: var(--ls-fg); font: inherit; font-weight: 600; cursor: pointer; }
 .ls-clear { display: grid; place-items: center; width: 32px; padding: 0; }
 .ls-clear svg { display: block; width: 16px; height: 16px; }
@@ -117,7 +138,9 @@
 .ls-act, .ls-clear { border-radius: var(--radius-full); }
 .ls-act:focus-visible, .ls-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
-  .ls-path, .ls-bar, .ls-count.is-bump { animation: none; }
+  .ls-path, .ls-bar, .ls-count.is-bump, .ls-bar-icon svg, .ls-grid li.is-carried i, .ls-bar-text::after { animation: none !important; }
   .ls-grid li { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ls :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ls [hidden] { display: none !important; }

@@ -66,7 +66,8 @@
 .dz.is-dizzy .dz-pull { animation: dz-sway 1.2s var(--ease-in-out) infinite; }
 @keyframes dz-sway { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
 
-.dz-status { color: var(--dz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* Bottom of the card: trimmed to the baseline, so the padding below reads the same as the padding above (10b.39) */
+.dz-status { text-box: trim-end cap alphabetic; color: var(--dz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .dz.is-dizzy .dz-status { color: var(--dz-fg); font-weight: 500; }
 .dz-notify { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 12px 0 14px; border-radius: var(--radius-lg); background: var(--dz-sunken); cursor: pointer; animation: dz-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes dz-in { from { opacity: 0; transform: translateY(-6px); } }
@@ -82,4 +83,6 @@
   .dz.is-loading .dz-spinner, .dz.is-woozy.is-loading .dz-spinner, .dz.is-dizzy .dz-pull, .dz-eyes i::after, .dz-notify { animation: none; }
   .dz-list { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.dz :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .dz [hidden] { display: none !important; }

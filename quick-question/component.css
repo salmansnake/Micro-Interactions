@@ -40,7 +40,8 @@
 .qq-empty { margin: auto !important; color: var(--qq-muted); font-size: var(--text-small); text-align: center; }
 .qq-msg { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 2px 8px; animation: qq-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes qq-in { from { opacity: 0; transform: translateY(6px); } }
-.qq-av { grid-row: span 2; display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--c, var(--placeholder)); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered. 14px capitals leave an even split above and below at 1x and 2x */
+.qq-av { grid-row: span 2; display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--c, var(--placeholder)); color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; }
 .qq-who { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; }
 .qq-who time { margin-left: 6px; color: var(--qq-muted); font-weight: 400; font-variant-numeric: tabular-nums; }
 .qq-text { font-size: var(--text-body); line-height: var(--leading-body); overflow-wrap: anywhere; }
@@ -60,4 +61,6 @@
   .qq-watch, .qq-msg, .qq-call { animation: none; }
   .qq-thread { scroll-behavior: auto; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.qq :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .qq [hidden] { display: none !important; }

@@ -67,7 +67,8 @@
 .st-row + .st-row { box-shadow: inset 0 1px 0 var(--st-line); }
 .st-row span { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .st-row span:nth-child(n+2) { justify-content: flex-end; }
-.st-row b { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: var(--radius-sm); color: var(--on-color); font-size: calc(var(--text-caption) - 1px); }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered */
+.st-row b { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 22px; height: 22px; border-radius: var(--radius-sm); color: var(--on-color); font-size: calc(var(--text-caption) - 1px); }
 .st-row.is-moved { animation: st-flash 1.6s var(--ease-out); }
 @keyframes st-flash { 0% { background: color-mix(in srgb, var(--brand) 14%, transparent); } 100% { background: transparent; } }
 /* The badge straddles the card and the table, so it carries its own tint of its color instead of the card's white */
@@ -99,4 +100,6 @@
   .st-row.is-moved { animation: none; }
   .st-sort i, .st-delta { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.st :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .st [hidden] { display: none !important; }

@@ -266,4 +266,6 @@
 @media (prefers-reduced-motion: reduce) {
   .br *, .br *::after { transition-duration: var(--duration-reduced) !important; transition-delay: 0ms !important; transition-timing-function: linear !important; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.br :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .br [hidden] { display: none !important; }

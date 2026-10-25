@@ -29,7 +29,8 @@
   -webkit-font-smoothing: antialiased;
 }
 .cb p { margin: 0; }
-.cb-to { color: var(--cb-muted); font-size: var(--text-small); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.cb-to { text-box: trim-start cap alphabetic; color: var(--cb-muted); font-size: var(--text-small); }
 .cb-to b { color: var(--cb-fg); font-weight: 600; }
 .cb-input { display: block; width: 100%; min-height: 92px; box-sizing: border-box; padding: 12px 14px; border: 1px solid var(--input); box-shadow: var(--shadow-xs); border-radius: var(--radius-lg); background: var(--card); color: inherit; font: inherit; line-height: 21px; resize: none; }
 .cb-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -81,4 +82,6 @@
   .cb-boomerang.is-out, .cb-boomerang.is-back { animation: none; opacity: 0; }
   .cb-reminder, .cb-hint i { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.cb :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .cb [hidden] { display: none !important; }

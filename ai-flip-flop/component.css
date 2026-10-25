@@ -84,4 +84,6 @@
   .ff-text.is-thinking { animation: none; color: var(--ff-muted); background: none; }
   .ff-conf { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ff :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ff [hidden] { display: none !important; }

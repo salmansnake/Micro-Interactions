@@ -35,9 +35,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
   --spring-ui-duration: 460ms;
   --text-body: 15px;
-  --text-caption: 12px;
   --text-small: 13px;
   --text-title-sm: 17px;
+  --text-ui: 14px;
   --tracking-title: -0.015em;
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
@@ -223,7 +223,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .pp-rows li:focus-visible { box-shadow: inset 0 0 0 2px var(--pp-accent); }
 .pp-rows li.is-picked { background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); }
 .pp-rows small { margin-left: auto; color: var(--pp-muted); font-size: var(--text-small); }
-.pp-sq { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.pp-sq { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; }
 /* The sheet */
 .pp-sheet {
   position: absolute;
@@ -282,6 +284,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 }
 /* The docked pill and its status line get a strip of their own only while they show, so they never cover a row */
 .pp:has(.pp-pill:not([hidden])), .pp:has(.pp-status:not(:empty)) { padding-bottom: 72px; }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.pp :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .pp [hidden] { display: none !important; }
 
 </style>
@@ -324,9 +328,54 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initPocketProgress(root) {
     if (!root || root.__miPocket) return;
     root.__miPocket = true;
+    evenLines(root);
     var DURATION = Number(root.getAttribute('data-duration')) || 9000;
     var exportBtn = root.querySelector('.pp-export');
     var sheet = root.querySelector('.pp-sheet');

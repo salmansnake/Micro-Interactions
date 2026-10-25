@@ -42,15 +42,16 @@
 .uu-switch input:checked:active ~ .uu-knob { transform: translateX(14px); }
 .uu-switch input:focus-visible ~ .uu-track { outline: 2px solid var(--ring); outline-offset: 2px; }
 .uu-text { margin: 0; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--uu-sunken); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
-/* The less sure, the stronger the underline: --u runs 0 (sure) to 1 (unsure) */
+/* The less sure, the stronger the underline: --u runs 0 (sure) to 1 (unsure). Only the color changes; every word
+   has the same line thickness, so the dots are the same size, and even the faintest stays above 3:1 */
 .uu-w {
   display: inline-block;
   border-radius: var(--radius-xs);
   text-decoration-line: underline;
   text-decoration-style: dotted;
-  text-decoration-thickness: calc(1px + var(--u, 0) * 2px);
-  text-underline-offset: 4px;
-  text-decoration-color: color-mix(in srgb, var(--uu-orange) calc(35% + var(--u, 0) * 65%), transparent);
+  text-decoration-thickness: var(--mark-thickness);
+  text-underline-offset: var(--mark-offset);
+  text-decoration-color: oklch(from var(--warning-text) calc(var(--mark-l-weak) + (var(--mark-l-strong) - var(--mark-l-weak)) * var(--u, 0)) c h);
   cursor: pointer;
   outline: none;
   transition: background-color var(--duration-base), text-decoration-color var(--duration-slower);
@@ -89,4 +90,6 @@
 @media (prefers-reduced-motion: reduce) {
   .uu-w.is-fixed, .uu-w.is-swap, .uu-pop { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.uu :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .uu [hidden] { display: none !important; }

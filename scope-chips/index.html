@@ -83,19 +83,24 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .sx-suggest small { margin-left: auto; opacity: 0.7; font-size: var(--text-caption); }
 .sx-tip { margin: 0 4px; color: var(--sx-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .sx-tip code { padding: 1px 5px; border-radius: var(--radius-xs); background: var(--sx-fill); color: var(--sx-fg); font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono); }
-.sx-results { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--sx-sunken); }
+/* The previews are single lines with an ellipsis; contain keeps their full length from widening the card on narrow screens */
+.sx-results { contain: inline-size; display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--sx-sunken); }
 .sx-results li { position: relative; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 14px; box-sizing: border-box; animation: sx-row var(--spring-ui-duration) var(--spring-ui) both; }
 .sx-results li + li::before { content: ""; position: absolute; top: 0; left: 48px; right: 0; height: 1px; background: var(--sx-line); transform: scaleY(0.5); transform-origin: top; }
 @keyframes sx-row { from { opacity: 0; transform: translateY(4px); } }
-.sx-results i { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 50%; color: var(--on-chart); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered */
+.sx-results i { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 24px; height: 24px; border-radius: 50%; color: var(--on-chart); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
 .sx-results div { min-width: 0; }
 .sx-results b { display: block; font-weight: 600; font-size: var(--text-ui); }
-.sx-results span { display: block; overflow: hidden; color: var(--sx-muted); font-size: var(--text-small); text-overflow: ellipsis; white-space: nowrap; }
-.sx-results small { margin-left: auto; flex: none; padding: 2px 8px; border-radius: var(--radius-full); background: var(--sx-fill); color: var(--sx-muted); font-size: calc(var(--text-caption) - 1px); }
+.sx-results span { display: block; margin-top: 2px; overflow: hidden; color: var(--sx-muted); font-size: var(--text-small); line-height: var(--leading-small); text-overflow: ellipsis; white-space: nowrap; }
+/* Tags on the gray results panel use the fill for gray panels, so they don't dissolve into it (button rule 9) */
+.sx-results small { margin-left: auto; flex: none; padding: 2px 8px; border-radius: var(--radius-full); background: var(--fill-on-subtle); color: var(--muted-on-tint); font-size: calc(var(--text-caption) - 1px); }
 .sx-results .sx-none { justify-content: center; color: var(--sx-muted); font-size: var(--text-small); }
 @media (prefers-reduced-motion: reduce) {
   .sx-chip, .sx-chip.is-melting, .sx-suggest, .sx-results li { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.sx :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .sx [hidden] { display: none !important; }
 
 </style>
@@ -152,9 +157,54 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   ];
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initScopeChips(root) {
     if (!root || root.__miScope) return;
     root.__miScope = true;
+    evenLines(root);
     var field = root.querySelector('.sx-field');
     var chipsBox = root.querySelector('.sx-chips');
     var input = root.querySelector('.sx-input');

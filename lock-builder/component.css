@@ -33,7 +33,8 @@
 .lb[data-level="3"] { --lb-tone: var(--lb-accent); }
 .lb[data-level="4"] { --lb-tone: var(--lb-green); }
 .lb-top { display: flex; align-items: center; gap: 16px; }
-.lb-lock { flex: none; width: 56px; height: 63px; overflow: visible; }
+/* The open shackle lifts 8px above the lock; the margin keeps it inside the top padding (10b.39) */
+.lb-lock { flex: none; width: 56px; height: 63px; margin-top: 8px; overflow: visible; }
 .lb-shackle {
   fill: none;
   stroke: var(--lb-tone);
@@ -73,4 +74,6 @@
   .lb-shackle, .lb-bolt, .lb-tick::after { transition-duration: var(--duration-reduced) !important; transition-timing-function: linear !important; }
   .lb.is-locked .lb-lock { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.lb :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .lb [hidden] { display: none !important; }

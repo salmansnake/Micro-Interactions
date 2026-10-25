@@ -25,6 +25,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   --ls-fill: var(--muted);
   --ls-accent: var(--primary);
   --ls-on-accent: var(--primary-foreground);
+  --ls-ok: var(--success-text);
   --ls-glass: var(--frost);
   --ls-glass-edge: var(--frost-border);
   --ls-glass-rim: var(--frost-border);
@@ -47,7 +48,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
-.ls-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.ls-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .ls-hint { margin: 2px 0 0; color: var(--ls-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .ls-area { position: relative; padding: 12px; border-radius: var(--radius-xl); background: var(--ls-sunken); touch-action: none; user-select: none; -webkit-user-select: none; cursor: crosshair; outline: none; }
 .ls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
@@ -125,7 +127,26 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   animation: ls-bar var(--spring-ui-duration) var(--spring-ui) both;
 }
 @keyframes ls-bar { from { opacity: 0; transform: translateY(10px) scale(var(--press-scale)); } }
-.ls-bar-text { margin-right: 6px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ls-bar-text { position: relative; display: inline-flex; align-items: center; gap: 6px; margin-right: 6px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ls-bar-icon:empty { display: none; }
+.ls-bar-icon svg { display: block; width: 16px; height: 16px; }
+/* Move and Download: a quiet scene, smaller than the lasso itself. The icon drifts the way the files go, a hairline fills under
+   the text, and the selected files hop right (Move) or dip down (Download), one after another */
+.ls-bar-text::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; border-radius: var(--radius-full); background: currentColor; opacity: 0; transform: scaleX(0); transform-origin: left; }
+.ls.is-moving .ls-bar-text::after, .ls.is-downloading .ls-bar-text::after { opacity: 0.25; animation: ls-run 1100ms var(--ease-out) forwards; }
+@keyframes ls-run { to { transform: scaleX(1); } }
+.ls.is-moving .ls-bar-icon svg { animation: ls-drift 550ms var(--ease-in-out) infinite; }
+@keyframes ls-drift { 50% { transform: translateX(3px); } }
+.ls.is-downloading .ls-bar-icon svg { animation: ls-dip 550ms var(--ease-in-out) infinite; }
+@keyframes ls-dip { 50% { transform: translateY(2px); } }
+.ls.is-done .ls-bar-icon { color: var(--ls-ok); }
+.ls.is-done .ls-bar-icon svg { translate: 0 calc(100% / 48); animation: ls-tick var(--spring-pop-duration) var(--spring-pop) both; }
+@keyframes ls-tick { from { transform: scale(0.4); opacity: 0; } }
+.ls.is-moving .ls-grid li.is-carried i { animation: ls-hop 700ms var(--ease-in-out) calc(var(--ls-i, 0) * 60ms) both; }
+@keyframes ls-hop { 45% { transform: translateX(6px) rotate(4deg); } }
+.ls.is-downloading .ls-grid li.is-carried i { animation: ls-sink 700ms var(--ease-in-out) calc(var(--ls-i, 0) * 60ms) both; }
+@keyframes ls-sink { 45% { transform: translateY(4px) scale(0.96); } }
+.ls.is-busy .ls-act { opacity: 0.55; cursor: default; }
 .ls-act, .ls-clear { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--ls-fill); color: var(--ls-fg); font: inherit; font-weight: 600; cursor: pointer; }
 .ls-clear { display: grid; place-items: center; width: 32px; padding: 0; }
 .ls-clear svg { display: block; width: 16px; height: 16px; }
@@ -133,9 +154,11 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .ls-act, .ls-clear { border-radius: var(--radius-full); }
 .ls-act:focus-visible, .ls-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
-  .ls-path, .ls-bar, .ls-count.is-bump { animation: none; }
+  .ls-path, .ls-bar, .ls-count.is-bump, .ls-bar-icon svg, .ls-grid li.is-carried i, .ls-bar-text::after { animation: none !important; }
   .ls-grid li { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ls :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ls [hidden] { display: none !important; }
 
 </style>
@@ -183,9 +206,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     <span class="ls-count" aria-hidden="true"></span>
   </div>
   <div class="ls-bar" role="toolbar" aria-label="Selection actions" hidden>
-    <span class="ls-bar-text" aria-live="polite"></span>
-    <button type="button" class="ls-act">Move</button>
-    <button type="button" class="ls-act">Download</button>
+    <span class="ls-bar-text"><span class="ls-bar-icon" aria-hidden="true"></span><span class="ls-bar-label" aria-live="polite"></span></span>
+    <button type="button" class="ls-act" data-act="move">Move</button>
+    <button type="button" class="ls-act" data-act="download">Download</button>
     <button type="button" class="ls-clear" aria-label="Clear selection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
   </div>
 </div>
@@ -195,6 +218,14 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
    Items are [role="option"] inside .ls-grid. Call window.initLassoSelect(el) for elements added later. */
 (function () {
   'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // Lucide arrow-right, arrow-down-to-line and check
+  var ICONS = {
+    move: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+    download: '<path d="M12 17V3"/><path d="m6 11 6 6 6-6"/><path d="M19 21H5"/>',
+    done: '<path d="M20 6 9 17l-5-5"/>'
+  };
+  function svg(p) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>'; }
 
   // Ray-casting point-in-polygon test.
   function inside(x, y, pts) {
@@ -206,24 +237,83 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     return hit;
   }
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initLassoSelect(root) {
     if (!root || root.__miLasso) return;
     root.__miLasso = true;
+    evenLines(root);
     var area = root.querySelector('.ls-area');
     var items = Array.prototype.slice.call(root.querySelectorAll('[role="option"]'));
     var path = root.querySelector('.ls-path');
     var count = root.querySelector('.ls-count');
     var bar = root.querySelector('.ls-bar');
     var barText = root.querySelector('.ls-bar-text');
+    var barLabel = root.querySelector('.ls-bar-label');
+    var barIcon = root.querySelector('.ls-bar-icon');
+    var acts = root.querySelectorAll('.ls-act');
+    var run = 0, busy = false;
     var pts = [], drawing = false, base = [], lastHot = -1, raf = 0;
 
     function isSel(el) { return el.getAttribute('aria-selected') === 'true'; }
     function setSel(el, on) { el.setAttribute('aria-selected', on ? 'true' : 'false'); }
     function selectedCount() { return items.filter(isSel).length; }
+    // Any change to the selection cancels a Move or Download in progress
+    function stop() {
+      clearTimeout(run); run = 0; busy = false;
+      root.classList.remove('is-busy', 'is-moving', 'is-downloading', 'is-done');
+      barIcon.innerHTML = '';
+      barText.style.minWidth = '';
+      items.forEach(function (el) { el.classList.remove('is-carried'); });
+      Array.prototype.forEach.call(acts, function (b) { b.removeAttribute('aria-disabled'); });
+    }
     function updateBar() {
+      stop();
       var n = selectedCount();
       bar.hidden = n === 0;
-      barText.textContent = n + (n === 1 ? ' Selected' : ' Selected');
+      barLabel.textContent = n + ' Selected';
     }
     function local(e) { var r = area.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
     function centers() {
@@ -313,8 +403,35 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       updateBar();
       area.querySelector('[tabindex="0"]').focus();
     });
-    root.querySelectorAll('.ls-act').forEach(function (b) {
-      b.addEventListener('click', function () { barText.textContent = b.textContent + ' ' + selectedCount() + ' files'; });
+    // Move and Download play a small, quiet scene: the files hop (or dip) while a line fills under "Moving 2 files",
+    // then a check and "Moved 2 files". The selection clears a moment later.
+    Array.prototype.forEach.call(acts, function (b) {
+      b.addEventListener('click', function () {
+        if (busy) return;
+        var move = b.getAttribute('data-act') === 'move';
+        var n = selectedCount(), files = n + (n === 1 ? ' file' : ' files'), k = 0;
+        stop();
+        busy = true;
+        barLabel.textContent = (move ? 'Moving ' : 'Downloading ') + files;
+        barIcon.innerHTML = svg(move ? ICONS.move : ICONS.download);
+        barText.style.minWidth = barText.getBoundingClientRect().width + 'px'; // the shorter past tense doesn't shrink the bar
+        root.classList.add('is-busy', move ? 'is-moving' : 'is-downloading');
+        Array.prototype.forEach.call(acts, function (a) { a.setAttribute('aria-disabled', 'true'); });
+        items.forEach(function (el) { if (isSel(el)) { el.style.setProperty('--ls-i', k++); el.classList.add('is-carried'); } });
+        run = setTimeout(function () {
+          root.classList.remove('is-moving', 'is-downloading');
+          root.classList.add('is-done');
+          items.forEach(function (el) { el.classList.remove('is-carried'); });
+          barIcon.innerHTML = svg(ICONS.done);
+          barLabel.textContent = (move ? 'Moved ' : 'Downloaded ') + files;
+          run = setTimeout(function () {
+            var had = bar.contains(document.activeElement);
+            items.forEach(function (el) { setSel(el, false); });
+            updateBar();
+            if (had) area.querySelector('[tabindex="0"]').focus();
+          }, 1600);
+        }, reduce.matches ? 400 : 1100);
+      });
     });
   }
 

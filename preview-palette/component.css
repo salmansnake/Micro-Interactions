@@ -56,12 +56,16 @@
 .pv:has(.pv-app[data-accent="olive"]) { --pv-a: var(--olive); }
 .pv-app[data-density="compact"] { --pad: 7px; padding: 12px; gap: 8px; }
 .pv-app.is-previewing { box-shadow: 0 0 0 2px var(--pv-a), 0 0 0 6px color-mix(in srgb, var(--pv-a) 22%, transparent); }
-.pv-app-bar { display: flex; align-items: center; gap: 10px; }
-.pv-logo { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--a); color: var(--app-on-a); font-weight: 700; transition: background-color var(--spring-press-duration); }
+.pv-app-bar { display: flex; align-items: center; gap: 10px; container-type: inline-size; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.pv-logo { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--a); color: var(--app-on-a); font-size: var(--text-ui); font-weight: 700; transition: background-color var(--spring-press-duration); }
 .pv-app-name { font-weight: 600; }
 .pv-badge { padding: 2px 8px; border-radius: var(--radius-full); background: oklch(from var(--a) var(--app-tint-l) calc(c * 0.4) h); color: var(--app-fg); font-size: calc(var(--text-caption) - 1px); font-weight: 700; opacity: 0; transform: scale(0.8); transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
 .pv-app.is-previewing .pv-badge { opacity: 1; transform: none; }
 .pv-open { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 6px 0 12px; border: 0; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--app-fg) 8%, transparent); color: var(--app-fg); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
+/* On a phone-width app the key hint goes (there is no ⌘K to press there), so the bar fits without scrolling sideways */
+@container (max-width: 320px) { .pv-open kbd { display: none; } .pv-open { padding: 0 12px; } }
 .pv-open kbd, .pv-help kbd { padding: 1px 6px; border-radius: var(--radius-sm); background: color-mix(in srgb, currentColor 12%, transparent); font: 600 calc(var(--text-caption) - 1px) / 16px var(--font-sans); }
 .pv-open:focus-visible, .pv-cta:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .pv-items { position: relative; display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--app-row); transition: background-color var(--spring-press-duration); }
@@ -108,4 +112,6 @@
   .pv-palette { animation: none; }
   .pv-app, .pv-items li { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.pv :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .pv [hidden] { display: none !important; }

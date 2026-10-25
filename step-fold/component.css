@@ -50,6 +50,7 @@
    Its strokes span y 6 to 17 on the 24 grid, half a unit above middle, so it moves down that half unit. */
 .fo-chip i svg { display: block; width: 14px; height: 14px; translate: 0 calc(100% / 48); }
 .fo-chip small { color: var(--fo-muted); font-size: var(--text-caption); }
+.fo-nowrap { white-space: nowrap; } /* "per seat" stays together, so a narrow card never leaves "seat" alone */
 .fo-chip b { font-weight: 600; }
 .fo-chip:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @keyframes fo-chip { from { opacity: 0; transform: translateY(14px) scale(0.7) rotateX(60deg); } }
@@ -63,18 +64,22 @@
 .fo-step.is-waiting { background: none; box-shadow: inset 0 0 0 1px var(--fo-fill); }
 .fo-step.is-waiting .fo-step-title { color: var(--fo-muted); }
 .fo-step-title { display: flex; align-items: center; gap: 10px; margin: 0; padding: 14px 16px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
-.fo-step-title span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--fo-fill); font-size: var(--text-small); }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   Its 13px digits leave an even split above and below at 1x and 2x */
+.fo-step-title span { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; width: 24px; height: 24px; border-radius: 50%; background: var(--fo-fill); font-size: var(--text-small); }
 .fo-step:not(.is-waiting) .fo-step-title span { background: var(--fo-accent); color: var(--fo-on-accent); }
 .fo-body { display: flex; flex-direction: column; gap: 12px; padding: 0 16px 16px; }
 .fo-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .fo-plan { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--fo-bg); box-shadow: 0 0 0 1px var(--fo-fill); cursor: pointer; transition: box-shadow var(--duration-base); }
 .fo-plan input { position: absolute; opacity: 0; }
 .fo-plan b { font-weight: 600; }
-.fo-plan small { color: var(--fo-muted); font-size: var(--text-caption); }
+.fo-plan small { color: var(--fo-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
 .fo-plan:has(input:checked) { box-shadow: 0 0 0 2px var(--fo-accent); }
 .fo-plan:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
 .fo-stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
-.fo-stepper button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fo-fill); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
+/* On the gray step panel the − and + use the fill for gray panels: a clear step darker than the panel in light, lighter in dark.
+   The plain gray fill nearly matched the panel, and white matched the card around it and looked see-through (button rule 9) */
+.fo-stepper button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fill-on-subtle); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
 .fo-stepper button svg { display: block; width: 18px; height: 18px; }
 .fo-stepper button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .fo-seats { min-width: 2ch; font-size: var(--text-h2); line-height: var(--leading-h2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
@@ -90,4 +95,6 @@
 @media (prefers-reduced-motion: reduce) {
   .fo-chip, .fo-step.is-folding, .fo-step.is-unfolding, .fo-done { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.fo :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .fo [hidden] { display: none !important; }
