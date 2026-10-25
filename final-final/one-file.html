@@ -168,6 +168,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .fn-list .fn-more::before { visibility: hidden; }
 @keyframes fn-in { from { opacity: 0; transform: translateY(-6px); } }
 .fn-status { min-height: 18px; color: var(--fn-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.fn-status:empty { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 @media (prefers-reduced-motion: reduce) {
   .fn.is-typing .fn-caret, .fn-list li { animation: none; }

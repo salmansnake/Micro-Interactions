@@ -30,7 +30,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --text-body: 15px;
   --text-small: 13px;
   --amber-11: #ab6400;
-  --amber-3: #fff7c2;
   --amber-9: #ffc53d;
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
@@ -40,7 +39,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --canvas: #FAFAF8;
   --card: var(--white);
   --danger: #ce2c31;
-  --danger-subtle: var(--red-3);
+  --danger-soft: color-mix(in srgb, var(--danger) 16%, transparent);
+  --danger-soft-foreground: #AC2529;
   --danger-text: #ca2b30;
   --foreground: var(--black);
   --green-11: #218358;
@@ -52,22 +52,21 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --muted-foreground: var(--ash);
   --primary: var(--black);
   --red-11: #ce2c31;
-  --red-3: #feebec;
   --ring: var(--aqua-700);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
   --success-text: #1f7b53;
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --warning: var(--amber-9);
-  --warning-subtle: var(--amber-3);
   --warning-text: #a15e00;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
 [data-theme="dark"] .pe, .dark .pe {
   --amber-11: #ffca16;
-  --amber-3: #302008;
   --amber-9: #ffc53d;
   --aqua: #79EEEC;
   --aqua-700: #79EEEC;
@@ -77,7 +76,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --canvas: #0B0C0B;
   --card: var(--white);
   --danger: #d4373c;
-  --danger-subtle: var(--red-3);
+  --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
+  --danger-soft-foreground: var(--red-11);
   --danger-text: var(--red-11);
   --foreground: #F3F2EE;
   --green-11: #3dd68c;
@@ -89,22 +89,21 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --muted-foreground: var(--ash);
   --primary: var(--aqua);
   --red-11: #ff9592;
-  --red-3: #3b1219;
   --ring: var(--aqua);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
   --success-text: var(--green-11);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --warning: var(--amber-9);
-  --warning-subtle: var(--amber-3);
   --warning-text: var(--amber-11);
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not(.light) .pe {
     --amber-11: #ffca16;
-    --amber-3: #302008;
     --amber-9: #ffc53d;
     --aqua: #79EEEC;
     --aqua-700: #79EEEC;
@@ -114,7 +113,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --canvas: #0B0C0B;
     --card: var(--white);
     --danger: #d4373c;
-    --danger-subtle: var(--red-3);
+    --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
+    --danger-soft-foreground: var(--red-11);
     --danger-text: var(--red-11);
     --foreground: #F3F2EE;
     --green-11: #3dd68c;
@@ -126,15 +126,15 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --muted-foreground: var(--ash);
     --primary: var(--aqua);
     --red-11: #ff9592;
-    --red-3: #3b1219;
     --ring: var(--aqua);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
     --success-text: var(--green-11);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --warning: var(--amber-9);
-    --warning-subtle: var(--amber-3);
     --warning-text: var(--amber-11);
     --white: #161817;
   }
@@ -152,14 +152,16 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --pe-accent: var(--primary);
   --pe-danger: var(--danger);
   --pe-danger-text: var(--danger-text);
-  --pe-danger-soft: var(--danger-subtle);
+  --pe-danger-soft: oklch(from var(--danger) var(--tint-l) calc(c * var(--tint-c)) h);
   --pe-warn: var(--warning);
   --pe-warn-text: var(--warning-text);
-  --pe-warn-soft: var(--warning-subtle);
+  --pe-warn-soft: oklch(from var(--warning) var(--tint-l) calc(c * var(--tint-c)) h);
   --pe-ok: var(--success-text);
   --pe-tone: var(--pe-danger);
   --pe-tone-text: var(--pe-danger-text);
   --pe-tone-soft: var(--pe-danger-soft);
+  --pe-tone-btn: var(--danger-soft);
+  --pe-tone-btn-text: var(--danger-soft-foreground);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -178,7 +180,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
-.pe.is-soft { --pe-tone: var(--pe-warn); --pe-tone-text: var(--pe-warn-text); --pe-tone-soft: var(--pe-warn-soft); }
+.pe.is-soft { --pe-tone: var(--pe-warn); --pe-tone-text: var(--pe-warn-text); --pe-tone-soft: var(--pe-warn-soft); --pe-tone-btn: var(--pe-warn-soft); --pe-tone-btn-text: var(--pe-warn-text); }
 .pe-label { padding-left: 4px; color: var(--pe-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
 .pe-field {
   position: relative;
@@ -244,13 +246,14 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   align-items: center;
   flex-wrap: wrap;
   gap: 6px 10px;
-  min-height: 28px;
   margin: 14px 0 0;
   padding-left: 20px;
   font-size: var(--text-small);
   line-height: var(--leading-small);
   letter-spacing: normal;
 }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.pe-msg:has(.pe-msg-text:empty):has(.pe-fix[hidden]) { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .pe.has-error .pe-msg-text { color: var(--pe-tone-text); font-weight: 500; }
 .pe.is-ok .pe-msg-text { color: var(--pe-ok); }
 .pe.is-ok .pe-msg-text::before { content: "✓ "; }
@@ -259,8 +262,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   padding: 0 12px;
   border: 0;
   border-radius: var(--radius-sm);
-  background: var(--pe-tone-soft);
-  color: var(--pe-tone-text);
+  background: var(--pe-tone-btn);
+  color: var(--pe-tone-btn-text);
   font: inherit;
   font-weight: 600;
   cursor: pointer;

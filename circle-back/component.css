@@ -43,22 +43,22 @@
 .cb-status { flex: 1 1 180px; color: var(--cb-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .cb-send, .cb-ff, .cb-open, .cb-again { flex: none; height: 44px; padding: 0 20px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .cb-send, .cb-open { background: var(--cb-accent); color: var(--cb-on-accent); }
+/* On the orange reminder, Open Thread is inverse (black in light, off-white in dark): an Aqua button on an orange tint clashed */
+.cb-reminder .cb-open { background: var(--inverse); color: var(--inverse-foreground); }
 .cb-ff, .cb-again { background: var(--cb-fill); color: var(--cb-fg); }
 .cb-ff { padding: 0 14px; }
 .cb-send:active, .cb-ff:active, .cb-open:active, .cb-again:active { transform: scale(var(--press-scale)); }
 .cb-send:focus-visible, .cb-ff:focus-visible, .cb-open:focus-visible, .cb-again:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
-.cb-reminder { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: var(--radius-xl); background: color-mix(in srgb, var(--ai) 22%, var(--cb-bg)); box-shadow: var(--shadow-md); animation: cb-catch var(--spring-pop-duration) var(--spring-pop) both; }
+.cb-reminder { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: var(--radius-xl); background: oklch(from var(--ai) var(--tint-l) calc(c * var(--tint-c)) h); box-shadow: var(--shadow-md); animation: cb-catch var(--spring-pop-duration) var(--spring-pop) both; }
 @keyframes cb-catch { 0% { opacity: 0; transform: translateX(30px) rotate(3deg) scale(0.9); } }
-.cb-rem-kicker { color: var(--ai-text); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 700; }
+.cb-rem-kicker { color: oklch(from var(--ai-text) min(l, var(--tint-ink-l)) c h); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 700; }
 .cb-rem-text { font-size: var(--text-body); line-height: var(--leading-body); }
 .cb-rem-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 .cb-rem-actions button { height: 36px; padding: 0 14px; }
 /* Gray dissolves into the tinted card, so the secondary button is raised (white in light) */
-.cb-rem-actions .cb-again { background: var(--raised); box-shadow: var(--shadow-xs); }
+.cb-rem-actions .cb-again { background: var(--fill-on-tint); }
 /* Dark: orange reads stronger on dark, so the tint stays lighter; the button is a light wash of the tint instead of gray */
-:root[data-theme="dark"] .cb-reminder { background: color-mix(in srgb, var(--ai) 15%, var(--cb-bg)); } :root[data-theme="dark"] .cb-rem-actions .cb-again { background: color-mix(in srgb, var(--foreground) 14%, transparent); box-shadow: none; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cb-reminder { background: color-mix(in srgb, var(--ai) 15%, var(--cb-bg)); } :root:not([data-theme="light"]) .cb-rem-actions .cb-again { background: color-mix(in srgb, var(--foreground) 14%, transparent); box-shadow: none; } }
 
 /* The boomerang flies along a curve, spinning */
 .cb-boomerang { position: absolute; z-index: 3; left: 0; top: 0; width: 36px; height: 36px; pointer-events: none; opacity: 0; }

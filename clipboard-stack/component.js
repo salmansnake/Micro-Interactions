@@ -28,6 +28,9 @@
     var sr = root.querySelector('.cs-sr');
     var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
     var stack = []; // newest first: { text, label, t }
+    var COPIED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Copied';
+    // Each copy button is as wide as its "Copied" state from the start, so confirming never resizes it
+    root.querySelectorAll('.cs-copy').forEach(function (b) { var keep = b.innerHTML; b.innerHTML = COPIED; var w = parseFloat(getComputedStyle(b).width); b.innerHTML = keep; if (w) b.style.minWidth = Math.ceil(w) + 'px'; });
 
     function render() {
       root.setAttribute('data-count', String(Math.min(stack.length, 3)));
@@ -130,7 +133,7 @@
       add(text, label, btn);
       var old = btn.getAttribute('data-label') || btn.textContent;
       btn.setAttribute('data-label', old);
-      btn.textContent = 'Copied';
+      btn.innerHTML = COPIED;
       btn.classList.add('is-done');
       setTimeout(function () { btn.textContent = old; btn.classList.remove('is-done'); }, 1400);
     });

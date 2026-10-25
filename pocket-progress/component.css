@@ -21,9 +21,8 @@
   gap: 12px;
   width: 100%;
   max-width: 440px;
-  min-height: 330px;
   box-sizing: border-box;
-  padding: 20px 20px 72px;
+  padding: 20px;
   overflow: hidden;
   background: var(--pp-bg);
   color: var(--pp-fg);
@@ -58,7 +57,7 @@
 .pp-rows li + li::before { content: ""; position: absolute; top: 0; left: 52px; right: 0; height: 1px; background: var(--pp-line); transform: scaleY(0.5); transform-origin: top; }
 .pp-rows li:hover { background: var(--pp-fill); }
 .pp-rows li:focus-visible { box-shadow: inset 0 0 0 2px var(--pp-accent); }
-.pp-rows li.is-picked { background: color-mix(in srgb, var(--brand) 14%, transparent); }
+.pp-rows li.is-picked { background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); }
 .pp-rows small { margin-left: auto; color: var(--pp-muted); font-size: var(--text-small); }
 .pp-sq { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
 /* The sheet */
@@ -117,4 +116,6 @@
 @media (prefers-reduced-motion: reduce) {
   .pp-sheet.is-in, .pp-pill.is-ping { animation: none; }
 }
+/* The docked pill and its status line get a strip of their own only while they show, so they never cover a row */
+.pp:has(.pp-pill:not([hidden])), .pp:has(.pp-status:not(:empty)) { padding-bottom: 72px; }
 .pp [hidden] { display: none !important; }

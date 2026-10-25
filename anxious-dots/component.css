@@ -34,6 +34,7 @@
 .ax-name { font-weight: 600; }
 .ax-presence { color: var(--ax-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
 
+/* Holds its height on purpose: the typing bubble resizes on every frame, so the card would jitter */
 .ax-thread { display: flex; flex-direction: column; gap: 4px; min-height: 196px; }
 .ax-msg { max-width: 78%; padding: 8px 13px; border-radius: var(--radius-xl); font-size: var(--text-body-lg); line-height: var(--leading-body-lg); letter-spacing: normal; }
 .ax-msg--me { align-self: flex-end; background: var(--ax-accent); color: var(--ax-on-accent); }

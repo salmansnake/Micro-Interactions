@@ -172,9 +172,10 @@
 }
 .cs-copy:active { transform: scale(var(--press-scale)); }
 .cs-copy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.cs-copy.is-done, .cs-copy.is-done:active { background: var(--primary); color: var(--primary-foreground); transform: none; }
-[data-theme="dark"] .cs-copy.is-done, [data-theme="dark"] .cs-copy.is-done:active { background: var(--foreground); color: var(--background); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cs-copy.is-done { background: var(--foreground); color: var(--background); } }
+/* Copied keeps the button's colors: the label changes and a check appears, centered on it */
+.cs-copy { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.cs-copy.is-done, .cs-copy.is-done:active { transform: none; }
+.cs-copy svg { flex: none; width: 14px; height: 14px; translate: 0 calc(100% / 48); }
 /* The flying slip */
 .cs-slip {
   position: absolute;

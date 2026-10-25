@@ -36,7 +36,7 @@
       c.setAttribute('data-key', f.key);
       var k = document.createElement('small'); k.textContent = KEYS[f.key].label;
       var v = document.createElement('b'); v.textContent = cap(f.value);
-      var x = document.createElement('button'); x.type = 'button'; x.textContent = '×';
+      var x = document.createElement('button'); x.type = 'button'; x.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
       x.setAttribute('aria-label', 'Remove filter ' + KEYS[f.key].label + ' ' + cap(f.value));
       x.addEventListener('click', function () { remove(f, false); input.focus(); });
       c.append(k, v, x);

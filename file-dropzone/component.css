@@ -61,7 +61,7 @@
 @keyframes fd-breathe { 50% { transform: translateY(-4px); } }
 .fd-title, .fd-over-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .fd-sub { margin: 0; color: var(--fd-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
-.fd-choose { margin-top: 8px; padding: 6px 14px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--fd-accent); font-size: var(--text-body); font-weight: 600; }
+.fd-choose { margin-top: 8px; padding: 6px 14px; border-radius: var(--radius-md); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: var(--fd-accent); font-size: var(--text-body); font-weight: 600; }
 .fd-input { display: none; }
 .fd.has-file .fd-zone { display: none; }
 

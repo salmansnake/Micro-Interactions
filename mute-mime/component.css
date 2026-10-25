@@ -53,7 +53,7 @@
 @keyframes mm-boxed { 0% { transform: scale(1); opacity: 0.8; } 80% { transform: scale(var(--mm-stop, 2.4)); opacity: 0.8; } 100% { transform: scale(var(--mm-stop, 2.4)) scaleY(0.92); opacity: 0; } }
 @keyframes mm-free { 0% { transform: scale(1); opacity: 0.7; border-color: color-mix(in srgb, var(--success) 80%, transparent); } 100% { transform: scale(6); opacity: 0; border-color: color-mix(in srgb, var(--success) 40%, transparent); } }
 
-.mm-toast { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--danger) 12%, transparent); animation: mm-in var(--spring-ui-duration) var(--spring-ui) both; }
+.mm-toast { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: oklch(from var(--danger) var(--tint-l) calc(c * var(--tint-c)) h); animation: mm-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes mm-in { from { opacity: 0; transform: translateY(-6px); } }
 .mm-toast-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
 .mm-unmute-inline { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--danger); color: var(--danger-foreground); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
@@ -61,7 +61,7 @@
 .mm-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; touch-action: none; -webkit-user-select: none; user-select: none; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-base); }
 .mm-controls button svg { width: 20px; height: 20px; }
 .mm-mute { flex: none; padding: 0 18px; background: var(--mm-fill); color: var(--mm-fg); }
-.mm-mute[aria-pressed="true"] { background: color-mix(in srgb, var(--danger) 16%, transparent); color: var(--danger-text); }
+.mm-mute[aria-pressed="true"] { background: var(--danger-soft); color: var(--danger-soft-foreground); }
 .mm-talk { flex: 1; background: var(--mm-accent); color: var(--mm-on-accent); }
 .mm.is-talking .mm-talk { transform: scale(0.97); }
 .mm-controls button:focus-visible, .mm-unmute-inline:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

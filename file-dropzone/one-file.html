@@ -83,6 +83,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --subtle: var(--soft-ground);
   --success: var(--green-11);
   --success-foreground: #ffffff;
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -124,6 +126,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --subtle: var(--soft-ground);
   --success: #218358;
   --success-foreground: #ffffff;
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -165,6 +169,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --subtle: var(--soft-ground);
     --success: #218358;
     --success-foreground: #ffffff;
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -232,7 +238,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 @keyframes fd-breathe { 50% { transform: translateY(-4px); } }
 .fd-title, .fd-over-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .fd-sub { margin: 0; color: var(--fd-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
-.fd-choose { margin-top: 8px; padding: 6px 14px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--fd-accent); font-size: var(--text-body); font-weight: 600; }
+.fd-choose { margin-top: 8px; padding: 6px 14px; border-radius: var(--radius-md); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: var(--fd-accent); font-size: var(--text-body); font-weight: 600; }
 .fd-input { display: none; }
 .fd.has-file .fd-zone { display: none; }
 

@@ -61,7 +61,7 @@
       found.slice(0, 5).forEach(function (it, k) {
         var li = document.createElement('li');
         li.style.animationDelay = (k * 40) + 'ms';
-        var icon = document.createElement('i'); icon.textContent = it.name[0]; icon.style.background = it.color;
+        var icon = document.createElement('i'); icon.append(Object.assign(document.createElement('span'), { textContent: it.name[0] })); icon.style.background = it.color;
         var b = document.createElement('b');
         var name = it.name, ix = name.toLowerCase().indexOf(q);
         if (q && ix > -1) {

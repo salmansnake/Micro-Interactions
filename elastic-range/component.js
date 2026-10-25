@@ -98,7 +98,7 @@
       var wall = firstBookedAfter(start);
       if (wall !== null && day >= wall) {
         draw(start, Math.max(start + 0, wall - 1) === start ? null : wall - 1, wall);
-        summary.replaceChildren(Object.assign(document.createElement('span'), { className: 'er-warn', textContent: mon + ' ' + wall + ' is booked, so your stay ends ' + mon + ' ' + (wall - 1) + '.' }));
+        summary.replaceChildren(Object.assign(document.createElement('span'), { className: 'er-warn', textContent: mon + ' ' + wall + ' is booked,' }), Object.assign(document.createElement('span'), { className: 'er-warn er-line', textContent: 'so your stay ends ' + mon + ' ' + (wall - 1) + '.' }));
         return;
       }
       draw(start, day);
@@ -107,10 +107,15 @@
 
     function summarize(a, z, tentative) {
       summary.replaceChildren();
-      if (!a) { summary.textContent = 'Choose a check-in date.'; return; }
-      if (!z) { summary.append('Check-in ', Object.assign(document.createElement('b'), { textContent: mon + ' ' + a }), '. Now choose check-out.'); return; }
+      if (!a) { summary.append('Choose a ', Object.assign(document.createElement('span'), { className: 'er-nowrap', textContent: 'check-in' }), ' date.'); return; }
+      if (!z) {
+        var next = Object.assign(document.createElement('span'), { className: 'er-line', textContent: 'Now choose ' });
+        next.append(Object.assign(document.createElement('span'), { className: 'er-nowrap', textContent: 'check-out.' }));
+        summary.append('Check-in ', Object.assign(document.createElement('b'), { textContent: mon + ' ' + a }), '.', next);
+        return;
+      }
       var nights = z - a;
-      summary.append(Object.assign(document.createElement('b'), { textContent: mon + ' ' + a + ' – ' + mon + ' ' + z }), ' · ' + nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString() + ' total' : '') + (tentative ? '' : '.'));
+      summary.append(Object.assign(document.createElement('b'), { textContent: mon + ' ' + a + ' – ' + mon + ' ' + z }), Object.assign(document.createElement('span'), { className: 'er-cost', textContent: nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString() + ' total' : '') + (tentative ? '' : '.') }));
     }
 
     function choose(day) {

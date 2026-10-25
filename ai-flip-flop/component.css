@@ -46,7 +46,7 @@
   height: 26px;
   padding: 0 10px;
   border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--ff-c) 16%, transparent);
+  background: oklch(from var(--ff-c) var(--tint-l) calc(c * var(--tint-c)) h);
   color: color-mix(in srgb, var(--ff-c) 70%, var(--ff-fg));
   font-size: var(--text-small);
   font-weight: 600;
@@ -65,6 +65,7 @@
 .ff.is-panicking .ff-drop:first-child { animation-duration: 0.8s; }
 @keyframes ff-sweat { 0% { opacity: 0; transform: translateY(-2px) scale(0.6); } 20% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(14px); } }
 
+/* Holds two lines on purpose: the answer changes while you keep pressing the button below it */
 .ff-text { min-height: 42px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
 .ff-text.is-in { animation: ff-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes ff-in { from { opacity: 0; transform: translateY(4px); filter: blur(3px); } }

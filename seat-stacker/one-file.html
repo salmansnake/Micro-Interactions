@@ -52,7 +52,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-5: var(--olive);
   --foreground: var(--black);
   --green-11: #218358;
-  --green-3: #e6f6eb;
   --input: var(--line-strong);
   --lift: #FFFFFF;
   --line: #DCDED9;
@@ -73,8 +72,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
   --success: var(--green-11);
-  --success-subtle: var(--green-3);
   --success-text: #1f7b53;
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -92,7 +92,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-5: var(--olive);
   --foreground: #F3F2EE;
   --green-11: #3dd68c;
-  --green-3: #132d21;
   --input: var(--line-strong);
   --lift: #3F4341;
   --line: #313432;
@@ -113,8 +112,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
   --success: #218358;
-  --success-subtle: var(--green-3);
   --success-text: var(--green-11);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -132,7 +132,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --chart-5: var(--olive);
     --foreground: #F3F2EE;
     --green-11: #3dd68c;
-    --green-3: #132d21;
     --input: var(--line-strong);
     --lift: #3F4341;
     --line: #313432;
@@ -153,8 +152,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
     --success: #218358;
-    --success-subtle: var(--green-3);
     --success-text: var(--green-11);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -172,7 +172,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --ss-on-accent: var(--primary-foreground);
   --ss-green: var(--success);
   --ss-green-text: var(--success-text);
-  --ss-green-soft: var(--success-subtle);
+  --ss-green-soft: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -248,8 +248,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .ss-odo { display: inline-flex; height: 34px; overflow: hidden; }
 .ss-col { display: flex; flex-direction: column; transition: transform var(--spring-ui-duration) var(--spring-ui); }
 .ss-col span { height: 34px; line-height: 34px; text-align: center; }
-.ss-note { min-height: 30px; margin: 0; }
-.ss-note:empty { display: none; }
+.ss-note { margin: 0; }
+.ss-note:empty { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .ss-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: var(--radius-full); background: var(--ss-green-soft); color: var(--ss-green-text); font-size: var(--text-small); font-weight: 600; animation: ss-chip var(--spring-pop-duration) var(--spring-pop) both; }
 @keyframes ss-chip { from { opacity: 0; transform: translateY(6px) scale(0.9); } }
 @media (prefers-reduced-motion: reduce) {

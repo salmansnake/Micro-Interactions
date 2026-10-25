@@ -219,11 +219,31 @@
     if (!node) return;
     var old = btn.getAttribute('data-label') || node.textContent;
     btn.setAttribute('data-label', old);
+    var held = btn.style.minWidth;
     btn.style.minWidth = btn.offsetWidth + 'px';
     node.textContent = text;
+    // The copy icon becomes a check while it confirms; the button keeps its colors
+    var icon = btn.querySelector('svg');
+    if (icon && text === 'Copied') {
+      if (!btn._icon) btn._icon = icon.innerHTML;
+      icon.innerHTML = '<path d="M20 6 9 17l-5-5"/>';
+    }
     btn.classList.add('is-done');
     clearTimeout(btn._doneT);
-    btn._doneT = setTimeout(function () { node.textContent = old; btn.classList.remove('is-done'); btn.style.minWidth = ''; }, 1600);
+    btn._doneT = setTimeout(function () {
+      node.textContent = old;
+      if (icon && btn._icon) icon.innerHTML = btn._icon;
+      btn.classList.remove('is-done'); btn.style.minWidth = held;
+    }, 1600);
+  }
+  // A copy button is as wide as its "Copied" state from the start, so confirming never resizes it
+  function holdWidth(btn) {
+    if (!btn || btn._held || !btn.offsetWidth) return;
+    var node = null; btn.childNodes.forEach(function (n) { if (n.nodeType === 3 && n.textContent.trim()) node = n; });
+    if (!node) return;
+    var label = node.textContent; node.textContent = 'Copied';
+    var w = parseFloat(getComputedStyle(btn).width); node.textContent = label; // layout width, unaffected by the dialog's opening scale
+    btn.style.minWidth = Math.ceil(w) + 'px'; btn._held = true;
   }
   function copy(text, btn, fallbackEl) {
     function fail() { if (fallbackEl) { var r = document.createRange(); r.selectNodeContents(fallbackEl); var s = getSelection(); s.removeAllRanges(); s.addRange(r); } done(btn, 'Press Ctrl+C'); }
@@ -238,13 +258,15 @@
     if (k !== 'one') return s[k];
     return DATA.oneTpl.replace('__TITLE__', BY[slug].name).split('__CSS__').join(s.css).split('__HTML__').join(s.html).split('__JS__').join(s.js);
   }
-  var box = $('#codebox'), pre = $('pre', box), tabs = $$('[role="tab"]', box), active = 'prompt', opener = null;
+  var box = $('#codebox'), pre = $('pre', box), panel = $('.codebox-panel', box), dl = $('[data-download]', box), tabs = $$('[role="tab"]', box), active = 'prompt', opener = null;
+  // Each box names the file it holds, so it's clear what Copy copies. One File can also be downloaded.
+  var FILES = { prompt: 'prompt.md', html: 'component.html', css: 'component.css', js: 'component.js' };
   var HINTS = {
     prompt: 'Paste this into an AI tool like Claude or Cursor to rebuild it in your own stack. It includes the exact Outcraft colors, type and motion.',
     html: 'The markup. Paste it where the interaction should appear on your page. It needs the CSS and JS too.',
     css: 'The styles, with the Outcraft font and colors built in. Add it to your stylesheet or inside a <style> tag.',
     js: 'The behavior. Add it after the HTML, inside a <script> tag at the end of the page.',
-    one: 'Everything in one file. Save it as a .html file and open it, or paste it into your page. The easiest option if you are not a developer.'
+    one: 'Everything in one file. Download it and open it in a browser, or copy it into your page. The easiest option if you are not a developer.'
   };
   function showTab(k) {
     active = k;
@@ -252,14 +274,17 @@
     tabs.forEach(function (t, i) { var on = t.getAttribute('data-k') === k; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on) t.parentNode.style.setProperty('--i', i); });
     pre.textContent = code(state.slug, k);
     pre.classList.toggle('is-prose', k === 'prompt');
-    pre.setAttribute('aria-labelledby', 'cb-tab-' + k);
+    panel.setAttribute('aria-labelledby', 'cb-tab-' + k);
+    $('.codebox-name', box).textContent = k === 'one' ? state.slug + '.html' : FILES[k];
+    dl.hidden = k !== 'one';
+    if (k === 'one') { dl.href = state.slug + '/one-file.html'; dl.setAttribute('download', state.slug + '.html'); }
     pre.scrollTop = 0;
   }
   $('[data-open-code]').addEventListener('click', function (e) {
     opener = e.currentTarget;
     var it = BY[state.slug];
     $('h2', box).textContent = it.name;
-    showTab('prompt'); box.showModal();
+    showTab('prompt'); box.showModal(); holdWidth($('[data-copy-code]', box));
     var sel = $('[aria-selected="true"]', box); if (sel) sel.focus();
   });
   tabs.forEach(function (t, i) {

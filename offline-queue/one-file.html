@@ -65,6 +65,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --subtle: var(--soft-ground);
   --success: var(--green-11);
   --switch-on: var(--black);
+  --tint-c: 0.4;
+  --tint-ink-l: 0.48;
+  --tint-l: 0.92;
   --warning: var(--amber-9);
   --warning-text: #a15e00;
   --white: #FFFFFF;
@@ -99,6 +102,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --subtle: var(--soft-ground);
   --success: #218358;
   --switch-on: var(--aqua);
+  --tint-c: 0.45;
+  --tint-ink-l: 1;
+  --tint-l: 0.32;
   --warning: var(--amber-9);
   --warning-text: var(--amber-11);
   --white: #161817;
@@ -133,6 +139,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --subtle: var(--soft-ground);
     --success: #218358;
     --switch-on: var(--aqua);
+    --tint-c: 0.45;
+    --tint-ink-l: 1;
+    --tint-l: 0.32;
     --warning: var(--amber-9);
     --warning-text: var(--amber-11);
     --white: #161817;
@@ -222,7 +231,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .oq-add-btn:active { transform: scale(var(--press-scale)); }
 .oq-add-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 /* The queue: a pill that holds one chip per waiting change */
-.oq-queue { display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--oq-orange) 14%, transparent); color: var(--oq-orange-text); font-size: var(--text-small); font-weight: 600; animation: oq-in var(--spring-ui-duration) var(--spring-ui) both; }
+.oq-queue { display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px; border-radius: var(--radius-full); background: oklch(from var(--oq-orange) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--oq-orange-text) min(l, var(--tint-ink-l)) c h); font-size: var(--text-small); font-weight: 600; animation: oq-in var(--spring-ui-duration) var(--spring-ui) both; }
 .oq-chips { display: flex; }
 .oq-chip { width: 18px; height: 22px; margin-left: -9px; border-radius: var(--radius-xs); background: var(--oq-bg); box-shadow: 0 0 0 1px var(--oq-line), var(--shadow-xs); animation: oq-chip var(--spring-pop-duration) var(--spring-pop) both; }
 .oq-chip:first-child { margin-left: 0; }

@@ -95,18 +95,20 @@
 .ce.is-sent .ce-free { opacity: 1; }
 
 /* Verdict */
-.ce-verdict { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--brand) 10%, transparent); animation: ce-in var(--spring-ui-duration) var(--spring-ui) both; }
+.ce-verdict { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); animation: ce-in var(--spring-ui-duration) var(--spring-ui) both; }
 .ce-verdict-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
-.ce-verdict-sub { color: var(--ce-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ce-verdict-sub { color: var(--muted-on-tint); font-size: var(--text-small); line-height: var(--leading-small); }
 .ce-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .ce-send, .ce-keep, .ce-again { height: 40px; padding: 0 16px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .ce-send { background: var(--ce-accent); color: var(--ce-on-accent); }
-.ce-keep { background: var(--ce-fill); color: var(--ce-fg); }
+.ce-keep { background: var(--fill-on-tint); color: var(--ce-fg); }
 .ce-again { height: 32px; padding: 0 12px; background: none; color: var(--ce-accent); }
 .ce-send:active, .ce-keep:active, .ce-again:active { transform: scale(var(--press-scale)); }
 .ce-send:focus-visible, .ce-keep:focus-visible, .ce-again:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @keyframes ce-in { from { opacity: 0; transform: translateY(-6px); } }
-.ce-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 32px; }
+.ce-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.ce-foot:has(.ce-status:empty):has(.ce-again[hidden]) { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .ce-status { color: var(--ce-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 
 @media (prefers-reduced-motion: reduce) {

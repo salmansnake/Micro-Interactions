@@ -63,6 +63,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --shadow-xl: 0 8px 16px -4px rgba(17, 17, 16, 0.08), 0 28px 56px -12px rgba(17, 17, 16, 0.22);
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -94,6 +96,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -125,6 +129,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.55), 0 28px 56px -12px rgba(0, 0, 0, 0.65);
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -145,7 +151,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   position: relative;
   width: 100%;
   max-width: 460px;
-  min-height: 380px;
   color: var(--pv-fg);
   font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
   letter-spacing: normal;
@@ -184,7 +189,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .pv-app-bar { display: flex; align-items: center; gap: 10px; }
 .pv-logo { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--a); color: var(--app-on-a); font-weight: 700; transition: background-color var(--spring-press-duration); }
 .pv-app-name { font-weight: 600; }
-.pv-badge { padding: 2px 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--brand) 16%, transparent); color: var(--app-fg); font-size: calc(var(--text-caption) - 1px); font-weight: 700; opacity: 0; transform: scale(0.8); transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
+.pv-badge { padding: 2px 8px; border-radius: var(--radius-full); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: var(--app-fg); font-size: calc(var(--text-caption) - 1px); font-weight: 700; opacity: 0; transform: scale(0.8); transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
 .pv-app.is-previewing .pv-badge { opacity: 1; transform: none; }
 .pv-open { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 6px 0 12px; border: 0; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--app-fg) 8%, transparent); color: var(--app-fg); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
 .pv-open kbd, .pv-help kbd { padding: 1px 6px; border-radius: var(--radius-sm); background: color-mix(in srgb, currentColor 12%, transparent); font: 600 calc(var(--text-caption) - 1px) / 16px var(--font-sans); }
@@ -201,7 +206,11 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   z-index: 5;
   left: 50%;
   top: 64px;
+  display: flex;
+  flex-direction: column;
   width: min(340px, calc(100% - 24px));
+  /* Stays inside the app card at any density: the list shrinks and scrolls instead of the card reserving room */
+  max-height: calc(100% - 72px);
   overflow: hidden;
   border-radius: var(--radius-xl);
   background: var(--pv-glass);
@@ -211,16 +220,19 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   transform: translateX(-50%);
   animation: pv-in var(--spring-ui-duration) var(--spring-ui) both;
 }
+.pv:has(.pv-status:not(:empty)) .pv-palette { max-height: calc(100% - 100px); }
 @keyframes pv-in { from { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.97); } }
-.pv-input { width: 100%; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-bottom: 1px solid var(--pv-line); background: transparent; color: var(--pv-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
-.pv-list { max-height: 210px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; }
+.pv-input { flex: none; width: 100%; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-bottom: 1px solid var(--pv-line); background: transparent; color: var(--pv-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
+.pv-list { flex: 1 1 auto; min-height: 0; max-height: 210px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; }
 .pv-group { padding: 8px 10px 4px; color: var(--pv-muted); font-size: var(--text-caption); font-weight: 600; }
 .pv-opt { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 10px; border-radius: var(--radius-md); cursor: pointer; }
 .pv-opt[aria-selected="true"] { background: var(--pv-accent); color: var(--primary-foreground); }
 .pv-opt .pv-sw { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--black) 10%, transparent); }
 .pv-opt .pv-cur { margin-left: auto; font-size: var(--text-caption); opacity: 0.7; }
-.pv-help { margin: 0; padding: 8px 14px 10px; border-top: 1px solid var(--pv-line); color: var(--pv-muted); font-size: var(--text-caption); }
+.pv-help { flex: none; margin: 0; padding: 8px 14px 10px; border-top: 1px solid var(--pv-line); color: var(--pv-muted); font-size: var(--text-caption); }
 .pv-status { margin: 10px 4px 0; min-height: 18px; color: var(--pv-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.pv-status:empty { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) {
   .pv-palette { animation: none; }
   .pv-app, .pv-items li { transition-duration: var(--duration-reduced); }

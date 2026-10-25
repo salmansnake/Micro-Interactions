@@ -15,6 +15,9 @@
     var reach = root.querySelector('.al-reach');
     var warn = root.querySelector('.al-warn');
     var copy = root.querySelector('.al-copy');
+    var COPIED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Copied';
+    // As wide as its "Copied" state from the start, so confirming never resizes it
+    (function () { var keep = copy.innerHTML; copy.innerHTML = COPIED; var w = parseFloat(getComputedStyle(copy).width); copy.innerHTML = keep; if (w) copy.style.minWidth = Math.ceil(w) + 'px'; })();
     var link = root.querySelector('.al-link');
     var level = -1;
     var gen = 0;
@@ -107,7 +110,7 @@
     });
     copy.addEventListener('click', function () {
       try { navigator.clipboard.writeText('https://' + link.textContent).catch(function () {}); } catch (e) {}
-      copy.textContent = 'Copied'; copy.classList.add('is-done');
+      copy.innerHTML = COPIED; copy.classList.add('is-done');
       setTimeout(function () { copy.textContent = 'Copy Link'; copy.classList.remove('is-done'); }, 1400);
     });
     set(Number((root.querySelector('[aria-checked="true"]') || rungs[0]).getAttribute('data-level')));

@@ -165,7 +165,7 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 .info-actions .oc-btn svg { width: 16px; height: 16px; }
 .mobile-browse { display: none; }
 
-/* Done state for the page's own copy buttons in dark mode: neutral, like every Copied */
+/* Copy Prompt and Submit an idea are neutral in dark mode (off-white), not Aqua */
 [data-theme="dark"] .info-actions .oc-btn[data-copy-prompt], [data-theme="dark"] .tb-idea { --oc-btn-bg: var(--foreground); --oc-btn-fg: var(--background); --oc-btn-hover: color-mix(in srgb, var(--foreground) 88%, var(--background)); }
 
 /* Tablet: list on the left, info moves under the stage, page scrolls */
@@ -203,6 +203,12 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 .codebox-head .x { margin-left: auto; }
 .codebox-bar { flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-5); border-bottom: 1px solid var(--border); }
 .codebox-hint { flex-basis: 100%; margin: 0; color: var(--muted-foreground); font: var(--text-small)/var(--leading-small) var(--font-sans); }
+.codebox-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--subtle); }
+/* Each code box carries its own file name and actions, so it's clear what Copy copies */
+.codebox-file { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4) var(--space-3) var(--space-6); border-bottom: 1px solid var(--border); }
+.codebox-name { min-width: 0; overflow: hidden; color: var(--muted-foreground); font: 500 var(--text-small)/var(--leading-small) var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+.codebox-actions { flex: none; display: flex; gap: var(--space-2); }
+.codebox-actions .oc-btn { --oc-btn-bg: var(--raised); } /* raised on the gray box, per 10a; hover and Copied still apply */
 .codebox pre { flex: 1; min-height: 0; margin: 0; overflow: auto; padding: var(--space-5) var(--space-6); background: var(--subtle); color: var(--foreground); font: 400 var(--text-code)/var(--leading-code) var(--font-mono); tab-size: 2; }
 .codebox pre.is-prose { white-space: pre-wrap; font-family: var(--font-sans); font-size: var(--text-small); line-height: 20px; color: var(--body); }
 .codebox pre:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }

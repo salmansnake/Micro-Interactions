@@ -76,6 +76,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --success-border: var(--green-7);
   --success-subtle: var(--green-3);
   --success-text: #1f7b53;
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -117,6 +119,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --success-border: var(--green-7);
   --success-subtle: var(--green-3);
   --success-text: var(--green-11);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -158,6 +162,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --success-border: var(--green-7);
     --success-subtle: var(--green-3);
     --success-text: var(--green-11);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -220,7 +226,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .ct-list button, .ct-lunch { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ct-accent); color: var(--ct-on-accent); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .ct-list button:active, .ct-lunch:active { transform: scale(var(--press-scale-sm)); }
 .ct-list button:focus-visible, .ct-lunch:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.ct-clear { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--success) 14%, transparent); animation: ct-in var(--spring-ui-duration) var(--spring-ui) both; }
+.ct-clear { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h); animation: ct-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes ct-in { from { opacity: 0; transform: translateY(-6px); } }
 .ct-clear-text { font-size: var(--text-body); line-height: var(--leading-body); }
 .ct-lunch { align-self: flex-start; height: 40px; background: var(--success); }

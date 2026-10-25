@@ -56,12 +56,11 @@
 }
 .oc-btn:hover { background: var(--oc-btn-hover); }
 .oc-btn:active { transform: scale(var(--press-scale)); transition-duration: var(--duration-instant); }
-/* Done state (Copied, Saved, Sent): keep the label readable and never let the button sink while it confirms */
-.oc-btn.is-done, .oc-btn.is-done:hover, .oc-btn.is-done:active { background: var(--primary); color: var(--primary-foreground); border-color: transparent; transform: none; }
+/* Done state (Copied, Saved, Sent): the button keeps its own colors; only the icon becomes a check and the label changes. It never sinks or resizes while it confirms */
+.oc-btn.is-done, .oc-btn.is-done:active { transform: none; }
+/* Lucide check sits half a grid unit high, so it moves down that half unit to center on the label */
+.oc-btn.is-done svg { translate: 0 calc(100% / 48); }
 
-/* Done state in dark mode is neutral (off-white fill, dark text) rather than Aqua, so every "Copied" looks the same */
-[data-theme="dark"] .oc-btn.is-done, [data-theme="dark"] .oc-btn.is-done:hover, [data-theme="dark"] .oc-btn.is-done:active { background: var(--foreground); color: var(--background); border-color: transparent; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .oc-btn.is-done { background: var(--foreground); color: var(--background); border-color: transparent; } }
 
 .oc-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 .oc-btn:disabled { opacity: 0.5; pointer-events: none; box-shadow: none; }
@@ -71,6 +70,7 @@
 .oc-btn--ghost { --oc-btn-bg: transparent; --oc-btn-fg: var(--foreground); --oc-btn-hover: var(--accent); box-shadow: none; }
 .oc-btn--brand { --oc-btn-bg: var(--brand); --oc-btn-fg: var(--brand-foreground); --oc-btn-hover: var(--brand-hover); }
 .oc-btn--danger { --oc-btn-bg: var(--danger); --oc-btn-fg: var(--danger-foreground); --oc-btn-hover: color-mix(in srgb, var(--danger) 88%, black); }
+.oc-btn--danger-soft { --oc-btn-bg: var(--danger-soft); --oc-btn-fg: var(--danger-soft-foreground); --oc-btn-hover: var(--danger-soft-hover); box-shadow: none; }
 .oc-btn--link { --oc-btn-bg: transparent; --oc-btn-fg: var(--foreground); --oc-btn-hover: transparent; box-shadow: none; padding: 0 var(--space-1); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 4px; }
 .oc-btn--link:hover { text-decoration-color: currentColor; }
 .oc-btn--sm { height: var(--control-sm); padding: 0 var(--space-3); border-radius: var(--radius-sm); font-size: var(--text-small); }

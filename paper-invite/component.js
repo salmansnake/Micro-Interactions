@@ -33,7 +33,7 @@
       c.className = 'pi-chip' + (bad ? ' is-bad is-back' : '');
       c.setAttribute('data-email', email.toLowerCase());
       var s = document.createElement('span'); s.textContent = email;
-      var x = document.createElement('button'); x.type = 'button'; x.className = 'pi-x'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove ' + email);
+      var x = document.createElement('button'); x.type = 'button'; x.className = 'pi-x'; x.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>'; x.setAttribute('aria-label', 'Remove ' + email);
       x.addEventListener('click', function () { var why = c.nextElementSibling; if (why && why.classList.contains('pi-why')) why.remove(); c.remove(); refresh(); input.focus(); });
       c.append(s, x);
       box.insertBefore(c, input);

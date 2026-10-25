@@ -66,7 +66,7 @@
 .dz.is-dizzy .dz-pull { animation: dz-sway 1.2s var(--ease-in-out) infinite; }
 @keyframes dz-sway { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
 
-.dz-status { min-height: 36px; color: var(--dz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.dz-status { color: var(--dz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .dz.is-dizzy .dz-status { color: var(--dz-fg); font-weight: 500; }
 .dz-notify { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 12px 0 14px; border-radius: var(--radius-lg); background: var(--dz-sunken); cursor: pointer; animation: dz-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes dz-in { from { opacity: 0; transform: translateY(-6px); } }
