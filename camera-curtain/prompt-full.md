@@ -4,7 +4,7 @@ WHAT IT DOES
 Turning your camera off draws red velvet theater curtains across your tile, with an Intermission sign. Turning it back on opens the show with a spotlight.
 
 BEHAVIOR
-1. A 230px tile showing a soft camera scene: one light warm wall, a lamp glow, and a simple head-and-shoulders silhouette in one dark warm tone (a round 76px head resting directly on rounded shoulders, no neck, one color) that breathes (2px over 4s). A dark translucent name chip sits in the corner, its text vertically centered, and a gray filled 44px button below toggles the camera, with a camera icon and "Turn Camera Off" / "Turn Camera On".
+1. A 230px tile showing a soft camera scene: one light warm wall, a lamp glow, and a simple head-and-shoulders silhouette in one dark warm tone (a round 76px head resting directly on rounded shoulders, no neck, one color) that breathes (2px over 4s). A dark translucent name chip sits in the corner, its text vertically centered, and a gray filled 44px button below toggles the camera, with the Lucide `video` icon and "Turn Camera Off" while the camera is on, and `video-off` with "Turn Camera On" while it is off.
 2. Camera off:
    - Two curtains slide in from the sides on a pop spring. They're velvet made of repeating vertical red folds with top and bottom shading, rounded where they meet at the bottom.
    - A scalloped red valance with a gold line sits on top.

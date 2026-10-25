@@ -4,7 +4,7 @@ WHAT IT DOES
 Passive-aggressive phrases lower the temperature of your message. Frost creeps in from the corners, and one button warms it back up with friendlier wording.
 
 BEHAVIOR
-1. Header: "To: Sam" and a thermometer pill (thermometer icon, "3°", "Chilly"). Below it, a 12px rounded message field prefilled with "Per my last email, the files are in the shared folder. Going forward, please check there first." Then phrase chips (+ As previously mentioned, + Friendly reminder, + Noted.) and a Send button.
+1. Header: "To: Sam" and a thermometer pill (the Lucide `thermometer` outline with a live mercury line and bulb drawn inside it that rise and fall with the temperature, "3°", "Chilly"). Below it, a 12px rounded message field prefilled with "Per my last email, the files are in the shared folder. Going forward, please check there first." Then phrase chips (+ As previously mentioned, + Friendly reminder, + Noted.) and a Send button.
 2. Start at 22°. Each phrase costs degrees and has a warmer swap:
    - per my last email (or previous, or message) −14 → in case it got buried
    - as previously mentioned −10 → as a quick recap

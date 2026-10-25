@@ -8,7 +8,7 @@ BEHAVIOR
 2. An "Invites" grouped list: Budget Check (12:00 PM · Priya), Vendor Call (1:00 PM · Sam), Quick Sync (3:00 PM · Mira), each a title with its time and person on a smaller line under it, and an Accept button.
 3. Accept drops the block into its slot from above the column on a pop spring and removes the invite. The free count updates.
 4. When no slots are left: "No time free" turns red. Every block flashes white in turn from top to bottom (60ms apart), like a cleared row. Then a green panel appears: "Line clear. No gaps from 9 to 5. Not even for lunch." with a green "Protect 12:00 for Lunch" button (white text in light and dark mode).
-5. Protect lunch: the 12:00 meeting slides out to the right and a striped green "Lunch (Protected)" block with a lock drops in. "Lunch protected. Budget Check moved to tomorrow, where it will also be fine." The header line now reads "Lunch protected".
+5. Protect lunch: the 12:00 meeting slides out to the right and a striped green "Lunch (Protected)" block with a 10px Lucide `lock` icon drops in. "Lunch protected. Budget Check moved to tomorrow, where it will also be fine." The header line now reads "Lunch protected".
 Reduced motion: blocks appear without falling or flashing.
 
 APPEARANCE (Outcraft Design System)

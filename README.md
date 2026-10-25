@@ -38,7 +38,11 @@ python3 tools/build.py           # check, then generate the site, every <slug>/ 
 
 The build writes `index.html`, each `<slug>/index.html`, `one-file.html` and `prompt-full.md`, and refreshes the intro and catalogue in this README, so commit those generated files with every change.
 
+Every icon is a Lucide icon. `tools/lucide-icons.json` holds the exact Lucide drawings in use, and the build fails any icon that isn't one of them: to use a new icon, copy its drawing from [lucide.dev](https://lucide.dev/icons) into that file first.
+
 Deploy the repository as a static site (entry point `index.html`, no build command). On Vercel, import the repo and keep the defaults.
+
+The site's **Submit an idea** form sends to the Formspree form set as `formEndpoint` in `site.json`; Formspree saves each idea and emails it on, so no address appears on the site. If you reuse this repo, put your own Formspree form there, or leave it empty and the form runs in preview mode and sends nothing.
 
 ## Interactions
 
@@ -111,7 +115,7 @@ Deploy the repository as a static site (entry point `index.html`, no build comma
 ## Credits and license
 
 - Type: Geist and Geist Mono (SIL Open Font License 1.1).
-- Icons: Lucide (ISC).
+- Icons: Lucide (ISC). The exact drawings in use are in `tools/lucide-icons.json`.
 - Status colors: Radix Colors (MIT).
 - Patterns inspired by shadcn/ui (MIT). All code is original.
 

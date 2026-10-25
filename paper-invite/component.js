@@ -3,7 +3,7 @@
 (function () {
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var PLANE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.6 10.9 20.4 3.4c.8-.3 1.5.4 1.2 1.2l-7.5 17.8c-.3.8-1.5.8-1.8-.1l-2-6.4-6.4-2c-.9-.3-.9-1.5-.1-1.8Z"/></svg>';
+  var PLANE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>'; // Lucide send
   var SAMPLE = 'sam@northwind.co, ali@northwind.co, mira@northwind.co, jo@northwind';
 
   function problem(email, members) {

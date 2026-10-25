@@ -74,7 +74,7 @@
     $('.filter-btn').setAttribute('aria-label', n ? 'Filters, ' + n + ' active' : 'Filters');
     chips.innerHTML = state.types.concat(state.topics).map(function (f) {
       return '<button type="button" class="chip" data-chip="' + esc(f) + '" aria-label="Remove filter ' + esc(f) + '">' + esc(f) +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>';
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>';
     }).join('');
   }
   search.addEventListener('input', function () { state.q = search.value; renderList(); });

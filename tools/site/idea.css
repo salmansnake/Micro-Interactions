@@ -24,11 +24,16 @@
 .idea-err:empty { display: none; }
 .idea-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .idea-foot { display: flex; justify-content: flex-end; gap: var(--space-2); padding: var(--space-5) var(--space-6) var(--space-6); }
-.idea-done { display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-12) var(--space-6); text-align: center; outline: none; }
+/* The thank-you hugs its short message: the dialog narrows from the form's 560px, with 32px above and below */
+.idea:has(.idea-done:not([hidden])) { width: min(400px, calc(100vw - 32px)); }
+/* While the dialog eases to the thank-you's size: no scrollbars, and the message stays centered, with equal space
+   above and below, so the dialog closes in around it from every side */
+.idea.idea-resizing { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.idea-done { display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-8) var(--space-6); text-align: center; outline: none; }
 .idea-done[hidden] { display: none; }
-.idea-done p { margin: 0 0 var(--space-4); }
+.idea-done p { margin: 0 0 var(--space-4); text-wrap: balance; } /* never one word alone on the last line (10b.29d) */
 .idea-done-mark { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: var(--space-2); border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); animation: idea-pop var(--spring-pop-duration) var(--spring-pop) both; }
-.idea-done-mark svg { width: 22px; height: 22px; }
+.idea-done-mark svg { width: 22px; height: 22px; translate: 0 calc(100% / 48); } /* a check sits half a grid unit high in a circle (10c) */
 @keyframes idea-pop { from { transform: scale(0); } }
 .idea-send-busy { pointer-events: none; opacity: 0.7; }
 @media (max-width: 520px) { .idea-two { grid-template-columns: minmax(0, 1fr); } .idea-head, .idea-body, .idea-foot { padding-left: var(--space-4); padding-right: var(--space-4); } }

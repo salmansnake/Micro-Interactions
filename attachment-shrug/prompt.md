@@ -4,7 +4,7 @@ WHAT IT DOES
 Write "see the attached deck" with nothing attached and the Send button shrugs at you instead of sending.
 
 BEHAVIOR
-1. An email composer: To and Subject rows with hairlines, a borderless 17px body ("Hi team, please see the attached deck with the Q4 numbers."), a round paperclip button on the left and a Send button on the right.
+1. An email composer: To and Subject rows with hairlines, a borderless 17px body ("Hi team, please see the attached deck with the Q4 numbers."), a round paperclip button (Lucide `paperclip`, 22px) on the left and a Send button on the right.
 2. While the body mentions an attachment (attached, attachment, enclosed, see the file, I've included) and nothing is attached, the paperclip's circle turns the same color as Send: black with a white icon in light mode, Aqua with a black icon in dark mode and glances left and right every 2.4s.
 3. Send with nothing attached:
    - The button shrugs: it rises 6px twice, slightly narrower and taller, anchored at the bottom.

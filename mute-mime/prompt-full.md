@@ -4,7 +4,7 @@ WHAT IT DOES
 Talk while you're muted and your voice bounces off an invisible glass box around your tile, like a mime trapped inside. Then it tells you you're on mute.
 
 BEHAVIOR
-1. A dark 220px video tile (radial gray gradient in both themes) with an 80px gradient avatar, and a dark translucent name chip in the corner with a red slashed mic. Below it: a Mute/Unmute button (tinted red while muted) and a "Hold to Talk" button for the demo. In a real call, drive it from voice activity.
+1. A dark 220px video tile (radial gray gradient in both themes) with an 80px gradient avatar, and a dark translucent name chip in the corner with a red Lucide `mic-off` icon (white `mic` once unmuted). The Mute/Unmute button carries the Lucide `mic` icon. Below it: a Mute/Unmute button (tinted red while muted) and a "Hold to Talk" button for the demo. In a real call, drive it from voice activity.
 2. While talking, spawn a ring every 420ms from the avatar (2px white border, 80px).
 3. Muted:
    - Each ring grows until it meets the box's top and bottom edges (the box is inset 14px), holds, flattens slightly and fades.

@@ -4,7 +4,7 @@ WHAT IT DOES
 Every save renames the file one step further down the road everyone knows: final, final_v2, FINAL, FINAL_final, FINAL_final_v3 (use this one)…
 
 BEHAVIOR
-1. A file card: a Pink 48px document icon, the name ("Pitch Deck" plus a gray ".pdf") and "24 pages · Saved just now". A full-width Save button with a "⌘S" keycap. ⌘S or Ctrl+S inside the component saves too.
+1. A file card: a Pink 48px tile with the Lucide `file-text` icon (26px), the name ("Pitch Deck" plus a gray ".pdf") and "24 pages · Saved just now". A full-width Save button with a "⌘S" keycap. ⌘S or Ctrl+S inside the component saves too.
 2. Name stages: "", " final", " final_v2", " FINAL", " FINAL_final", " FINAL_final_v3", " FINAL_final_v3 (use this one)", " FINAL_final_v3 (use this one) (1)", " FINAL_final_v3 (use this one) (1) EDITED", then back to "".
 3. Each save retypes the name: backspace to the shared prefix at 22ms per character, then type the new ending at 38ms per character with a blinking caret. The meta says "Saving…" while it types.
 4. An "Also in This Folder" grouped list grows with every old name, newest first, showing 3 and then "and 4 more".

@@ -4,7 +4,7 @@ WHAT IT DOES
 Approve a huge pull request a few seconds after opening it and the approval stamp tells the truth: "LGTM (Didn't Look)".
 
 BEHAVIOR
-1. A pull request card: merge icon, title ("Refactor billing service"), "#482 · Sam wants to merge 31 commits", stats (+2,114 in green, −1,387 in red, "0 of 48 files viewed"), a 150px scrolling diff with sticky file names and green/red line backgrounds, and a green "Approve" button.
+1. A pull request card: the Lucide `git-pull-request` icon, title ("Refactor billing service"), "#482 · Sam wants to merge 31 commits", stats (+2,114 in green, −1,387 in red, "0 of 48 files viewed"), a 150px scrolling diff with sticky file names and green/red line backgrounds, and a green "Approve" button.
 2. A timer starts when the card scrolls into view: "Open for 3.2 seconds". Files viewed = scroll progress of the diff × total files, and it only goes up.
 3. Approve: if under 80% of files were viewed and it's been under 20 seconds, stamp "LGTM" with "(Didn't Look)" in amber. Otherwise stamp "LGTM (Actually Looked)" in green.
 4. The stamp is a rounded 3px-bordered box rotated −9°, heavy 44px type, slightly translucent fill and a speckled ink mask. It slams in over the diff in 480ms (the slower duration; scale 2.2 and blur(4px) to 0.94, then 1, settling at 92% opacity) while the diff dips 2px.

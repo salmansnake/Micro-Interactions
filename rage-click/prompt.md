@@ -4,7 +4,7 @@ WHAT IT DOES
 Click a busy button over and over and it notices: it calms you down, tells you the truth about the wait, promises only one job started, and hands you a stress ball to squeeze.
 
 BEHAVIOR
-1. A file card (red document icon, "Q3 Revenue Report", "2,418 rows · PDF") above a full-width 44px filled button, "Export PDF".
+1. A file card (red Lucide `file-text` icon, "Q3 Revenue Report", "2,418 rows · PDF") above a full-width 44px filled button, "Export PDF".
 2. First click starts one export (5 seconds in the demo): the button turns Soft ground with an arc spinner and "Exporting…", and a 4px progress bar fills.
 3. Every extra click while busy is counted, never queued: a red "×3" counter pill (its text exactly centered in the circle) bumps on the button's right edge and the button nudges sideways. The first few say "Still working on it. About 3 seconds left."
 4. Four or more extra clicks within 1.5 seconds is a rage click: the message becomes "Okay, okay. I heard you. It's still exporting, about 2 seconds left. Only one export was started." and a stress ball panel springs up (pop spring).

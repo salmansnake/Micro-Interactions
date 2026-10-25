@@ -40,7 +40,12 @@
 .oq.is-offline .oq-state { color: var(--oq-orange-text); }
 .oq-cloud { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--oq-fill); color: var(--oq-accent); transition: color var(--duration-slow); }
 .oq-cloud svg { width: 20px; height: 20px; }
-.oq-slash { stroke-dasharray: 23; stroke-dashoffset: 23; transition: stroke-dashoffset var(--spring-ui-duration) var(--spring-ui); }
+/* Lucide cloud online and cloud-off offline, stacked: they crossfade while cloud-off's slash draws in */
+.oq-cloud svg { grid-area: 1 / 1; transition: opacity var(--duration-base); }
+.oq-off { opacity: 0; }
+.oq.is-offline .oq-on { opacity: 0; }
+.oq.is-offline .oq-off { opacity: 1; }
+.oq-slash { stroke-dasharray: 29; stroke-dashoffset: 29; transition: stroke-dashoffset var(--spring-ui-duration) var(--spring-ui); }
 .oq.is-offline .oq-cloud { color: var(--oq-muted); }
 .oq.is-offline .oq-slash { stroke-dashoffset: 0; }
 .oq-cloud.is-hit { animation: oq-hit var(--spring-pop-duration) var(--spring-pop); }

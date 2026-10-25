@@ -22,7 +22,7 @@ APPEARANCE (Outcraft Design System)
 - Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
 - Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
 - Copy: title-case button labels, sentence-case body text, no emoji. Every count uses the singular for one ("1 file", "1 second", "1 person"), including counts set by data attributes.
-- This one: the clipboard is a 44px Soft ground circle with a clipboard icon and a black badge (Aqua in dark mode); the popover is a 280px card with 16px corners, 10px padding and a soft elevation shadow.
+- This one: the clipboard is a 44px Soft ground circle with the Lucide `clipboard` icon (22px) and a black badge (Aqua in dark mode); the popover is a 280px card with 16px corners, 10px padding and a soft elevation shadow.
 
 DELIVER
 The component, the demo rows, and short usage notes.
