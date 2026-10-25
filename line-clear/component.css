@@ -59,7 +59,7 @@
 .ct-clear { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h); animation: ct-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes ct-in { from { opacity: 0; transform: translateY(-6px); } }
 .ct-clear-text { font-size: var(--text-body); line-height: var(--leading-body); }
-.ct-lunch { align-self: flex-start; height: 40px; background: var(--success); }
+.ct-lunch { align-self: flex-start; height: 40px; background: var(--success); color: var(--success-foreground); } /* white on green in both themes */
 .ct-status { min-height: 18px; color: var(--ct-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .ct-status:empty { display: none; }
 

@@ -146,6 +146,13 @@ def check(reg):
             rootrule = re.search(r'(?m)^\.' + re.escape(m[0][1]) + r'\s*\{([^}]*)\}', re.sub(r'/\*.*?\*/', '', c, flags=re.S))
             if not rootrule or not re.search(r'background(?:-color)?\s*:', rootrule.group(1)) or not re.search(r'border-radius\s*:', rootrule.group(1)):
                 errors.append(f'{s}: the root .{m[0][1]} is not the card (no background or border-radius); make the root the one bounded card (RULES 10b.1)')
+        # Green fills always carry white text (RULES 10b.14): never inherit a primary-foreground that turns black in dark mode.
+        for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', re.sub(r'/\*.*?\*/', '', c, flags=re.S)):
+            if re.search(r'background(?:-color)?\s*:\s*var\(--success\)\s*;', body) and not re.search(r'(?<![-\w])color\s*:\s*var\(--(success-foreground|on-color)\)', body):
+                errors.append(f'{s}: "{sel.strip().splitlines()[-1].strip()}" fills with green but does not set white text; add color: var(--success-foreground) (RULES 10b.14)')
+        # No hard-coded colors hidden inside an SVG data URI (RULES 10): draw the shape through a mask and color it with a token.
+        if re.search(r"data:image/svg\+xml[^)]*%23[0-9a-fA-F]{3,8}", c):
+            errors.append(f'{s}: an SVG data URI in component.css has a hard-coded color; use it as a mask and color it with a token (RULES 10)')
         btn_cls = {k for cl in re.findall(r'<button[^>]*\bclass="([^"]+)"', h + j) for k in cl.split()}
         for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', c):
             sel1 = sel.strip().splitlines()[-1]

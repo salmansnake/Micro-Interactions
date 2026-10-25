@@ -156,7 +156,7 @@
 .oc-list > li + li { border-top: 1px solid var(--border); }
 .oc-list__meta { color: var(--muted-foreground); font-size: var(--text-small); }
 .oc-list--interactive > li { cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out); }
-.oc-list--interactive > li:hover { background: var(--accent); }
+.oc-list--interactive > li:hover { background: var(--hover); } /* a lighter step than a selected row (--muted) */
 
 /* Frost: floating bars, toasts, docks */
 .oc-frost { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1); border: 1px solid var(--frost-border); border-radius: var(--radius-lg);

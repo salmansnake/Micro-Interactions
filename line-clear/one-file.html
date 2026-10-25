@@ -74,6 +74,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --subtle: var(--soft-ground);
   --success: var(--green-11);
   --success-border: var(--green-7);
+  --success-foreground: #ffffff;
   --success-subtle: var(--green-3);
   --success-text: #1f7b53;
   --tint-c: 0.4;
@@ -117,6 +118,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --subtle: var(--soft-ground);
   --success: #218358;
   --success-border: var(--green-7);
+  --success-foreground: #ffffff;
   --success-subtle: var(--green-3);
   --success-text: var(--green-11);
   --tint-c: 0.45;
@@ -160,6 +162,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --subtle: var(--soft-ground);
     --success: #218358;
     --success-border: var(--green-7);
+    --success-foreground: #ffffff;
     --success-subtle: var(--green-3);
     --success-text: var(--green-11);
     --tint-c: 0.45;
@@ -229,7 +232,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .ct-clear { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h); animation: ct-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes ct-in { from { opacity: 0; transform: translateY(-6px); } }
 .ct-clear-text { font-size: var(--text-body); line-height: var(--leading-body); }
-.ct-lunch { align-self: flex-start; height: 40px; background: var(--success); }
+.ct-lunch { align-self: flex-start; height: 40px; background: var(--success); color: var(--success-foreground); } /* white on green in both themes */
 .ct-status { min-height: 18px; color: var(--ct-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .ct-status:empty { display: none; }
 

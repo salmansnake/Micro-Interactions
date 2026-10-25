@@ -8,7 +8,7 @@ BEHAVIOR
 2. Options every 64px of drag, starting at 48px: "In 1 Hour", "This Evening" (6 PM, or "Tomorrow Evening" after 5 PM), "Tomorrow" (9 AM), "Next Week" (Monday 9 AM). Compute real dates from now. The track shows the option name (17px bold) and the exact time ("Tomorrow at 9:00 AM").
 3. Crossing into a new option pops the label (scale 1.12 and back, pop spring) and, where supported, vibrates for 8ms. Before the first step it reads "Snooze · Keep dragging".
 4. Past the last option, drag is rubber-banded to a quarter of the pointer's movement.
-5. Releasing on an option: the card slides off to the right, the row collapses smoothly, and a tinted capsule pill appears: a clock icon, "Snoozed until Tomorrow at 9:00 AM" (US format always, e.g. "Monday, Oct 26 at 9:00 AM"), and a capsule Undo button (white in light mode, a light wash of the text color in dark mode) that restores the card. Releasing before the first step springs the card back.
+5. Releasing on an option: the card slides off to the right, the row collapses smoothly, and a tinted capsule pill appears: a clock icon, "Snoozed until Tomorrow at 9:00 AM" (US format always, e.g. "Monday, Oct 26 at 9:00 AM"), and a capsule Undo button (a lighter shade of the panel's own color (a 65% white wash in light mode, a 14% wash of the text color in dark mode, never solid white or gray)) that restores the card. Releasing before the first step springs the card back.
 6. Keyboard: the card is focusable; Right Arrow steps through options (the card slides open to match), Left Arrow steps back, Enter or Space snoozes, Escape cancels.
 Reduced motion: no pop or collapse animation; the card still follows the pointer.
 
@@ -42,7 +42,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --duration-reduced: 120ms
 --duration-slower: 480ms
 --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1)
---fill-on-tint: #FFFFFF  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
+--fill-on-tint: color-mix(in srgb, #FFFFFF 65%, transparent)  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
 --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
 --foreground: #000000  (dark: #F3F2EE)
 --leading-body: 22px

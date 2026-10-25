@@ -66,6 +66,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --stone: #8A908C;
   --subtle: var(--soft-ground);
   --success: var(--green-11);
+  --success-foreground: #ffffff;
   --warning-text: #a15e00;
   --white: #FFFFFF;
 }
@@ -104,6 +105,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --stone: #7C827E;
   --subtle: var(--soft-ground);
   --success: #218358;
+  --success-foreground: #ffffff;
   --warning-text: var(--amber-11);
   --white: #161817;
 }
@@ -142,6 +144,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --stone: #7C827E;
     --subtle: var(--soft-ground);
     --success: #218358;
+    --success-foreground: #ffffff;
     --warning-text: var(--amber-11);
     --white: #161817;
   }
@@ -201,7 +204,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .qq-input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
 .qq-send, .qq-call { flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--qq-accent); color: var(--qq-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
 .qq-send:disabled { opacity: 0.4; cursor: default; }
-.qq-call { background: var(--success); animation: qq-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.qq-call { background: var(--success); color: var(--success-foreground); /* white on green in both themes */ animation: qq-pop var(--spring-pop-duration) var(--spring-pop) both; }
 .qq-send:active, .qq-call:active { transform: scale(var(--press-scale)); }
 .qq-send:focus-visible, .qq-call:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 

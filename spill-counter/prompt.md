@@ -14,7 +14,7 @@ COUNTER
 - A polite live region says "8 characters left." or "7 characters over the limit."
 
 ACTIONS
-- Trim: a soft red button, "Trim 7 Characters", shown only when over. Pressing it makes the excess characters fall (top → 34px, fade, 0.42s, staggered 14ms from the last character backwards, capped at 320ms), then cuts the value to the limit and puts the caret at the end.
+- Trim: a soft red button, "Trim 7 Characters", shown only when over. Pressing it makes the excess characters fall (top → 34px, fade, 0.48s, the slower duration token, staggered 14ms from the last character backwards, capped at 320ms), then cuts the value to the limit and puts the caret at the end.
 - Post: a filled primary button, disabled when empty or over the limit.
 - Demo: a "Keep Typing for Me" button that types a long phrase at 40ms per character.
 

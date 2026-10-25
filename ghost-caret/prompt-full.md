@@ -17,7 +17,7 @@ POLITENESS
 - Before each remote keystroke, if your caret is within 12 characters of theirs, they wait: the flag reads "Mira · Waiting", a soft halo pulses around their caret, and the status line says "Mira is waiting for you to finish here." They resume when you move away or leave the field.
 
 DEMO SCRIPT
-- When the field first scrolls into view, the teammate glides (ui spring, 0.58s) to three spots and types a phrase at each, 55–125ms per character, pausing between. Then they idle (caret blinks) and leave (avatar dims, caret fades). A "Replay" button resets everything.
+- When the field first scrolls into view, the teammate glides (ui spring, 0.46s) to three spots and types a phrase at each, 55–125ms per character, pausing between. Then they idle (caret blinks) and leave (avatar dims, caret fades). A "Replay" button resets everything.
 - Presence avatars sit in the header: you in black (Aqua in dark mode), the teammate in their color.
 Reduced motion: no glide, blink or halo; highlights still fade.
 

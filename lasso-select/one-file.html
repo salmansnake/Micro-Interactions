@@ -213,7 +213,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .ls-grid li.is-hot { background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); transform: scale(var(--press-scale)); }
 .ls-grid li[aria-selected="true"] { background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); }
 .ls-grid li[aria-selected="true"] span { color: var(--ls-accent); font-weight: 600; }
-.ls-grid li::after {
+.ls-grid li::before, .ls-grid li::after {
   content: "";
   position: absolute;
   top: 6px;
@@ -221,12 +221,13 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--ls-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.5 7.8 12 13 6.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat;
-  box-shadow: 0 0 0 2px var(--ls-bg);
   transform: scale(0);
   transition: transform var(--spring-pop-duration) var(--spring-pop);
 }
-.ls-grid li[aria-selected="true"]::after { transform: scale(1); }
+/* The selected badge: a circle in the accent, and the Lucide check in the accent's own text color (white on black, black on Aqua) */
+.ls-grid li::before { background: var(--ls-accent); box-shadow: 0 0 0 2px var(--ls-bg); }
+.ls-grid li::after { background: var(--ls-on-accent); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center calc(50% + 12px / 48) / 12px 12px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center calc(50% + 12px / 48) / 12px 12px no-repeat; }
+.ls-grid li[aria-selected="true"]::before, .ls-grid li[aria-selected="true"]::after { transform: scale(1); }
 .ls-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .ls-path { fill: color-mix(in srgb, var(--brand) 10%, transparent); stroke: var(--brand-strong); stroke-width: 1.75; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 6 5; animation: ls-march var(--duration-slower) linear infinite; }
 @keyframes ls-march { to { stroke-dashoffset: -11; } }

@@ -8,7 +8,7 @@ BEHAVIOR
 2. Detect promise phrases (circle back, follow up, touch base, loop back, revisit this, get back to you) and a rough time (tomorrow, a weekday, in a few days; otherwise next week). Under the field: a small orange boomerang that wiggles, then "Boomerang ready for "circle back". It comes back Thursday, Oct 29."
 3. Send: an orange boomerang SVG flies from the button up in an arc and off the right edge, spinning five full turns (1.1s). Status: "Sent. Reminder set for Thursday, Oct 29. It'll come back." A "Skip Ahead a Week" button appears for the demo.
 4. Skip ahead: the boomerang flies back in from the right, spinning the other way, and lands on a reminder card that springs in:
-   - The card is tinted orange (the fixed-lightness tint) with an elevation shadow and no border. Open Thread is the main button, black with white text in light mode and off-white with dark text in dark mode (never Aqua on the orange tint); Circle Back Again is white in light mode and a light wash of the text color in dark, never the plain gray fill, which dissolves into the tint. It reads "A Week Later" and "You told Sam: "Let's circle back next week once the numbers are in."".
+   - The card is tinted orange (the fixed-lightness tint) with an elevation shadow and no border. Open Thread is the main button, black with white text in light mode and off-white with dark text in dark mode (never Aqua on the orange tint); Circle Back Again is a lighter shade of the panel's own color (a 65% white wash in light mode, a 14% wash of the text color in dark mode, never solid white or gray), never the plain gray fill, which dissolves into the tint. It reads "A Week Later" and "You told Sam: "Let's circle back next week once the numbers are in."".
    - Its buttons are Open Thread and Circle Back Again ("Again? Bold. See you Thursday, Oct 29.").
 5. No phrase found: "Sent. No boomerang, so you'll have to remember this one yourself."
 Reduced motion: no flight; the reminder just appears.
@@ -39,7 +39,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --canvas: #FAFAF8  (dark: #0B0C0B)
 --card: #FFFFFF  (dark: #161817)
 --ease-in-out: cubic-bezier(0.62, 0, 0.32, 1)
---fill-on-tint: #FFFFFF  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
+--fill-on-tint: color-mix(in srgb, #FFFFFF 65%, transparent)  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
 --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
 --foreground: #000000  (dark: #F3F2EE)
 --input: #C6C9C3  (dark: #434744)

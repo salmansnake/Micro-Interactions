@@ -18,7 +18,7 @@
   --pe-tone: var(--pe-danger);
   --pe-tone-text: var(--pe-danger-text);
   --pe-tone-soft: var(--pe-danger-soft);
-  --pe-tone-btn: var(--danger-soft);
+  --pe-tone-btn: var(--fill-on-tint); /* the Fix button sits on the tinted callout (button rule 7) */
   --pe-tone-btn-text: var(--danger-soft-foreground);
   position: relative;
   display: flex;
@@ -38,7 +38,7 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
-.pe.is-soft { --pe-tone: var(--pe-warn); --pe-tone-text: var(--pe-warn-text); --pe-tone-soft: var(--pe-warn-soft); --pe-tone-btn: var(--pe-warn-soft); --pe-tone-btn-text: var(--pe-warn-text); }
+.pe.is-soft { --pe-tone: var(--pe-warn); --pe-tone-text: var(--pe-warn-text); --pe-tone-soft: var(--pe-warn-soft); --pe-tone-btn: var(--fill-on-tint); --pe-tone-btn-text: var(--pe-warn-text); }
 .pe-label { padding-left: 4px; color: var(--pe-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
 .pe-field {
   position: relative;
@@ -85,34 +85,24 @@
 .pe-mark.is-gap { background: transparent; box-shadow: none; border: 1.5px dashed var(--pe-tone); }
 .pe.has-error .pe-mark { opacity: 1; }
 /* Connector line */
-.pe-line {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--duration-base);
-}
-.pe.has-error .pe-line { opacity: 1; }
-.pe-line path { fill: none; stroke: var(--pe-tone); stroke-width: 1.5; stroke-linecap: round; }
-.pe-line circle { fill: var(--pe-tone); }
 .pe-msg {
+  position: relative;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 6px 10px;
-  margin: 14px 0 0;
-  padding-left: 20px;
+  margin: 12px 0 0;
   font-size: var(--text-small);
   line-height: var(--leading-small);
   letter-spacing: normal;
 }
+/* An error is a tinted callout under the field, flush with its left edge; a small pointer on its top edge sits right under the problem characters, so no line crosses any text */
+/* Hugs its content with equal padding left and right; the Fix button always sits under the message. The script widens it only if the pointer needs to reach further right */
+.pe.has-error .pe-msg { flex-direction: column; align-items: flex-start; gap: 8px; width: fit-content; max-width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: var(--radius-lg); background: oklch(from var(--pe-tone) var(--tint-l) calc(c * var(--tint-c)) h); }
+.pe.has-error .pe-msg::before { content: ""; position: absolute; top: -5px; left: var(--pe-x, 24px); width: 10px; height: 10px; margin-left: -5px; border-radius: 2px; background: inherit; transform: rotate(45deg); transition: left var(--spring-ui-duration) var(--spring-ui); }
 /* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
 .pe-msg:has(.pe-msg-text:empty):has(.pe-fix[hidden]) { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.pe.has-error .pe-msg-text { color: var(--pe-tone-text); font-weight: 500; }
+.pe.has-error .pe-msg-text { color: oklch(from var(--pe-tone-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-weight: 500; }
 .pe.is-ok .pe-msg-text { color: var(--pe-ok); }
 /* Lucide check before the message, not a typed ✓ */
 .pe.is-ok .pe-msg-text::before { content: ""; display: inline-block; width: 14px; height: 14px; margin-right: 4px; vertical-align: -2px; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 14px 14px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 14px 14px no-repeat; }
@@ -122,7 +112,7 @@
   border: 0;
   border-radius: var(--radius-sm);
   background: var(--pe-tone-btn);
-  color: var(--pe-tone-btn-text);
+  color: color-mix(in oklab, var(--pe-tone-btn-text) 70%, var(--foreground)); /* a step toward the text color keeps it above 4.5:1 on the wash in dark */
   font: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -157,6 +147,6 @@
 .pe-try button:active { transform: scale(var(--press-scale)); }
 .pe-try button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
-  .pe-mark, .pe-line { transition-duration: var(--duration-reduced) !important; }
+  .pe-mark { transition-duration: var(--duration-reduced) !important; }
 }
 .pe [hidden] { display: none !important; }

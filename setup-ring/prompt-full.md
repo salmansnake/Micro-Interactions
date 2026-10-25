@@ -37,7 +37,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --duration-fast: 140ms
 --duration-slow: 320ms
 --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1)
---fill-on-tint: #FFFFFF  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
+--fill-on-tint: color-mix(in srgb, #FFFFFF 65%, transparent)  (dark: color-mix(in srgb, #F3F2EE 14%, transparent))
 --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
 --foreground: #000000  (dark: #F3F2EE)
 --green-11: #218358  (dark: #3dd68c)

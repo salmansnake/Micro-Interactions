@@ -5,10 +5,10 @@ Command palettes make you commit blind. This one previews each command live on t
 
 BEHAVIOR
 1. Open with ⌘K / Ctrl+K while focus is inside the app, or with a "Commands ⌘K" button. The palette is a Frost sheet: a search input, grouped options, and a help row ("↑ ↓ preview · ↵ apply · esc revert").
-2. Demo commands: Appearance (Dark Mode, Light Mode), Accent (Aqua, Sage, Orange, Olive, each with a color swatch), Density (Compact, Comfortable), Sort Pages (By Name, By Most Recent). The current setting of each is marked "Current".
-3. Highlighting an option by arrow key or hover applies it to the app immediately as a preview: colors cross-fade (0.39s), density springs paddings, and sorting reorders rows with FLIP. While previewing something different from the saved state, the app gets a 2px Aqua ring and a "Previewing" badge.
+2. Demo commands: Appearance (Dark Mode, Light Mode), Accent (Aqua, Sage, Orange, Olive, each with a color swatch; the app uses exactly the swatch color in both its light and dark scheme, with black text on it), Density (Compact, Comfortable), Sort Pages (By Name, By Most Recent). The current setting of each is marked "Current".
+3. Highlighting an option by arrow key or hover applies it to the app immediately as a preview: colors cross-fade (0.31s, the press spring duration), density springs paddings, and sorting reorders rows with FLIP. While previewing something different from the saved state, the app gets a 2px ring in the current accent and a "Previewing" badge: a tint of the current accent that follows the app's own scheme (light tint with black text in a light app, dark tint with white text in a dark app), never the page's theme.
 4. Moving the pointer off the list, pressing Escape, or clicking outside reverts to the saved state. Enter or click commits it, closes the palette, and announces "Accent set to Sage."
-5. Typing filters options; the first match is highlighted and previewed. Use role listbox/option with aria-activedescendant.
+5. Typing filters options; the first match is highlighted and previewed. The highlighted option is filled with the app's current accent (black text), in light and dark, so it follows whatever accent is applied or being previewed; never a fixed Aqua or black. Use role listbox/option with aria-activedescendant.
 Reduced motion: changes apply in 100ms without springs or FLIP.
 
 APPEARANCE (Outcraft Design System)

@@ -21,7 +21,7 @@ APPEARANCE (Outcraft Design System)
 - Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
 - Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
 - Copy: title-case button labels, sentence-case body text, no emoji.
-- This one: the sheet is a 16px rounded white card with a large soft shadow; the pill is 40px tall and docks 20px from the corner.
+- This one: the sheet is a 16px rounded white card with a large soft shadow; the pill is 40px tall and docks 20px from the corner, in a strip of its own at the bottom of the card that opens only while the pill (or its status line) shows, so it never covers a row.
 
 DELIVER
 The component with a setProgress(0–1) hook, the demo, and short usage notes.

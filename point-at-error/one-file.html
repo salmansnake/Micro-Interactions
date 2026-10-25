@@ -21,12 +21,15 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --leading-body: 22px;
   --leading-small: 18px;
   --press-scale: 0.97;
+  --radius-lg: 12px;
   --radius-md: 8px;
   --radius-sm: 6px;
   --radius-xl: 16px;
   --radius-xs: 4px;
   --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
   --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
   --text-body: 15px;
   --text-small: 13px;
   --amber-11: #ab6400;
@@ -39,18 +42,20 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --canvas: #FAFAF8;
   --card: var(--white);
   --danger: #ce2c31;
-  --danger-soft: color-mix(in srgb, var(--danger) 16%, transparent);
   --danger-soft-foreground: #AC2529;
   --danger-text: #ca2b30;
+  --fill-on-tint: color-mix(in srgb, var(--raised) 65%, transparent);
   --foreground: var(--black);
   --green-11: #218358;
   --input: var(--line-strong);
+  --lift: #FFFFFF;
   --line: #DCDED9;
   --line-strong: #C6C9C3;
   --mist: #ECEBE6;
   --muted: var(--mist);
   --muted-foreground: var(--ash);
   --primary: var(--black);
+  --raised: var(--lift);
   --red-11: #ce2c31;
   --ring: var(--aqua-700);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
@@ -59,6 +64,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --subtle: var(--soft-ground);
   --success-text: #1f7b53;
   --tint-c: 0.4;
+  --tint-ink-l: 0.48;
+  --tint-ink-min: 0;
   --tint-l: 0.92;
   --warning: var(--amber-9);
   --warning-text: #a15e00;
@@ -76,18 +83,20 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --canvas: #0B0C0B;
   --card: var(--white);
   --danger: #d4373c;
-  --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
   --danger-soft-foreground: var(--red-11);
   --danger-text: var(--red-11);
+  --fill-on-tint: color-mix(in srgb, var(--foreground) 14%, transparent);
   --foreground: #F3F2EE;
   --green-11: #3dd68c;
   --input: var(--line-strong);
+  --lift: #3F4341;
   --line: #313432;
   --line-strong: #434744;
   --mist: #2B2E2D;
   --muted: var(--mist);
   --muted-foreground: var(--ash);
   --primary: var(--aqua);
+  --raised: var(--lift);
   --red-11: #ff9592;
   --ring: var(--aqua);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -96,6 +105,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --subtle: var(--soft-ground);
   --success-text: var(--green-11);
   --tint-c: 0.45;
+  --tint-ink-l: 1;
+  --tint-ink-min: 0.75;
   --tint-l: 0.32;
   --warning: var(--amber-9);
   --warning-text: var(--amber-11);
@@ -113,18 +124,20 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --canvas: #0B0C0B;
     --card: var(--white);
     --danger: #d4373c;
-    --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
     --danger-soft-foreground: var(--red-11);
     --danger-text: var(--red-11);
+    --fill-on-tint: color-mix(in srgb, var(--foreground) 14%, transparent);
     --foreground: #F3F2EE;
     --green-11: #3dd68c;
     --input: var(--line-strong);
+    --lift: #3F4341;
     --line: #313432;
     --line-strong: #434744;
     --mist: #2B2E2D;
     --muted: var(--mist);
     --muted-foreground: var(--ash);
     --primary: var(--aqua);
+    --raised: var(--lift);
     --red-11: #ff9592;
     --ring: var(--aqua);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -133,6 +146,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --subtle: var(--soft-ground);
     --success-text: var(--green-11);
     --tint-c: 0.45;
+    --tint-ink-l: 1;
+    --tint-ink-min: 0.75;
     --tint-l: 0.32;
     --warning: var(--amber-9);
     --warning-text: var(--amber-11);
@@ -160,7 +175,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --pe-tone: var(--pe-danger);
   --pe-tone-text: var(--pe-danger-text);
   --pe-tone-soft: var(--pe-danger-soft);
-  --pe-tone-btn: var(--danger-soft);
+  --pe-tone-btn: var(--fill-on-tint); /* the Fix button sits on the tinted callout (button rule 7) */
   --pe-tone-btn-text: var(--danger-soft-foreground);
   position: relative;
   display: flex;
@@ -180,7 +195,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
-.pe.is-soft { --pe-tone: var(--pe-warn); --pe-tone-text: var(--pe-warn-text); --pe-tone-soft: var(--pe-warn-soft); --pe-tone-btn: var(--pe-warn-soft); --pe-tone-btn-text: var(--pe-warn-text); }
+.pe.is-soft { --pe-tone: var(--pe-warn); --pe-tone-text: var(--pe-warn-text); --pe-tone-soft: var(--pe-warn-soft); --pe-tone-btn: var(--fill-on-tint); --pe-tone-btn-text: var(--pe-warn-text); }
 .pe-label { padding-left: 4px; color: var(--pe-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
 .pe-field {
   position: relative;
@@ -227,34 +242,24 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .pe-mark.is-gap { background: transparent; box-shadow: none; border: 1.5px dashed var(--pe-tone); }
 .pe.has-error .pe-mark { opacity: 1; }
 /* Connector line */
-.pe-line {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--duration-base);
-}
-.pe.has-error .pe-line { opacity: 1; }
-.pe-line path { fill: none; stroke: var(--pe-tone); stroke-width: 1.5; stroke-linecap: round; }
-.pe-line circle { fill: var(--pe-tone); }
 .pe-msg {
+  position: relative;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 6px 10px;
-  margin: 14px 0 0;
-  padding-left: 20px;
+  margin: 12px 0 0;
   font-size: var(--text-small);
   line-height: var(--leading-small);
   letter-spacing: normal;
 }
+/* An error is a tinted callout under the field, flush with its left edge; a small pointer on its top edge sits right under the problem characters, so no line crosses any text */
+/* Hugs its content with equal padding left and right; the Fix button always sits under the message. The script widens it only if the pointer needs to reach further right */
+.pe.has-error .pe-msg { flex-direction: column; align-items: flex-start; gap: 8px; width: fit-content; max-width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: var(--radius-lg); background: oklch(from var(--pe-tone) var(--tint-l) calc(c * var(--tint-c)) h); }
+.pe.has-error .pe-msg::before { content: ""; position: absolute; top: -5px; left: var(--pe-x, 24px); width: 10px; height: 10px; margin-left: -5px; border-radius: 2px; background: inherit; transform: rotate(45deg); transition: left var(--spring-ui-duration) var(--spring-ui); }
 /* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
 .pe-msg:has(.pe-msg-text:empty):has(.pe-fix[hidden]) { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.pe.has-error .pe-msg-text { color: var(--pe-tone-text); font-weight: 500; }
+.pe.has-error .pe-msg-text { color: oklch(from var(--pe-tone-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-weight: 500; }
 .pe.is-ok .pe-msg-text { color: var(--pe-ok); }
 /* Lucide check before the message, not a typed ✓ */
 .pe.is-ok .pe-msg-text::before { content: ""; display: inline-block; width: 14px; height: 14px; margin-right: 4px; vertical-align: -2px; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 14px 14px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 14px 14px no-repeat; }
@@ -264,7 +269,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   border: 0;
   border-radius: var(--radius-sm);
   background: var(--pe-tone-btn);
-  color: var(--pe-tone-btn-text);
+  color: color-mix(in oklab, var(--pe-tone-btn-text) 70%, var(--foreground)); /* a step toward the text color keeps it above 4.5:1 on the wash in dark */
   font: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -299,7 +304,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .pe-try button:active { transform: scale(var(--press-scale)); }
 .pe-try button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
-  .pe-mark, .pe-line { transition-duration: var(--duration-reduced) !important; }
+  .pe-mark { transition-duration: var(--duration-reduced) !important; }
 }
 .pe [hidden] { display: none !important; }
 
@@ -314,7 +319,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     <input id="pe-email" class="pe-input" type="text" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="name@company.com" aria-describedby="pe-msg">
   </div>
   <p class="pe-msg" id="pe-msg" aria-live="polite"><span class="pe-msg-text"></span><button type="button" class="pe-fix" hidden>Fix it</button></p>
-  <svg class="pe-line" aria-hidden="true" focusable="false"><path d="M0 0"></path><circle r="2.5" cx="0" cy="0"></circle></svg>
   <div class="pe-try">
     <span>Try</span>
     <button type="button" data-try="sarah miller@acme.io">sarah miller@acme.io</button>
@@ -389,9 +393,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     var input = root.querySelector('.pe-input');
     var field = root.querySelector('.pe-field');
     var mark = root.querySelector('.pe-mark');
-    var svg = root.querySelector('.pe-line');
-    var path = svg.querySelector('path');
-    var dot = svg.querySelector('circle');
+    var msg = root.querySelector('.pe-msg');
     var text = root.querySelector('.pe-msg-text');
     var fixBtn = root.querySelector('.pe-fix');
     var ctx = document.createElement('canvas').getContext('2d');
@@ -426,27 +428,15 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       mark.style.width = b.w + 'px';
       mark.classList.toggle('is-gap', !!current.gap);
 
-      var rr = root.getBoundingClientRect();
+      // The bubble's pointer sits right under the problem characters, kept clear of its rounded corners.
       var fr = field.getBoundingClientRect();
-      var tr = text.getBoundingClientRect();
-      var ox = rr.left + root.clientLeft;
-      var oy = rr.top + root.clientTop;
-      var markBottom = parseFloat(getComputedStyle(mark).bottom) || 7;
-      var ex = fr.left + field.clientLeft + b.x + b.w / 2 - ox;
-      var ey = fr.top + field.clientTop + field.clientHeight - markBottom + 2 - oy;
-      var sx = tr.left - 6 - ox;
-      var sy = tr.top + 10 - oy;
-      path.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + (sx - 12) + ' ' + sy + ' ' + ex + ' ' + (ey + 22) + ' ' + ex + ' ' + ey);
-      dot.setAttribute('cx', ex);
-      dot.setAttribute('cy', ey);
-
-      if (animate && !reduce.matches && path.animate) {
-        var L = path.getTotalLength();
-        path.style.strokeDasharray = L + ' ' + L;
-        path.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: 420, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'both' });
-        dot.animate([{ opacity: 0 }, { opacity: 0, offset: 0.8 }, { opacity: 1 }], { duration: 460, fill: 'both' });
-      } else {
-        path.style.strokeDasharray = 'none';
+      msg.style.minWidth = '';
+      var mr = msg.getBoundingClientRect();
+      var px = fr.left + field.clientLeft + b.x + b.w / 2 - mr.left;
+      if (px + 18 > mr.width) { msg.style.minWidth = Math.ceil(px + 18) + 'px'; mr = msg.getBoundingClientRect(); }
+      msg.style.setProperty('--pe-x', Math.max(18, Math.min(px, mr.width - 18)) + 'px');
+      if (animate && !reduce.matches && msg.animate) {
+        msg.animate([{ opacity: 0, transform: 'translateY(-4px)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.3,.7,.3,1)' });
       }
     }
 
@@ -464,6 +454,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       } else {
         text.textContent = ok ? 'Looks good.' : '';
         fixBtn.hidden = true;
+        msg.style.minWidth = '';
         input.removeAttribute('aria-invalid');
       }
     }
