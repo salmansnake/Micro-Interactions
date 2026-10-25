@@ -68,6 +68,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 /* Stepper */
 .ce-step { display: flex; align-items: center; gap: 2px; }
 .ce-step button { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--ce-fill); color: inherit; font: 500 var(--text-title-sm)/1 inherit; font-family: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ce-step button svg { display: block; width: 16px; height: 16px; }
 .ce-step button:active { transform: scale(var(--press-scale-sm)); }
 .ce-step button:disabled { opacity: 0.35; cursor: default; }
 .ce-step button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -173,9 +174,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     <div class="ce-row">
       <span class="ce-row-label" id="ce-ppl-label">People</span>
       <div class="ce-step" role="group" aria-labelledby="ce-ppl-label">
-        <button type="button" class="ce-minus" aria-label="Fewer people">−</button>
+        <button type="button" class="ce-minus" aria-label="Fewer people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
         <output class="ce-people" aria-live="polite">6</output>
-        <button type="button" class="ce-plus" aria-label="More people">+</button>
+        <button type="button" class="ce-plus" aria-label="More people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
       </div>
     </div>
     <label class="ce-row ce-row--agenda">

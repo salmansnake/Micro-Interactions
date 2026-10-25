@@ -26,7 +26,7 @@
     var list = root.querySelector('.cs-list');
     var clear = root.querySelector('.cs-clear');
     var sr = root.querySelector('.cs-sr');
-    var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
     var stack = []; // newest first: { text, label, t }
     var COPIED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Copied';
     // Each copy button is as wide as its "Copied" state from the start, so confirming never resizes it

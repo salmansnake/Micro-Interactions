@@ -34,7 +34,7 @@
       var target = speed(now);
       shown += (target - shown) * 0.25;
       if (shown < 0.5 && target === 0) shown = 0;
-      wpsEl.textContent = Math.round(shown).toLocaleString();
+      wpsEl.textContent = Math.round(shown).toLocaleString('en-US');
       var s = shown >= SPEEDRUN ? 'speedrun' : shown >= SKIM ? 'skim' : '';
       if (!done) root.setAttribute('data-speed', s);
       mode.textContent = s === 'speedrun' ? 'Speedrunning' : s === 'skim' ? 'Skimming' : '';
@@ -47,7 +47,7 @@
       var avg = total / secs;
       check.disabled = false;
       cancelAnimationFrame(raf); raf = 0;
-      wpsEl.textContent = Math.round(avg).toLocaleString();
+      wpsEl.textContent = Math.round(avg).toLocaleString('en-US');
       mode.textContent = avg >= SPEEDRUN ? 'Speedrunning' : avg > honest ? 'Skimming' : 'Reading';
       result.hidden = false;
       if (avg > honest) {
@@ -55,11 +55,11 @@
         root.setAttribute('data-speed', avg >= SPEEDRUN ? 'speedrun' : 'skim');
         label.textContent = 'I have not read this, and we both know it.';
         label.classList.remove('is-swap'); void label.offsetWidth; label.classList.add('is-swap');
-        record.textContent = 'You read ' + total.toLocaleString() + ' words in ' + secs.toFixed(1) + ' seconds. That’s ' + Math.round(avg).toLocaleString() + ' words per second.';
+        record.textContent = 'You read ' + total.toLocaleString('en-US') + ' words in ' + secs.toFixed(1) + ' seconds. That’s ' + Math.round(avg).toLocaleString('en-US') + ' words per second.';
         tldr.hidden = false;
       } else {
         root.setAttribute('data-speed', '');
-        record.textContent = 'You actually read all ' + total.toLocaleString() + ' words. Section 8 says you’re owed a high five.';
+        record.textContent = 'You actually read all ' + total.toLocaleString('en-US') + ' words. Section 8 says you’re owed a high five.';
       }
     }
 

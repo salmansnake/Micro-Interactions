@@ -21,6 +21,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --leading-body: 22px;
   --leading-small: 18px;
   --leading-title-sm: 24px;
+  --radius-full: 9999px;
   --radius-lg: 12px;
   --radius-md: 8px;
   --radius-sm: 6px;
@@ -35,6 +36,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --text-title-sm: 17px;
   --tracking-title: -0.015em;
   --amber-11: #ab6400;
+  --amber-9: #ffc53d;
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
   --ash: #646A66;
@@ -47,7 +49,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-3: var(--orange);
   --chart-4: var(--sage);
   --chart-5: var(--olive);
-  --chart-6: var(--aqua-700);
   --foreground: var(--black);
   --green-11: #218358;
   --line: #DCDED9;
@@ -56,7 +57,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --muted-foreground: var(--ash);
   --olive: #AA9856;
   --on-chart: #000000;
-  --on-chart-strong: #ffffff;
   --on-color: #ffffff;
   --orange: #FE8C5F;
   --pink: #FFC7F6;
@@ -66,13 +66,19 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
+  --success: var(--green-11);
   --success-text: #1f7b53;
+  --tint-c: 0.4;
+  --tint-ink-l: 0.48;
+  --tint-l: 0.92;
+  --warning: var(--amber-9);
   --warning-text: #a15e00;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
 [data-theme="dark"] .st, .dark .st {
   --amber-11: #ffca16;
+  --amber-9: #ffc53d;
   --aqua: #79EEEC;
   --aqua-700: #79EEEC;
   --ash: #A3A8A4;
@@ -85,7 +91,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-3: var(--orange);
   --chart-4: var(--sage);
   --chart-5: var(--olive);
-  --chart-6: var(--aqua-700);
   --foreground: #F3F2EE;
   --green-11: #3dd68c;
   --line: #313432;
@@ -94,7 +99,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --muted-foreground: var(--ash);
   --olive: #AA9856;
   --on-chart: #000000;
-  --on-chart-strong: #000000;
   --on-color: #ffffff;
   --orange: #FE8C5F;
   --pink: #FFC7F6;
@@ -104,13 +108,19 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
+  --success: #218358;
   --success-text: var(--green-11);
+  --tint-c: 0.45;
+  --tint-ink-l: 1;
+  --tint-l: 0.32;
+  --warning: var(--amber-9);
   --warning-text: var(--amber-11);
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not(.light) .st {
     --amber-11: #ffca16;
+    --amber-9: #ffc53d;
     --aqua: #79EEEC;
     --aqua-700: #79EEEC;
     --ash: #A3A8A4;
@@ -123,7 +133,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --chart-3: var(--orange);
     --chart-4: var(--sage);
     --chart-5: var(--olive);
-    --chart-6: var(--aqua-700);
     --foreground: #F3F2EE;
     --green-11: #3dd68c;
     --line: #313432;
@@ -132,7 +141,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --muted-foreground: var(--ash);
     --olive: #AA9856;
     --on-chart: #000000;
-    --on-chart-strong: #000000;
     --on-color: #ffffff;
     --orange: #FE8C5F;
     --pink: #FFC7F6;
@@ -142,7 +150,12 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
+    --success: #218358;
     --success-text: var(--green-11);
+    --tint-c: 0.45;
+    --tint-ink-l: 1;
+    --tint-l: 0.32;
+    --warning: var(--amber-9);
     --warning-text: var(--amber-11);
     --white: #161817;
   }
@@ -201,8 +214,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .st-sort:hover { color: var(--st-fg); }
 .st-sort:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .st-sort[aria-sort="ascending"], .st-sort[aria-sort="descending"] { color: var(--st-accent); }
-.st-sort i { width: 8px; height: 8px; opacity: 0; transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-base); }
-.st-sort i::before { content: ""; display: block; width: 6px; height: 6px; border: solid currentColor; border-width: 0 1.75px 1.75px 0; transform: translate(1px, -1px) rotate(45deg); }
+.st-sort i { width: 14px; height: 14px; opacity: 0; transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-base); }
+/* Lucide chevron-down (round ends), drawn through a mask; it flips for ascending */
+.st-sort i::before { content: ""; display: block; width: 14px; height: 14px; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / 14px 14px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / 14px 14px no-repeat; }
 .st-sort[aria-sort="descending"] i { opacity: 1; }
 .st-sort[aria-sort="ascending"] i { opacity: 1; transform: rotate(180deg); }
 .st-body { position: relative; padding: 0 8px 6px 24px; }
@@ -219,15 +233,19 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .st-row b { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: var(--radius-sm); color: var(--on-color); font-size: calc(var(--text-caption) - 1px); }
 .st-row.is-moved { animation: st-flash 1.6s var(--ease-out); }
 @keyframes st-flash { 0% { background: color-mix(in srgb, var(--brand) 14%, transparent); } 100% { background: transparent; } }
+/* The badge straddles the card and the table, so it carries its own tint of its color instead of the card's white */
 .st-delta {
   position: absolute;
   left: -22px;
   top: 50%;
-  padding: 1px 4px;
-  border-radius: var(--radius-sm);
-  background: var(--st-bg);
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  box-sizing: border-box;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
   font-size: calc(var(--text-caption) - 2px);
-  line-height: 14px;
+  line-height: 1;
   font-style: normal;
   font-weight: 700;
   white-space: nowrap;
@@ -236,8 +254,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop);
   z-index: 1;
 }
-.st-delta.up { color: var(--st-up); }
-.st-delta.down { color: var(--st-down); }
+.st-delta.up { background: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--st-up) min(l, var(--tint-ink-l)) c h); }
+.st-delta.down { background: oklch(from var(--warning) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--st-down) min(l, var(--tint-ink-l)) c h); }
 .st-delta.is-on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 .st-status { margin: 0 4px; color: var(--st-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 @media (prefers-reduced-motion: reduce) {
@@ -265,7 +283,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       <div class="st-row" role="row" data-name="Atlas" data-mrr="6340" data-growth="4.8"><span role="cell"><b style="background: var(--chart-4); color: var(--on-chart)">A</b>Atlas</span><span role="cell">$6,340</span><span role="cell">+4.8%</span><em class="st-delta" aria-hidden="true"></em></div>
       <div class="st-row" role="row" data-name="Nova" data-mrr="980" data-growth="2.2"><span role="cell"><b style="background: var(--chart-2); color: var(--on-chart)">N</b>Nova</span><span role="cell">$980</span><span role="cell">+2.2%</span><em class="st-delta" aria-hidden="true"></em></div>
       <div class="st-row" role="row" data-name="Beacon" data-mrr="3710" data-growth="-1.6"><span role="cell"><b style="background: var(--chart-5); color: var(--on-chart)">B</b>Beacon</span><span role="cell">$3,710</span><span role="cell">−1.6%</span><em class="st-delta" aria-hidden="true"></em></div>
-      <div class="st-row" role="row" data-name="Cobalt" data-mrr="1490" data-growth="-3.9"><span role="cell"><b style="background: var(--chart-6); color: var(--on-chart-strong)">C</b>Cobalt</span><span role="cell">$1,490</span><span role="cell">−3.9%</span><em class="st-delta" aria-hidden="true"></em></div>
+      <div class="st-row" role="row" data-name="Cobalt" data-mrr="1490" data-growth="-3.9"><span role="cell"><b style="background: var(--chart-1); color: var(--on-chart)">C</b>Cobalt</span><span role="cell">$1,490</span><span role="cell">−3.9%</span><em class="st-delta" aria-hidden="true"></em></div>
     </div>
   </div>
   <p class="st-status" aria-live="polite">Sorted by growth, highest first.</p>

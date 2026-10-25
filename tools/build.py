@@ -130,6 +130,22 @@ def check(reg):
         # Icons are Lucide SVG (RULES 10c): a lone text glyph like a tick or a cross sits where the font puts it, not in the center.
         if re.search(r"textContent\s*=\s*'[\u2713\u2714\u2715\u2716\u2717\u00d7]'\s*[;,)]|>\s*[\u2713\u2714\u2715\u2716\u2717\u00d7]\s*<", h + j):
             errors.append(f'{s}: a tick or cross is drawn as a text character; use the Lucide check or x icon as inline SVG (RULES 10c)')
+        # Locale (RULES 12b): dates, times and numbers are always US format, whatever the visitor's browser is set to.
+        if re.search(r"toLocale(?:Date|Time)?String\(\s*(?:\)|\[\]|undefined)|Intl\.\w+\(\s*(?:\)|\[\]|undefined)", j):
+            errors.append(f'{s}: dates or numbers are formatted in the visitor\'s locale; pass \'en-US\' (RULES 12b)')
+        # Icons have round ends and are real Lucide shapes (RULES 10c): no ticks drawn with rotated borders, no typed + or minus as a control, no stroked SVG without round caps.
+        if re.search(r'border-width\s*:\s*0\s+[\d.]+px\s+[\d.]+px\s+0[^;]*;[^}]*rotate\(45deg\)', c):
+            errors.append(f'{s}: a tick is drawn with a rotated border (sharp corners); use the Lucide check (RULES 10c)')
+        if re.search(r'<button[^>]*>\s*[\u2212+\u2013]\s*</button>', h + j):
+            errors.append(f'{s}: a plus or minus button uses a typed character; use the Lucide plus or minus icon (RULES 10c)')
+        for tag in re.findall(r'<svg\b[^>]*>', (h + j).replace('\\"', '"')):
+            if 'stroke=' in tag and 'stroke="none"' not in tag and 'stroke-linecap="round"' not in tag:
+                errors.append(f'{s}: an icon has square line ends; add stroke-linecap="round" stroke-linejoin="round" (RULES 10c)'); break
+        # One bounded card (RULES 10b.1): the component's root element is the card, so nothing it shows can sit outside it.
+        if m:
+            rootrule = re.search(r'(?m)^\.' + re.escape(m[0][1]) + r'\s*\{([^}]*)\}', re.sub(r'/\*.*?\*/', '', c, flags=re.S))
+            if not rootrule or not re.search(r'background(?:-color)?\s*:', rootrule.group(1)) or not re.search(r'border-radius\s*:', rootrule.group(1)):
+                errors.append(f'{s}: the root .{m[0][1]} is not the card (no background or border-radius); make the root the one bounded card (RULES 10b.1)')
         btn_cls = {k for cl in re.findall(r'<button[^>]*\bclass="([^"]+)"', h + j) for k in cl.split()}
         for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', c):
             sel1 = sel.strip().splitlines()[-1]

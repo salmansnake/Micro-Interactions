@@ -46,7 +46,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
   min-width: 34px;
   height: 34px;
   box-sizing: border-box;
@@ -61,9 +60,13 @@
   transition: background-color var(--duration-fast), color var(--duration-fast), transform var(--spring-press-duration) var(--spring-press);
 }
 .sr-btn:hover { background: var(--sr-hover); }
+/* Buttons in a capsule group are capsules (circles when icon-only), so their hover and on states match the group's shape */
+.sr-group .sr-btn { border-radius: var(--radius-full); }
 .sr-btn:active { transform: scale(var(--press-scale-sm)); }
 .sr-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .sr-btn svg { flex: none; width: 16px; height: 16px; }
+/* Spacing sits on the label, not a flex gap: the hidden shortcut badge is a child too, and a gap made room for it, pushing every label and icon off center */
+.sr-btn svg + .sr-text { margin-left: 6px; }
 .sr-btn.is-on { background: color-mix(in srgb, var(--sr-accent) 16%, transparent); color: var(--sr-accent); }
 .sr-btn.is-primary { margin-left: auto; height: 40px; padding: 0 18px; background: var(--sr-accent); color: var(--sr-on-accent); font-weight: 600; box-shadow: var(--sr-glass-shadow); }
 .sr-btn.is-primary:hover { background: color-mix(in oklab, var(--sr-accent), var(--black) 8%); }

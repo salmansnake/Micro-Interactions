@@ -74,7 +74,8 @@
 .fo-plan:has(input:checked) { box-shadow: 0 0 0 2px var(--fo-accent); }
 .fo-plan:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
 .fo-stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
-.fo-stepper button { width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fo-fill); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
+.fo-stepper button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fo-fill); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
+.fo-stepper button svg { display: block; width: 18px; height: 18px; }
 .fo-stepper button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .fo-seats { min-width: 2ch; font-size: var(--text-h2); line-height: var(--leading-h2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
 .fo-email { height: 44px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--fo-bg); color: var(--fo-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }

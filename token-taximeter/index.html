@@ -180,7 +180,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
         last = str;
       }
       drawFare(str);
-      tokensEl.textContent = tin.toLocaleString() + ' tokens in · ' + (tin ? outTokens.toLocaleString() : 0) + ' out';
+      tokensEl.textContent = tin.toLocaleString('en-US') + ' tokens in · ' + (tin ? outTokens.toLocaleString('en-US') : 0) + ' out';
       used.style.width = Math.min(100, spent / budget * 100) + '%';
       next.style.width = (tin ? Math.min(100 - spent / budget * 100, Math.max(1.5, cost / budget * 100)) : 0) + '%'; // true share, with a sliver so it stays visible
       var b = document.createElement('b'); b.textContent = '$' + spent.toFixed(2);

@@ -112,6 +112,8 @@
 .ls-act, .ls-clear { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--ls-fill); color: var(--ls-fg); font: inherit; font-weight: 600; cursor: pointer; }
 .ls-clear { display: grid; place-items: center; width: 32px; padding: 0; }
 .ls-clear svg { display: block; width: 16px; height: 16px; }
+/* Capsule in a capsule: the bar is fully rounded, so its buttons are too (button rule 4) */
+.ls-act, .ls-clear { border-radius: var(--radius-full); }
 .ls-act:focus-visible, .ls-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .ls-path, .ls-bar, .ls-count.is-bump { animation: none; }

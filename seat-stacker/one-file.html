@@ -225,6 +225,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   cursor: pointer;
   transition: transform var(--spring-press-duration) var(--spring-press);
 }
+.ss-step svg { display: block; width: 20px; height: 20px; }
 .ss-step:active { transform: scale(0.9); }
 .ss-step:disabled { opacity: 0.35; cursor: default; }
 .ss-step:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -268,9 +269,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     <div class="ss-avatars" aria-hidden="true"></div>
   </div>
   <div class="ss-control">
-    <button type="button" class="ss-step" data-step="-1" aria-label="Remove a seat">−</button>
+    <button type="button" class="ss-step" data-step="-1" aria-label="Remove a seat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
     <label class="ss-count-wrap"><span class="ss-sr">Seats</span><input class="ss-count" type="text" inputmode="numeric" value="3" aria-label="Seats"></label>
-    <button type="button" class="ss-step" data-step="1" aria-label="Add a seat">+</button>
+    <button type="button" class="ss-step" data-step="1" aria-label="Add a seat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
   </div>
   <div class="ss-tiers" aria-hidden="true">
     <div class="ss-tier" data-min="1"><b>$12</b><span>1–9 seats</span></div>

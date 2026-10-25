@@ -143,7 +143,7 @@
           });
           wrap.appendChild(t);
           preview.replaceChildren(wrap);
-          info.textContent = body.length.toLocaleString() + ' rows · ' + head.length + ' columns · ' + size(file.size);
+          info.textContent = body.length.toLocaleString('en-US') + ' rows · ' + head.length + ' columns · ' + size(file.size);
         });
       } else if (kind === 'image') {
         url = URL.createObjectURL(file);

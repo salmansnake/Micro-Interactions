@@ -78,10 +78,11 @@
 /* Snoozed pills */
 .sn-snoozed { display: flex; flex-direction: column; gap: 6px; }
 .sn-snoozed:empty { display: none; }
-.sn-pill { display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--sn-indigo) 12%, transparent); color: var(--sn-fg); font-size: var(--text-small); line-height: var(--leading-small); animation: sn-in var(--spring-ui-duration) var(--spring-ui) both; }
+.sn-pill { display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px; border-radius: var(--radius-full); background: oklch(from var(--sn-indigo) var(--tint-l) calc(c * var(--tint-c)) h); color: var(--sn-fg); font-size: var(--text-small); line-height: var(--leading-small); animation: sn-in var(--spring-ui-duration) var(--spring-ui) both; }
 .sn-pill svg { flex: none; width: 16px; height: 16px; color: var(--sn-indigo); }
 .sn-pill span { flex: 1; min-width: 0; }
-.sn-pill button { flex: none; height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--raised); color: var(--sn-accent); font: inherit; font-weight: 600; cursor: pointer; }
+/* Capsule in a capsule (button rule 4); the fill is the on-tint secondary, never gray on the tint (button rule 7) */
+.sn-pill button { flex: none; height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-full); background: var(--fill-on-tint); color: var(--sn-accent); font: inherit; font-weight: 600; cursor: pointer; }
 .sn-pill button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @keyframes sn-in { from { opacity: 0; transform: translateY(-6px) scale(var(--press-scale)); } }
 .sn-hint { margin: 2px 4px 0; color: var(--sn-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }

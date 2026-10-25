@@ -54,7 +54,7 @@
       if (allDone) {
         var plan = root.querySelector('input[name="fo-plan"]:checked').value;
         var b = document.createElement('b');
-        b.textContent = '$' + (PRICES[plan] * seats).toLocaleString();
+        b.textContent = '$' + (PRICES[plan] * seats).toLocaleString('en-US');
         total.replaceChildren(b, document.createTextNode(' per month after a 14-day trial. Billed to ' + email.value.trim() + '.'));
       }
       renderChips();
