@@ -38,13 +38,31 @@
         var s = document.createElement('span');
         s.className = 'sc-x';
         s.textContent = extra[i];
-        s.style.top = Math.min(1 + i * 0.45, 9).toFixed(2) + 'px';
         if (!reduce.matches && limit + i >= fresh) s.classList.add('is-new');
         mirror.appendChild(s);
       }
       mirror.appendChild(document.createTextNode('​')); // keeps a trailing newline's height
       grow();
+      slope();
       update(v.length);
+    }
+
+    // Every line of spilled characters slopes down, from 1px where it starts to 9px at the right edge,
+    // so each new line keeps spilling instead of going flat. Measure at rest, then offset.
+    function slope() {
+      var spans = mirror.querySelectorAll('.sc-x');
+      if (!spans.length) return;
+      var cs = getComputedStyle(mirror);
+      var right = mirror.clientWidth - parseFloat(cs.paddingRight);
+      var pos = [];
+      spans.forEach(function (s) { s.style.top = '0px'; });
+      spans.forEach(function (s) { pos.push([s.offsetTop, s.offsetLeft]); });
+      var lineTop = null, start = 0;
+      spans.forEach(function (s, i) {
+        if (pos[i][0] !== lineTop) { lineTop = pos[i][0]; start = pos[i][1]; }
+        var t = right > start ? (pos[i][1] - start) / (right - start) : 0;
+        s.style.top = (1 + 8 * Math.max(0, Math.min(1, t))).toFixed(2) + 'px';
+      });
     }
 
     function update(len) {
@@ -111,7 +129,7 @@
       });
     }
 
-    if (window.ResizeObserver) new ResizeObserver(grow).observe(root);
+    if (window.ResizeObserver) new ResizeObserver(function () { grow(); slope(); }).observe(root);
     render(Infinity);
   }
 

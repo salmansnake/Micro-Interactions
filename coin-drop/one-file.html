@@ -62,6 +62,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --success: var(--green-11);
   --success-subtle: var(--green-3);
   --success-text: #1f7b53;
+  --tint-ink-l: 0.48;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -91,6 +92,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --success: #218358;
   --success-subtle: var(--green-3);
   --success-text: var(--green-11);
+  --tint-ink-l: 1;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -120,6 +122,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --success: #218358;
     --success-subtle: var(--green-3);
     --success-text: var(--green-11);
+    --tint-ink-l: 1;
     --white: #161817;
   }
 }
@@ -201,7 +204,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 }
 .cd-toggle button[aria-checked="true"] { font-weight: 600; }
 .cd-toggle button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.cd-pct { padding: 1px 6px; border-radius: var(--radius-full); background: var(--cd-success-soft); color: var(--cd-success-text); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-base); }
+.cd-pct { padding: 1px 6px; border-radius: var(--radius-full); background: var(--cd-success-soft); color: oklch(from var(--cd-success-text) min(l, var(--tint-ink-l)) c h); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-base); }
 /* On the gray track (Monthly selected) the pale green tint washes out, so it steps up; on the white thumb and in dark mode it stays the standard soft green */
 .cd[data-period="monthly"] .cd-pct { background: color-mix(in srgb, var(--success) 14%, var(--cd-track)); }
 :root[data-theme="dark"] .cd[data-period="monthly"] .cd-pct { background: var(--cd-success-soft); }

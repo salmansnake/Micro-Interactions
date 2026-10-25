@@ -200,6 +200,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   .fy-seg { max-width: none; }
 }
 .fy-status { min-height: 18px; color: var(--fy-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.fy-status:empty { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 @media (prefers-reduced-motion: reduce) {
   .fy-hat { transition-duration: var(--duration-reduced); }

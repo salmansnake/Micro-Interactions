@@ -12,7 +12,7 @@
   --sc-warn: var(--warning);
   --sc-danger: var(--danger);
   --sc-danger-text: var(--danger-text);
-  --sc-danger-soft: var(--danger-subtle);
+  --sc-danger-soft: oklch(from var(--danger) var(--tint-l) calc(c * var(--tint-c)) h);
   --sc-tone: var(--sc-accent);
   display: flex;
   flex-direction: column;
@@ -66,7 +66,7 @@
   outline: none;
 }
 .sc-input::selection { background: color-mix(in srgb, var(--brand) 28%, transparent); color: transparent; }
-/* Characters past the limit: each hangs a little lower than the last */
+/* Characters past the limit: on every line, each hangs a little lower than the last (the script sets top, 1px to 9px across the line) */
 .sc-x {
   position: relative;
   border-radius: var(--radius-xs);
@@ -78,8 +78,13 @@
 .sc-x.is-falling { animation: sc-fall var(--duration-slower) cubic-bezier(0.5, 0, 0.9, 0.5) forwards; animation-delay: var(--sc-d, 0ms); }
 @keyframes sc-fall { to { top: 34px; opacity: 0; } }
 
-.sc-foot { display: flex; align-items: center; gap: 10px; min-height: 36px; }
-.sc-status { flex: 1 1 auto; min-width: 0; margin: 0; color: var(--sc-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+.sc-foot { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+/* The message sits on its own line right under the field; the ring, Trim and Post follow in one row */
+.sc-status { margin: 0; padding-left: 4px; color: var(--sc-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.sc-status:empty { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* The ring and its number are one tight pair */
+.sc-gauge { display: flex; align-items: center; gap: 6px; margin-right: 4px; }
 .sc.is-over .sc-status { color: var(--sc-danger-text); font-weight: 500; }
 .sc-meter { position: relative; flex: none; width: 24px; height: 24px; }
 .sc-meter svg { display: block; width: 24px; height: 24px; transform: rotate(-90deg); }
@@ -110,7 +115,8 @@
   25% { transform: translateY(-2px) scale(1); opacity: 1; }
   100% { transform: translateY(14px) scale(0.8); opacity: 0; }
 }
-.sc-count { flex: none; min-width: 2ch; color: var(--sc-tone); font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.sc-count { flex: none; color: var(--sc-tone); font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; }
+.sc-count:empty { display: none; }
 .sc-trim,
 .sc-post,
 .sc-try button {
@@ -124,7 +130,7 @@
   cursor: pointer;
   transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base), background-color var(--duration-base);
 }
-.sc-trim { background: var(--sc-danger-soft); color: var(--sc-danger-text); }
+.sc-trim { background: var(--danger-soft); color: var(--danger-soft-foreground); }
 .sc-post { background: var(--sc-accent); color: var(--sc-on-accent); }
 .sc-post:disabled { opacity: 0.35; cursor: default; }
 .sc-trim:active, .sc-post:active, .sc-try button:active { transform: scale(var(--press-scale)); }

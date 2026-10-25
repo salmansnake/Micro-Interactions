@@ -47,7 +47,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .tn p { margin: 0; }
 .tn-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .tn-title { font-weight: 600; }
-.tn-temp { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px 0 6px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--tn-c) 16%, transparent); color: color-mix(in srgb, var(--tn-c) 72%, var(--tn-fg)); font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; transition: background-color var(--duration-slower), color var(--duration-slower); }
+.tn-temp { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px 0 6px; border-radius: var(--radius-full); background: oklch(from var(--tn-c) var(--tint-l) calc(c * var(--tint-c)) h); color: color-mix(in srgb, var(--tn-c) 72%, var(--tn-fg)); font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; transition: background-color var(--duration-slower), color var(--duration-slower); }
 .tn-temp svg { width: 20px; height: 20px; }
 .tn-mercury { transition: d var(--duration-slower); }
 .tn-deg { font-weight: 700; }
@@ -80,7 +80,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .tn-chips button::before { content: "+ "; color: var(--tn-muted); }
 .tn-chips button:active { transform: scale(var(--press-scale-sm)); }
 .tn-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.tn-fix { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--chart-1) 16%, transparent); animation: tn-in var(--spring-ui-duration) var(--spring-ui) both; }
+/* A neutral inset, so the Orange button is the only color here (an Aqua tint behind Orange clashed) */
+.tn-fix { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: var(--tn-sunken); animation: tn-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes tn-in { from { opacity: 0; transform: translateY(-6px); } }
 .tn-fix-text { font-size: var(--text-small); line-height: var(--leading-small); }
 .tn-warm { flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ai); color: var(--ai-foreground); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }

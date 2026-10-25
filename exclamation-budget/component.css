@@ -48,7 +48,7 @@
 .eb-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .eb-status { color: var(--eb-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
 .eb.is-broke .eb-status { color: var(--eb-fg); font-weight: 500; }
-.eb-shop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--ai) 12%, transparent); animation: eb-in var(--spring-ui-duration) var(--spring-ui) both; }
+.eb-shop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: oklch(from var(--ai) var(--tint-l) calc(c * var(--tint-c)) h); animation: eb-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes eb-in { from { opacity: 0; transform: translateY(-6px); } }
 .eb-shop-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
 .eb-buy { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ai); color: var(--ai-foreground); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }

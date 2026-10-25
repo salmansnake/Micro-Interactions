@@ -44,7 +44,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-2: var(--pink);
   --danger: #ce2c31;
   --danger-foreground: #ffffff;
-  --danger-text: #ca2b30;
+  --danger-soft: color-mix(in srgb, var(--danger) 16%, transparent);
+  --danger-soft-foreground: #AC2529;
   --foreground: var(--black);
   --green-11: #218358;
   --line: #DCDED9;
@@ -60,6 +61,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --ring: var(--aqua-700);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --success: var(--green-11);
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -74,7 +77,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-2: var(--pink);
   --danger: #d4373c;
   --danger-foreground: #ffffff;
-  --danger-text: var(--red-11);
+  --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
+  --danger-soft-foreground: var(--red-11);
   --foreground: #F3F2EE;
   --green-11: #3dd68c;
   --line: #313432;
@@ -90,6 +94,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --ring: var(--aqua);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --success: #218358;
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -104,7 +110,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --chart-2: var(--pink);
     --danger: #d4373c;
     --danger-foreground: #ffffff;
-    --danger-text: var(--red-11);
+    --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
+    --danger-soft-foreground: var(--red-11);
     --foreground: #F3F2EE;
     --green-11: #3dd68c;
     --line: #313432;
@@ -120,6 +127,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --ring: var(--aqua);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --success: #218358;
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -179,7 +188,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 @keyframes mm-boxed { 0% { transform: scale(1); opacity: 0.8; } 80% { transform: scale(var(--mm-stop, 2.4)); opacity: 0.8; } 100% { transform: scale(var(--mm-stop, 2.4)) scaleY(0.92); opacity: 0; } }
 @keyframes mm-free { 0% { transform: scale(1); opacity: 0.7; border-color: color-mix(in srgb, var(--success) 80%, transparent); } 100% { transform: scale(6); opacity: 0; border-color: color-mix(in srgb, var(--success) 40%, transparent); } }
 
-.mm-toast { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--danger) 12%, transparent); animation: mm-in var(--spring-ui-duration) var(--spring-ui) both; }
+.mm-toast { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: var(--radius-lg); background: oklch(from var(--danger) var(--tint-l) calc(c * var(--tint-c)) h); animation: mm-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes mm-in { from { opacity: 0; transform: translateY(-6px); } }
 .mm-toast-text { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
 .mm-unmute-inline { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--danger); color: var(--danger-foreground); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; }
@@ -187,7 +196,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .mm-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; touch-action: none; -webkit-user-select: none; user-select: none; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-base); }
 .mm-controls button svg { width: 20px; height: 20px; }
 .mm-mute { flex: none; padding: 0 18px; background: var(--mm-fill); color: var(--mm-fg); }
-.mm-mute[aria-pressed="true"] { background: color-mix(in srgb, var(--danger) 16%, transparent); color: var(--danger-text); }
+.mm-mute[aria-pressed="true"] { background: var(--danger-soft); color: var(--danger-soft-foreground); }
 .mm-talk { flex: 1; background: var(--mm-accent); color: var(--mm-on-accent); }
 .mm.is-talking .mm-talk { transform: scale(0.97); }
 .mm-controls button:focus-visible, .mm-unmute-inline:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

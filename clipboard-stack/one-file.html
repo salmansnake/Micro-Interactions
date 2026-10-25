@@ -47,10 +47,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
   --ash: #646A66;
-  --background: var(--canvas);
   --black: #000000;
   --border: var(--line);
-  --canvas: #FAFAF8;
   --card: var(--white);
   --foreground: var(--black);
   --green-11: #218358;
@@ -75,10 +73,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --aqua: #79EEEC;
   --aqua-700: #79EEEC;
   --ash: #A3A8A4;
-  --background: var(--canvas);
   --black: #000000;
   --border: var(--line);
-  --canvas: #0B0C0B;
   --card: var(--white);
   --foreground: #F3F2EE;
   --green-11: #3dd68c;
@@ -103,10 +99,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --aqua: #79EEEC;
     --aqua-700: #79EEEC;
     --ash: #A3A8A4;
-    --background: var(--canvas);
     --black: #000000;
     --border: var(--line);
-    --canvas: #0B0C0B;
     --card: var(--white);
     --foreground: #F3F2EE;
     --green-11: #3dd68c;
@@ -302,9 +296,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 }
 .cs-copy:active { transform: scale(var(--press-scale)); }
 .cs-copy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.cs-copy.is-done, .cs-copy.is-done:active { background: var(--primary); color: var(--primary-foreground); transform: none; }
-[data-theme="dark"] .cs-copy.is-done, [data-theme="dark"] .cs-copy.is-done:active { background: var(--foreground); color: var(--background); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cs-copy.is-done { background: var(--foreground); color: var(--background); } }
+/* Copied keeps the button's colors: the label changes and a check appears, centered on it */
+.cs-copy { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.cs-copy.is-done, .cs-copy.is-done:active { transform: none; }
+.cs-copy svg { flex: none; width: 14px; height: 14px; translate: 0 calc(100% / 48); }
 /* The flying slip */
 .cs-slip {
   position: absolute;
@@ -389,6 +384,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     var sr = root.querySelector('.cs-sr');
     var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
     var stack = []; // newest first: { text, label, t }
+    var COPIED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Copied';
+    // Each copy button is as wide as its "Copied" state from the start, so confirming never resizes it
+    root.querySelectorAll('.cs-copy').forEach(function (b) { var keep = b.innerHTML; b.innerHTML = COPIED; var w = parseFloat(getComputedStyle(b).width); b.innerHTML = keep; if (w) b.style.minWidth = Math.ceil(w) + 'px'; });
 
     function render() {
       root.setAttribute('data-count', String(Math.min(stack.length, 3)));
@@ -491,7 +489,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       add(text, label, btn);
       var old = btn.getAttribute('data-label') || btn.textContent;
       btn.setAttribute('data-label', old);
-      btn.textContent = 'Copied';
+      btn.innerHTML = COPIED;
       btn.classList.add('is-done');
       setTimeout(function () { btn.textContent = old; btn.classList.remove('is-done'); }, 1400);
     });

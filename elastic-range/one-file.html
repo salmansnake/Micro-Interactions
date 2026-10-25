@@ -51,6 +51,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --red-11: #ce2c31;
   --ring: var(--aqua-700);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -73,6 +75,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --red-11: #ff9592;
   --ring: var(--aqua);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -95,6 +99,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --red-11: #ff9592;
     --ring: var(--aqua);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -160,7 +166,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   position: absolute;
   height: var(--er-cell);
   border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--brand) 16%, transparent);
+  background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h);
   opacity: 0;
   transition: left var(--spring-pop-duration) var(--spring-pop), width var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base);
 }
@@ -194,9 +200,14 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   transition: left var(--spring-pop-duration) var(--spring-pop), top var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base);
 }
 .er-bubble.is-on { opacity: 1; }
-.er-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; padding: 6px 4px 0; border-top: 1px solid var(--er-line); margin-top: 6px; }
-.er-summary { margin: 0; font-size: var(--text-small); line-height: var(--leading-small); color: var(--er-muted); }
+.er-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 4px 0; border-top: 1px solid var(--er-line); margin-top: 6px; }
+/* Narrower than the row, and balanced, so a two-line message splits evenly and keeps clear of Clear */
+.er-summary { max-width: 30ch; margin: 0; font-size: var(--text-small); line-height: var(--leading-small); color: var(--er-muted); text-wrap: balance; }
 .er-summary b { color: var(--er-fg); font-weight: 600; }
+/* Dates on the first line, nights and total always on the second */
+.er-summary .er-cost, .er-summary .er-line { display: block; }
+/* Hyphenated words never split across lines */
+.er-summary .er-nowrap { white-space: nowrap; }
 .er-summary .er-warn { color: var(--er-red); }
 .er-clear { flex: none; height: 30px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--er-fill); color: var(--er-fg); font: inherit; font-weight: 600; cursor: pointer; }
 .er-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -328,7 +339,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       var wall = firstBookedAfter(start);
       if (wall !== null && day >= wall) {
         draw(start, Math.max(start + 0, wall - 1) === start ? null : wall - 1, wall);
-        summary.replaceChildren(Object.assign(document.createElement('span'), { className: 'er-warn', textContent: mon + ' ' + wall + ' is booked, so your stay ends ' + mon + ' ' + (wall - 1) + '.' }));
+        summary.replaceChildren(Object.assign(document.createElement('span'), { className: 'er-warn', textContent: mon + ' ' + wall + ' is booked,' }), Object.assign(document.createElement('span'), { className: 'er-warn er-line', textContent: 'so your stay ends ' + mon + ' ' + (wall - 1) + '.' }));
         return;
       }
       draw(start, day);
@@ -337,10 +348,15 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 
     function summarize(a, z, tentative) {
       summary.replaceChildren();
-      if (!a) { summary.textContent = 'Choose a check-in date.'; return; }
-      if (!z) { summary.append('Check-in ', Object.assign(document.createElement('b'), { textContent: mon + ' ' + a }), '. Now choose check-out.'); return; }
+      if (!a) { summary.append('Choose a ', Object.assign(document.createElement('span'), { className: 'er-nowrap', textContent: 'check-in' }), ' date.'); return; }
+      if (!z) {
+        var next = Object.assign(document.createElement('span'), { className: 'er-line', textContent: 'Now choose ' });
+        next.append(Object.assign(document.createElement('span'), { className: 'er-nowrap', textContent: 'check-out.' }));
+        summary.append('Check-in ', Object.assign(document.createElement('b'), { textContent: mon + ' ' + a }), '.', next);
+        return;
+      }
       var nights = z - a;
-      summary.append(Object.assign(document.createElement('b'), { textContent: mon + ' ' + a + ' – ' + mon + ' ' + z }), ' · ' + nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString() + ' total' : '') + (tentative ? '' : '.'));
+      summary.append(Object.assign(document.createElement('b'), { textContent: mon + ' ' + a + ' – ' + mon + ' ' + z }), Object.assign(document.createElement('span'), { className: 'er-cost', textContent: nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString() + ' total' : '') + (tentative ? '' : '.') }));
     }
 
     function choose(day) {

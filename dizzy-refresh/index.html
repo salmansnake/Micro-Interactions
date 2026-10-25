@@ -82,7 +82,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .dz.is-dizzy .dz-pull { animation: dz-sway 1.2s var(--ease-in-out) infinite; }
 @keyframes dz-sway { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
 
-.dz-status { min-height: 36px; color: var(--dz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.dz-status { color: var(--dz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .dz.is-dizzy .dz-status { color: var(--dz-fg); font-weight: 500; }
 .dz-notify { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 12px 0 14px; border-radius: var(--radius-lg); background: var(--dz-sunken); cursor: pointer; animation: dz-in var(--spring-ui-duration) var(--spring-ui) both; }
 @keyframes dz-in { from { opacity: 0; transform: translateY(-6px); } }
@@ -124,7 +124,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 <div class="mi-host"><div class="dz" data-mi="dizzy-refresh" data-last="2:14 PM">
   <div class="dz-head">
     <p class="dz-title">Inbox</p>
-    <button type="button" class="dz-refresh" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4v4h-4"/></svg></button>
+    <button type="button" class="dz-refresh" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></button>
   </div>
   <div class="dz-viewport">
     <div class="dz-pull" aria-hidden="true">

@@ -91,7 +91,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 .cd-toggle button[aria-checked="true"] { font-weight: 600; }
 .cd-toggle button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.cd-pct { padding: 1px 6px; border-radius: var(--radius-full); background: var(--cd-success-soft); color: var(--cd-success-text); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-base); }
+.cd-pct { padding: 1px 6px; border-radius: var(--radius-full); background: var(--cd-success-soft); color: oklch(from var(--cd-success-text) min(l, var(--tint-ink-l)) c h); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-base); }
 /* On the gray track (Monthly selected) the pale green tint washes out, so it steps up; on the white thumb and in dark mode it stays the standard soft green */
 .cd[data-period="monthly"] .cd-pct { background: color-mix(in srgb, var(--success) 14%, var(--cd-track)); }
 :root[data-theme="dark"] .cd[data-period="monthly"] .cd-pct { background: var(--cd-success-soft); }

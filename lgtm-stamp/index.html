@@ -49,7 +49,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .lg p { margin: 0; }
 .lg.is-honest { --lg-ink: var(--lg-green); }
 .lg-head { display: flex; align-items: center; gap: 12px; }
-.lg-icon { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: color-mix(in srgb, var(--success) 16%, transparent); color: var(--lg-green); }
+.lg-icon { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h); color: var(--lg-green); }
 .lg-icon svg { width: 20px; height: 20px; }
 .lg-head-text { min-width: 0; }
 .lg-title { font-weight: 600; }
@@ -63,8 +63,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .lg-diff:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .lg-file { position: sticky; top: -4px; padding: 8px 12px 4px; background: linear-gradient(var(--lg-sunken), var(--lg-sunken)), var(--lg-bg); font: 600 var(--text-caption)/var(--leading-caption) var(--font-mono); }
 .lg-l { display: block; overflow: hidden; padding: 1px 12px; font: var(--text-caption)/var(--leading-caption) var(--font-mono); text-overflow: ellipsis; white-space: pre; }
-.lg-l--add { background: color-mix(in srgb, var(--success) 12%, transparent); }
-.lg-l--del { background: color-mix(in srgb, var(--danger) 10%, transparent); }
+.lg-l--add { background: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h); }
+.lg-l--del { background: oklch(from var(--danger) var(--tint-l) calc(c * var(--tint-c)) h); }
 .lg-more { padding: 10px 12px 0; color: var(--lg-muted); font-size: var(--text-caption); }
 .lg-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .lg-timer { color: var(--lg-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
@@ -73,7 +73,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .lg-approve:disabled { opacity: 0.4; cursor: default; }
 .lg-approve:focus-visible, .lg-undo:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .lg-undo { height: 32px; padding: 0 12px; background: none; color: var(--lg-accent); }
-.lg-after { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 36px; }
+.lg-after { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.lg-after:has(.lg-status:empty):has(.lg-undo[hidden]) { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .lg-status { color: var(--lg-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 
 /* The stamp lands on the diff */

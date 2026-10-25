@@ -39,21 +39,18 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --text-title-sm: 17px;
   --tracking-title: -0.015em;
   --aqua: #79EEEC;
-  --aqua-100: #CFF8F6;
   --aqua-700: #0B7573;
-  --aqua-border: #8FE0DD;
   --ash: #646A66;
   --black: #000000;
   --border: var(--line);
   --brand: var(--aqua);
-  --brand-border: var(--aqua-border);
-  --brand-foreground: #000000;
-  --brand-subtle: var(--aqua-100);
   --card: var(--white);
   --danger: #ce2c31;
   --danger-foreground: #ffffff;
+  --fill-on-tint: var(--raised);
   --foreground: var(--black);
   --input: var(--line-strong);
+  --lift: #FFFFFF;
   --line: #DCDED9;
   --line-strong: #C6C9C3;
   --mist: #ECEBE6;
@@ -61,30 +58,30 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --muted-foreground: var(--ash);
   --primary: var(--black);
   --primary-foreground: #ffffff;
+  --raised: var(--lift);
   --ring: var(--aqua-700);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
 [data-theme="dark"] .at, .dark .at {
   --aqua: #79EEEC;
-  --aqua-100: #0E2E2D;
   --aqua-700: #79EEEC;
-  --aqua-border: #1F5654;
   --ash: #A3A8A4;
   --black: #000000;
   --border: var(--line);
   --brand: var(--aqua);
-  --brand-border: var(--aqua-border);
-  --brand-foreground: #000000;
-  --brand-subtle: var(--aqua-100);
   --card: var(--white);
   --danger: #d4373c;
   --danger-foreground: #ffffff;
+  --fill-on-tint: color-mix(in srgb, var(--foreground) 14%, transparent);
   --foreground: #F3F2EE;
   --input: var(--line-strong);
+  --lift: #3F4341;
   --line: #313432;
   --line-strong: #434744;
   --mist: #2B2E2D;
@@ -92,30 +89,30 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --muted-foreground: var(--ash);
   --primary: var(--aqua);
   --primary-foreground: #000000;
+  --raised: var(--lift);
   --ring: var(--aqua);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not(.light) .at {
     --aqua: #79EEEC;
-    --aqua-100: #0E2E2D;
     --aqua-700: #79EEEC;
-    --aqua-border: #1F5654;
     --ash: #A3A8A4;
     --black: #000000;
     --border: var(--line);
     --brand: var(--aqua);
-    --brand-border: var(--aqua-border);
-    --brand-foreground: #000000;
-    --brand-subtle: var(--aqua-100);
     --card: var(--white);
     --danger: #d4373c;
     --danger-foreground: #ffffff;
+    --fill-on-tint: color-mix(in srgb, var(--foreground) 14%, transparent);
     --foreground: #F3F2EE;
     --input: var(--line-strong);
+    --lift: #3F4341;
     --line: #313432;
     --line-strong: #434744;
     --mist: #2B2E2D;
@@ -123,10 +120,13 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --muted-foreground: var(--ash);
     --primary: var(--aqua);
     --primary-foreground: #000000;
+    --raised: var(--lift);
     --ring: var(--aqua);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -173,14 +173,15 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .at-file-icon { display: grid; place-items: center; flex: none; width: 32px; height: 38px; border-radius: var(--radius-sm); background: var(--danger); color: var(--danger-foreground); font-size: calc(var(--text-caption) - 2px); font-weight: 800; }
 .at-file-name { flex: 1; min-width: 0; overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .at-file-name small { display: block; color: var(--at-muted); font-size: var(--text-caption); font-weight: 400; }
-.at-remove { flex: none; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--at-fill); color: var(--at-muted); font: 600 var(--text-title-sm)/1 inherit; cursor: pointer; }
+.at-remove { display: grid; place-items: center; flex: none; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: var(--at-fill); color: var(--at-muted); cursor: pointer; }
+.at-remove svg { display: block; width: 16px; height: 16px; }
 .at-remove:focus-visible, .at-clip:focus-visible, .at-send:focus-visible, .at-ask button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
 .at-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .at-clip { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--at-fill); color: var(--at-fg); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), color var(--duration-base), background-color var(--duration-base); }
 .at-clip svg { width: 22px; height: 22px; }
 .at-clip:active { transform: scale(var(--press-scale-sm)); }
-.at.is-hint .at-clip { color: var(--brand-foreground); background: var(--brand); animation: at-look 2.4s var(--ease-in-out) infinite; }
+.at.is-hint .at-clip { color: var(--at-on-accent); background: var(--at-accent); animation: at-look 2.4s var(--ease-in-out) infinite; }
 @keyframes at-look { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-16deg); } 80% { transform: rotate(14deg); } 90% { transform: rotate(-6deg); } }
 .at-send-wrap { position: relative; }
 .at-send { height: 44px; padding: 0 26px; border: 0; border-radius: var(--radius-md); background: var(--at-accent); color: var(--at-on-accent); font: inherit; font-weight: 600; cursor: pointer; transform-origin: 50% 100%; transition: transform var(--spring-press-duration) var(--spring-press); }
@@ -190,12 +191,12 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .at-shrug { position: absolute; right: 0; bottom: calc(100% + 8px); padding: 6px 10px; border-radius: var(--radius-lg); background: var(--at-fg); color: var(--at-bg); font: 600 var(--text-body)/1 var(--font-sans); white-space: nowrap; opacity: 0; transform: translateY(8px) scale(0.6); transform-origin: 80% 100%; pointer-events: none; transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
 .at-shrug::after { content: ""; position: absolute; right: 26px; top: 100%; border: 6px solid transparent; border-top-color: var(--at-fg); }
 .at.is-shrugging .at-shrug { opacity: 1; transform: none; }
-.at-ask { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: var(--brand-subtle); box-shadow: inset 0 0 0 1px var(--brand-border); animation: at-in var(--spring-ui-duration) var(--spring-ui) both; }
+.at-ask { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); animation: at-in var(--spring-ui-duration) var(--spring-ui) both; }
 .at-ask-text { font-weight: 500; }
 .at-ask-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .at-ask button { height: 36px; padding: 0 14px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; }
 .at-attach { background: var(--at-accent); color: var(--at-on-accent); }
-.at-anyway { background: var(--at-bg); color: var(--at-fg); box-shadow: inset 0 0 0 1px var(--brand-border); }
+.at-anyway { background: var(--fill-on-tint); color: var(--at-fg); }
 .at-status { min-height: 18px; color: var(--at-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .at-status:empty { display: none; }
 
@@ -263,7 +264,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       var ic = document.createElement('span'); ic.className = 'at-file-icon'; ic.textContent = (name.split('.').pop() || '').toUpperCase();
       var nm = document.createElement('span'); nm.className = 'at-file-name'; nm.textContent = name;
       var sm = document.createElement('small'); sm.textContent = size; nm.appendChild(sm);
-      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'at-remove'; rm.setAttribute('aria-label', 'Remove ' + name); rm.textContent = '×';
+      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'at-remove'; rm.setAttribute('aria-label', 'Remove ' + name); rm.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
       rm.addEventListener('click', function () { f.remove(); hasFile = false; hint(); clip.focus(); });
       f.append(ic, nm, rm);
       files.appendChild(f);

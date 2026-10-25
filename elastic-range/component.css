@@ -59,7 +59,7 @@
   position: absolute;
   height: var(--er-cell);
   border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--brand) 16%, transparent);
+  background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h);
   opacity: 0;
   transition: left var(--spring-pop-duration) var(--spring-pop), width var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base);
 }
@@ -93,9 +93,14 @@
   transition: left var(--spring-pop-duration) var(--spring-pop), top var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base);
 }
 .er-bubble.is-on { opacity: 1; }
-.er-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; padding: 6px 4px 0; border-top: 1px solid var(--er-line); margin-top: 6px; }
-.er-summary { margin: 0; font-size: var(--text-small); line-height: var(--leading-small); color: var(--er-muted); }
+.er-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 4px 0; border-top: 1px solid var(--er-line); margin-top: 6px; }
+/* Narrower than the row, and balanced, so a two-line message splits evenly and keeps clear of Clear */
+.er-summary { max-width: 30ch; margin: 0; font-size: var(--text-small); line-height: var(--leading-small); color: var(--er-muted); text-wrap: balance; }
 .er-summary b { color: var(--er-fg); font-weight: 600; }
+/* Dates on the first line, nights and total always on the second */
+.er-summary .er-cost, .er-summary .er-line { display: block; }
+/* Hyphenated words never split across lines */
+.er-summary .er-nowrap { white-space: nowrap; }
 .er-summary .er-warn { color: var(--er-red); }
 .er-clear { flex: none; height: 30px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--er-fill); color: var(--er-fg); font: inherit; font-weight: 600; cursor: pointer; }
 .er-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

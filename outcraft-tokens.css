@@ -86,6 +86,9 @@
   --danger-subtle: var(--red-3);
   --danger-border: var(--red-7);
   --danger-text: #ca2b30;
+  --danger-soft: color-mix(in srgb, var(--danger) 16%, transparent); /* soft destructive button (Decline, Delete, Cancel Subscription): tint only, never a stroke */
+  --danger-soft-hover: color-mix(in srgb, var(--danger) 22%, transparent);
+  --danger-soft-foreground: #AC2529; /* deeper than --danger-text so it stays above 5:1 on the stronger tint */
   --warning: var(--amber-9);
   --warning-foreground: #000000;
   --warning-subtle: var(--amber-3);
@@ -132,6 +135,13 @@
   --frost-border: rgba(0, 0, 0, 0.08);
   --overlay: rgba(0, 0, 0, 0.4);
   --on-color: #ffffff; /* text on status colors (red, green, blue) only. On --primary or --brand use --primary-foreground / --brand-foreground (black on Aqua in dark mode). */
+  --tint-l: 0.92; /* every tinted fill (panels, chips, soft buttons, selected rows) lands on this OKLCH lightness, whatever its color: oklch(from var(--x) var(--tint-l) calc(c * var(--tint-c)) h). Pale colors like Aqua and Pink no longer wash out. */
+  --tint-c: 0.4; /* share of the color's chroma the tint keeps */
+  --tint-ink-l: 0.48; /* colored text on a tint is capped at this lightness: oklch(from var(--x-text) min(l, var(--tint-ink-l)) c h). Keeps it above 4.5:1 on the tint. */
+  --muted-on-tint: var(--body); /* secondary text on a tint: the gray muted text drops under 4.5:1 there */
+  --inverse: var(--primary); /* the strongest neutral fill: black in light, off-white in dark (not Aqua). Copied states, a hint that must stand out. */
+  --inverse-foreground: var(--primary-foreground); /* text or icon on --inverse: white in light, dark in dark */
+  --fill-on-tint: var(--raised); /* secondary button sitting on a tinted panel: white in light, a light wash in dark. Never plain gray, never a stroke. */
   --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --shadow-md: 0 2px 4px -1px rgba(17, 17, 16, 0.05), 0 6px 14px -3px rgba(17, 17, 16, 0.09);
@@ -229,6 +239,9 @@
   --danger-subtle: var(--red-3);
   --danger-border: var(--red-7);
   --danger-text: var(--red-11);
+  --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent); /* dark needs about twice the light tint to separate from the card */
+  --danger-soft-hover: color-mix(in srgb, var(--danger) 38%, transparent);
+  --danger-soft-foreground: var(--red-11);
   --warning: var(--amber-9);
   --warning-foreground: #000000;
   --warning-subtle: var(--amber-3);
@@ -275,6 +288,13 @@
   --frost-border: rgba(243, 242, 238, 0.1);
   --overlay: rgba(0, 0, 0, 0.6);
   --on-color: #ffffff;
+  --tint-l: 0.32; /* dark grounds: a fixed step up from the card, the same for every color */
+  --tint-c: 0.45;
+  --tint-ink-l: 1; /* dark: text colors already read on the tint, so no cap */
+  --muted-on-tint: var(--muted-foreground);
+  --inverse: var(--foreground);
+  --inverse-foreground: var(--background);
+  --fill-on-tint: color-mix(in srgb, var(--foreground) 14%, transparent);
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
@@ -367,6 +387,9 @@
     --danger-subtle: var(--red-3);
     --danger-border: var(--red-7);
     --danger-text: var(--red-11);
+    --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
+    --danger-soft-hover: color-mix(in srgb, var(--danger) 38%, transparent);
+    --danger-soft-foreground: var(--red-11);
     --warning: var(--amber-9);
     --warning-foreground: #000000;
     --warning-subtle: var(--amber-3);
@@ -413,6 +436,13 @@
     --frost-border: rgba(243, 242, 238, 0.1);
     --overlay: rgba(0, 0, 0, 0.6);
     --on-color: #ffffff;
+    --tint-l: 0.32;
+    --tint-c: 0.45;
+    --tint-ink-l: 1;
+    --muted-on-tint: var(--muted-foreground);
+    --inverse: var(--foreground);
+    --inverse-foreground: var(--background);
+    --fill-on-tint: color-mix(in srgb, var(--foreground) 14%, transparent);
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);

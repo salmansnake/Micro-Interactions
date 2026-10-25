@@ -59,7 +59,7 @@
 .cm-chips button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--cm-fill); color: var(--cm-fg); font: var(--text-small)/var(--leading-small) var(--font-mono); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .cm-chips button:active { transform: scale(var(--press-scale-sm)); }
 .cm-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.cm-care { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--cm-mood) 12%, transparent); animation: cm-in var(--spring-ui-duration) var(--spring-ui) both; }
+.cm-care { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: var(--radius-lg); background: oklch(from var(--cm-mood) var(--tint-l) calc(c * var(--tint-c)) h); animation: cm-in var(--spring-ui-duration) var(--spring-ui) both; }
 .cm-care-text { font-size: var(--text-body); line-height: var(--leading-body); }
 .cm-break { align-self: flex-start; height: 36px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--cm-fg); color: var(--cm-bg); font: inherit; font-weight: 600; cursor: pointer; }
 .cm-break:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

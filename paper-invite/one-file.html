@@ -46,7 +46,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --border: var(--line);
   --card: var(--white);
   --danger: #ce2c31;
-  --danger-subtle: var(--red-3);
   --danger-text: #ca2b30;
   --foreground: var(--black);
   --green-11: #218358;
@@ -59,13 +58,14 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --primary: var(--black);
   --primary-foreground: #ffffff;
   --red-11: #ce2c31;
-  --red-3: #feebec;
   --ring: var(--aqua-700);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
   --success-text: #1f7b53;
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -77,7 +77,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --border: var(--line);
   --card: var(--white);
   --danger: #d4373c;
-  --danger-subtle: var(--red-3);
   --danger-text: var(--red-11);
   --foreground: #F3F2EE;
   --green-11: #3dd68c;
@@ -90,13 +89,14 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --primary: var(--aqua);
   --primary-foreground: #000000;
   --red-11: #ff9592;
-  --red-3: #3b1219;
   --ring: var(--aqua);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
   --success-text: var(--green-11);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -108,7 +108,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --border: var(--line);
     --card: var(--white);
     --danger: #d4373c;
-    --danger-subtle: var(--red-3);
     --danger-text: var(--red-11);
     --foreground: #F3F2EE;
     --green-11: #3dd68c;
@@ -121,13 +120,14 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --primary: var(--aqua);
     --primary-foreground: #000000;
     --red-11: #ff9592;
-    --red-3: #3b1219;
     --ring: var(--aqua);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
     --success-text: var(--green-11);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -145,7 +145,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --pi-on-accent: var(--primary-foreground);
   --pi-red: var(--danger);
   --pi-red-text: var(--danger-text);
-  --pi-red-soft: var(--danger-subtle);
+  --pi-red-soft: oklch(from var(--danger) var(--tint-l) calc(c * var(--tint-c)) h);
   --pi-green-text: var(--success-text);
   position: relative;
   display: flex;
@@ -178,10 +178,12 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .pi-chip.is-back { animation: pi-back var(--spring-pop-duration) var(--spring-pop) both; }
 @keyframes pi-back { 0% { transform: translate(60px, -40px) rotate(20deg) scale(0.6); opacity: 0.4; } 100% { transform: none; opacity: 1; } }
 .pi-x { display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 50%; background: none; color: inherit; opacity: 0.6; font-size: var(--text-body-lg); line-height: 1; cursor: pointer; }
-.pi-x:hover { background: var(--pi-fill); opacity: 1; }
+.pi-x svg { display: block; width: 14px; height: 14px; }
+/* The hover circle is a wash of the chip's own text color, so it reads on a white chip and a red one alike (plain gray went muddy on red) */
+.pi-x:hover { background: color-mix(in srgb, currentColor 16%, transparent); opacity: 1; }
 .pi-x:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; opacity: 1; }
 .pi-why { display: block; width: 100%; margin: 2px 0 0 4px; color: var(--pi-red-text); font-size: var(--text-caption); line-height: var(--leading-caption); }
-.pi-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; margin-top: 4px; }
+.pi-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
 .pi-status { flex: 1; min-width: 0; margin: 0; color: var(--pi-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .pi-status.is-good { color: var(--pi-green-text); font-weight: 600; }
 .pi-send { flex: none; height: 40px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--pi-accent); color: var(--pi-on-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), opacity var(--duration-base); }
@@ -254,7 +256,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       c.className = 'pi-chip' + (bad ? ' is-bad is-back' : '');
       c.setAttribute('data-email', email.toLowerCase());
       var s = document.createElement('span'); s.textContent = email;
-      var x = document.createElement('button'); x.type = 'button'; x.className = 'pi-x'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove ' + email);
+      var x = document.createElement('button'); x.type = 'button'; x.className = 'pi-x'; x.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>'; x.setAttribute('aria-label', 'Remove ' + email);
       x.addEventListener('click', function () { var why = c.nextElementSibling; if (why && why.classList.contains('pi-why')) why.remove(); c.remove(); refresh(); input.focus(); });
       c.append(s, x);
       box.insertBefore(c, input);

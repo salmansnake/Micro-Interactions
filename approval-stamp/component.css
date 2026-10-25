@@ -91,7 +91,7 @@
 .as-btn:active { transform: scale(var(--press-scale)); }
 .as-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .as-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
-.as-decline { background: var(--danger-subtle); color: var(--as-red); }
+.as-decline { background: var(--danger-soft); color: var(--danger-soft-foreground); }
 /* Reason field open: same label, solid red, so it's clear the next press sends the decline */
 .as-decline.is-armed { background: var(--danger); color: var(--danger-foreground); }
 .as-approve { background: var(--success); color: var(--success-foreground); }

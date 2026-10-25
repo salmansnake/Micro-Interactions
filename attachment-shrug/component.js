@@ -26,7 +26,7 @@
       var ic = document.createElement('span'); ic.className = 'at-file-icon'; ic.textContent = (name.split('.').pop() || '').toUpperCase();
       var nm = document.createElement('span'); nm.className = 'at-file-name'; nm.textContent = name;
       var sm = document.createElement('small'); sm.textContent = size; nm.appendChild(sm);
-      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'at-remove'; rm.setAttribute('aria-label', 'Remove ' + name); rm.textContent = '×';
+      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'at-remove'; rm.setAttribute('aria-label', 'Remove ' + name); rm.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
       rm.addEventListener('click', function () { f.remove(); hasFile = false; hint(); clip.focus(); });
       f.append(ic, nm, rm);
       files.appendChild(f);

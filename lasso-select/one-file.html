@@ -74,6 +74,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
   --success: var(--green-11);
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -111,6 +113,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
   --success: #218358;
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -148,6 +152,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
     --success: #218358;
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -204,8 +210,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .ls-grid li:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
 .ls-grid i { display: block; width: 44px; height: 52px; border-radius: var(--radius-md); background: linear-gradient(160deg, var(--c), color-mix(in srgb, var(--c) 65%, var(--black))); box-shadow: var(--shadow-sm); }
 .ls-grid span { max-width: 100%; overflow: hidden; font-size: var(--text-caption); line-height: var(--leading-caption); text-overflow: ellipsis; white-space: nowrap; }
-.ls-grid li.is-hot { background: color-mix(in srgb, var(--brand) 10%, transparent); transform: scale(var(--press-scale)); }
-.ls-grid li[aria-selected="true"] { background: color-mix(in srgb, var(--brand) 16%, transparent); }
+.ls-grid li.is-hot { background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); transform: scale(var(--press-scale)); }
+.ls-grid li[aria-selected="true"] { background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); }
 .ls-grid li[aria-selected="true"] span { color: var(--ls-accent); font-weight: 600; }
 .ls-grid li::after {
   content: "";
@@ -264,7 +270,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 @keyframes ls-bar { from { opacity: 0; transform: translateY(10px) scale(var(--press-scale)); } }
 .ls-bar-text { margin-right: 6px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .ls-act, .ls-clear { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--ls-fill); color: var(--ls-fg); font: inherit; font-weight: 600; cursor: pointer; }
-.ls-clear { width: 32px; padding: 0; font-size: calc(var(--text-title-sm) + 1px); line-height: 1; }
+.ls-clear { display: grid; place-items: center; width: 32px; padding: 0; }
+.ls-clear svg { display: block; width: 16px; height: 16px; }
 .ls-act:focus-visible, .ls-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .ls-path, .ls-bar, .ls-count.is-bump { animation: none; }
@@ -303,7 +310,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     <span class="ls-bar-text" aria-live="polite"></span>
     <button type="button" class="ls-act">Move</button>
     <button type="button" class="ls-act">Download</button>
-    <button type="button" class="ls-clear" aria-label="Clear selection">×</button>
+    <button type="button" class="ls-clear" aria-label="Clear selection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
   </div>
 </div>
 

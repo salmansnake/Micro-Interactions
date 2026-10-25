@@ -55,7 +55,7 @@
   outline: none;
   transition: background-color var(--duration-base), text-decoration-color var(--duration-slower);
 }
-.uu-w:hover, .uu-w:focus-visible, .uu-w.is-open { background: color-mix(in srgb, var(--uu-orange) 16%, transparent); }
+.uu-w:hover, .uu-w:focus-visible, .uu-w.is-open { background: oklch(from var(--uu-orange) var(--tint-l) calc(c * var(--tint-c)) h); }
 .uu-w:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 22%, transparent); }
 .uu.is-hidden .uu-w, .uu-w.is-sure { text-decoration-color: transparent; cursor: text; }
 .uu-w.is-fixed { animation: uu-fixed 1.2s var(--ease-out); }
@@ -82,7 +82,7 @@
 .uu-meter i { display: block; height: 100%; background: var(--uu-orange); transform-origin: left; transform: scaleX(var(--c, 0.5)); }
 .uu-alts { display: flex; flex-wrap: wrap; gap: 6px; }
 .uu-alts button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--uu-fill); color: var(--uu-fg); font: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
-.uu-alts button.is-keep { background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--uu-accent); font-weight: 600; }
+.uu-alts button.is-keep { background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: var(--uu-accent); font-weight: 600; }
 .uu-alts button:active { transform: scale(var(--press-scale)); }
 .uu-alts button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .uu-status { margin: 0 4px; color: var(--uu-muted); font-size: var(--text-small); line-height: var(--leading-small); }

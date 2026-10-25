@@ -11,7 +11,7 @@
   --ss-on-accent: var(--primary-foreground);
   --ss-green: var(--success);
   --ss-green-text: var(--success-text);
-  --ss-green-soft: var(--success-subtle);
+  --ss-green-soft: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -87,8 +87,8 @@
 .ss-odo { display: inline-flex; height: 34px; overflow: hidden; }
 .ss-col { display: flex; flex-direction: column; transition: transform var(--spring-ui-duration) var(--spring-ui); }
 .ss-col span { height: 34px; line-height: 34px; text-align: center; }
-.ss-note { min-height: 30px; margin: 0; }
-.ss-note:empty { display: none; }
+.ss-note { margin: 0; }
+.ss-note:empty { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .ss-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: var(--radius-full); background: var(--ss-green-soft); color: var(--ss-green-text); font-size: var(--text-small); font-weight: 600; animation: ss-chip var(--spring-pop-duration) var(--spring-pop) both; }
 @keyframes ss-chip { from { opacity: 0; transform: translateY(6px) scale(0.9); } }
 @media (prefers-reduced-motion: reduce) {

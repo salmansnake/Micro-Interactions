@@ -67,8 +67,8 @@
 .ar-actions button:active { transform: scale(var(--press-scale)); }
 .ar-actions button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .ar-status { margin: 0; color: var(--ar-muted); font-size: var(--text-small); line-height: var(--leading-small); }
-/* No message, no space: the card grows only when there is something to say */
-.ar-status:empty { display: none; }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.ar-status:empty { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 /* Narrow cards: slightly smaller button text so "Snooze (Seriously?)" stays on one line */
 .ar { container-type: inline-size; }
 @container (max-width: 320px) { .ar-actions button { padding: 0 8px; font-size: var(--text-small); } }

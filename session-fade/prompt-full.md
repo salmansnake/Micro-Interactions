@@ -15,8 +15,8 @@ Reduced motion: p changes without the spring; no ripple or banner slide.
 APPEARANCE (Outcraft Design System)
 - Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
 - Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
-- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps.
-- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float.
+- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps. A colored panel, chip or soft fill is a tint of its color at a fixed lightness (OKLCH L 0.92 in light, 0.32 in dark, keeping 40% / 45% of its chroma), so pale Aqua and strong red separate from the card equally; never outlined. Colored text on a tint is capped at OKLCH L 0.48 in light, and gray secondary text on it uses the body gray. A soft red button (Decline, Delete, Cancel) is red at 16% in light and 30% in dark with deep red text (#AC2529 in light, #FF9592 in dark), never outlined; it centers its label.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float. Components hug their content: a status line, footer or message that is empty takes no space, and the card grows when text appears.
 - Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
 - Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
 - Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
@@ -35,6 +35,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --black: #000000
 --blue-9: #0090ff
 --blur-md: 16px
+--body: #4A504D  (dark: #C9CDCA)
 --border: #DCDED9  (dark: #313432)
 --brand: #79EEEC
 --card: #FFFFFF  (dark: #161817)
@@ -59,6 +60,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --mist: #ECEBE6  (dark: #2B2E2D)
 --muted: #ECEBE6  (dark: #2B2E2D)
 --muted-foreground: #646A66  (dark: #A3A8A4)
+--muted-on-tint: #4A504D  (dark: #A3A8A4)
 --orange: #FE8C5F
 --press-scale: 0.97
 --primary: #000000  (dark: #79EEEC)
@@ -70,6 +72,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --radius-xs: 4px
 --ring: #0B7573  (dark: #79EEEC)
 --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14)  (dark: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55))
+--slate: #4A504D  (dark: #C9CDCA)
 --soft-ground: #F3F2EE  (dark: #0C0D0C)
 --spring-panel: linear(0, 0.0198, 0.069, 0.1356, 0.211, 0.2893, 0.3667, 0.4407, 0.5096, 0.5727, 0.6297, 0.6805, 0.7255, 0.765, 0.7995, 0.8294, 0.8552, 0.8774, 0.8964, 0.9127, 0.9265, 0.9382, 0.9482, 0.9566, 0.9637, 0.9696, 0.9746, 0.9788, 0.9824, 0.9853, 0.9878, 0.9899, 0.9916, 0.993, 0.9942, 0.9952, 0.996, 0.9967, 0.9973, 0.9978, 1)
 --spring-panel-duration: 530ms
@@ -85,6 +88,8 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --text-title: 20px
 --text-title-sm: 17px
 --text-ui: 14px
+--tint-c: 0.4  (dark: 0.45)
+--tint-l: 0.92  (dark: 0.32)
 --tracking-title: -0.015em
 --white: #FFFFFF  (dark: #161817)
 Fonts: Geist and Geist Mono from Google Fonts (fallback system-ui).

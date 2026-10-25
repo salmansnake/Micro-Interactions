@@ -64,7 +64,7 @@
 .ts.is-busted .ts-label { font-weight: 600; }
 
 .ts-result { display: flex; flex-direction: column; gap: 10px; animation: ts-swap var(--spring-ui-duration) var(--spring-ui) both; }
-.ts-record { padding: 10px 12px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--ts-tone) 12%, transparent); color: color-mix(in srgb, var(--ts-tone) 80%, var(--ts-fg)); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
+.ts-record { padding: 10px 12px; border-radius: var(--radius-lg); background: oklch(from var(--ts-tone) var(--tint-l) calc(c * var(--tint-c)) h); color: color-mix(in srgb, var(--ts-tone) 80%, var(--ts-fg)); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; font-variant-numeric: tabular-nums; }
 .ts:not(.is-busted) .ts-record { --ts-tone: var(--success-text); }
 .ts-tldr { padding: 12px 14px; border-radius: var(--radius-lg); background: var(--ts-sunken); font-size: var(--text-small); line-height: var(--leading-small); }
 .ts-tldr-title { margin-bottom: 4px !important; font-weight: 600; }

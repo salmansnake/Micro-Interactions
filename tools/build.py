@@ -25,6 +25,7 @@ ICON = {k: SVG.format(v) for k, v in {
     'moon': '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
     'copy': '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
     'code': '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
+    'download': '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
     'arrow': '<path d="M5 12h14M12 5l7 7-7 7"/>',
     'hand': '<path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
     'search': '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
@@ -115,6 +116,21 @@ def check(reg):
         for name, target in alias.items():
             if re.search(r'thumb|knob', name) and _res(target) in ('--card', '--background', '--white', '--popover', '--canvas'):
                 errors.append(f'{s}: {name} points at {target}; thumbs and knobs use --raised (RULES 10a)')
+        # Hug the content (RULES 10b.2): a status line that starts empty must leave the layout until it has text.
+        for tag, cls in re.findall(r'<(\w+)\b[^>]*\bclass="([\w-]+)[^"]*"[^>]*role="status"[^>]*>\s*</\1>', h) + re.findall(r'<(\w+)\b[^>]*role="status"[^>]*\bclass="([\w-]+)[^"]*"[^>]*>\s*</\1>', h):
+            own = re.search(r'\.' + re.escape(cls) + r'\s*\{([^}]*)\}', c)
+            if own and re.search(r'min-height\s*:\s*[1-9]', own.group(1)) and not re.search(r'\.' + re.escape(cls) + r':empty', c):
+                errors.append(f'{s}: ".{cls}" is an empty status line that still takes space; add ".{cls}:empty" so it leaves the layout until text arrives (RULES 10b.2)')
+        # Hug the content (RULES 10b.2): a text line is never held taller than one line for text or buttons that come later.
+        for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', c):
+            sel1 = sel.strip().splitlines()[-1]
+            mh = re.search(r'(?<![-\w])min-height\s*:\s*(\d+)px', body)
+            if mh and int(mh.group(1)) > 24 and re.search(r'-(status|msg|message|note|hint|summary|caption|foot|after)\s*$', sel1.strip()) and 'mi-allow-hold' not in body:
+                errors.append(f'{s}: "{sel1.strip()}" holds {mh.group(1)}px for content that comes later; let it hug its text and grow when more appears (RULES 10b.2)')
+        # Icons are Lucide SVG (RULES 10c): a lone text glyph like a tick or a cross sits where the font puts it, not in the center.
+        if re.search(r"textContent\s*=\s*'[\u2713\u2714\u2715\u2716\u2717\u00d7]'\s*[;,)]|>\s*[\u2713\u2714\u2715\u2716\u2717\u00d7]\s*<", h + j):
+            errors.append(f'{s}: a tick or cross is drawn as a text character; use the Lucide check or x icon as inline SVG (RULES 10c)')
+        btn_cls = {k for cl in re.findall(r'<button[^>]*\bclass="([^"]+)"', h + j) for k in cl.split()}
         for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', c):
             sel1 = sel.strip().splitlines()[-1]
             bg = re.search(r'background(?:-color)?\s*:\s*var\((--[\w-]+)\)', body)
@@ -124,6 +140,15 @@ def check(reg):
             stroke = re.search(r'(?<![-\w])border\s*:\s*1px|box-shadow\s*:[^;]*0 0 0 1px', body)
             if tint and stroke and re.search(r'border-radius\s*:\s*var\(--radius-(lg|xl)\)', body) and 'transparent' not in tint.group(0):
                 warns.append(f'{s}: "{sel1}" is a tinted panel with a stroke; separate it with a stronger tint instead (RULES 10b.10)')
+            if re.search(r'background\s*:\s*color-mix\(in srgb,\s*var\(--(?![\w-]*bg\b)[\w-]+\)\s+\d+%,\s*transparent\)', body) and re.search(r'border-radius\s*:\s*var\(--radius-lg\)', body) and re.search(r'padding\s*:\s*\d+px \d+px', body) and 'height:' not in body:
+                warns.append(f'{s}: "{sel1}" looks like a tinted panel with a fixed tint percentage; use oklch(from var(--color) var(--tint-l) calc(c * var(--tint-c)) h) so every color separates from the card equally in light and dark (RULES 10b.10)')
+            if 'cursor: pointer' in body or re.search(r'btn|button', sel1) or set(re.findall(r'\.([\w-]+)', sel1)) & btn_cls:
+                if re.search(r'background(?:-color)?\s*:\s*(var\(--danger-subtle\)|color-mix\(in srgb,\s*var\(--danger\)\s*\d+%)', body):
+                    errors.append(f'{s}: "{sel1}" is a soft red button; use background var(--danger-soft) and color var(--danger-soft-foreground) (RULES 11.8)')
+                if re.search(r'border(?:-color)?\s*:[^;]*--danger-border', body):
+                    errors.append(f'{s}: "{sel1}" outlines a red button; soft red buttons have no stroke (RULES 11.8)')
+            if not re.match(r'(\d+%|from|to)(?![\w-])', sel1) and re.search(r'background(?:-color)?\s*:\s*color-mix\(in srgb,\s*var\(--(brand|aqua|pink|pop)\)\s*(1?\d)%,\s*transparent\)', body):
+                warns.append(f'{s}: "{sel1}" tints with a pale color (Aqua or Pink) under 20%, which is near white in light mode; use oklch(from var(--color) var(--tint-l) calc(c * var(--tint-c)) h) (RULES 10b.10)')
         hexes = re.findall(r'(?<![\w&])#[0-9a-fA-F]{3,8}\b', re.sub(r'/\*.*?\*/', '', c, flags=re.S))
         if hexes: warns.append(f'{s}: hard-coded colors in component.css {sorted(set(hexes))[:4]} (use tokens)')
     for it in items:
@@ -358,8 +383,11 @@ def build_site(reg, site):
 
 <dialog class="codebox" id="codebox" aria-labelledby="cb-title">
   <div class="codebox-head"><h2 id="cb-title"></h2><button type="button" class="oc-btn oc-btn--ghost oc-btn--icon oc-btn--sm x" data-close-code aria-label="Close">{ICON['x']}</button></div>
-  <div class="codebox-bar"><div class="oc-tabs" role="tablist" aria-label="Code" style="--n: 5">{tabs}</div><button type="button" class="oc-btn oc-btn--outline oc-btn--sm" data-copy-code>{ICON['copy']}Copy</button><p class="codebox-hint" aria-live="polite"></p></div>
-  <pre role="tabpanel" tabindex="0"></pre>
+  <div class="codebox-bar"><div class="oc-tabs" role="tablist" aria-label="Code" style="--n: 5">{tabs}</div><p class="codebox-hint" aria-live="polite"></p></div>
+  <div class="codebox-panel" role="tabpanel">
+    <div class="codebox-file"><span class="codebox-name"></span><div class="codebox-actions"><button type="button" class="oc-btn oc-btn--outline oc-btn--sm" data-copy-code>{ICON['copy']}Copy</button><a class="oc-btn oc-btn--outline oc-btn--sm" data-download hidden>{ICON['download']}Download</a></div></div>
+    <pre tabindex="0"></pre>
+  </div>
 </dialog>
 {idea}
 <p class="sr-only" id="mi-live" role="status" aria-live="polite"></p>

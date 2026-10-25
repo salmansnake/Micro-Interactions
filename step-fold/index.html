@@ -53,7 +53,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   padding: 0 12px 0 6px;
   border: 0;
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--brand) 12%, transparent);
+  background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h);
   color: var(--fo-fg);
   font: inherit;
   font-size: var(--text-small);
@@ -61,7 +61,10 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   transform-origin: 50% 0;
   animation: fo-chip var(--spring-pop-duration) var(--spring-pop) both;
 }
-.fo-chip i { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--fo-accent); color: var(--fo-on-accent); font-size: calc(var(--text-caption) - 1px); font-style: normal; font-weight: 700; }
+.fo-chip i { display: grid; place-items: center; flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--fo-accent); color: var(--fo-on-accent); }
+/* Lucide check, drawn as an icon so it sits in the true center (a text tick sat where the font put it).
+   Its strokes span y 6 to 17 on the 24 grid, half a unit above middle, so it moves down that half unit. */
+.fo-chip i svg { display: block; width: 14px; height: 14px; translate: 0 calc(100% / 48); }
 .fo-chip small { color: var(--fo-muted); font-size: var(--text-caption); }
 .fo-chip b { font-weight: 600; }
 .fo-chip:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -195,7 +198,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
         var c = document.createElement('button');
         c.type = 'button';
         c.className = 'fo-chip';
-        var n = document.createElement('i'); n.textContent = '✓';
+        var n = document.createElement('i'); n.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
         var label = document.createElement('small'); label.textContent = s.getAttribute('data-title');
         var b = document.createElement('b'); b.textContent = value(s);
         c.append(n, label, b);

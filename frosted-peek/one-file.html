@@ -56,7 +56,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --frost: rgba(255, 255, 255, 0.74);
   --frost-border: rgba(0, 0, 0, 0.08);
   --green-11: #218358;
-  --green-3: #e6f6eb;
   --line: #DCDED9;
   --mist: #ECEBE6;
   --muted: var(--mist);
@@ -67,8 +66,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --success: var(--green-11);
-  --success-subtle: var(--green-3);
   --success-text: #1f7b53;
+  --tint-c: 0.4;
+  --tint-ink-l: 0.48;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -86,7 +87,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --frost: rgba(21, 23, 22, 0.74);
   --frost-border: rgba(243, 242, 238, 0.1);
   --green-11: #3dd68c;
-  --green-3: #132d21;
   --line: #313432;
   --mist: #2B2E2D;
   --muted: var(--mist);
@@ -97,8 +97,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --success: #218358;
-  --success-subtle: var(--green-3);
   --success-text: var(--green-11);
+  --tint-c: 0.45;
+  --tint-ink-l: 1;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -116,7 +118,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --frost: rgba(21, 23, 22, 0.74);
     --frost-border: rgba(243, 242, 238, 0.1);
     --green-11: #3dd68c;
-    --green-3: #132d21;
     --line: #313432;
     --mist: #2B2E2D;
     --muted: var(--mist);
@@ -127,8 +128,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --success: #218358;
-    --success-subtle: var(--green-3);
     --success-text: var(--green-11);
+    --tint-c: 0.45;
+    --tint-ink-l: 1;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -148,7 +151,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --fp-on-accent: var(--primary-foreground);
   --fp-green: var(--success);
   --fp-green-text: var(--success-text);
-  --fp-green-soft: var(--success-subtle);
+  --fp-green-soft: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h);
   --fp-glass-edge: var(--frost-border);
   --fp-glass: var(--frost);
   --fp-glass-shadow: var(--shadow-lg);
@@ -174,8 +177,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .fp-total { margin: 2px 0 0; color: var(--fp-muted); font-size: var(--text-body); }
 .fp-secret { display: inline-block; color: var(--fp-fg); font-size: var(--text-h3); line-height: var(--leading-h3); font-weight: 700; letter-spacing: var(--tracking-title); filter: blur(7px); transition: filter var(--spring-panel-duration) var(--spring-panel); }
 .fp.is-unlocked .fp-secret { filter: none; }
-.fp-badge { flex: none; padding: 3px 10px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--brand-text); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-slow), color var(--duration-slow); }
-.fp.is-unlocked .fp-badge { background: var(--fp-green-soft); color: var(--fp-green-text); }
+.fp-badge { flex: none; padding: 3px 10px; border-radius: var(--radius-full); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--brand-text) min(l, var(--tint-ink-l)) c h); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-slow), color var(--duration-slow); }
+.fp.is-unlocked .fp-badge { background: var(--fp-green-soft); color: oklch(from var(--fp-green-text) min(l, var(--tint-ink-l)) c h); }
 
 /* Chart + frost */
 .fp-chart {

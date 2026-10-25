@@ -62,7 +62,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 @keyframes rd-nod { 30% { transform: rotate(9deg) translateY(2px); } 60% { transform: rotate(-3deg); } }
 .rd-duck.is-joy { animation: rd-joy var(--spring-pop-duration) var(--spring-pop); }
 @keyframes rd-joy { 40% { transform: translateY(-18px) rotate(-200deg); } 100% { transform: rotate(-360deg); } }
-.rd-say { position: relative; flex: 1; padding: 10px 14px; border-radius: var(--radius-xl) var(--radius-xl) var(--radius-xl) var(--radius-sm); background: color-mix(in srgb, var(--warning) 22%, var(--rd-bg)); font-size: var(--text-body); line-height: var(--leading-body); }
+.rd-say { position: relative; flex: 1; padding: 10px 14px; border-radius: var(--radius-xl) var(--radius-xl) var(--radius-xl) var(--radius-sm); background: oklch(from var(--warning) var(--tint-l) calc(c * var(--tint-c)) h); font-size: var(--text-body); line-height: var(--leading-body); }
 
 .rd-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .rd-actions button { flex: 1 1 auto; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }

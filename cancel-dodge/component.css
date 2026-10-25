@@ -29,7 +29,8 @@
 .cn-body { color: var(--cn-muted); }
 /* The pleading line in Outcraft Orange, nudged 35% toward Orange 700 so it holds up on white (about #E47447, 3:1).
    In dark mode --orange-700 is Orange itself, so the mix is plain #FE8C5F. Space is reserved so nothing jumps. */
-.cn-quip { min-height: var(--leading-small); color: color-mix(in srgb, var(--orange) 65%, var(--orange-700)); font: 600 var(--text-small)/var(--leading-small) var(--font-sans); }
+/* Holds one line on purpose: it changes while you chase the buttons below it */
+.cn-quip { min-height: var(--leading-small); color: color-mix(in srgb, var(--orange) 20%, var(--orange-700)); font: 600 var(--text-small)/var(--leading-small) var(--font-sans); }
 .cn-quip:empty { visibility: hidden; }
 .cn-quip.is-new { animation: cn-quip var(--spring-pop-duration) var(--spring-pop); }
 @keyframes cn-quip { from { opacity: 0; transform: translateY(4px); } }
@@ -49,9 +50,9 @@
 .cn-keep { border: 0; background: var(--primary); color: var(--primary-foreground); transform: translateX(var(--cn-keep-x, 0px)); }
 .cn-keep:hover { background: color-mix(in srgb, var(--primary) 88%, var(--background)); }
 /* Cancel: soft red while it's running away; once it's calm, pressing it goes solid red */
-.cn-cancel { border: 1px solid var(--danger-border); background: var(--danger-subtle); color: var(--danger-text); transform: translateX(var(--cn-x, 0px)); }
-.cn.is-free .cn-cancel:hover { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 14%, var(--danger-subtle)); }
-.cn.is-free .cn-cancel:active { border-color: var(--danger); background: var(--danger); color: var(--danger-foreground); transition-duration: var(--duration-instant); }
+.cn-cancel { border: 0; background: var(--danger-soft); color: var(--danger-soft-foreground); transform: translateX(var(--cn-x, 0px)); }
+.cn.is-free .cn-cancel:hover { background: var(--danger-soft-hover); }
+.cn.is-free .cn-cancel:active { background: var(--danger); color: var(--danger-foreground); transition-duration: var(--duration-instant); }
 .cn-keep:focus-visible, .cn-cancel:focus-visible, .cn-again:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .cn-keep.is-plead { animation: cn-plead var(--spring-pop-duration) var(--spring-pop); }
 @keyframes cn-plead { 40% { scale: 1.03; } }

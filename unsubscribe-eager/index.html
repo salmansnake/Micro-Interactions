@@ -56,6 +56,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .ue.is-done .ue-lines, .ue.is-done .ue-mail { opacity: 0.4; }
 
 /* The zone the button may roam inside */
+/* Holds 108px on purpose: the Unsubscribe button travels around inside this zone */
 .ue-zone { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; min-height: 108px; padding: 12px 8px 16px; border-top: 1px solid var(--ue-line); }
 .ue-legal { color: var(--ue-muted); font-size: var(--text-caption); line-height: var(--leading-caption); text-align: center; }
 .ue-btn { position: relative; z-index: 1; height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--ue-muted); font: inherit; font-size: var(--text-small); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; transform: translate(var(--ue-x, 0), var(--ue-y, 0)) scale(var(--ue-s, 1)); transition: background-color var(--duration-base), color var(--duration-base), box-shadow var(--duration-base); will-change: transform; }
@@ -65,6 +66,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .ue-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .ue.is-done .ue-btn { background: var(--success); color: var(--success-foreground); text-decoration: none; font-weight: 600; }
 .ue-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+/* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
+.ue-foot:has(.ue-status:empty):has(.ue-undo[hidden]) { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .ue-status { color: var(--ue-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .ue-status:empty { display: none; }
 .ue-undo { flex: none; height: 32px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--ue-accent); font: inherit; font-weight: 600; cursor: pointer; }

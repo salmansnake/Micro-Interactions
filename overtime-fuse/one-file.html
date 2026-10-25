@@ -45,6 +45,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --card: var(--white);
   --danger: #ce2c31;
   --danger-foreground: #ffffff;
+  --danger-soft: color-mix(in srgb, var(--danger) 16%, transparent);
+  --danger-soft-foreground: #AC2529;
   --danger-text: #ca2b30;
   --foreground: var(--black);
   --input: var(--line-strong);
@@ -79,6 +81,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --card: var(--white);
   --danger: #d4373c;
   --danger-foreground: #ffffff;
+  --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
+  --danger-soft-foreground: var(--red-11);
   --danger-text: var(--red-11);
   --foreground: #F3F2EE;
   --input: var(--line-strong);
@@ -113,6 +117,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --card: var(--white);
     --danger: #d4373c;
     --danger-foreground: #ffffff;
+    --danger-soft: color-mix(in srgb, var(--danger) 30%, transparent);
+    --danger-soft-foreground: var(--red-11);
     --danger-text: var(--red-11);
     --foreground: #F3F2EE;
     --input: var(--line-strong);
@@ -190,13 +196,14 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .of-spark i:nth-child(4) { --dx: -4px; --dy: -20px; animation-delay: var(--duration-slower) !important; }
 @keyframes of-ember { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)); } }
 
+/* Holds two lines on purpose: it changes while you drag the slider below it */
 .of-line { min-height: 40px; font-size: var(--text-body); line-height: var(--leading-body); font-weight: 500; font-variant-numeric: tabular-nums; }
 .of.is-over .of-line { color: var(--danger-text); }
 .of-time { display: flex; flex-direction: column; gap: 6px; }
 .of-time-label { color: var(--of-muted); font-size: var(--text-small); }
 .of-range { width: 100%; accent-color: var(--of-accent); }
 .of-range:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: var(--radius-xs); }
-.of-end { height: 44px; border: 0; border-radius: var(--radius-md); background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger-text); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-slow), color var(--duration-slow); }
+.of-end { height: 44px; border: 0; border-radius: var(--radius-md); background: var(--danger-soft); color: var(--danger-soft-foreground); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-slow), color var(--duration-slow); }
 .of.is-late .of-end { background: var(--danger); color: var(--danger-foreground); animation: of-nudge 2.4s var(--ease-in-out) infinite; }
 @keyframes of-nudge { 0%, 80%, 100% { transform: none; } 88% { transform: scale(1.03); } }
 .of-end:active { transform: scale(var(--press-scale)); }

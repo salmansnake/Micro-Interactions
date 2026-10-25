@@ -62,9 +62,9 @@
 .su-dot { position: absolute; z-index: 3; left: 0; top: 0; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--su-accent); box-shadow: 0 2px 6px color-mix(in srgb, var(--brand-strong) 40%, transparent); pointer-events: none; }
 .su.is-done .su-list { animation: su-fold var(--spring-ui-duration) var(--ease-out) forwards; }
 @keyframes su-fold { to { opacity: 0; transform: scaleY(0.6); transform-origin: top; } }
-.su-finish { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--su-green) 14%, transparent); animation: su-in var(--spring-ui-duration) var(--spring-ui) both; }
+.su-finish { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: var(--radius-lg); background: oklch(from var(--su-green) var(--tint-l) calc(c * var(--tint-c)) h); animation: su-in var(--spring-ui-duration) var(--spring-ui) both; }
 .su-finish p { margin: 0; font-weight: 600; }
-.su-reset { height: 30px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--su-bg); color: var(--su-fg); font: inherit; font-weight: 600; cursor: pointer; }
+.su-reset { height: 30px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--fill-on-tint); color: var(--su-fg); font: inherit; font-weight: 600; cursor: pointer; }
 .su-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 @keyframes su-in { from { opacity: 0; transform: translateY(8px); } }
 @media (prefers-reduced-motion: reduce) {

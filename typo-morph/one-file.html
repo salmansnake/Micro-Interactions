@@ -37,6 +37,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --text-caption: 12px;
   --text-small: 13px;
   --text-title-sm: 17px;
+  --text-ui: 14px;
   --tracking-title: -0.015em;
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
@@ -71,6 +72,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
   --success-text: #1f7b53;
+  --tint-c: 0.4;
+  --tint-l: 0.92;
   --white: #FFFFFF;
 }
 /* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
@@ -108,6 +111,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
   --success-text: var(--green-11);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
   --white: #161817;
 }
 @media (prefers-color-scheme: dark) {
@@ -145,6 +150,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
     --success-text: var(--green-11);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
     --white: #161817;
   }
 }
@@ -195,7 +202,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   padding: 6px 12px;
   border: 0;
   border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h);
   color: var(--tm-fg);
   font: 600 var(--text-title-sm)/var(--leading-title-sm) var(--font-sans);
   letter-spacing: var(--tracking-title);
@@ -219,10 +226,13 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .tm-results li { position: relative; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 6px 14px; box-sizing: border-box; animation: tm-row var(--spring-ui-duration) var(--spring-ui) both; }
 .tm-results li + li::before { content: ""; position: absolute; top: 0; left: 50px; right: 0; height: 1px; background: var(--tm-line); transform: scaleY(0.5); transform-origin: top; }
 @keyframes tm-row { from { opacity: 0; transform: translateY(4px); } }
-.tm-results i { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-caption); font-style: normal; font-weight: 700; }
+.tm-results i { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-ui); font-style: normal; font-weight: 700; }
+/* Centered on the capital letter, not the taller line box: the span is trimmed to cap height. 14px in a 26px tile leaves an even
+   split above and below at 1x and 2x (12px left half a pixel more below, so letters sat high) */
+.tm-results i span { text-box: trim-both cap alphabetic; }
 .tm-results b { font-weight: 500; }
 .tm-results small { margin-left: auto; color: var(--tm-muted); font-size: var(--text-caption); white-space: nowrap; }
-.tm-results mark { border-radius: var(--radius-xs); background: color-mix(in srgb, var(--brand) 20%, transparent); color: inherit; }
+.tm-results mark { border-radius: var(--radius-xs); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); color: inherit; }
 .tm-try { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--tm-line); color: var(--tm-muted); font-size: var(--text-small); }
 .tm-try button { height: 28px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--tm-fill); color: var(--tm-fg); font: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .tm-try button:active { transform: scale(var(--press-scale)); }
@@ -312,7 +322,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       found.slice(0, 5).forEach(function (it, k) {
         var li = document.createElement('li');
         li.style.animationDelay = (k * 40) + 'ms';
-        var icon = document.createElement('i'); icon.textContent = it.name[0]; icon.style.background = it.color;
+        var icon = document.createElement('i'); icon.append(Object.assign(document.createElement('span'), { textContent: it.name[0] })); icon.style.background = it.color;
         var b = document.createElement('b');
         var name = it.name, ix = name.toLowerCase().indexOf(q);
         if (q && ix > -1) {
