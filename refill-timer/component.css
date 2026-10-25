@@ -27,7 +27,8 @@
   -webkit-font-smoothing: antialiased;
 }
 .rt-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.rt-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.rt-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .rt-sub { margin: 2px 0 0; color: var(--rt-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
 .rt-left { color: var(--rt-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
 /* Each credit is a small tank that fills from the bottom */
@@ -104,4 +105,6 @@
 @media (prefers-reduced-motion: reduce) {
   .rt-dot.is-ready, .rt-dot.is-spent, .rt-out li, .rt-btn.is-ready { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.rt :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .rt [hidden] { display: none !important; }

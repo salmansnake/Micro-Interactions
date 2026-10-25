@@ -28,11 +28,13 @@
   -webkit-font-smoothing: antialiased;
 }
 .fy p { margin: 0; }
-.fy-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.fy-title { text-box: trim-start cap alphabetic; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .fy-meta { color: var(--fy-muted); font-size: var(--text-small); line-height: var(--leading-small); font-family: var(--font-mono); letter-spacing: 0; }
 .fy-when { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 14px; border-radius: var(--radius-lg); background: var(--fy-sunken); }
 .fy-when-label { flex: none; color: var(--fy-muted); font-size: var(--text-small); }
-.fy-seg { --i: 2; position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); flex: 1; max-width: 300px; padding: 2px; border-radius: var(--radius-md); background: var(--fy-fill); }
+/* The track sits on the gray "Pretend It's" panel, so it uses the fill for gray panels: a clear step darker in light, lighter in dark (button rule 9) */
+.fy-seg { --i: 2; position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); flex: 1; max-width: 300px; padding: 2px; border-radius: var(--radius-md); background: var(--fill-on-subtle); }
 .fy-seg::before { content: ""; position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc((100% - 4px) / 3); border-radius: var(--radius-sm); background: var(--fy-thumb); box-shadow: var(--shadow-sm); transform: translateX(calc(var(--i) * 100%)); transition: transform var(--spring-ui-duration) var(--spring-ui); }
 .fy-seg button { position: relative; z-index: 1; height: 30px; padding: 0 2px; white-space: nowrap; border: 0; border-radius: var(--radius-sm); background: none; color: inherit; font: 600 var(--text-caption)/1 inherit; font-family: inherit; white-space: nowrap; cursor: pointer; }
 .fy { container-type: inline-size; }
@@ -72,4 +74,6 @@
 @media (prefers-reduced-motion: reduce) {
   .fy-hat { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.fy :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .fy [hidden] { display: none !important; }

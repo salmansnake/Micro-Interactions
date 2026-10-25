@@ -108,4 +108,6 @@
   .er-band, .er-cap, .er-bubble { transition-duration: var(--duration-reduced); transition-timing-function: linear; }
   .er-cap.is-strain { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.er :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .er [hidden] { display: none !important; }

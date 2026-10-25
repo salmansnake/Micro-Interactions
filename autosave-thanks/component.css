@@ -27,7 +27,8 @@
 }
 .av p { margin: 0; }
 .av-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.av-doc { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.av-doc { text-box: trim-start cap alphabetic; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .av-saved { display: inline-flex; align-items: center; gap: 4px; color: var(--av-muted); font-size: var(--text-small); }
 .av-saved svg { width: 20px; height: 20px; }
 .av-check { transition: opacity var(--duration-base); }
@@ -57,4 +58,6 @@
   .av-toast { transition-duration: var(--duration-reduced); }
   .av-toast.is-bump { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.av :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .av [hidden] { display: none !important; }

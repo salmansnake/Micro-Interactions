@@ -29,7 +29,8 @@
 }
 .ct p { margin: 0; }
 .ct-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.ct-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.ct-title { text-box: trim-start cap alphabetic; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .ct-free { color: var(--ct-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
 .ct.is-full .ct-free { color: var(--danger-text); font-weight: 600; }
 .ct-day { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 6px; padding: 8px; border-radius: var(--radius-lg); background: var(--ct-sunken); }
@@ -49,10 +50,11 @@
 .ct-inv-title { margin-bottom: 6px !important; color: var(--ct-muted); font-size: var(--text-small); font-weight: 600; }
 .ct-list { margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--ct-sunken); }
 .ct-list:empty { display: none; }
-.ct-list li { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 0 8px 0 14px; }
+.ct-list li { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: var(--space-2) 8px var(--space-2) 14px; box-sizing: border-box; }
 .ct-list li + li::before { content: ""; position: absolute; top: 0; left: 14px; right: 0; height: 1px; background: var(--ct-line); transform: scaleY(0.5); transform-origin: top; }
 .ct-list b { display: block; font-weight: 600; }
-.ct-list small { color: var(--ct-muted); font-size: var(--text-caption); }
+/* Title and detail: each line keeps its own leading, 2px apart, with equal space above and below (10b.38) */
+.ct-list small { display: block; margin-top: 2px; color: var(--ct-muted); font-size: var(--text-caption); line-height: var(--leading-caption); }
 .ct-list button, .ct-lunch { flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ct-accent); color: var(--ct-on-accent); font: inherit; font-size: var(--text-small); font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .ct-list button:active, .ct-lunch:active { transform: scale(var(--press-scale-sm)); }
 .ct-list button:focus-visible, .ct-lunch:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -66,4 +68,6 @@
 @media (prefers-reduced-motion: reduce) {
   .ct-block.is-drop, .ct-block.is-flash, .ct-block.is-out, .ct-clear { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ct :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ct [hidden] { display: none !important; }

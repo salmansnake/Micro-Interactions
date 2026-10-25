@@ -29,14 +29,17 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
-.ad-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.ad-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .ad-list, .ad-archived { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--ad-sunken); }
 .ad-row { position: relative; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 6px 10px 6px 12px; box-sizing: border-box; overflow: hidden; }
 .ad-row + .ad-row::before { content: ""; position: absolute; top: 0; left: 56px; right: 0; height: 1px; background: var(--ad-line); transform: scaleY(0.5); transform-origin: top; }
 .ad-row > div { flex: 1; min-width: 0; }
 .ad-row b { display: block; font-weight: 600; }
-.ad-row small { display: block; overflow: hidden; color: var(--ad-muted); font-size: var(--text-small); text-overflow: ellipsis; white-space: nowrap; }
-.ad-av { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; color: var(--on-chart); font-weight: 700; }
+.ad-row small { display: block; margin-top: 2px; overflow: hidden; color: var(--ad-muted); font-size: var(--text-small); line-height: var(--leading-small); text-overflow: ellipsis; white-space: nowrap; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.ad-av { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 32px; height: 32px; border-radius: 50%; color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; }
 .ad-archive, .ad-restore { flex: none; height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--ad-bg); color: var(--ad-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .ad-archive:active, .ad-restore:active { transform: scale(var(--press-scale)); }
 .ad-archive:focus-visible, .ad-restore:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -78,7 +81,8 @@
 .ad-front-label { position: absolute; left: 0; right: 0; bottom: 7px; text-align: center; color: color-mix(in srgb, var(--black) 45%, transparent); /* 10px thin strokes read lighter than the solid handle, so the text sits 10% deeper to look the same tone */ font: 600 10px/1 var(--font-sans); letter-spacing: 0.02em; }
 .ad-drawer.is-gulp .ad-front { animation: ad-gulp var(--spring-pop-duration) var(--spring-pop); }
 @keyframes ad-gulp { 30% { transform: scale(1.08, 0.9) translateY(3px); } 100% { transform: none; } }
-.ad-badge { position: absolute; top: -4px; right: -6px; display: grid; place-items: center; min-width: 20px; height: 20px; box-sizing: border-box; padding: 0 6px; border-radius: var(--radius-full); background: var(--ad-accent); color: var(--ad-on-accent); font-size: var(--text-caption); font-weight: 700; font-variant-numeric: tabular-nums; transform: scale(calc(min(var(--ad-n), 1))); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered. 11px digits split evenly in the 20px badge (12px sat high) */
+.ad-badge { position: absolute; top: -4px; right: -6px; display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; min-width: 20px; height: 20px; box-sizing: border-box; padding: 0 6px; border-radius: var(--radius-full); background: var(--ad-accent); color: var(--ad-on-accent); font-size: calc(var(--text-caption) - 1px); font-weight: 700; font-variant-numeric: tabular-nums; transform: scale(calc(min(var(--ad-n), 1))); transition: transform var(--spring-pop-duration) var(--spring-pop); }
 .ad-drawer[aria-expanded="true"] { --ad-open: 1; }
 .ad-panel { animation: ad-in var(--spring-ui-duration) var(--spring-ui) both; }
 .ad-panel-title { margin: 0 0 8px; color: var(--ad-muted); font-size: var(--text-small); font-weight: 600; }
@@ -88,4 +92,6 @@
   .ad-drawer { transition: none; }
   .ad-papers, .ad-front, .ad-badge { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ad :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ad [hidden] { display: none !important; }

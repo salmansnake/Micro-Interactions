@@ -30,7 +30,9 @@
 }
 .hk-card { display: flex; flex-direction: column; gap: 18px; } /* the content; the card is the root */
 .hk-head { display: flex; align-items: center; gap: 12px; }
-.hk-avatar { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-lg); background: var(--hk-accent); color: var(--primary-foreground); font-size: var(--text-title); font-weight: 700; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   22px capitals leave an even split in this 44px tile at 1x and 2x (20px sat high) */
+.hk-avatar { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 44px; height: 44px; border-radius: var(--radius-lg); background: var(--hk-accent); color: var(--primary-foreground); font-size: calc(var(--text-title) + 2px); font-weight: 700; }
 .hk-id { min-width: 0; flex: 1; }
 .hk-name { margin: 0; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
 .hk-label { margin: 0 0 8px; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; letter-spacing: normal; }
@@ -104,4 +106,6 @@
   .hk-sk { animation: none; }
   .hk-real, .hk-wait, .hk-bars span { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.hk :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .hk [hidden] { display: none !important; }

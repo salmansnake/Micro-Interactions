@@ -7,10 +7,10 @@ BEHAVIOR
 1. A grid of file tiles (icon, name) inside a rounded area with a crosshair cursor.
 2. Pointer down on the area starts a lasso. Record points as the pointer moves (skip moves under 4px) and draw them as a closed SVG path with a light Aqua fill and a marching dashed Aqua 700 stroke.
 3. Each animation frame, test every tile's center against the polygon (ray casting). Tiles inside get a "hot" state (Aqua 100 background, scale 0.97).
-4. A black button (Aqua in dark mode) follows the pointer 14px below and right, showing the running count, and bumps whenever the count changes.
+4. A black pill (Aqua in dark mode) follows the pointer 14px below and right, showing the running count, and bumps whenever the count changes.
 5. On release, hot tiles become selected: an Aqua 100 background, name in Aqua 700, and a check badge that springs in at the corner. The lasso fades out.
 6. Holding Shift or ⌘ adds to the current selection; otherwise a new lasso replaces it. A click without dragging selects the tile under the pointer.
-7. A Frost bar appears below with "4 Selected", Move, Download and a square clear button with the Lucide `x` icon (16px).
+7. A Frost bar appears below with "4 Selected", Move, Download and a round clear button with the Lucide `x` icon (16px); every button in the capsule bar is a capsule or circle. Move and Download play a small, quiet scene, never bigger than the lasso itself: the text becomes "Moving 4 files" or "Downloading 4 files" (singular for one) with a 16px Lucide arrow-right that drifts 3px right, or arrow-down-to-line that dips 2px, on a loop; a 2px line at 25% of the text color fills under the text over 1.1s; and the selected files' icons hop 6px right with a 4° tilt (Move) or dip 4px and shrink to 0.96 (Download), 60ms apart. Then a green Lucide check pops in with "Moved 4 files" or "Downloaded 4 files", and after 1.6s the selection clears. The text keeps its width so the bar doesn't jump, Move and Download dim to 55% while it runs, and any change to the selection cancels it. Reduced motion: no movement, the text changes after 0.4s.
 8. Keyboard: arrows move focus through the grid (roving tabindex), Space or Enter toggles, Shift+arrow extends, ⌘A / Ctrl+A selects all, Escape clears. Use role listbox with aria-multiselectable and aria-selected.
 Reduced motion: no marching or springs.
 
@@ -18,11 +18,11 @@ APPEARANCE (Outcraft Design System)
 - Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
 - Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
 - Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps. A colored panel, chip or soft fill is a tint of its color at a fixed lightness (OKLCH L 0.92 in light, 0.32 in dark, keeping 40% / 45% of its chroma), so pale Aqua and strong red separate from the card equally; never outlined. Colored text on a tint is held between OKLCH L 0.48 (a cap in light) and 0.75 (a floor in dark), so it reads in both themes, and gray secondary text on it uses the body gray. A soft red button (Decline, Delete, Cancel) is red at 16% in light and 30% in dark with deep red text (#AC2529 in light, #FF9592 in dark), never outlined; it centers its label.
-- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float. Components hug their content: a status line, footer or message that is empty takes no space, and the card grows when text appears. Icons are Lucide with round line ends and joins; every tick, cross, plus, minus and chevron is the Lucide check, x, plus, minus or chevron icon, never a typed character or a shape drawn with CSS borders.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float. Text that wraps to two or three lines reads as one paragraph whose lines are close in length, with the first line the longest (narrow the text block until that holds; never a long line with one or two words below it). A row with a title and a detail line under it sets each line at its own size and line height (detail 13/18 or 12/16, not the body's 22px), 2px apart, with equal space above and below (at least 8px), so the text never presses against a divider. A card's padding is measured to what you see: text at the top edge trims to its capitals (text-box: trim-start cap alphabetic) and text at the bottom edge to its baseline (text-box: trim-end cap alphabetic), so the space above matches the space below. Components hug their content: a status line, footer or message that is empty takes no space, and the card grows when text appears. Icons are Lucide with round line ends and joins; every tick, cross, plus, minus and chevron is the Lucide check, x, plus, minus or chevron icon, never a typed character or a shape drawn with CSS borders. A letter, initials or a number in a tile, avatar or count badge is centered on its capital height, not its line box (display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic), at a size whose capitals leave equal space above and below: 14px bold in tiles from 26 to 40px.
 - Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
 - Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
 - Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
-- Copy: title-case button labels, sentence-case body text, no emoji.
+- Copy: title-case button labels, sentence-case body text, no emoji. Every count uses the singular for one ("1 file", "1 second", "1 person"), including counts set by data attributes.
 - This one: the area is a 16px rounded Soft ground surface; tiles are 12px rounded; the check badge is an 18px circle in the accent (black in light, Aqua in dark) holding the 12px Lucide check in the accent's text color (white on black, black on Aqua).
 
 DELIVER
@@ -48,6 +48,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --duration-reduced: 120ms
 --duration-slow: 320ms
 --duration-slower: 480ms
+--ease-in-out: cubic-bezier(0.62, 0, 0.32, 1)
 --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1)
 --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
 --foreground: #000000  (dark: #F3F2EE)
@@ -84,6 +85,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --spring-ui-duration: 460ms
 --subtle: #F3F2EE  (dark: #0C0D0C)
 --success: #218358
+--success-text: #1f7b53  (dark: #3dd68c)
 --text-body: 15px
 --text-caption: 12px
 --text-small: 13px

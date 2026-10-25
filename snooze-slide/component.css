@@ -70,7 +70,8 @@
 .sn-card.is-settling { transition: transform var(--spring-ui-duration) var(--spring-ui); }
 .sn-card:active { cursor: grabbing; }
 .sn-card:focus-visible { box-shadow: 0 0 0 3px var(--sn-accent); }
-.sn-avatar { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; color: var(--on-chart); font-weight: 700; }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered */
+.sn-avatar { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 36px; height: 36px; border-radius: 50%; color: var(--on-chart); font-weight: 700; }
 .sn-text { min-width: 0; }
 .sn-text p { margin: 0; font-size: var(--text-body); line-height: var(--leading-body); }
 .sn-text b { font-weight: 600; }
@@ -91,4 +92,6 @@
   .sn-item.is-gone, .sn-pill, .sn-when.is-pop { animation: none; }
   .sn-item.is-gone { display: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.sn :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .sn [hidden] { display: none !important; }

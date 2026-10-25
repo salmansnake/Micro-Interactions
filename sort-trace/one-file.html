@@ -233,7 +233,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .st-row + .st-row { box-shadow: inset 0 1px 0 var(--st-line); }
 .st-row span { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .st-row span:nth-child(n+2) { justify-content: flex-end; }
-.st-row b { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: var(--radius-sm); color: var(--on-color); font-size: calc(var(--text-caption) - 1px); }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered */
+.st-row b { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 22px; height: 22px; border-radius: var(--radius-sm); color: var(--on-color); font-size: calc(var(--text-caption) - 1px); }
 .st-row.is-moved { animation: st-flash 1.6s var(--ease-out); }
 @keyframes st-flash { 0% { background: color-mix(in srgb, var(--brand) 14%, transparent); } 100% { background: transparent; } }
 /* The badge straddles the card and the table, so it carries its own tint of its color instead of the card's white */
@@ -265,6 +266,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   .st-row.is-moved { animation: none; }
   .st-sort i, .st-delta { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.st :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .st [hidden] { display: none !important; }
 
 </style>
@@ -302,9 +305,54 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   var NS = 'http://www.w3.org/2000/svg';
   var LABEL = { name: 'name', mrr: 'MRR', growth: 'growth' };
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initSortTrace(root) {
     if (!root || root.__miSort) return;
     root.__miSort = true;
+    evenLines(root);
     var body = root.querySelector('.st-body');
     var trails = root.querySelector('.st-trails');
     var heads = Array.prototype.slice.call(root.querySelectorAll('.st-sort'));

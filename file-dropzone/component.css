@@ -46,6 +46,7 @@
   transition: transform var(--spring-ui-duration) var(--spring-ui), background-color var(--duration-base);
 }
 .fd-zone:focus-visible { box-shadow: 0 0 0 3px var(--fd-accent); }
+/* The dashed border sits 1px inside the 16px zone, so its corners are 15px and stay concentric */
 .fd-border { position: absolute; inset: 1px; width: calc(100% - 2px); height: calc(100% - 2px); overflow: visible; pointer-events: none; }
 .fd-border rect { fill: none; stroke: var(--fd-line); stroke-width: 1.5; stroke-dasharray: 7 6; transition: stroke var(--duration-base); }
 .fd.is-over .fd-zone { transform: scale(0.985); background: color-mix(in srgb, var(--fd-tone) 10%, transparent); }
@@ -127,4 +128,6 @@
   .fd-table tbody tr, .fd-photo, .fd-page, .fd-generic, .fd-over-icon, .fd.is-over .fd-border rect, .fd.is-error .fd-zone { animation: none !important; }
   .fd-photo img { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.fd :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .fd [hidden] { display: none !important; }

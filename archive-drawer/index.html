@@ -45,14 +45,17 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
-.ad-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.ad-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .ad-list, .ad-archived { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--ad-sunken); }
 .ad-row { position: relative; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 6px 10px 6px 12px; box-sizing: border-box; overflow: hidden; }
 .ad-row + .ad-row::before { content: ""; position: absolute; top: 0; left: 56px; right: 0; height: 1px; background: var(--ad-line); transform: scaleY(0.5); transform-origin: top; }
 .ad-row > div { flex: 1; min-width: 0; }
 .ad-row b { display: block; font-weight: 600; }
-.ad-row small { display: block; overflow: hidden; color: var(--ad-muted); font-size: var(--text-small); text-overflow: ellipsis; white-space: nowrap; }
-.ad-av { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; color: var(--on-chart); font-weight: 700; }
+.ad-row small { display: block; margin-top: 2px; overflow: hidden; color: var(--ad-muted); font-size: var(--text-small); line-height: var(--leading-small); text-overflow: ellipsis; white-space: nowrap; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.ad-av { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 32px; height: 32px; border-radius: 50%; color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; }
 .ad-archive, .ad-restore { flex: none; height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--ad-bg); color: var(--ad-accent); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .ad-archive:active, .ad-restore:active { transform: scale(var(--press-scale)); }
 .ad-archive:focus-visible, .ad-restore:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -94,7 +97,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .ad-front-label { position: absolute; left: 0; right: 0; bottom: 7px; text-align: center; color: color-mix(in srgb, var(--black) 45%, transparent); /* 10px thin strokes read lighter than the solid handle, so the text sits 10% deeper to look the same tone */ font: 600 10px/1 var(--font-sans); letter-spacing: 0.02em; }
 .ad-drawer.is-gulp .ad-front { animation: ad-gulp var(--spring-pop-duration) var(--spring-pop); }
 @keyframes ad-gulp { 30% { transform: scale(1.08, 0.9) translateY(3px); } 100% { transform: none; } }
-.ad-badge { position: absolute; top: -4px; right: -6px; display: grid; place-items: center; min-width: 20px; height: 20px; box-sizing: border-box; padding: 0 6px; border-radius: var(--radius-full); background: var(--ad-accent); color: var(--ad-on-accent); font-size: var(--text-caption); font-weight: 700; font-variant-numeric: tabular-nums; transform: scale(calc(min(var(--ad-n), 1))); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered. 11px digits split evenly in the 20px badge (12px sat high) */
+.ad-badge { position: absolute; top: -4px; right: -6px; display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; min-width: 20px; height: 20px; box-sizing: border-box; padding: 0 6px; border-radius: var(--radius-full); background: var(--ad-accent); color: var(--ad-on-accent); font-size: calc(var(--text-caption) - 1px); font-weight: 700; font-variant-numeric: tabular-nums; transform: scale(calc(min(var(--ad-n), 1))); transition: transform var(--spring-pop-duration) var(--spring-pop); }
 .ad-drawer[aria-expanded="true"] { --ad-open: 1; }
 .ad-panel { animation: ad-in var(--spring-ui-duration) var(--spring-ui) both; }
 .ad-panel-title { margin: 0 0 8px; color: var(--ad-muted); font-size: var(--text-small); font-weight: 600; }
@@ -104,6 +108,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   .ad-drawer { transition: none; }
   .ad-papers, .ad-front, .ad-badge { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ad :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ad [hidden] { display: none !important; }
 
 </style>
@@ -156,9 +162,54 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initArchiveDrawer(root) {
     if (!root || root.__miDrawer) return;
     root.__miDrawer = true;
+    evenLines(root);
     var list = root.querySelector('.ad-list');
     var empty = root.querySelector('.ad-empty');
     var drawer = root.querySelector('.ad-drawer');

@@ -33,6 +33,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --text-caption: 12px;
   --text-small: 13px;
   --text-title-sm: 17px;
+  --text-ui: 14px;
   --tracking-title: -0.015em;
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
@@ -140,7 +141,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .oc-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .oc-doc-title { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .oc-people { display: flex; }
-.oc-people span { display: grid; place-items: center; width: 26px; height: 26px; margin-left: -6px; border-radius: 50%; background: var(--c); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; box-shadow: 0 0 0 2px var(--oc-bg); }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.oc-people span { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; width: 26px; height: 26px; margin-left: -6px; border-radius: 50%; background: var(--c); color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; box-shadow: 0 0 0 2px var(--oc-bg); }
 .oc-doc { position: relative; display: flex; flex-direction: column; gap: 14px; min-height: 190px; padding: 18px 18px 22px; overflow: hidden; border-radius: var(--radius-lg); background: var(--oc-sunken); }
 .oc-p { font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title); }
 .oc-edit { margin: -4px -6px !important; padding: 4px 6px; border-radius: var(--radius-md); outline: none; caret-color: var(--oc-accent); }
@@ -155,11 +158,16 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .oc.is-reading .oc-glasses { width: 28px; margin-right: 5px; opacity: 1; transform: none; }
 .oc.is-squinting .oc-glasses { transform: translateY(1px) scale(1.12); }
 .oc.is-startled .oc-glasses { width: 0; margin-right: 0; opacity: 0; transform: translate(10px, 26px) rotate(140deg); transition-duration: var(--duration-slower); }
-.oc-status { min-height: 18px; color: var(--oc-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+/* Bottom of the card: trimmed to the baseline, so the padding below reads the same as the padding above (10b.39) */
+.oc-status { text-box: trim-end cap alphabetic; color: var(--oc-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
 
 @media (prefers-reduced-motion: reduce) {
   .oc-glasses { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.oc :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+/* Document paragraphs keep their natural flow; only a lonely last word is avoided */
+.oc .oc-doc :is(p, li) { text-wrap: pretty; }
 .oc [hidden] { display: none !important; }
 
 </style>
@@ -192,9 +200,54 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initShoulderCursor(root) {
     if (!root || root.__miShoulder) return;
     root.__miShoulder = true;
+    evenLines(root);
     var name = root.getAttribute('data-name') || 'They';
     var doc = root.querySelector('.oc-doc'), edit = root.querySelector('.oc-edit'), other = root.querySelector('.oc-other');
     var cur = root.querySelector('.oc-cursor'), status = root.querySelector('.oc-status');
@@ -220,7 +273,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
           root.classList.add('is-squinting');
           targetScale = 1.18;
           var whole = Math.floor(secs);
-          if (whole !== shown && whole % 2 === 0) { shown = whole; status.textContent = name + ' has been reading this sentence for ' + whole + ' seconds.'; }
+          if (whole !== shown && whole % 2 === 0) { shown = whole; status.textContent = name + ' has been reading this sentence for ' + whole + ' seconds.'; } // never 1: even seconds only
           // Creep along the line, word by word.
           var b = box(edit);
           target.x = Math.min(b.x + b.w - 40, target.x + 0.12);

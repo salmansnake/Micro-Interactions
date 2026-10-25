@@ -18,6 +18,18 @@ def rd(*p): return open(os.path.join(ROOT, *p), encoding='utf-8').read()
 def esc(s): return html.escape(str(s), quote=True)
 def js_json(o): return json.dumps(o, ensure_ascii=False).replace('</', '<\\/')
 
+def ui_icon(slug, name):
+    """{icon:Name} in site text: the icon of the control whose aria-label starts with Name, exactly as the interaction draws it."""
+    h = rd(slug, 'component.html')
+    m = re.search(r'<(\w+)\b[^>]*\baria-label="' + re.escape(name) + r'[^"]*"[^>]*>', h)
+    if not m: return None
+    svg = re.search(r'<svg\b.*?</svg>', h[m.end():h.find('</' + m.group(1) + '>', m.end())], re.S)
+    return svg.group(0) if svg else None
+
+def ref_icons(it):
+    return {n: ui_icon(it['slug'], n) for t in [it.get('summary', ''), it.get('tryit', '')] + [sp.get('value', '') for sp in it.get('specs', [])]
+            for n in re.findall(r'\{icon:([^{}]+)\}', t)}
+
 SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{}</svg>'
 ICON = {k: SVG.format(v) for k, v in {
     'linkedin': '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
@@ -153,6 +165,12 @@ def check(reg):
         # No hard-coded colors hidden inside an SVG data URI (RULES 10): draw the shape through a mask and color it with a token.
         if re.search(r"data:image/svg\+xml[^)]*%23[0-9a-fA-F]{3,8}", c):
             errors.append(f'{s}: an SVG data URI in component.css has a hard-coded color; use it as a mask and color it with a token (RULES 10)')
+        # Even line breaks (RULES 10b.29d): every interaction balances its multi-line text.
+        if m and not re.search(r'\.' + re.escape(m[0][1]) + r' :is\(p, li[^)]*\) \{ text-wrap: balance; \}', c):
+            errors.append(f'{s}: add ".{m[0][1]} :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) {{ text-wrap: balance; }}" so text never ends on one or two lonely words (RULES 10b.29d)')
+        # Even line breaks (RULES 10b.29d): the evenLines helper is present and called at init.
+        if 'function evenLines(' not in j or not re.search(r'evenLines\((root|form)\);', j):
+            errors.append(f'{s}: component.js needs the evenLines helper, called right after the init guard (RULES 10b.29d)')
         btn_cls = {k for cl in re.findall(r'<button[^>]*\bclass="([^"]+)"', h + j) for k in cl.split()}
         for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', c):
             sel1 = sel.strip().splitlines()[-1]
@@ -172,9 +190,65 @@ def check(reg):
                     errors.append(f'{s}: "{sel1}" outlines a red button; soft red buttons have no stroke (RULES 11.8)')
             if not re.match(r'(\d+%|from|to)(?![\w-])', sel1) and re.search(r'background(?:-color)?\s*:\s*color-mix\(in srgb,\s*var\(--(brand|aqua|pink|pop)\)\s*(1?\d)%,\s*transparent\)', body):
                 warns.append(f'{s}: "{sel1}" tints with a pale color (Aqua or Pink) under 20%, which is near white in light mode; use oklch(from var(--color) var(--tint-l) calc(c * var(--tint-c)) h) (RULES 10b.10)')
+            # A colored panel mixed faintly into a surface nearly vanishes (Frosted Peek's chart box was Aqua at 4% over the card)
+            if not re.match(r'(\d+%|from|to)(?![\w-])', sel1) and re.search(r'background(?:-color)?\s*:\s*color-mix\(in (?:srgb|oklab),\s*var\(--(brand|aqua|pink|pop|ai|orange|success|danger|warning|info)[\w-]*\)\s*\d%,\s*var\(--[\w-]+\)\)', body):
+                errors.append(f'{s}: "{sel1}" is a colored panel mixed under 10% into a surface, which nearly vanishes; use oklch(from var(--color) var(--tint-l) calc(c * var(--tint-c)) h) (RULES 10b.10)')
+            # Marks keep one size and show a level by lightness only (RULES 10b.36, 10b.37)
+            if re.search(r'text-decoration-thickness\s*:\s*calc\(', body):
+                errors.append(f'{s}: "{sel1}" changes an underline\'s thickness with a value; use var(--mark-thickness) and show the level by color (RULES 10b.36)')
+            if re.search(r'text-decoration-color\s*:\s*color-mix\([^;]*calc\([^;]*transparent', body):
+                errors.append(f'{s}: "{sel1}" fades an underline toward transparent to show a level; use the --mark-l-weak/--mark-l-strong lightness scale (RULES 10b.37)')
+        # text-box needs an over and an under edge; "trim-end alphabetic" is invalid and silently does nothing (RULES 10b.39)
+        for _tb in re.findall(r'text-box:\s*([^;}]+)', c):
+            if re.fullmatch(r'(trim-\w+\s+)?(alphabetic|ideographic)\s*', _tb.strip()):
+                errors.append(f'{s}: "text-box: {_tb.strip()}" is invalid and does nothing; write both edges, such as "trim-end cap alphabetic" (RULES 10b.39)')
+        # A blur behind a surface (a material or Frost) uses the blur tokens, never a typed size
+        for _bf in re.findall(r'backdrop-filter:\s*[^;}]*blur\(\s*(\d+(?:\.\d+)?px)', c):
+            errors.append(f'{s}: backdrop blur({_bf}) is hard-coded; use var(--blur-sm), var(--blur-md) or var(--blur-lg) (tokens only)')
+        # A letter tile or avatar centers its letter on the capital height, not the line box (RULES 10b.5)
+        _cc = re.sub(r'/\*.*?\*/', '', c, flags=re.S)
+        for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', _cc):
+            # Square tiles and round count badges (width or min-width equal to height) that hold text; icon holders have a "<sel> svg" rule
+            _w, _h = re.search(r'(?<![-\w])(?:min-)?width:\s*(\d+)px', body), re.search(r'(?<![-\w])height:\s*(\d+)px', body)
+            if re.search(r'display:\s*(inline-)?(grid|flex)', body) and re.search(r'place-items:\s*center|justify-content:\s*center', body) \
+                    and re.search(r'font-(size|weight)', body) and _w and _h and _w.group(1) == _h.group(1) and int(_h.group(1)) <= 48 \
+                    and 'text-box' not in body and not re.search(re.escape(sel.strip()) + r' (span\s*\{[^}]*text-box|svg\s*\{)', _cc):
+                errors.append(f'{s}: "{sel.strip()}" is a letter tile or count badge centered on its line box, so its text sits off center; use display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic, at a size that splits evenly (RULES 10b.5)')
+        # A title stacked over a smaller detail line: the detail sets its own line height (RULES 10b.38)
+        _rules = [(sel.strip().split(',')[-1].strip(), body) for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', re.sub(r'/\*.*?\*/', '', c, flags=re.S))]
+        _stacked = {sel[:-2] for sel, body in _rules if sel.endswith(' b') and re.search(r'display:\s*block', body)}
+        for sel, body in _rules:
+            m2 = re.match(r'(.+) (small|span)$', sel)
+            if m2 and m2.group(1) in _stacked and re.search(r'font-size:\s*var\(--text-(small|caption)\)', body) and 'line-height' not in body:
+                errors.append(f'{s}: "{sel}" is a detail line under a title but keeps the body line height; give it display: block, its own line-height and 2px margin-top (RULES 10b.38)')
+        # A count before a plural word needs its singular for one (RULES 12d); mark a count that can never be 1 with "// never 1"
+        for _ln in rd(s, 'component.js').splitlines():
+            if re.search(r"[\w)\]] \+ '\s*(files|items|seconds|minutes|hours|days|weeks|tokens|steps|people|characters|seats|words|rows|columns|copies|messages|tasks|commits|replies|changes|versions|invites|projects|shortcuts|times|nights|months|years|points|credits|generations)\b", _ln) \
+                    and not re.search(r'[!=]==? ?1\b|> ?1\b|toFixed\(|// never 1', _ln):
+                errors.append(f'{s}: "{_ln.strip()[:70]}" shows a count with a plural word but no singular for 1 (RULES 12d)')
         hexes = re.findall(r'(?<![\w&])#[0-9a-fA-F]{3,8}\b', re.sub(r'/\*.*?\*/', '', c, flags=re.S))
         if hexes: warns.append(f'{s}: hard-coded colors in component.css {sorted(set(hexes))[:4]} (use tokens)')
     for it in items:
+        # Prompts drift from the code: reduced motion is the 120ms token, and corner radii come from the radius scale
+        _p = rd(it['slug'], 'prompt.md') if os.path.isfile(os.path.join(ROOT, it['slug'], 'prompt.md')) else ''
+        for _l in _p.splitlines():
+            if _l.startswith('Reduced motion') or 'prefers-reduced-motion' in _l:
+                for _ms in re.findall(r'(\d+)ms', _l):
+                    if _ms != '120': errors.append(f'{it["slug"]}/prompt.md: reduced motion says {_ms}ms; the reduced-motion token is 120ms')
+        for _r in re.findall(r'(\d+)px (?:corners|rounded (?:box|card|group|list|area|panel|block|field|window|rectangle|text area|message field))', _p):
+            if int(_r) not in (4, 6, 8, 12, 16): warns.append(f'{it["slug"]}/prompt.md: {_r}px corners is not on the radius scale (4, 6, 8, 12, 16); check it against the code')
+        # {Label} marks something on screen (RULES 12c): it must match a label in the interaction, and braces must balance.
+        _slug = it['slug']
+        _src = html.unescape(rd(_slug, 'component.html') + rd(_slug, 'component.js')) if os.path.isdir(os.path.join(ROOT, _slug)) else ''
+        for _t in [it.get('summary', ''), it.get('tryit', '')] + [sp.get('value', '') for sp in it.get('specs', [])]:
+            if _t.count('{') != _t.count('}'):
+                errors.append(f'{_slug}: unbalanced {{ }} in "{_t[:40]}"')
+            for _lab in re.findall(r'\{([^{}]+)\}', _t):
+                if _lab.startswith('icon:'):
+                    if not ui_icon(_slug, _lab[5:]): errors.append(f'{_slug}: "{{{_lab}}}" needs a control whose aria-label starts with "{_lab[5:]}" and holds an svg (RULES 12c)')
+                    continue
+                if not _lab.isdigit() and _lab.replace(' n', '') not in _src:  # exact, capitals included; plain numbers (calendar days) are generated, not written
+                    errors.append(f'{_slug}: "{{{_lab}}}" names something that is not on screen in this interaction (RULES 12c)')
         for k in ('name', 'summary', 'tryit'):
             for w in locale.findall(str(it.get(k, ''))): errors.append(f'{it["slug"]}: "{w}" in {k} breaks the locale rules')
         for sp in it.get('specs', []):
@@ -291,7 +365,7 @@ def build_site(reg, site):
         b = bundle(it['slug'])
         src[it['slug']] = {'prompt': full_prompt(it['slug']), 'html': rd(it['slug'], 'component.html'), 'css': b['css'], 'js': rd(it['slug'], 'component.js')}
     data = {'oneTpl': one_template(), 'types': reg['types'], 'topics': reg['topics'], 'init': {k: v for k, v in init.items()},
-            'icons': {'hand': ICON['hand']}, 'interactions': items}
+            'icons': {'hand': ICON['hand']}, 'interactions': [dict(it, refIcons=ref_icons(it)) if ref_icons(it) else it for it in items]}
     by = {it['slug']: it for it in items}
     newest = [it for it in items if it['new']]
     pill_it = newest[-1] if newest else items[-1]

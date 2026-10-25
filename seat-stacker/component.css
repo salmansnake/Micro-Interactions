@@ -32,9 +32,12 @@
 .ss-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
 .ss-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .ss-avatars { display: flex; flex-direction: row-reverse; justify-content: flex-end; }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered */
 .ss-av {
-  display: grid;
-  place-items: center;
+  display: block;
+  align-content: center;
+  text-align: center;
+  text-box: trim-both cap alphabetic;
   width: 30px;
   height: 30px;
   margin-left: -4px; /* overlap small enough that the next face never covers these initials */
@@ -97,4 +100,6 @@
   .ss-av, .ss-av.is-leaving, .ss-tier.is-new, .ss-chip { animation: none; }
   .ss-col { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ss :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ss [hidden] { display: none !important; }

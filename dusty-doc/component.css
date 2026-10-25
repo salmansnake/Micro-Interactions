@@ -52,4 +52,8 @@
 @media (prefers-reduced-motion: reduce) {
   .dd-web, .dd-scroll { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.dd :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+/* Document paragraphs keep their natural flow; only a lonely last word is avoided */
+.dd .dd-page :is(p, li) { text-wrap: pretty; }
 .dd [hidden] { display: none !important; }

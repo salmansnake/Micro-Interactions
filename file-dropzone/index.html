@@ -62,6 +62,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   transition: transform var(--spring-ui-duration) var(--spring-ui), background-color var(--duration-base);
 }
 .fd-zone:focus-visible { box-shadow: 0 0 0 3px var(--fd-accent); }
+/* The dashed border sits 1px inside the 16px zone, so its corners are 15px and stay concentric */
 .fd-border { position: absolute; inset: 1px; width: calc(100% - 2px); height: calc(100% - 2px); overflow: visible; pointer-events: none; }
 .fd-border rect { fill: none; stroke: var(--fd-line); stroke-width: 1.5; stroke-dasharray: 7 6; transition: stroke var(--duration-base); }
 .fd.is-over .fd-zone { transform: scale(0.985); background: color-mix(in srgb, var(--fd-tone) 10%, transparent); }
@@ -143,6 +144,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   .fd-table tbody tr, .fd-photo, .fd-page, .fd-generic, .fd-over-icon, .fd.is-over .fd-border rect, .fd.is-error .fd-zone { animation: none !important; }
   .fd-photo img { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.fd :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .fd [hidden] { display: none !important; }
 
 </style>
@@ -168,7 +171,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 <button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset File-Aware Dropzone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
 <div class="mi-host"><div class="fd" data-mi="file-dropzone" data-max-mb="10">
   <div class="fd-zone" tabindex="0" role="button" aria-label="Upload a file. CSV, image or PDF, up to 10 MB.">
-    <svg class="fd-border" aria-hidden="true"><rect width="100%" height="100%" rx="19"></rect></svg>
+    <svg class="fd-border" aria-hidden="true"><rect width="100%" height="100%" rx="15"></rect></svg>
     <div class="fd-idle">
       <span class="fd-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
@@ -275,9 +278,54 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     return Promise.resolve(new File([pdf], 'pricing-proposal.pdf', { type: 'application/pdf' }));
   }
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initFileDropzone(root) {
     if (!root || root.__miDrop) return;
     root.__miDrop = true;
+    evenLines(root);
 
     var maxMB = Number(root.getAttribute('data-max-mb')) || 10;
     var zone = root.querySelector('.fd-zone');
@@ -344,7 +392,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
           });
           wrap.appendChild(t);
           preview.replaceChildren(wrap);
-          info.textContent = body.length.toLocaleString('en-US') + ' rows · ' + head.length + ' columns · ' + size(file.size);
+          info.textContent = body.length.toLocaleString('en-US') + (body.length === 1 ? ' row · ' : ' rows · ') + head.length + (head.length === 1 ? ' column · ' : ' columns · ') + size(file.size);
         });
       } else if (kind === 'image') {
         url = URL.createObjectURL(file);

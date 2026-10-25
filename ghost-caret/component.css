@@ -30,7 +30,9 @@
 .gc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .gc-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .gc-people { display: flex; }
-.gc-avatar { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 0 0 2px var(--gc-bg); color: var(--gc-on-peer); font-size: var(--text-caption); font-weight: 700; transition: opacity var(--duration-slow), transform var(--spring-ui-duration) var(--spring-ui); }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.gc-avatar { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 0 0 2px var(--gc-bg); color: var(--gc-on-peer); font-size: var(--text-ui); font-weight: 700; transition: opacity var(--duration-slow), transform var(--spring-ui-duration) var(--spring-ui); }
 .gc-avatar + .gc-avatar { margin-left: -6px; }
 .gc-avatar--you { background: var(--gc-accent); color: var(--primary-foreground); }
 .gc-avatar--peer { background: var(--gc-peer); }
@@ -111,4 +113,6 @@
   .gc-caret.is-gliding { transition: opacity var(--duration-fast); }
   .gc-caret.is-idle, .gc-caret.is-waiting::before { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.gc :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .gc [hidden] { display: none !important; }

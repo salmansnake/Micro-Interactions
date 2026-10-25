@@ -28,7 +28,9 @@
 }
 .ue p { margin: 0; }
 .ue-mail { display: flex; align-items: center; gap: 12px; }
-.ue-logo { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-md); background: linear-gradient(160deg, var(--orange), var(--pink)); color: var(--on-chart); font-weight: 800; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.ue-logo { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 40px; height: 40px; border-radius: var(--radius-md); background: linear-gradient(160deg, var(--orange), var(--pink)); color: var(--on-chart); font-size: var(--text-ui); font-weight: 800; }
 .ue-mail-text { flex: 1; min-width: 0; contain: inline-size; }
 .ue-from { font-weight: 600; }
 .ue-subj { overflow: hidden; color: var(--ue-muted); font-size: var(--text-small); line-height: var(--leading-small); text-overflow: ellipsis; white-space: nowrap; }
@@ -60,4 +62,6 @@
 @media (prefers-reduced-motion: reduce) {
   .ue.is-eager .ue-btn { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ue :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .ue [hidden] { display: none !important; }

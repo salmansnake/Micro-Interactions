@@ -59,7 +59,9 @@
 .pp-rows li:focus-visible { box-shadow: inset 0 0 0 2px var(--pp-accent); }
 .pp-rows li.is-picked { background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); }
 .pp-rows small { margin-left: auto; color: var(--pp-muted); font-size: var(--text-small); }
-.pp-sq { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.pp-sq { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 26px; height: 26px; border-radius: var(--radius-sm); color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; }
 /* The sheet */
 .pp-sheet {
   position: absolute;
@@ -118,4 +120,6 @@
 }
 /* The docked pill and its status line get a strip of their own only while they show, so they never cover a row */
 .pp:has(.pp-pill:not([hidden])), .pp:has(.pp-status:not(:empty)) { padding-bottom: 72px; }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.pp :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .pp [hidden] { display: none !important; }

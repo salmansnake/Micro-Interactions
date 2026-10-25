@@ -30,7 +30,8 @@
   -webkit-font-smoothing: antialiased;
 }
 .al[data-level="3"] { --al-tone: var(--al-orange); }
-.al-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.al-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .al-reach { margin: 2px 0 0; color: var(--al-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .al-reach b { color: var(--al-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
 .al-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; align-items: stretch; }
@@ -68,7 +69,8 @@
 /* A tight grid: 'You' takes a 2x2 cell so the other dots pack around it with no gap */
 .al-crowd { position: relative; display: grid; grid-template-columns: repeat(auto-fit, 14px); grid-auto-rows: 14px; grid-auto-flow: row dense; align-content: center; justify-content: center; gap: 4px; padding: 12px; border-radius: var(--radius-xl); background: var(--al-sunken); overflow: hidden; min-height: 176px; box-sizing: border-box; }
 .al-p { width: 14px; height: 14px; border-radius: 50%; background: var(--c, var(--al-accent)); animation: al-in var(--spring-pop-duration) var(--spring-pop) both; }
-.al-p.is-you { grid-column: span 2; grid-row: span 2; width: 32px; height: 32px; display: grid; place-items: center; color: var(--on-chart); font-size: var(--text-caption); font-weight: 700; }
+/* Centered on the capital height, not the line box (10b.5): the text is trimmed to cap height and centered. 13px "You" fits the 32px circle and splits evenly at 1x and 2x */
+.al-p.is-you { grid-column: span 2; grid-row: span 2; width: 32px; height: 32px; display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; color: var(--on-chart); font-size: var(--text-small); font-weight: 700; }
 /* A crowd that fits in one row sits centered beside You instead of hugging its top edge */
 .al-crowd.is-few .al-p.is-you { grid-column: 1 / span 2; grid-row: 1 / span 2; }
 .al-crowd.is-few .al-p:not(.is-you) { grid-row: 1 / span 2; align-self: center; }
@@ -94,4 +96,6 @@
   .al-p, .al-p.is-out, .al-globe, .al-warn { animation: none; }
   .al-rail i { transition-duration: var(--duration-reduced); }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.al :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .al [hidden] { display: none !important; }

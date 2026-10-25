@@ -17,6 +17,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --duration-slow: 320ms;
   --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --leading-body: 22px;
+  --leading-small: 18px;
   --leading-title: 28px;
   --press-scale: 0.97;
   --radius-lg: 12px;
@@ -34,6 +35,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --text-small: 13px;
   --text-title: 20px;
   --text-title-sm: 17px;
+  --text-ui: 14px;
   --tracking-title: -0.015em;
   --ai: var(--orange);
   --aqua: #79EEEC;
@@ -194,12 +196,15 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .le-cta:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 /* After creating */
 .le-filled { text-align: left; }
-.le-list-title { margin: 0 0 10px; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
+/* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
+.le-list-title { text-box: trim-start cap alphabetic; margin: 0 0 10px; font-size: var(--text-title); line-height: var(--leading-title); font-weight: 600; letter-spacing: var(--tracking-title); }
 .le-list { margin: 0 0 16px; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--le-sunken); }
 .le-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
-.le-item-icon { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--le-accent); color: var(--le-on-accent); font-weight: 700; }
+/* A letter in a tile is centered on its capital height, not its line box (10b.5): the tile trims its text to cap height and centers it.
+   14px capitals leave an even split above and below at 1x and 2x */
+.le-item-icon { display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic; flex: none; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--le-accent); color: var(--le-on-accent); font-size: var(--text-ui); font-weight: 700; }
 .le-item b { display: block; font-weight: 600; }
-.le-item small { color: var(--le-muted); font-size: var(--text-small); }
+.le-item small { display: block; margin-top: 2px; color: var(--le-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .le-item.is-new { animation: le-arrive var(--spring-pop-duration) var(--spring-pop) both; }
 @keyframes le-arrive { from { opacity: 0; transform: translateY(-24px) scale(0.9); } }
 .le-reset { height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-sm); background: var(--le-fill); color: var(--le-fg); font: inherit; font-weight: 600; cursor: pointer; }
@@ -208,6 +213,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   .le-tile { transition: none; }
   .le-item.is-new { animation: none; }
 }
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.le :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
 .le [hidden] { display: none !important; }
 
 </style>
@@ -244,9 +251,54 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var RANGE = 320; // px from the button where the lean starts
 
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
   function initLeaningEmptyState(root) {
     if (!root || root.__miLean) return;
     root.__miLean = true;
+    evenLines(root);
     var empty = root.querySelector('.le-empty');
     var filled = root.querySelector('.le-filled');
     var cta = root.querySelector('.le-cta');

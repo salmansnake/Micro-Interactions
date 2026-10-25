@@ -20,6 +20,15 @@
   var mounted = [];
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  // {Label} in summaries, Try it and specs names something on screen: show it as a small chip so it never reads as part of the sentence.
+  // {icon:Name} shows an icon-only control the same way, with the icon the interaction draws
+  function rich(s, icons) {
+    return esc(s).replace(/\{([^{}]+)\}/g, function (m, x) {
+      var k = /^icon:(.+)$/.exec(x);
+      if (k && icons && icons[k[1]]) return '<span class="ui-ref ui-ref--icon" role="img" aria-label="' + k[1] + '">' + icons[k[1]] + '</span>';
+      return '<span class="ui-ref">' + x + '</span>';
+    });
+  }
   function typeClass(t) { return t === 'Pure Joke' ? 'oc-badge--pop' : t === 'Secretly Useful' ? 'oc-badge--ai' : 't-useful'; }
 
   /* ---------- mounting: only what's on screen runs ---------- */
@@ -136,9 +145,9 @@
       '<div class="info-meta"><span class="oc-badge type-badge ' + typeClass(it.type) + '">' + esc(it.type) + '</span>' +
       (it['new'] ? '<span class="tag-new">New</span>' : '') + '</div>' +
       '<h1>' + esc(it.name) + '</h1><p class="topic">' + esc(it.topic) + '</p>' +
-      '<p class="summary">' + esc(it.summary) + '</p>' +
-      '<div class="try">' + HAND + '<p><b>Try it</b>' + esc(it.tryit) + '</p></div>' +
-      '<dl class="spec">' + it.specs.map(function (s) { return '<dt>' + esc(s.label) + '</dt><dd>' + esc(s.value) + '</dd>'; }).join('') + '</dl>';
+      '<p class="summary">' + rich(it.summary, it.refIcons) + '</p>' +
+      '<div class="try">' + HAND + '<p><b>Try it</b>' + rich(it.tryit, it.refIcons) + '</p></div>' +
+      '<dl class="spec">' + it.specs.map(function (s) { return '<dt>' + esc(s.label) + '</dt><dd>' + rich(s.value, it.refIcons) + '</dd>'; }).join('') + '</dl>';
   }
 
   /* ---------- routing ---------- */
