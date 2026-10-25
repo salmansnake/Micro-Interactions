@@ -24,7 +24,7 @@
       root.classList.remove('is-lifting');
       root.classList.toggle('is-declined', kind === 'declined');
       word.textContent = kind === 'approved' ? 'Approved' : 'Declined';
-      meta.textContent = initials + ' · ' + now.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' · ' + now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      meta.textContent = initials + ' · ' + now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' · ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
       root.classList.remove('is-stamped'); void root.offsetWidth; root.classList.add('is-stamped');
       // the card takes the hit just as the stamp lands
       setTimeout(function () { card.classList.remove('is-hit'); void card.offsetWidth; card.classList.add('is-hit'); }, 200);

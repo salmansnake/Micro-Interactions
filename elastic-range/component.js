@@ -80,7 +80,7 @@
       if (a && z && z > a) {
         var nights = z - a;
         var p = pos(z);
-        bubble.textContent = nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString() : '');
+        bubble.textContent = nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString('en-US') : '');
         bubble.style.left = p.x + p.w / 2 + 'px';
         bubble.style.top = p.y - 4 + 'px';
         bubble.classList.add('is-on');
@@ -115,7 +115,7 @@
         return;
       }
       var nights = z - a;
-      summary.append(Object.assign(document.createElement('b'), { textContent: mon + ' ' + a + ' – ' + mon + ' ' + z }), Object.assign(document.createElement('span'), { className: 'er-cost', textContent: nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString() + ' total' : '') + (tentative ? '' : '.') }));
+      summary.append(Object.assign(document.createElement('b'), { textContent: mon + ' ' + a + ' – ' + mon + ' ' + z }), Object.assign(document.createElement('span'), { className: 'er-cost', textContent: nights + (nights === 1 ? ' night' : ' nights') + (rate ? ' · $' + (nights * rate).toLocaleString('en-US') + ' total' : '') + (tentative ? '' : '.') }));
     }
 
     function choose(day) {

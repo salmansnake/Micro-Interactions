@@ -129,7 +129,7 @@
       plans.forEach(function (p, pi) {
         most = Math.max(most, p.save);
         tweenPrice(p, toYearly ? p.y : p.m, token);
-        p.billed.textContent = toYearly ? 'Billed yearly · $' + (p.y * 12).toLocaleString() : 'Billed monthly';
+        p.billed.textContent = toYearly ? 'Billed yearly · $' + (p.y * 12).toLocaleString('en-US') : 'Billed monthly';
         p.kept = 0;
         p.landed = 0;
         if (reduce.matches) { if (toYearly) p.kept = p.save; renderTray(p); return; }

@@ -64,6 +64,7 @@
   cursor: pointer;
   transition: transform var(--spring-press-duration) var(--spring-press);
 }
+.ss-step svg { display: block; width: 20px; height: 20px; }
 .ss-step:active { transform: scale(0.9); }
 .ss-step:disabled { opacity: 0.35; cursor: default; }
 .ss-step:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

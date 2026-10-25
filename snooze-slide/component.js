@@ -27,10 +27,10 @@
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var day = new Date(d); day.setHours(0, 0, 0, 0);
     var diff = Math.round((day - today) / 86400000);
-    var time = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    var time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     if (diff === 0) return 'Today at ' + time;
     if (diff === 1) return 'Tomorrow at ' + time;
-    return d.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' }) + ' at ' + time;
+    return d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) + ' at ' + time;
   }
   var CLOCK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 4.8V8l2.2 1.4"/></svg>';
 

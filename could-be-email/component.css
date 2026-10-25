@@ -52,6 +52,7 @@
 /* Stepper */
 .ce-step { display: flex; align-items: center; gap: 2px; }
 .ce-step button { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--ce-fill); color: inherit; font: 500 var(--text-title-sm)/1 inherit; font-family: inherit; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.ce-step button svg { display: block; width: 16px; height: 16px; }
 .ce-step button:active { transform: scale(var(--press-scale-sm)); }
 .ce-step button:disabled { opacity: 0.35; cursor: default; }
 .ce-step button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

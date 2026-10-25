@@ -190,7 +190,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .fo-plan:has(input:checked) { box-shadow: 0 0 0 2px var(--fo-accent); }
 .fo-plan:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
 .fo-stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
-.fo-stepper button { width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fo-fill); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
+.fo-stepper button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fo-fill); color: var(--fo-fg); font: 500 var(--text-title)/1 var(--font-sans); cursor: pointer; }
+.fo-stepper button svg { display: block; width: 18px; height: 18px; }
 .fo-stepper button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .fo-seats { min-width: 2ch; font-size: var(--text-h2); line-height: var(--leading-h2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
 .fo-email { height: 44px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--fo-bg); color: var(--fo-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
@@ -227,7 +228,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   <section class="fo-step" data-step="seats" data-title="Seats">
     <p class="fo-step-title"><span>2</span>How Many Seats?</p>
     <div class="fo-body">
-      <div class="fo-stepper"><button type="button" class="fo-minus" aria-label="Fewer seats">−</button><output class="fo-seats" aria-live="polite">5</output><button type="button" class="fo-plus" aria-label="More seats">+</button></div>
+      <div class="fo-stepper"><button type="button" class="fo-minus" aria-label="Fewer seats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><output class="fo-seats" aria-live="polite">5</output><button type="button" class="fo-plus" aria-label="More seats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button></div>
       <button type="button" class="fo-next">Continue</button>
     </div>
   </section>
@@ -302,7 +303,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       if (allDone) {
         var plan = root.querySelector('input[name="fo-plan"]:checked').value;
         var b = document.createElement('b');
-        b.textContent = '$' + (PRICES[plan] * seats).toLocaleString();
+        b.textContent = '$' + (PRICES[plan] * seats).toLocaleString('en-US');
         total.replaceChildren(b, document.createTextNode(' per month after a 14-day trial. Billed to ' + email.value.trim() + '.'));
       }
       renderChips();

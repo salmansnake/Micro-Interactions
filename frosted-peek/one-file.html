@@ -222,7 +222,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   left: var(--fp-x);
   width: calc(var(--fp-w) * 2);
   margin-left: calc(var(--fp-w) * -1);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg); /* never rounder than the 12px chart it slides inside */
   box-shadow: 0 0 0 1px var(--fp-glass-edge), var(--shadow-lg);
   opacity: var(--fp-o);
   transform: scale(calc(0.9 + var(--fp-o) * 0.1));

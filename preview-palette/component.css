@@ -19,6 +19,13 @@
   letter-spacing: normal;
   text-align: left;
   -webkit-font-smoothing: antialiased;
+  /* One bounded card: everything the interaction shows sits inside it, including its note */
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 /* The mini app the commands act on. Its own theme so previews are visible. */
 .pv-app {
@@ -34,7 +41,7 @@
   flex-direction: column;
   gap: 12px;
   padding: 18px;
-  border-radius: var(--radius-xl); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); border: 1px solid var(--border);
   background: var(--app-bg);
   color: var(--app-fg);
   box-shadow: 0 0 0 1px var(--pv-line);
@@ -68,12 +75,12 @@
   position: absolute;
   z-index: 5;
   left: 50%;
-  top: 64px;
+  top: 84px; /* 20px card padding + 64px into the app */
   display: flex;
   flex-direction: column;
   width: min(340px, calc(100% - 24px));
   /* Stays inside the app card at any density: the list shrinks and scrolls instead of the card reserving room */
-  max-height: calc(100% - 72px);
+  max-height: calc(100% - 112px);
   overflow: hidden;
   border-radius: var(--radius-xl);
   background: var(--pv-glass);
@@ -83,7 +90,7 @@
   transform: translateX(-50%);
   animation: pv-in var(--spring-ui-duration) var(--spring-ui) both;
 }
-.pv:has(.pv-status:not(:empty)) .pv-palette { max-height: calc(100% - 100px); }
+.pv:has(.pv-status:not(:empty)) .pv-palette { max-height: calc(100% - 140px); }
 @keyframes pv-in { from { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.97); } }
 .pv-input { flex: none; width: 100%; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-bottom: 1px solid var(--pv-line); background: transparent; color: var(--pv-fg); font: inherit; font-size: var(--text-title-sm); outline: none; }
 .pv-list { flex: 1 1 auto; min-height: 0; max-height: 210px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; }

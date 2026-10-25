@@ -48,7 +48,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-4: var(--sage);
   --danger-text: #ca2b30;
   --foreground: var(--black);
-  --lift: #FFFFFF;
   --line: #DCDED9;
   --mist: #ECEBE6;
   --muted: var(--mist);
@@ -57,11 +56,11 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --pink: #FFC7F6;
   --primary: var(--black);
   --primary-foreground: #ffffff;
-  --raised: var(--lift);
   --red-11: #ce2c31;
   --ring: var(--aqua-700);
   --sage: #99AD88;
   --shadow-md: 0 2px 4px -1px rgba(17, 17, 16, 0.05), 0 6px 14px -3px rgba(17, 17, 16, 0.09);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --soft-ground: #F3F2EE;
   --subtle: var(--soft-ground);
   --warning: var(--amber-9);
@@ -81,7 +80,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-4: var(--sage);
   --danger-text: var(--red-11);
   --foreground: #F3F2EE;
-  --lift: #3F4341;
   --line: #313432;
   --mist: #2B2E2D;
   --muted: var(--mist);
@@ -90,11 +88,11 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --pink: #FFC7F6;
   --primary: var(--aqua);
   --primary-foreground: #000000;
-  --raised: var(--lift);
   --red-11: #ff9592;
   --ring: var(--aqua);
   --sage: #99AD88;
   --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --soft-ground: #0C0D0C;
   --subtle: var(--soft-ground);
   --warning: var(--amber-9);
@@ -114,7 +112,6 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --chart-4: var(--sage);
     --danger-text: var(--red-11);
     --foreground: #F3F2EE;
-    --lift: #3F4341;
     --line: #313432;
     --mist: #2B2E2D;
     --muted: var(--mist);
@@ -123,11 +120,11 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --pink: #FFC7F6;
     --primary: var(--aqua);
     --primary-foreground: #000000;
-    --raised: var(--lift);
     --red-11: #ff9592;
     --ring: var(--aqua);
     --sage: #99AD88;
     --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --soft-ground: #0C0D0C;
     --subtle: var(--soft-ground);
     --warning: var(--amber-9);
@@ -157,8 +154,15 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   letter-spacing: normal;
   text-align: left;
   -webkit-font-smoothing: antialiased;
+  /* One bounded card: everything the interaction shows sits inside it, including its note */
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
-.hk-card { display: flex; flex-direction: column; gap: 18px; padding: 20px; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--hk-bg); }
+.hk-card { display: flex; flex-direction: column; gap: 18px; } /* the content; the card is the root */
 .hk-head { display: flex; align-items: center; gap: 12px; }
 .hk-avatar { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-lg); background: var(--hk-accent); color: var(--primary-foreground); font-size: var(--text-title); font-weight: 700; }
 .hk-id { min-width: 0; flex: 1; }
@@ -225,10 +229,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   cursor: pointer;
   transition: transform var(--spring-press-duration) var(--spring-press);
 }
-.hk-reload { background: var(--raised); }
+.hk-reload { background: var(--hk-fill); } /* gray on the white card */
 .hk-error button:active, .hk-reload:active { transform: scale(var(--press-scale)); }
 .hk-error button:focus-visible, .hk-reload:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.hk-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; }
+.hk-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid var(--hk-line); }
 .hk-note { margin: 0; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
 @media (prefers-reduced-motion: reduce) {
   .hk-sk { animation: none; }

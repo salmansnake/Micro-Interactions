@@ -20,8 +20,15 @@
   letter-spacing: normal;
   text-align: left;
   -webkit-font-smoothing: antialiased;
+  /* One bounded card: everything the interaction shows sits inside it, including its note */
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
-.hk-card { display: flex; flex-direction: column; gap: 18px; padding: 20px; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--hk-bg); }
+.hk-card { display: flex; flex-direction: column; gap: 18px; } /* the content; the card is the root */
 .hk-head { display: flex; align-items: center; gap: 12px; }
 .hk-avatar { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-lg); background: var(--hk-accent); color: var(--primary-foreground); font-size: var(--text-title); font-weight: 700; }
 .hk-id { min-width: 0; flex: 1; }
@@ -88,10 +95,10 @@
   cursor: pointer;
   transition: transform var(--spring-press-duration) var(--spring-press);
 }
-.hk-reload { background: var(--raised); }
+.hk-reload { background: var(--hk-fill); } /* gray on the white card */
 .hk-error button:active, .hk-reload:active { transform: scale(var(--press-scale)); }
 .hk-error button:focus-visible, .hk-reload:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.hk-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; }
+.hk-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid var(--hk-line); }
 .hk-note { margin: 0; color: var(--hk-muted); font-size: var(--text-small); line-height: var(--leading-small); letter-spacing: normal; }
 @media (prefers-reduced-motion: reduce) {
   .hk-sk { animation: none; }

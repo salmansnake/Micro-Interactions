@@ -65,9 +65,10 @@
 .lb-rules li { display: flex; align-items: center; gap: 10px; color: var(--lb-muted); transition: color var(--duration-base); }
 .lb-rules li.is-met { color: var(--lb-fg); }
 .lb-tick { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--lb-fill); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
-.lb-tick::after { content: ""; position: absolute; left: 6px; top: 3px; width: 4px; height: 8px; border: solid var(--on-color); border-width: 0 2px 2px 0; transform: rotate(45deg) scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+/* Lucide check (round ends), drawn through a mask; nudged down half a grid unit so the visible tick is centered */
+.lb-tick::after { content: ""; position: absolute; inset: 0; background: var(--on-color); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center calc(50% + 12px / 48) / 12px 12px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center calc(50% + 12px / 48) / 12px 12px no-repeat; transform: scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
 .lb-rules li.is-met .lb-tick { background: var(--lb-green); box-shadow: none; }
-.lb-rules li.is-met .lb-tick::after { transform: rotate(45deg) scale(1); }
+.lb-rules li.is-met .lb-tick::after { transform: scale(1); }
 @media (prefers-reduced-motion: reduce) {
   .lb-shackle, .lb-bolt, .lb-tick::after { transition-duration: var(--duration-reduced) !important; transition-timing-function: linear !important; }
   .lb.is-locked .lb-lock { animation: none; }
