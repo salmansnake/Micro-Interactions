@@ -5,7 +5,7 @@ The dropzone recognizes a file's type while it is still being dragged, tells peo
 
 WHILE DRAGGING
 - On dragenter, read dataTransfer.items[0].type (available before the drop). Map it to csv, image, pdf or file.
-- Swap the idle content for a type-aware state: an icon tile in the type's color (CSV green, image Aqua 700, PDF red, other black) that gently bobs, and a title: "Drop to preview rows", "Drop to develop the photo", "Drop to fan out the pages", or "Drop to upload".
+- Swap the idle content for a type-aware state: an icon tile in the type's color (CSV green with Lucide `sheet`, image Aqua 700 with `image`, PDF red with `file-text`, other black with `upload`; the idle zone also shows `upload`) that gently bobs, and a title: "Drop to preview rows", "Drop to develop the photo", "Drop to fan out the pages", or "Drop to upload".
 - The zone scales to 0.985, tints with the type color, and its dashed border (an SVG rect, dash 7/6) marches.
 - Track dragenter/dragleave depth so child elements don't cause flicker.
 

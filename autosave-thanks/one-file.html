@@ -55,6 +55,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --mist: #ECEBE6;
   --muted: var(--mist);
   --muted-foreground: var(--ash);
+  --on-chart: #000000;
   --orange: #FE8C5F;
   --primary: var(--black);
   --raised: var(--lift);
@@ -85,6 +86,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --mist: #2B2E2D;
   --muted: var(--mist);
   --muted-foreground: var(--ash);
+  --on-chart: #000000;
   --orange: #FE8C5F;
   --primary: var(--aqua);
   --raised: var(--lift);
@@ -115,6 +117,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --mist: #2B2E2D;
     --muted: var(--mist);
     --muted-foreground: var(--ash);
+    --on-chart: #000000;
     --orange: #FE8C5F;
     --primary: var(--aqua);
     --raised: var(--lift);
@@ -169,7 +172,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 
 /* Toast: a glass capsule that drops in over the field */
 .av-toast { position: absolute; left: 50%; top: 10px; z-index: 2; display: flex; align-items: center; gap: 8px; width: max-content; max-width: calc(100% - 20px); box-sizing: border-box; padding: 8px 14px; border-radius: var(--radius-full); background: var(--frost); box-shadow: var(--shadow-lg), inset 0 0 0 1px var(--frost-border); -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate)); backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate)); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; opacity: 0; transform: translate(-50%, -14px) scale(0.9); pointer-events: none; transition: opacity var(--duration-base), transform var(--spring-pop-duration) var(--spring-pop); }
-.av-toast::before { content: ""; flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--chart-3) no-repeat center / 10px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 2.8C20 15.8 12 21 12 21Z' fill='white'/%3E%3C/svg%3E"); }
+/* A small pink circle holding the Lucide heart, filled */
+.av-heart { display: grid; place-items: center; flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--chart-3); color: var(--on-chart); }
+.av-heart svg { display: block; width: 10px; height: 10px; }
 .av.is-thanked .av-toast { opacity: 1; transform: translate(-50%, 0); }
 .av-toast.is-bump { animation: av-bump var(--spring-pop-duration) var(--spring-pop); }
 @keyframes av-bump { 40% { transform: translate(-50%, 0) scale(1.06); } }
@@ -199,13 +204,13 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 <div class="av" data-mi="autosave-thanks">
   <div class="av-bar">
     <p class="av-doc">Meeting Notes</p>
-    <span class="av-saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A6 6 0 0 0 6.6 9.1 4.75 4.75 0 0 0 7 18.5Z"/><path class="av-check" d="m9.5 13.5 2 2 3.5-4"/></svg><span class="av-saved-text">Saved</span></span>
+    <span class="av-saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path class="av-check" d="m17 15-5.5 5.5L9 18"/><path d="M5.516 16.07A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 3.501 7.327"/></svg><span class="av-saved-text">Saved</span></span>
   </div>
   <div class="av-field">
     <textarea class="av-input" rows="5" aria-label="Notes">Launch moved to the 14th.
 Mira owns the press kit.
 Next sync on Thursday.</textarea>
-    <div class="av-toast" aria-hidden="true"><span class="av-toast-text"></span><span class="av-count"></span></div>
+    <div class="av-toast" aria-hidden="true"><span class="av-heart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg></span><span class="av-toast-text"></span><span class="av-count"></span></div>
   </div>
   <div class="av-foot">
     <p class="av-hint">Everything saves as you type. Press <kbd>⌘S</kbd> or <kbd>Ctrl S</kbd> anyway.</p>

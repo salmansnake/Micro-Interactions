@@ -33,17 +33,17 @@ def ref_icons(it):
 SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{}</svg>'
 ICON = {k: SVG.format(v) for k, v in {
     'linkedin': '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
-    'sun': '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
+    'sun': '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
     'moon': '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
-    'copy': '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
-    'code': '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
+    'copy': '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+    'code': '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
     'download': '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
-    'arrow': '<path d="M5 12h14M12 5l7 7-7 7"/>',
-    'hand': '<path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
+    'arrow': '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+    'hand': '<path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
     'search': '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
-    'filter': '<path d="M3 6h18M7 12h10M10 18h4"/>',
-    'x': '<path d="M18 6 6 18M6 6l12 12"/>',
-    'list': '<path d="M3 12h18M3 6h18M3 18h18"/>',
+    'filter': '<path d="M2 5h20"/><path d="M6 12h12"/><path d="M9 19h6"/>',
+    'x': '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    'list': '<path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/>',
     'home': '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
     'reset': '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
 }.items()}
@@ -255,6 +255,14 @@ def check(reg):
             for w in locale.findall(json.dumps(sp)): errors.append(f'{it["slug"]}: "{w}" in specs breaks the locale rules')
     for s in reg.get('hero', []):
         if s not in slugs: errors.append(f'hero: "{s}" is not an interaction')
+    # Lucide only (RULES 10c): every 24x24 icon in an interaction and on the site must be one of tools/lucide-icons.json
+    sys.path.insert(0, os.path.join(ROOT, 'tools')); import lucide_check
+    errors += lucide_check.check([it['slug'] for it in items if os.path.isdir(os.path.join(ROOT, it['slug']))])
+    _known = set(json.load(open(os.path.join(ROOT, 'tools', 'lucide-icons.json'), encoding='utf-8'))['icons'].values())
+    _site = [v for k, v in re.findall(r"'(\w+)':\s*'(<[^']*)'", rd('tools', 'build.py').split('ICON = ', 1)[1].split('}.items()', 1)[0])]
+    for _f in ('site.js', 'idea-dialog.html'): _site += re.findall(r'<svg[^>]*viewBox="0 0 24 24"[^>]*>(.*?)</svg>', rd('tools', 'site', _f), re.S)
+    for _v in _site:
+        if lucide_check.norm(_v) not in _known: errors.append(f'site: an icon is not a Lucide icon ({_v[:60]}...) (RULES 10c)')
     return errors, warns
 
 

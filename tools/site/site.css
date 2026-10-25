@@ -162,8 +162,9 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 .spec dt { color: var(--muted-foreground); }
 .spec dd { margin: 0; color: var(--foreground); }
 /* A label from the interaction (a button, option or message) named in the text: a small chip, so "Hold {Hold to Talk}" never reads as a typo */
-.ui-ref { display: inline-block; padding: 0 6px; border-radius: var(--radius-sm); background: var(--muted); color: var(--foreground); font-weight: 600; line-height: inherit; white-space: nowrap; }
-.try .ui-ref { background: var(--raised); } /* raised on the gray Try it box, per 10a */
+/* A little space on each side so a chip never touches the next chip or a comma */
+.ui-ref { display: inline-block; margin: 0 2px; padding: 0 6px; border-radius: var(--radius-sm); background: var(--muted); color: var(--foreground); font-weight: 600; line-height: inherit; white-space: nowrap; }
+.try .ui-ref { background: var(--fill-on-subtle); } /* a clear gray step from the Try it box: darker in light, lighter in dark (button rule 9); white dissolved into it */
 /* An icon-only control: the same icon the interaction draws, at text size, in the same chip */
 .ui-ref--icon { padding: 0 5px; }
 .ui-ref--icon svg { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.17em; stroke-width: 2; }

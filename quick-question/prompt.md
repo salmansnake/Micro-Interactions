@@ -5,7 +5,7 @@ Start a message with "quick question" and a stopwatch starts too. It follows the
 
 BEHAVIOR
 1. A channel header ("# launch-team"), a 214px scrolling thread on Soft ground, a field prefilled with "Quick question about the launch date" and a Send button.
-2. Sending a message containing "quick question" posts it with a small "Quick question" tag, and a stopwatch pill pops into the header (pop spring).
+2. Sending a message containing "quick question" posts it with a small "Quick question" tag, and a stopwatch pill with the Lucide `timer` icon (18px) pops into the header (pop spring).
 3. The demo then plays a time-lapse at about 260ms per minute. Replies at minutes 2, 6, 13, 19, 31, 40 and 47:
    - "Depends. Which launch date?"
    - "The one we moved, or the one before that?"

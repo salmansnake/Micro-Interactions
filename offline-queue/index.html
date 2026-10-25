@@ -56,7 +56,12 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .oq.is-offline .oq-state { color: var(--oq-orange-text); }
 .oq-cloud { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--oq-fill); color: var(--oq-accent); transition: color var(--duration-slow); }
 .oq-cloud svg { width: 20px; height: 20px; }
-.oq-slash { stroke-dasharray: 23; stroke-dashoffset: 23; transition: stroke-dashoffset var(--spring-ui-duration) var(--spring-ui); }
+/* Lucide cloud online and cloud-off offline, stacked: they crossfade while cloud-off's slash draws in */
+.oq-cloud svg { grid-area: 1 / 1; transition: opacity var(--duration-base); }
+.oq-off { opacity: 0; }
+.oq.is-offline .oq-on { opacity: 0; }
+.oq.is-offline .oq-off { opacity: 1; }
+.oq-slash { stroke-dasharray: 29; stroke-dashoffset: 29; transition: stroke-dashoffset var(--spring-ui-duration) var(--spring-ui); }
 .oq.is-offline .oq-cloud { color: var(--oq-muted); }
 .oq.is-offline .oq-slash { stroke-dashoffset: 0; }
 .oq-cloud.is-hit { animation: oq-hit var(--spring-pop-duration) var(--spring-pop); }
@@ -140,7 +145,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       <p class="oq-state" aria-live="polite"><span class="oq-dot"></span><span class="oq-state-text">Online · All changes saved</span></p>
     </div>
     <span class="oq-cloud" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.5h10a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.1 9.1 4.75 4.75 0 0 0 7 18.5Z"/><path class="oq-slash" d="M4 4l16 16"/></svg>
+      <svg class="oq-on" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg><svg class="oq-off" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.94 5.274A7 7 0 0 1 15.71 10h1.79a4.5 4.5 0 0 1 4.222 6.057"/><path d="M18.796 18.81A4.5 4.5 0 0 1 17.5 19H9A7 7 0 0 1 5.79 5.78"/><path class="oq-slash" d="m2 2 20 20"/></svg>
     </span>
     <label class="oq-switch-row"><span>Online</span>
       <span class="oq-switch"><input type="checkbox" role="switch" class="oq-online" checked aria-label="Online"><span class="oq-track"></span><span class="oq-knob"></span></span>

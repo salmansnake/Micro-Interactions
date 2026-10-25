@@ -4,7 +4,7 @@ WHAT IT DOES
 Every time you ask the assistant "Are you sure?", it changes its answer and its confidence badge shrinks, turns red and starts to sweat. Then it pulls itself together at 100%, as if nothing happened.
 
 BEHAVIOR
-1. Your question in a black bubble on the right (Aqua in dark mode): "How many r's are in "strawberry"?". Below it, an answer card with an orange sparkle, "Assistant", and a confidence pill on the right: "100% Sure".
+1. Your question in a black bubble on the right (Aqua in dark mode): "How many r's are in "strawberry"?". Below it, an answer card with an orange Lucide `sparkles` icon (18px), "Assistant", and a confidence pill on the right: "100% Sure".
 2. Script (confidence, answer):
    - 100: There are 3 r's in "strawberry."
    - 72: Good catch. Looking again, there are 2 r's in "strawberry."

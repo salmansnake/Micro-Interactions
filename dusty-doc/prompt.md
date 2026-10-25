@@ -4,7 +4,7 @@ WHAT IT DOES
 A document untouched for years opens covered in dust, with a cobweb in the corner. Scrolling or swiping blows the dust away, and the page regains its color.
 
 BEHAVIOR
-1. A file header ("Q3 2022 Strategy (Draft)", "Last opened 3 years ago by you") and a 230px page on Soft ground with headings and secondary text. A canvas over the page holds about 520 dust specks (radius 0.5–1.6px, with 8% larger ones at 1.6–3px) in the Olive and Stone tokens at 35–85% opacity. A thin cobweb SVG sits in the top-right corner.
+1. A file header (a gray tile with the Lucide `file-text` icon, "Q3 2022 Strategy (Draft)", "Last opened 3 years ago by you") and a 230px page on Soft ground with headings and secondary text. A canvas over the page holds about 520 dust specks (radius 0.5–1.6px, with 8% larger ones at 1.6–3px) in the Olive and Stone tokens at 35–85% opacity. A thin cobweb SVG sits in the top-right corner.
 2. Age (stuck specks ÷ total) drives the content: sepia(0.55 × age), lower contrast and opacity, and a faint warm overlay.
 3. Scrolling releases a share of the stuck specks (1.2% per pixel scrolled, up to 50% per event). They fly in the scroll direction with random spread, slow with drag, drift down slightly and fade.
 4. Swiping across the page faster than 0.6 px/ms blows away the specks within 46px of the pointer in its direction of travel.

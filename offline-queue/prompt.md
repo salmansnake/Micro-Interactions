@@ -4,7 +4,7 @@ WHAT IT DOES
 When the connection drops, changes keep working and visibly pile up in a queue, so people know nothing is lost. When the connection returns, each queued change flies up to the cloud and its row confirms with a checkmark.
 
 BEHAVIOR
-1. Header: title, a status line with a colored dot ("Online · All changes saved" in green, "Offline · Changes save on this device" in amber), and a cloud icon in a gray circle; going offline draws a slash through it.
+1. Header: title, a status line with a colored dot ("Online · All changes saved" in green, "Offline · Changes save on this device" in amber), and the Lucide `cloud` icon in a gray circle; going offline crossfades it to `cloud-off` while that icon's slash draws in.
 2. In production listen to the online/offline events; in the demo, a switch labeled Online simulates it.
 3. Editing while online (checking a task, adding one) flashes a small green check badge on the row for 1.4s.
 4. Editing while offline puts an amber clock badge on the row and adds a paper chip to a queue pill below the list (an amber-tinted pill: stacked chips that drop in, plus "3 changes waiting to sync"). Changing the same row twice queues it once.

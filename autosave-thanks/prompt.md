@@ -4,9 +4,9 @@ WHAT IT DOES
 Press ⌘S in an app that saves everything as you type and, instead of the browser's save dialog, it thanks you for the gesture. It gets more philosophical the more you press.
 
 BEHAVIOR
-1. A notes editor: title "Meeting Notes", a cloud "Saved" indicator (it shows "Saving…" and hides its check for 600ms after typing), a 12px rounded text area, and a footer: "Everything saves as you type. Press ⌘S or Ctrl S anyway." beside a big ⌘ S keycap button for touch.
+1. A notes editor: title "Meeting Notes", a "Saved" indicator with the Lucide `cloud-check` icon, 20px (it shows "Saving…" and hides the icon's check for 600ms after typing), a 12px rounded text area, and a footer: "Everything saves as you type. Press ⌘S or Ctrl S anyway." beside a big ⌘ S keycap button for touch.
 2. Catch ⌘S / Ctrl+S anywhere inside the component (preventDefault so the browser dialog never opens), and the keycap button too.
-3. Each press drops a Frost toast onto the top of the field (pop spring) with a small pink heart. Messages by press count: 1 "Already saved. But I appreciate the gesture.", 2 "Still saved. Every keystroke, actually.", 3 "Saved. Again. It's fine.", 5 "We've got it. You can let go.", 8 "Muscle memory is a beautiful thing.", 12 "The file is now extremely safe.", 20 "At this point it's a ritual. Respect." Each message stays until the next threshold is reached. From the second press, a "×3" counter appears, and the toast bumps on each repeat.
+3. Each press drops a Frost toast onto the top of the field (pop spring) with a 16px pink circle holding a filled Lucide `heart` (10px, in the black text color for colored fills). Messages by press count: 1 "Already saved. But I appreciate the gesture.", 2 "Still saved. Every keystroke, actually.", 3 "Saved. Again. It's fine.", 5 "We've got it. You can let go.", 8 "Muscle memory is a beautiful thing.", 12 "The file is now extremely safe.", 20 "At this point it's a ritual. Respect." Each message stays until the next threshold is reached. From the second press, a "×3" counter appears, and the toast bumps on each repeat.
 4. The toast hides 2.6s after the last press. Announce each message in a visually hidden live region.
 Reduced motion: the toast fades in place.
 

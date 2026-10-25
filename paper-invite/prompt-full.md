@@ -6,7 +6,7 @@ Sending invites is satisfying and honest: each address folds into a paper plane 
 BEHAVIOR
 1. A chip input: typing an address and pressing Enter, comma, space or Tab (or pasting a list) turns each address into a white button chip with a remove button. Backspace in an empty field removes the last chip. Duplicates are ignored.
 2. "Send Invites" (filled button, disabled with no chips). On send, chips go one after another, 140ms apart:
-   - Each chip folds (squashes to scale 0.2 × 0.6, rotates −12°, fades, 260ms) as a paper-plane icon appears in its place.
+   - Each chip folds (squashes to scale 0.2 × 0.6, rotates −12°, fades, 260ms) as the Lucide `send` icon (a paper plane, 26px) appears in its place.
    - Valid addresses fly up and off the top-right with an accelerating curve, fading at the end (800ms).
    - Invalid ones (bad format, or already a member) fly out 150px, loop, and come back (1050ms). They return as red-tinted chips with a pop spring, each with a reason underneath: "jo@northwind: This address is missing its ending, like .com." or "mira@northwind.co: Already a member of this workspace."
 3. Status: "2 invites sent. 2 need attention." (green when everything was sent; singular for one, "1 invite sent. 1 needs attention."; "Nothing sent. 2 need attention." when every address failed).

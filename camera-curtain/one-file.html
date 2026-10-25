@@ -162,7 +162,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .cc-status { color: var(--cc-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .cc-cam { display: inline-flex; flex: none; align-items: center; gap: 6px; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--cc-fill); color: var(--cc-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .cc-cam svg { width: 20px; height: 20px; }
-.cc-cam[aria-pressed="true"] .cc-slash { display: none; }
+/* Lucide video while the camera is on, video-off while it is off */
+.cc-cam .cc-off, .cc-cam[aria-pressed="false"] .cc-on { display: none; }
+.cc-cam[aria-pressed="false"] .cc-off { display: block; }
 .cc-cam:active { transform: scale(var(--press-scale)); }
 .cc-cam:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
@@ -190,7 +192,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   </div>
   <div class="cc-bar">
     <p class="cc-status" role="status" aria-live="polite">Camera on.</p>
-    <button type="button" class="cc-cam" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="12.5" height="11" rx="2.5"/><path d="m15.5 10.5 5-3v9l-5-3Z"/><path class="cc-slash" d="M3 4l18 16" stroke-linecap="round"/></svg><span class="cc-cam-label">Turn Camera Off</span></button>
+    <button type="button" class="cc-cam" aria-pressed="true"><svg class="cc-on" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg><svg class="cc-off" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></svg><span class="cc-cam-label">Turn Camera Off</span></button>
   </div>
 </div>
 

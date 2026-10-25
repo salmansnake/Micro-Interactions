@@ -57,7 +57,9 @@
 .cc-status { color: var(--cc-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .cc-cam { display: inline-flex; flex: none; align-items: center; gap: 6px; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--cc-fill); color: var(--cc-fg); font: inherit; font-weight: 600; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
 .cc-cam svg { width: 20px; height: 20px; }
-.cc-cam[aria-pressed="true"] .cc-slash { display: none; }
+/* Lucide video while the camera is on, video-off while it is off */
+.cc-cam .cc-off, .cc-cam[aria-pressed="false"] .cc-on { display: none; }
+.cc-cam[aria-pressed="false"] .cc-off { display: block; }
 .cc-cam:active { transform: scale(var(--press-scale)); }
 .cc-cam:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 

@@ -15,7 +15,7 @@ THE FROST
 
 THE LENS
 - A Frost frame marks the window: 12px radius (never rounder than the 12px chart it slides inside), a 1px bright inner edge and a soft shadow, fading and scaling in with o.
-- Inside it: a pill label at the top in the text color (black with white text in light, off-white with dark text in dark; 12px semibold tabular numbers, "Mar · $48.2k"), a 10px dot in the primary color (black in light, Aqua in dark) with a 3px ring of the card color, riding the line at the current month and springing to each new value on the ui spring, and a small Frost grip at the bottom with a left-right chevrons icon.
+- Inside it: a pill label at the top in the text color (black with white text in light, off-white with dark text in dark; 12px semibold tabular numbers, "Mar · $48.2k"), a 10px dot in the primary color (black in light, Aqua in dark) with a 3px ring of the card color, riding the line at the current month and springing to each new value on the ui spring, and a small Frost grip at the bottom with the Lucide `chevrons-left-right` icon (14px).
 - A Frost hint pill "Drag across to peek" sits in the middle while closed.
 
 INPUT
