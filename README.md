@@ -3,7 +3,7 @@
 <!-- intro:start -->
 **Micro interactions for the moments products get wrong.**
 
-Serious interactions for real product moments, and funny ones that shouldn't exist (some secretly should). New ones drop every week.
+Serious interactions for real product moments, and funny ones that shouldn't exist (some secretly should). Copy the code or the AI prompt. New ones drop every week.
 
 61 interactions so far (35 Useful, 14 Secretly Useful, 12 Pure Joke).
 <!-- intro:end -->
