@@ -137,7 +137,8 @@
   --on-color: #ffffff; /* text on status colors (red, green, blue) only. On --primary or --brand use --primary-foreground / --brand-foreground (black on Aqua in dark mode). */
   --tint-l: 0.92; /* every tinted fill (panels, chips, soft buttons, selected rows) lands on this OKLCH lightness, whatever its color: oklch(from var(--x) var(--tint-l) calc(c * var(--tint-c)) h). Pale colors like Aqua and Pink no longer wash out. */
   --tint-c: 0.4; /* share of the color's chroma the tint keeps */
-  --tint-ink-l: 0.48; /* colored text on a tint is capped at this lightness: oklch(from var(--x-text) min(l, var(--tint-ink-l)) c h). Keeps it above 4.5:1 on the tint. */
+  --tint-ink-l: 0.48; /* colored text on a tint stays between --tint-ink-min and this lightness: oklch(from var(--x) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h). Keeps it above 4.5:1 on the tint. */
+  --tint-ink-min: 0; /* light: no floor, only the cap darkens pale text */
   --muted-on-tint: var(--body); /* secondary text on a tint: the gray muted text drops under 4.5:1 there */
   --inverse: var(--primary); /* the strongest neutral fill: black in light, off-white in dark (not Aqua). Copied states, a hint that must stand out. */
   --inverse-foreground: var(--primary-foreground); /* text or icon on --inverse: white in light, dark in dark */
@@ -290,7 +291,8 @@
   --on-color: #ffffff;
   --tint-l: 0.32; /* dark grounds: a fixed step up from the card, the same for every color */
   --tint-c: 0.45;
-  --tint-ink-l: 1; /* dark: text colors already read on the tint, so no cap */
+  --tint-ink-l: 1; /* dark: no cap */
+  --tint-ink-min: 0.75; /* dark: a floor, so a dark color (green, Aqua 700) is lifted enough to read on the dark tint */
   --muted-on-tint: var(--muted-foreground);
   --inverse: var(--foreground);
   --inverse-foreground: var(--background);
@@ -439,6 +441,7 @@
     --tint-l: 0.32;
     --tint-c: 0.45;
     --tint-ink-l: 1;
+    --tint-ink-min: 0.75;
     --muted-on-tint: var(--muted-foreground);
     --inverse: var(--foreground);
     --inverse-foreground: var(--background);

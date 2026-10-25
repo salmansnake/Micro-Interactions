@@ -37,7 +37,7 @@
   place-items: center;
   width: 30px;
   height: 30px;
-  margin-left: -8px;
+  margin-left: -4px; /* overlap small enough that the next face never covers these initials */
   border-radius: 50%;
   box-shadow: 0 0 0 2px var(--ss-bg);
   color: var(--on-chart);
@@ -46,7 +46,8 @@
   animation: ss-pop var(--spring-pop-duration) var(--spring-pop) both;
 }
 .ss-av:last-child { margin-left: 0; }
-.ss-av.is-more { background: var(--ss-fill); color: var(--ss-fg); font-size: calc(var(--text-caption) - 1px); }
+/* The +N count sits on top of its neighbor, so the overlap never covers the + */
+.ss-av.is-more { position: relative; z-index: 1; background: var(--ss-fill); color: var(--ss-fg); font-size: calc(var(--text-caption) - 1px); }
 .ss-av.is-leaving { animation: ss-leave var(--duration-slow) var(--ease-in) forwards; }
 @keyframes ss-pop { from { transform: scale(0) translateY(6px); } }
 @keyframes ss-leave { to { transform: scale(0); opacity: 0; } }

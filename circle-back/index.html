@@ -68,7 +68,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 
 .cb-reminder { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: var(--radius-xl); background: oklch(from var(--ai) var(--tint-l) calc(c * var(--tint-c)) h); box-shadow: var(--shadow-md); animation: cb-catch var(--spring-pop-duration) var(--spring-pop) both; }
 @keyframes cb-catch { 0% { opacity: 0; transform: translateX(30px) rotate(3deg) scale(0.9); } }
-.cb-rem-kicker { color: oklch(from var(--ai-text) min(l, var(--tint-ink-l)) c h); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 700; }
+.cb-rem-kicker { color: oklch(from var(--ai-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 700; }
 .cb-rem-text { font-size: var(--text-body); line-height: var(--leading-body); }
 .cb-rem-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 .cb-rem-actions button { height: 36px; padding: 0 14px; }
