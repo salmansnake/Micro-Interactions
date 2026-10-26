@@ -490,7 +490,7 @@ def build_site(reg, site):
   <div class="codebox-head"><h2 id="cb-title"></h2><button type="button" class="oc-btn oc-btn--ghost oc-btn--icon oc-btn--sm x" data-close-code aria-label="Close">{ICON['x']}</button></div>
   <div class="codebox-bar"><div class="oc-tabs" role="tablist" aria-label="Code" style="--n: 5">{tabs}</div><p class="codebox-hint" aria-live="polite"></p></div>
   <div class="codebox-panel" role="tabpanel">
-    <div class="codebox-file"><span class="codebox-name"></span><div class="codebox-actions"><button type="button" class="oc-btn oc-btn--outline oc-btn--sm" data-copy-code>{ICON['copy']}Copy</button><a class="oc-btn oc-btn--outline oc-btn--sm" data-download hidden>{ICON['download']}Download</a></div></div>
+    <div class="codebox-actions"><button type="button" class="oc-btn oc-btn--outline oc-btn--sm" data-copy-code>{ICON['copy']}Copy</button><a class="oc-btn oc-btn--outline oc-btn--sm" data-download hidden>{ICON['download']}Download</a></div>
     <pre tabindex="0"></pre>
   </div>
 </dialog>
