@@ -5,7 +5,7 @@ Instead of a red number, characters typed past the limit visibly spill: they tur
 
 HOW IT'S BUILT
 - A textarea with transparent text and a visible caret, layered over a "mirror" div that renders the same text with identical font, padding, line-height, letter-spacing, white-space: pre-wrap and overflow-wrap: break-word. The textarea auto-grows to its scrollHeight so nothing scrolls out of sync.
-- The mirror renders characters up to the limit as plain text, and every character past it as its own inline span with position: relative. On every line of spilled characters, each sits lower than the one before: measure each span at top 0, group them by line, and set top from 1px where that line's spill starts to 9px at the field's right edge, so every line keeps sliding off, not just the first (relative offsets keep line breaks identical to the textarea).
+- The mirror renders characters up to the limit as plain text, and every character past it as its own inline span with position: relative. On every line of spilled characters, each sits lower than the one before: measure each span at top 0 (subtract whatever top a letter is drawn at right now: the newest letter is still dropping in from 10px above, and measured with that offset it reads as a new line and resets to 1px, sitting higher than the letter before it), group them by line, and set top from 1px where that line's spill starts to 9px at the field's right edge, so every line keeps sliding off, not just the first (relative offsets keep line breaks identical to the textarea).
 - Newly typed excess characters drop in: animate top from −10px with a pop spring, opacity 0 → 1.
 
 COUNTER

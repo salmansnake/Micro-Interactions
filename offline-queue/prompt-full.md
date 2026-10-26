@@ -7,8 +7,8 @@ BEHAVIOR
 1. Header: title, a status line with a colored dot ("Online · All changes saved" in green, "Offline · Changes save on this device" in amber), and the Lucide `cloud` icon in a gray circle; going offline crossfades it to `cloud-off` while that icon's slash draws in.
 2. In production listen to the online/offline events; in the demo, a switch labeled Online simulates it.
 3. Editing while online (checking a task, adding one) flashes a small green check badge on the row for 1.4s.
-4. Editing while offline puts an amber clock badge on the row and adds a paper chip to a queue pill below the list (an amber-tinted pill: stacked chips that drop in, plus "3 changes waiting to sync"). Changing the same row twice queues it once.
-5. Back online: the status says "Back online · Syncing"; one by one (160ms apart) a chip flies from the pill to the cloud on an arc, tilting and shrinking; the cloud bounces; that row's clock badge turns into a green check; the count drops. When the queue is empty the pill disappears and the status returns to "Online · All changes saved". The queue pill says "1 change waiting to sync" for one. Going offline mid-sync stops the flush.
+4. Editing while offline puts an amber clock badge on the row and adds a paper chip (a blank white page, white in dark mode too: #FFFFFF in light, #F3F2EE in dark, with a 1px border ring) to a queue pill below the list (an amber-tinted pill: stacked chips that drop in, plus "3 changes waiting to sync"). Changing the same row twice queues it once.
+5. Back online: the status says "Back online · Syncing"; one by one (160ms apart) a chip (the same white page, still white in dark mode) flies from the pill to the cloud on an arc, tilting and shrinking; the cloud bounces; that row's clock badge turns into a green check; the count drops. When the queue is empty the pill disappears and the status returns to "Online · All changes saved". The queue pill says "1 change waiting to sync" for one. Going offline mid-sync stops the flush.
 6. Tasks: 22px round checkboxes that fill black (Aqua in dark mode) with a springy check, and an add field with an Add button.
 Reduced motion: no flights or bounces; badges and counts still change.
 
@@ -64,6 +64,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --ring: #0B7573  (dark: #79EEEC)
 --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07)  (dark: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3))
 --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05)  (dark: 0 1px 2px rgba(0, 0, 0, 0.4))
+--sheet: #FFFFFF  (dark: #F3F2EE)
 --soft-ground: #F3F2EE  (dark: #0C0D0C)
 --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1)
 --spring-pop-duration: 680ms

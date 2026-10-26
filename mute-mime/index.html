@@ -94,6 +94,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .mm :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.mm .mm-toast-text { text-wrap: wrap; } /* runs up to Unmute; "for 2 seconds." stays together, so the last line keeps three words */
 .mm [hidden] { display: none !important; }
 
 </style>
@@ -125,7 +126,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     <span class="mm-name"><svg class="mm-mic mm-mic--off" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19v3"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M16.95 16.95A7 7 0 0 1 5 12v-2"/><path d="M18.89 13.23A7 7 0 0 0 19 12v-2"/><path d="m2 2 20 20"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/></svg><svg class="mm-mic mm-mic--on" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>You</span>
   </div>
   <div class="mm-toast" hidden>
-    <p class="mm-toast-text" role="status" aria-live="polite">You’re on mute. You’ve been talking for <span class="mm-keep"><b class="mm-secs">2</b> <span class="mm-unit">seconds</span>.</span></p>
+    <p class="mm-toast-text" data-fill role="status" aria-live="polite">You’re on mute. You’ve been talking for&nbsp;<span class="mm-keep"><b class="mm-secs">2</b> <span class="mm-unit">seconds</span>.</span></p>
     <button type="button" class="mm-unmute-inline">Unmute</button>
   </div>
   <div class="mm-controls">
@@ -158,6 +159,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;

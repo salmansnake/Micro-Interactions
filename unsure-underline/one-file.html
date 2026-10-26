@@ -51,8 +51,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --lift: #FFFFFF;
   --line: #DCDED9;
   --line-strong: #C6C9C3;
-  --mark-l-strong: 0.42;
-  --mark-l-weak: 0.62;
+  --mark-ink: var(--warning);
+  --mark-l-strong: 0.56;
+  --mark-l-weak: 0.70;
   --mark-offset: 4px;
   --mark-thickness: 2px;
   --mist: #ECEBE6;
@@ -91,6 +92,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --lift: #3F4341;
   --line: #313432;
   --line-strong: #434744;
+  --mark-ink: var(--warning-text);
   --mark-l-strong: 0.87;
   --mark-l-weak: 0.55;
   --mist: #2B2E2D;
@@ -129,6 +131,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --lift: #3F4341;
     --line: #313432;
     --line-strong: #434744;
+    --mark-ink: var(--warning-text);
     --mark-l-strong: 0.87;
     --mark-l-weak: 0.55;
     --mist: #2B2E2D;
@@ -205,7 +208,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   text-decoration-style: dotted;
   text-decoration-thickness: var(--mark-thickness);
   text-underline-offset: var(--mark-offset);
-  text-decoration-color: oklch(from var(--warning-text) calc(var(--mark-l-weak) + (var(--mark-l-strong) - var(--mark-l-weak)) * var(--u, 0)) c h);
+  text-decoration-color: oklch(from var(--mark-ink) calc(var(--mark-l-weak) + (var(--mark-l-strong) - var(--mark-l-weak)) * var(--u, 0)) c h);
   cursor: pointer;
   outline: none;
   transition: background-color var(--duration-base), text-decoration-color var(--duration-slower);

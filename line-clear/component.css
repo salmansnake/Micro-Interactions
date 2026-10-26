@@ -70,4 +70,5 @@
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .ct :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.ct .ct-clear-text { text-wrap: wrap; } /* the green panel spans the card, so its text runs to the panel's own padding; its last words are joined by a no-break space */
 .ct [hidden] { display: none !important; }

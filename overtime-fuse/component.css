@@ -52,8 +52,9 @@
 @keyframes of-ember { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)); } }
 
 /* Holds two lines on purpose: it changes while you drag the slider below it */
-.of-line { min-height: 40px; font-size: var(--text-body); line-height: var(--leading-body); font-weight: 500; font-variant-numeric: tabular-nums; }
+.of-line { min-height: calc(var(--leading-body) * 2); /* two lines held, so the slider never moves while you drag it */ font-size: var(--text-body); line-height: var(--leading-body); font-weight: 500; font-variant-numeric: tabular-nums; }
 .of.is-over .of-line { color: var(--danger-text); }
+.of-part { display: block; } /* the overtime count, then its cost on the next line */
 .of-time { display: flex; flex-direction: column; gap: 6px; }
 .of-time-label { color: var(--of-muted); font-size: var(--text-small); }
 .of-range { width: 100%; accent-color: var(--of-accent); }

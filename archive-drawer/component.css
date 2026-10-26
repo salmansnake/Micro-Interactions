@@ -59,7 +59,7 @@
   bottom: 32px;
   height: calc(min(var(--ad-n), 1) * 4px + min(var(--ad-n), 8) * 2.5px);
   border-radius: var(--radius-xs) var(--radius-xs) 0 0;
-  background: repeating-linear-gradient(to top, var(--ad-bg) 0 2px, color-mix(in srgb, var(--ad-fg) 14%, var(--ad-bg)) 2px 2.5px);
+  background: repeating-linear-gradient(to top, var(--sheet) 0 2px, color-mix(in srgb, var(--black) 14%, var(--sheet)) 2px 2.5px);
   box-shadow: 0 0 0 1px var(--ad-line);
   transform: translateY(calc(var(--ad-open, 0) * -6px));
   transition: height var(--spring-pop-duration) var(--spring-pop), transform var(--spring-ui-duration) var(--spring-ui);

@@ -96,4 +96,6 @@
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .sf :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.sf .sf-note { text-wrap: wrap; } /* one paragraph across the footer, up to the meter; a no-break space keeps at least two words on its last line */
+.sf .sf-meter { margin-left: auto; } /* the 20-second meter keeps the right padding */
 .sf [hidden] { display: none !important; }

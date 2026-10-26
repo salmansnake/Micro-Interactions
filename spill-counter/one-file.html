@@ -412,7 +412,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       var right = mirror.clientWidth - parseFloat(cs.paddingRight);
       var pos = [];
       spans.forEach(function (s) { s.style.top = '0px'; });
-      spans.forEach(function (s) { pos.push([s.offsetTop, s.offsetLeft]); });
+      // Where each letter sits without its offset: a letter still dropping in is animated 10px up, which would
+      // read as a new line and reset its slope, so subtract whatever top it is drawn at right now
+      spans.forEach(function (s) { pos.push([Math.round(s.offsetTop - (parseFloat(getComputedStyle(s).top) || 0)), s.offsetLeft]); });
       var lineTop = null, start = 0;
       spans.forEach(function (s, i) {
         if (pos[i][0] !== lineTop) { lineTop = pos[i][0]; start = pos[i][1]; }

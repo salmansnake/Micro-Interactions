@@ -9,7 +9,7 @@ BEHAVIOR
 3. A Frost pill banner slides up at the bottom: "Signing out in 0:07" (tabular numbers, updated each second) with a filled "Stay Signed In" button.
 4. Activity during the warning: hide the banner, animate p back to 0 with a panel spring (register p with @property so it transitions), and play a soft Aqua ripple that expands from the pointer position (scale 1 → 40, fading).
 5. At zero: show a lock screen over the content (a material: the card color at 72% with a 24px blur and 140% saturation behind it, the Lucide `lock` icon (32px), "Signed Out", "We signed you out after 20 seconds without activity to keep Atlas safe.", and "Sign In Again"). Only move focus to it if focus was already inside the component or on the page body.
-6. Pause the countdown while the component is off screen. A thin progress meter in the footer shows the remaining session.
+6. Pause the countdown while the component is off screen. A thin progress meter in the footer shows the remaining session. The footer note ("This demo session lasts 20 seconds. Keep still to watch it fade; move to stay.") is one paragraph running across the footer up to the meter, which sits at the right padding; "to stay." never splits.
 Reduced motion: p changes without the spring; no ripple or banner slide.
 
 APPEARANCE (Outcraft Design System)

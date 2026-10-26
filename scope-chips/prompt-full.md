@@ -10,7 +10,7 @@ BEHAVIOR
 4. Backspace in an empty input melts the last chip (shrinks to scaleX 0.6 and fades, 200ms, the base duration, easing in) and puts its raw text ("from:mira") back in the input for editing.
 5. Only one value per key except is:, which can stack.
 6. Results update live: all filters must match, and any free text matches titles and previews. Results slide in, 30ms apart. Each result row carries a small folder tag (Design, Billing, Support) on the gray results panel: a gray a clear step darker than the panel in light (OKLCH L about 0.89 on 0.96) and the gray fill in dark, with body-gray text. "No messages match these filters." when empty.
-7. A hint line explains the syntax with inline code chips.
+7. A hint line explains the syntax with inline code chips: "Filters: from: in: is:. Type one and a space, or pick a suggestion." It is one paragraph running to the right padding (not narrowed for even lines), with "a suggestion." kept together so the last line never holds a single word.
 8. Result previews are single lines with an ellipsis; give the results list contain: inline-size so their full length never widens the card on narrow screens.
 Reduced motion: chips appear and disappear without springs.
 

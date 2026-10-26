@@ -9,9 +9,9 @@ BEHAVIOR
 3. The round checkbox, "I have read and agree to the Terms of Service", stays disabled until the end.
 4. At the end, average speed = total words ÷ seconds since the first scroll. If it's over 12 words per second (about 720 a minute):
    - The label swaps (rising out of a 2px blur) to "I have not read this, and we both know it."
-   - A soft red record line says "You read 455 words in 1.3 seconds. That's 350 words per second."
+   - A soft red record line says "You read 455 words in 1.3 seconds. That's 350 words per second." The record box spans the card's full width and its text runs to the box's own padding (not narrowed for even lines), with "per second." kept together.
    - A "Since You're in a Hurry" card lists the three things that matter, such as "You own your content, and we don't sell it.", "Cancel any time in Settings, in two clicks." and "We'll email a readable summary when these change."
-5. If they read at a human pace, a green line says "You actually read all 455 words. Section 8 says you're owed a high five."
+5. If they read at a human pace, a green line says "You actually read all 455 words. Section 8 says you're owed a high five." (the same full-width box, "high five." kept together)
 6. Checking the box enables a 44px Continue button.
 Reduced motion: no buzz or label animation.
 

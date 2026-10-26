@@ -85,6 +85,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .tt :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.tt .tt-budget-text { text-wrap: wrap; } /* one paragraph to the card's right padding; its last two words stay together */
 .tt [hidden] { display: none !important; }
 
 </style>
@@ -122,7 +123,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   </div>
   <div class="tt-budget">
     <div class="tt-bar" aria-hidden="true"><i class="tt-used"></i><i class="tt-next"></i></div>
-    <p class="tt-budget-text"></p>
+    <p class="tt-budget-text" data-fill></p>
   </div>
 </div>
 </div>
@@ -153,6 +154,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
@@ -231,8 +234,24 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       used.style.width = Math.min(100, spent / budget * 100) + '%';
       next.style.width = (tin ? Math.min(100 - spent / budget * 100, Math.max(1.5, cost / budget * 100)) : 0) + '%'; // true share, with a sliver so it stays visible
       var b = document.createElement('b'); b.textContent = '$' + spent.toFixed(2);
-      budgetText.replaceChildren(b, document.createTextNode(' of $' + budget.toFixed(2) + ' used this month. This prompt adds ' + (cost < 0.01 ? 'less than a cent' : 'about $' + cost.toFixed(2)) + '.'));
+      // The cost ends the paragraph on the second line: "than a cent." stays together, and "about $0.02." (short
+      // enough to fit on the first line on a wide card) is moved down by costLine
+      var c = document.createElement('span'); c.className = 'tt-cost';
+      if (cost < 0.01) { budgetText.replaceChildren(b, document.createTextNode(' of $' + budget.toFixed(2) + ' used this month. This prompt adds less ')); c.textContent = 'than\u00a0a\u00a0cent.'; }
+      else { budgetText.replaceChildren(b, document.createTextNode(' of $' + budget.toFixed(2) + ' used this month. This prompt adds ')); c.textContent = 'about\u00a0$' + cost.toFixed(2) + '.'; }
+      budgetText.appendChild(c);
+      costLine();
     }
+    // When the whole line fits on one row, break before the cost so it always reads as the second line
+    function costLine() {
+      var br = budgetText.querySelector('br'), c = budgetText.querySelector('.tt-cost');
+      if (br) br.remove();
+      if (!c) return;
+      var lh = parseFloat(getComputedStyle(budgetText).lineHeight) || 18;
+      if (budgetText.offsetHeight < lh * 1.5) budgetText.insertBefore(document.createElement('br'), c);
+    }
+    if (window.ResizeObserver) { var lastBW = 0; new ResizeObserver(function () { var w = budgetText.clientWidth; if (Math.abs(w - lastBW) > 0.5) { lastBW = w; costLine(); } }).observe(budgetText); }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(costLine);
 
     function running() {
       root.classList.add('is-running');

@@ -67,7 +67,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   text-decoration-style: dotted;
   text-decoration-thickness: var(--mark-thickness);
   text-underline-offset: var(--mark-offset);
-  text-decoration-color: oklch(from var(--warning-text) calc(var(--mark-l-weak) + (var(--mark-l-strong) - var(--mark-l-weak)) * var(--u, 0)) c h);
+  text-decoration-color: oklch(from var(--mark-ink) calc(var(--mark-l-weak) + (var(--mark-l-strong) - var(--mark-l-weak)) * var(--u, 0)) c h);
   cursor: pointer;
   outline: none;
   transition: background-color var(--duration-base), text-decoration-color var(--duration-slower);

@@ -21,6 +21,8 @@
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
@@ -100,11 +102,11 @@
         root.setAttribute('data-speed', avg >= SPEEDRUN ? 'speedrun' : 'skim');
         label.textContent = 'I have not read this, and we both know it.';
         label.classList.remove('is-swap'); void label.offsetWidth; label.classList.add('is-swap');
-        record.textContent = 'You read ' + total.toLocaleString('en-US') + ' words in ' + secs.toFixed(1) + ' seconds. That’s ' + Math.round(avg).toLocaleString('en-US') + ' words per second.';
+        record.textContent = 'You read ' + total.toLocaleString('en-US') + ' words in ' + secs.toFixed(1) + ' seconds. That’s ' + Math.round(avg).toLocaleString('en-US') + ' words per\u00a0second.';
         tldr.hidden = false;
       } else {
         root.setAttribute('data-speed', '');
-        record.textContent = 'You actually read all ' + total.toLocaleString('en-US') + ' words. Section 8 says you’re owed a high five.'; // never 1: the whole terms
+        record.textContent = 'You actually read all ' + total.toLocaleString('en-US') + ' words. Section 8 says you’re owed a high\u00a0five.'; // never 1: the whole terms
       }
     }
 

@@ -168,6 +168,17 @@ def check(reg):
         # Even line breaks (RULES 10b.29d): every interaction balances its multi-line text.
         if m and not re.search(r'\.' + re.escape(m[0][1]) + r' :is\(p, li[^)]*\) \{ text-wrap: balance; \}', c):
             errors.append(f'{s}: add ".{m[0][1]} :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) {{ text-wrap: balance; }}" so text never ends on one or two lonely words (RULES 10b.29d)')
+        # A sentence first in a row pushed to the right keeps its place (RULES 10b.47): evenLines narrows it, and
+        # justify-content: flex-end would then slide it away from the left padding unless it has margin-right: auto.
+        cc = re.sub(r'/\*.*?\*/', '', c, flags=re.S)
+        for row in {k for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', cc) if re.search(r'justify-content\s*:\s*(flex-)?end\b', body) for k in re.findall(r'\.([\w-]+)\s*$', sel.split(',')[-1].strip())}:
+            mrow = re.search(r'<(\w+)[^>]*\bclass="(?:[^"]*\s)?' + re.escape(row) + r'(?:\s[^"]*)?"[^>]*>\s*<(p|small|label|h[1-4])\b[^>]*\bclass="([\w-]+)', h)
+            # Scoped under the root (.xx .name) so a reset like ".xx p { margin: 0 }" can't cancel it
+            if mrow and not re.search(r'(\.[\w-]+\s+\.' + re.escape(mrow.group(3)) + r'\s*\{[^}]*(margin-right\s*:\s*auto|margin-inline-end\s*:\s*auto)|\.' + re.escape(mrow.group(3)) + r'\s*\{[^}]*white-space\s*:\s*nowrap)', cc):
+                errors.append(f'{s}: .{mrow.group(3)} starts the right-aligned row .{row}; give it margin-right: auto, scoped under the root (.xx .name), so it stays at the left padding when its lines are evened (RULES 10b.47)')
+        # Full-width filled boxes (RULES 10b.46): text marked data-fill must be skipped by the helper and fill its box.
+        if 'data-fill' in h + j and "hasAttribute('data-fill')" not in j:
+            errors.append(f'{s}: data-fill is used but the evenLines helper does not skip it; add "if (el.hasAttribute(\'data-fill\')) return;" (RULES 10b.46)')
         # Even line breaks (RULES 10b.29d): the evenLines helper is present and called at init.
         if 'function evenLines(' not in j or not re.search(r'evenLines\((root|form)\);', j):
             errors.append(f'{s}: component.js needs the evenLines helper, called right after the init guard (RULES 10b.29d)')

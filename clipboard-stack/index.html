@@ -61,6 +61,11 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   transition: transform var(--spring-press-duration) var(--spring-press);
 }
 .cs-dock svg { position: relative; z-index: 1; width: 22px; height: 22px; }
+/* The clipboard sits in front of the white slips: a gray panel behind the drawing fills its board (painted as the svg's
+   background, inside the strokes, so the Lucide drawing itself is untouched), and a 1px gap of that gray runs around
+   its strokes, so its light strokes in dark mode never merge with the paper behind */
+.cs-dock svg { background: linear-gradient(var(--cs-fill), var(--cs-fill)) 4.67px 4.67px / 12.67px 14.5px no-repeat; }
+.cs-dock svg { filter: drop-shadow(1px 0 0 var(--cs-fill)) drop-shadow(-1px 0 0 var(--cs-fill)) drop-shadow(0 1px 0 var(--cs-fill)) drop-shadow(0 -1px 0 var(--cs-fill)); } /* whole pixels: browsers round shadow offsets, so 1.25px came out 1px on the right and 2px on the left */
 .cs-dock:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .cs-dock.is-hit { animation: cs-hit var(--spring-pop-duration) var(--spring-pop); }
 @keyframes cs-hit { 30% { transform: scale(1.14); } 100% { transform: scale(1); } }
@@ -74,7 +79,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   height: 18px;
   margin-left: -7.5px;
   border-radius: var(--radius-xs);
-  background: var(--cs-bg);
+  background: var(--sheet); /* white paper in both themes; the clipboard keeps a gap around its strokes so they stay visible on it */
   box-shadow: 0 0 0 1px var(--cs-line), var(--shadow-xs);
   opacity: 0;
   transform: translateY(4px) rotate(0deg);
@@ -218,6 +223,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .cs :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.cs .cs-pop-empty { text-wrap: wrap; } /* runs across the popover; a no-break space keeps at least two words on its last line */
 .cs [hidden] { display: none !important; }
 
 </style>
@@ -253,7 +259,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       <div class="cs-pop" role="dialog" aria-label="Recent copies" tabindex="-1" hidden>
         <div class="cs-pop-head"><p class="cs-pop-title">Recent Copies</p><button type="button" class="cs-clear">Clear All</button></div>
         <ul class="cs-list"></ul>
-        <p class="cs-pop-empty">Things you copy here stay for this session.</p>
+        <p class="cs-pop-empty" data-fill>Things you copy here stay for this&nbsp;session.</p>
         <p class="cs-sr" role="status" aria-live="polite"></p>
       </div>
     </div>
@@ -302,6 +308,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
