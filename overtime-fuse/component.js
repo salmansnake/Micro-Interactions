@@ -78,7 +78,14 @@
       root.style.setProperty('--of-left', left2.toFixed(4));
       root.style.setProperty('--of-heat', (1 + (1 - left2) * 0.7).toFixed(2));
       if (left2 === 0) line.textContent = mins(over) + ' over. The fuse is out. Everyone is still here, physically.';
-      else line.textContent = mins(over) + ' over · ' + people + (people === 1 ? ' person · ' : ' people · ') + Math.round(over * people) + ' person-minutes';
+      else {
+        // Two parts, one per line: how late and for whom, then the cost (no separator starting the second line)
+        var a = document.createElement('span'), b = document.createElement('span');
+        a.className = b.className = 'of-part';
+        a.textContent = mins(over) + ' over · ' + people + (people === 1 ? ' person' : ' people');
+        b.textContent = Math.round(over * people) + ' person-minutes';
+        line.replaceChildren(a, b);
+      }
     }
 
     range.addEventListener('input', function () { setMinutes(Number(range.value)); });

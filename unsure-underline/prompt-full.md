@@ -5,7 +5,7 @@ AI output usually reads as equally confident everywhere. Here, words the model i
 
 BEHAVIOR
 1. Mark uncertain words as spans with a confidence (0–1) and alternatives. Set --u = 1 − confidence.
-2. Underline: dotted, the same 2px thickness on every word (so every dot is the same size), offset 4px. Only its color carries certainty: the amber text color at OKLCH lightness 0.62 → 0.42 as u goes 0 → 1 in light mode, and 0.55 → 0.87 in dark mode, so even the faintest underline stays above 3:1 on the text panel. Hover and focus give the word a light amber background. Each word is a focusable button labeled "annual, 42% sure. Show alternatives."
+2. Underline: dotted, the same 2px thickness on every word (so every dot is the same size), offset 4px. Only its color carries certainty, as OKLCH lightness with the hue and chroma kept: in light mode the bright amber (#FFC53D) at lightness 0.70 → 0.56 as u goes 0 → 1, a vivid amber from about 2.4:1 to 4:1 on the text panel (never brown); in dark mode the amber text color (#FFCA16) at 0.55 → 0.87. Hover and focus give the word a light amber background. Each word is a focusable button labeled "annual, 42% sure. Show alternatives."
 3. Clicking or pressing Enter opens a popover above the word (below if there's no room), springing in: "42% sure" with a small amber meter, a soft Aqua "Keep “annual”" button (focused; the Aqua tint with semibold primary-color text), and a gray filled button per alternative (30px tall, 6px corners).
 4. Choosing swaps the word (fades in from 6px above and blur(3px)), then it flashes green and scales 1.06 → 1 to confirm. The underline disappears for good, the word stops being a button, and focus moves to the next uncertain word.
 5. A status line counts what's left: "3 words to check. Darker underlines are less certain." then "Every word checked. Ready to send."
@@ -49,8 +49,9 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --lift: #FFFFFF  (dark: #3F4341)
 --line: #DCDED9  (dark: #313432)
 --line-strong: #C6C9C3  (dark: #434744)
---mark-l-strong: 0.42  (dark: 0.87)
---mark-l-weak: 0.62  (dark: 0.55)
+--mark-ink: #ffc53d  (dark: #ffca16)
+--mark-l-strong: 0.56  (dark: 0.87)
+--mark-l-weak: 0.70  (dark: 0.55)
 --mark-offset: 4px
 --mark-thickness: 2px
 --mist: #ECEBE6  (dark: #2B2E2D)

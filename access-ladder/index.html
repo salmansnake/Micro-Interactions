@@ -114,6 +114,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .al :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.al .al-warn { text-wrap: wrap; } /* spans the card, so its text runs to the box's own padding; its last words are joined by a no-break space */
 .al [hidden] { display: none !important; }
 
 </style>
@@ -152,7 +153,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     </div>
     <div class="al-crowd" aria-hidden="true"></div>
   </div>
-  <p class="al-warn" hidden>Anyone who gets this link can open it, including people outside Outcraft.</p>
+  <p class="al-warn" data-fill hidden>Anyone who gets this link can open it, including people outside&nbsp;Outcraft.</p>
   <div class="al-foot">
     <code class="al-link">atlas.app/s/q4-pricing</code>
     <button type="button" class="al-copy">Copy Link</button>
@@ -185,6 +186,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;

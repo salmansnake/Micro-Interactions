@@ -10,7 +10,7 @@ BEHAVIOR
    - Each ring grows until it meets the box's top and bottom edges (the box is inset 14px), holds, flattens slightly and fades.
    - As it hits, the box edge flashes: a 1.5px white inner border and a pale aqua inner glow fading over 480ms (the slower duration).
    - Faint corner brackets show the box while you talk.
-4. After 1.4s of muted talking, a red-tinted panel says "You're on mute. You've been talking for 2 seconds." as one balanced paragraph (the count keeps rising, "1 second" when it is one, and the number never splits from "seconds"), with an Unmute button.
+4. After 1.4s of muted talking, a red-tinted panel says "You're on mute. You've been talking for 2 seconds." as one paragraph that runs up to the Unmute button (the count keeps rising, "1 second" when it is one, and "for 2 seconds." never splits, so a second line always has at least those three words), with an Unmute button.
 5. Unmuted, the rings turn green and expand freely to 6× over 1.2s before fading, and the tile gets a 3px green speaking border. The avatar pulses gently while talking.
 Reduced motion: rings appear and fade without growing; the flash stays, slowed to 0.8s.
 

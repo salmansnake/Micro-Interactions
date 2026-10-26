@@ -29,6 +29,7 @@
   -webkit-font-smoothing: antialiased;
 }
 .cb p { margin: 0; }
+.cb .cb-status { margin-right: auto; } /* stays at the left padding when even lines narrow it (beats .cb p) */
 /* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
 .cb-to { text-box: trim-start cap alphabetic; color: var(--cb-muted); font-size: var(--text-small); }
 .cb-to b { color: var(--cb-fg); font-weight: 600; }

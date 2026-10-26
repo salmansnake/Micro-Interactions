@@ -86,6 +86,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .ct :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.ct .ct-clear-text { text-wrap: wrap; } /* the green panel spans the card, so its text runs to the panel's own padding; its last words are joined by a no-break space */
 .ct [hidden] { display: none !important; }
 
 </style>
@@ -133,7 +134,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     </ul>
   </div>
   <div class="ct-clear" hidden>
-    <p class="ct-clear-text"><b>Line clear.</b> No gaps from 9 to 5. Not even for lunch.</p>
+    <p class="ct-clear-text" data-fill><b>Line clear.</b> No gaps from 9 to 5. Not even for&nbsp;lunch.</p>
     <button type="button" class="ct-lunch">Protect 12:00 for Lunch</button>
   </div>
   <p class="ct-status" role="status" aria-live="polite"></p>
@@ -163,6 +164,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;

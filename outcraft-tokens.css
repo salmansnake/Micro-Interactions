@@ -61,6 +61,7 @@
   --muted-hover: var(--mist-strong);
   --raised: var(--lift); /* a surface sitting on a muted track: segmented thumbs, switch knobs, slider thumbs. White in light; lighter than the track in dark, never darker. */
   --fill-on-subtle: color-mix(in oklab, var(--muted) 95%, var(--foreground)); /* a gray button or control on a gray inset panel (--subtle): a clear gray step darker than the panel in light (L 0.89 on 0.96). Not --muted (only 0.02 apart) and not white (it matches the card around the panel and looks see-through). Lighter than the panel in dark. Also the track of a segmented control on a gray panel, and tags on one. Gray text on it uses --muted-on-tint. */
+  --sheet: var(--white); /* a blank sheet of paper drawn as an object (queued changes, copied slips, archived papers): white in both themes */
   --muted-foreground: var(--ash);
   --placeholder: var(--stone);
   --accent: var(--mist);
@@ -144,8 +145,9 @@
   --tint-ink-min: 0; /* light: no floor, only the cap darkens pale text */
   --mark-thickness: 2px; /* every underline mark (dotted "unsure" words, flags): one thickness, so dots are the same size on every word */
   --mark-offset: 4px;
-  --mark-l-weak: 0.62; /* a graded mark shows strength by lightness only: oklch(from var(--x) calc(var(--mark-l-weak) + (var(--mark-l-strong) - var(--mark-l-weak)) * strength) c h). Weak stays above 3:1, strong is about 7:1 or more. */
-  --mark-l-strong: 0.42;
+  --mark-l-weak: 0.70; /* a graded mark shows strength by lightness only: oklch(from var(--mark-ink) calc(var(--mark-l-weak) + (var(--mark-l-strong) - var(--mark-l-weak)) * strength) c h). Light: a vivid amber from about 2.4:1 (weak) to 4:1 (strong) on the gray panel, never brown. */
+  --mark-l-strong: 0.56;
+  --mark-ink: var(--warning); /* the color a graded mark is drawn from: the bright amber in light (the dark amber text color went brown), the amber text color in dark */
   --muted-on-tint: var(--body); /* secondary text on a tint: the gray muted text drops under 4.5:1 there */
   --hover: color-mix(in srgb, var(--muted) 50%, transparent); /* hover on a list row, tab or option: a lighter step than the selected fill (--muted), so the two never look the same */
   --inverse: var(--primary); /* the strongest neutral fill: black in light, off-white in dark (not Aqua). Copied states, a hint that must stand out. */
@@ -223,6 +225,7 @@
   --muted-hover: var(--mist-strong);
   --raised: var(--lift);
   --fill-on-subtle: var(--muted); /* dark: the gray fill is already a clear step lighter than the inset; not --raised, which is the thumb color on a track */
+  --sheet: #F3F2EE; /* dark: paper stays white (the canvas white), so a stack of pages still reads as paper */
   --muted-foreground: var(--ash);
   --placeholder: var(--stone);
   --accent: var(--mist);
@@ -306,6 +309,7 @@
   --tint-ink-min: 0.75; /* dark: a floor, so a dark color (green, Aqua 700) is lifted enough to read on the dark tint */
   --mark-l-weak: 0.55; /* dark: brighter is stronger */
   --mark-l-strong: 0.87;
+  --mark-ink: var(--warning-text);
   --muted-on-tint: var(--muted-foreground);
   --inverse: var(--foreground);
   --inverse-foreground: var(--background);
@@ -377,6 +381,7 @@
     --muted-hover: var(--mist-strong);
     --raised: var(--lift);
     --fill-on-subtle: var(--muted);
+    --sheet: #F3F2EE; /* dark: paper stays white (the canvas white), so a stack of pages still reads as paper */
     --muted-foreground: var(--ash);
     --placeholder: var(--stone);
     --accent: var(--mist);
@@ -460,6 +465,7 @@
     --tint-ink-min: 0.75;
     --mark-l-weak: 0.55;
     --mark-l-strong: 0.87;
+    --mark-ink: var(--warning-text);
     --muted-on-tint: var(--muted-foreground);
     --inverse: var(--foreground);
     --inverse-foreground: var(--background);

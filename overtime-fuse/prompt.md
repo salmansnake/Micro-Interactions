@@ -10,7 +10,7 @@ BEHAVIOR
    - The bar becomes a braided rope (repeating diagonal tan and brown) whose length = 1 − minutes over ÷ 15.
    - A glowing spark sits at its right tip: a radial gradient from white to yellow to orange that flickers and throws four tiny embers up and out.
    - The burnt part is a thin dark line, and the spark grows as the fuse shortens.
-   - The status reads "6 minutes over · 6 people · 36 person-minutes".
+   - The status reads "6 minutes over · 6 people" with "36 person-minutes" on its own line below (no "·" starting the second line). The status line always holds two lines of height, so the slider below never moves.
 4. Five or more minutes over: End Meeting for All turns solid red and gives a small pulse every 2.4s.
 5. Fuse out (15 min over): "17 minutes over. The fuse is out. Everyone is still here, physically." Ending: "Meeting ended. 6 people just got their afternoon back." (or "Meeting ended early. A legend." before the end time); the button then reads "Ended" and disables.
 Reduced motion: no flicker, embers or pulse.

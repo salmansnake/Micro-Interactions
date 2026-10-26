@@ -64,4 +64,5 @@
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .ue :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.ue .ue-status { flex: 1; text-wrap: wrap; } /* one paragraph up to Resubscribe; its last two words stay together */
 .ue [hidden] { display: none !important; }

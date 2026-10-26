@@ -9,7 +9,7 @@ BEHAVIOR
 3. Below the fare: "28 tokens in · 300 out" in small gray tabular numbers.
 4. Estimate input tokens (demo: characters ÷ 4; swap in a real tokenizer). Cost = (input × input rate + expected output × output rate) / 1,000,000. Example rates per million: Fast $0.25 in / $1.25 out, Smart $3 in / $15 out.
 5. Two segmented controls: Model (Fast / Smart) and Answer Length (Short = 300 output tokens / Long = 1,200). Arrow keys move between options.
-6. A budget bar under everything: solid black for spend so far (Aqua in dark mode), a striped Aqua segment for this prompt's share, and the text "$4.20 of $10.00 used this month. This prompt adds less than a cent." (or "adds about $0.04." from a cent up).
+6. A budget bar under everything: solid black for spend so far (Aqua in dark mode), a striped Aqua segment for this prompt's share, and the text "$4.20 of $10.00 used this month. This prompt adds less than a cent." (or "adds about $0.04." from a cent up). The text is one paragraph running to the card's right padding (not narrowed for even lines), and the cost always ends it on the second line: "than a cent." is kept together (so "less" ends the first line), and "about $0.04." gets a line break before it when the whole text would otherwise fit on one line.
 7. Don't put the meter in a live region; it would announce every keystroke.
 Reduced motion: digits jump instead of rolling; no glow flash.
 

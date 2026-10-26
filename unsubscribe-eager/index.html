@@ -80,6 +80,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .ue :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.ue .ue-status { flex: 1; text-wrap: wrap; } /* one paragraph up to Resubscribe; its last two words stay together */
 .ue [hidden] { display: none !important; }
 
 </style>
@@ -117,7 +118,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     <button type="button" class="ue-btn"><span class="ue-label">Unsubscribe</span></button>
   </div>
   <div class="ue-foot">
-    <p class="ue-status" role="status" aria-live="polite"></p>
+    <p class="ue-status" data-fill role="status" aria-live="polite"></p>
     <button type="button" class="ue-undo" hidden>Resubscribe</button>
   </div>
 </div>
@@ -147,6 +148,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
@@ -236,7 +239,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       root.classList.remove('is-eager');
       root.classList.add('is-done');
       label.textContent = 'Unsubscribed';
-      status.textContent = 'Done. No survey, no “Are you sure?”, no sad puppy. That’s it.';
+      // Lines break only between phrases, never inside one: each phrase's words are joined by no-break spaces
+      status.textContent = 'Done. No\u00a0survey, no\u00a0“Are\u00a0you\u00a0sure?”, no\u00a0sad\u00a0puppy. That’s\u00a0it.';
       undo.hidden = false;
       tx = 0; ty = 0; ts = 1; go();
     });
@@ -244,7 +248,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       done = false;
       root.classList.remove('is-done', 'is-near');
       label.textContent = 'Unsubscribe';
-      status.textContent = 'Resubscribed. We’ll pretend that didn’t happen.';
+      status.textContent = 'Resubscribed. We’ll pretend that didn’t\u00a0happen.';
       undo.hidden = true;
       btn.focus();
     });

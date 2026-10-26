@@ -7,7 +7,7 @@ BEHAVIOR
 1. A list of messages, each with an Archive button.
 2. Archive: the row's height collapses to zero while a card with its subject flies on a 40px-high arc into the drawer, tilting up to 8°, shrinking to 15% and fading over the last 15% (560ms). Restoring flies the same arc back, growing from 20%. Focus moves to the next row's Archive button.
 3. The drawer is a little cabinet: a 72×36px wood-toned front with a flat, shadowless handle near the top (35% black) and "Archive" printed in small 600-weight text below it, set slightly deeper (45% black) so it reads as the same tone as the handle (no separate label beside it), and a stack of paper edges rising out of the top. It hugs its contents: when empty it's just the front, with no space reserved above, and it grows as papers stack up. Each item adds 2.5px to the paper stack (springy), and the front widens slightly with the count (up to 8 items). When an item lands, the front squashes ("gulps") with a pop spring. A black badge (Aqua in dark mode) shows the count.
-4. Clicking the drawer opens it: the front slides down a little, the papers rise, and a panel lists archived items with Restore buttons.
+4. Archived papers stack in the drawer as white sheets with thin 14% black lines between them, white in dark mode too (#FFFFFF in light, #F3F2EE in dark). Clicking the drawer opens it: the front slides down a little, the papers rise, and a panel lists archived items with Restore buttons.
 5. Restore: the item flies from the drawer back into the list and reappears with a spring; the count drops.
 6. Empty inbox shows "Inbox zero. Everything is in the drawer."
 Reduced motion: no flights or gulps; counts and lists still update.
@@ -65,6 +65,7 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --sage: #99AD88
 --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14)  (dark: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -8px rgba(0, 0, 0, 0.55))
 --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07)  (dark: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3))
+--sheet: #FFFFFF  (dark: #F3F2EE)
 --soft-ground: #F3F2EE  (dark: #0C0D0C)
 --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1)
 --spring-pop-duration: 680ms

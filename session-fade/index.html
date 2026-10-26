@@ -112,6 +112,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .sf :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.sf .sf-note { text-wrap: wrap; } /* one paragraph across the footer, up to the meter; a no-break space keeps at least two words on its last line */
+.sf .sf-meter { margin-left: auto; } /* the 20-second meter keeps the right padding */
 .sf [hidden] { display: none !important; }
 
 </style>
@@ -163,7 +165,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     </div>
   </div>
   <div class="sf-foot">
-    <p class="sf-note">This demo session lasts 20 seconds. Keep still to watch it fade; move to stay.</p>
+    <p class="sf-note" data-fill>This demo session lasts 20 seconds. Keep still to watch it fade; move to&nbsp;stay.</p>
     <div class="sf-meter" aria-hidden="true"><i></i></div>
   </div>
 </div>
@@ -190,6 +192,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;

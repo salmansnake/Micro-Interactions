@@ -7,7 +7,7 @@ BEHAVIOR
 1. A list of messages, each with an Archive button.
 2. Archive: the row's height collapses to zero while a card with its subject flies on a 40px-high arc into the drawer, tilting up to 8°, shrinking to 15% and fading over the last 15% (560ms). Restoring flies the same arc back, growing from 20%. Focus moves to the next row's Archive button.
 3. The drawer is a little cabinet: a 72×36px wood-toned front with a flat, shadowless handle near the top (35% black) and "Archive" printed in small 600-weight text below it, set slightly deeper (45% black) so it reads as the same tone as the handle (no separate label beside it), and a stack of paper edges rising out of the top. It hugs its contents: when empty it's just the front, with no space reserved above, and it grows as papers stack up. Each item adds 2.5px to the paper stack (springy), and the front widens slightly with the count (up to 8 items). When an item lands, the front squashes ("gulps") with a pop spring. A black badge (Aqua in dark mode) shows the count.
-4. Clicking the drawer opens it: the front slides down a little, the papers rise, and a panel lists archived items with Restore buttons.
+4. Archived papers stack in the drawer as white sheets with thin 14% black lines between them, white in dark mode too (#FFFFFF in light, #F3F2EE in dark). Clicking the drawer opens it: the front slides down a little, the papers rise, and a panel lists archived items with Restore buttons.
 5. Restore: the item flies from the drawer back into the list and reappears with a spring; the count drops.
 6. Empty inbox shows "Inbox zero. Everything is in the drawer."
 Reduced motion: no flights or gulps; counts and lists still update.

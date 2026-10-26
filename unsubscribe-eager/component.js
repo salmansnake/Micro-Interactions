@@ -22,6 +22,8 @@
     }
     function fit(el) {
       el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
       var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
       if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
       if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
@@ -111,7 +113,8 @@
       root.classList.remove('is-eager');
       root.classList.add('is-done');
       label.textContent = 'Unsubscribed';
-      status.textContent = 'Done. No survey, no “Are you sure?”, no sad puppy. That’s it.';
+      // Lines break only between phrases, never inside one: each phrase's words are joined by no-break spaces
+      status.textContent = 'Done. No\u00a0survey, no\u00a0“Are\u00a0you\u00a0sure?”, no\u00a0sad\u00a0puppy. That’s\u00a0it.';
       undo.hidden = false;
       tx = 0; ty = 0; ts = 1; go();
     });
@@ -119,7 +122,7 @@
       done = false;
       root.classList.remove('is-done', 'is-near');
       label.textContent = 'Unsubscribe';
-      status.textContent = 'Resubscribed. We’ll pretend that didn’t happen.';
+      status.textContent = 'Resubscribed. We’ll pretend that didn’t\u00a0happen.';
       undo.hidden = true;
       btn.focus();
     });

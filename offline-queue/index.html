@@ -106,10 +106,10 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 /* The queue: a pill that holds one chip per waiting change */
 .oq-queue { display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px; border-radius: var(--radius-full); background: oklch(from var(--oq-orange) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--oq-orange-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-size: var(--text-small); font-weight: 600; animation: oq-in var(--spring-ui-duration) var(--spring-ui) both; }
 .oq-chips { display: flex; }
-.oq-chip { width: 18px; height: 22px; margin-left: -9px; border-radius: var(--radius-xs); background: var(--oq-bg); box-shadow: 0 0 0 1px var(--oq-line), var(--shadow-xs); animation: oq-chip var(--spring-pop-duration) var(--spring-pop) both; }
+.oq-chip { width: 18px; height: 22px; margin-left: -9px; border-radius: var(--radius-xs); background: var(--sheet); box-shadow: 0 0 0 1px var(--oq-line), var(--shadow-xs); animation: oq-chip var(--spring-pop-duration) var(--spring-pop) both; }
 .oq-chip:first-child { margin-left: 0; }
 @keyframes oq-chip { from { transform: translateY(-14px) rotate(-12deg); opacity: 0; } }
-.oq-fly { position: absolute; z-index: 4; left: 0; top: 0; width: 18px; height: 22px; border-radius: var(--radius-xs); background: var(--oq-bg); box-shadow: 0 0 0 1px var(--oq-line), var(--shadow-sm); pointer-events: none; }
+.oq-fly { position: absolute; z-index: 4; left: 0; top: 0; width: 18px; height: 22px; border-radius: var(--radius-xs); background: var(--sheet); /* the same white page as the chips, so it stays white in flight in dark mode */ box-shadow: 0 0 0 1px var(--oq-line), var(--shadow-sm); pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   .oq-row.is-new, .oq-queue, .oq-chip, .oq-cloud.is-hit { animation: none; }
 }
