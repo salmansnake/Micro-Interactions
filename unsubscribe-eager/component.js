@@ -114,7 +114,7 @@
       root.classList.add('is-done');
       label.textContent = 'Unsubscribed';
       // Lines break only between phrases, never inside one: each phrase's words are joined by no-break spaces
-      status.textContent = 'Done. No\u00a0survey, no\u00a0“Are\u00a0you\u00a0sure?”, no\u00a0sad\u00a0puppy. That’s\u00a0it.';
+      status.textContent = 'Done. No\u00a0survey, no\u00a0“Are\u00a0you\u00a0sure?”, no\u00a0sad\u00a0puppy.\u00a0That’s\u00a0it.';
       undo.hidden = false;
       tx = 0; ty = 0; ts = 1; go();
     });
