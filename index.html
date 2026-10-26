@@ -959,16 +959,24 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 .codebox-head .x { margin-left: auto; }
 .codebox-bar { flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-5); border-bottom: 1px solid var(--border); }
 .codebox-hint { flex-basis: 100%; margin: 0; color: var(--muted-foreground); font: var(--text-small)/var(--leading-small) var(--font-sans); }
-.codebox-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--subtle); }
-/* Each code box carries its own file name and actions, so it's clear what Copy copies */
-.codebox-file { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4) var(--space-3) var(--space-6); border-bottom: 1px solid var(--border); }
-.codebox-name { min-width: 0; overflow: hidden; color: var(--muted-foreground); font: 500 var(--text-small)/var(--leading-small) var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
-.codebox-actions { flex: none; display: flex; gap: var(--space-2); }
+/* The tab thumb follows the selected tab's own position and width (--tx, --tw, set by site.js), so the tabs can be sized
+   to their labels on a phone, where equal fifths pushed "One File" against the right edge */
+.codebox .oc-tabs::before { left: 0; width: var(--tw, 0); transform: translateX(var(--tx, 0)); transition-property: transform, width; }
+.codebox .oc-tabs.is-placing::before { transition: none; }
+.codebox-panel { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--subtle); }
+/* Copy (and Download on One File) float over the top right of the code and stay put while it scrolls; the code starts
+   below them, so nothing is hidden until you scroll. No file name strip: the tab already says what Copy copies. */
+.codebox-actions { position: absolute; z-index: 1; top: var(--space-4); right: var(--space-4); display: flex; gap: var(--space-2); }
 .codebox-actions .oc-btn { --oc-btn-bg: var(--raised); } /* raised on the gray box, per 10a; hover and Copied still apply */
-.codebox pre { flex: 1; min-height: 0; margin: 0; overflow: auto; padding: var(--space-5) var(--space-6); background: var(--subtle); color: var(--foreground); font: 400 var(--text-code)/var(--leading-code) var(--font-mono); tab-size: 2; }
+.codebox pre { flex: 1; min-height: 0; margin: 0; overflow: auto; padding: calc(var(--space-4) + var(--control-sm) + var(--space-3)) var(--space-6) var(--space-5); background: var(--subtle); color: var(--foreground); font: 400 var(--text-code)/var(--leading-code) var(--font-mono); tab-size: 2; }
 .codebox pre.is-prose { white-space: pre-wrap; font-family: var(--font-sans); font-size: var(--text-small); line-height: 20px; color: var(--body); }
 .codebox pre:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
-@media (max-width: 860px) { .codebox { width: 100vw; height: 100dvh; max-width: none; max-height: none; border-radius: 0; } }
+@media (max-width: 860px) {
+  .codebox { width: 100vw; height: 100dvh; max-width: none; max-height: none; border-radius: 0; }
+  /* Each tab is its label plus an equal share of the spare width, so every label has the same space on both sides */
+  .codebox .oc-tabs { display: flex; width: 100%; }
+  .codebox .oc-tabs button { flex: 1 1 auto; padding: 0 var(--space-2); }
+}
 @media (prefers-reduced-motion: reduce) { .codebox[open] { animation: none; } }
 @media (max-height: 760px) and (min-width: 861px) { .center { padding: var(--space-3); } .stage { padding: 52px var(--space-4); } .stage-nav { padding-top: var(--space-2); } }
 
@@ -7458,7 +7466,7 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
   <div class="codebox-head"><h2 id="cb-title"></h2><button type="button" class="oc-btn oc-btn--ghost oc-btn--icon oc-btn--sm x" data-close-code aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
   <div class="codebox-bar"><div class="oc-tabs" role="tablist" aria-label="Code" style="--n: 5"><button type="button" role="tab" id="cb-tab-prompt" data-k="prompt" aria-selected="true" tabindex="0">Prompt</button><button type="button" role="tab" id="cb-tab-html" data-k="html" aria-selected="false" tabindex="-1">HTML</button><button type="button" role="tab" id="cb-tab-css" data-k="css" aria-selected="false" tabindex="-1">CSS</button><button type="button" role="tab" id="cb-tab-js" data-k="js" aria-selected="false" tabindex="-1">JS</button><button type="button" role="tab" id="cb-tab-one" data-k="one" aria-selected="false" tabindex="-1">One File</button></div><p class="codebox-hint" aria-live="polite"></p></div>
   <div class="codebox-panel" role="tabpanel">
-    <div class="codebox-file"><span class="codebox-name"></span><div class="codebox-actions"><button type="button" class="oc-btn oc-btn--outline oc-btn--sm" data-copy-code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button><a class="oc-btn oc-btn--outline oc-btn--sm" data-download hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>Download</a></div></div>
+    <div class="codebox-actions"><button type="button" class="oc-btn oc-btn--outline oc-btn--sm" data-copy-code><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button><a class="oc-btn oc-btn--outline oc-btn--sm" data-download hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>Download</a></div>
     <pre tabindex="0"></pre>
   </div>
 </dialog>
@@ -19119,8 +19127,7 @@ Next sync on Thursday.</textarea>
     return DATA.oneTpl.replace('__TITLE__', BY[slug].name).split('__CSS__').join(s.css).split('__HTML__').join(s.html).split('__JS__').join(s.js);
   }
   var box = $('#codebox'), pre = $('pre', box), panel = $('.codebox-panel', box), dl = $('[data-download]', box), tabs = $$('[role="tab"]', box), active = 'prompt', opener = null;
-  // Each box names the file it holds, so it's clear what Copy copies. One File can also be downloaded.
-  var FILES = { prompt: 'prompt.md', html: 'component.html', css: 'component.css', js: 'component.js' };
+  var tabList = $('[role="tablist"]', box), actions = $('.codebox-actions', box);
   var HINTS = {
     prompt: 'Paste this into an AI tool like Claude or Cursor to rebuild it in your own stack. It includes the exact Outcraft colors, type and motion.',
     html: 'The markup. Paste it where the interaction should appear on your page. It needs the CSS and JS too.',
@@ -19131,20 +19138,30 @@ Next sync on Thursday.</textarea>
   function showTab(k) {
     active = k;
     $('.codebox-hint', box).textContent = HINTS[k];
-    tabs.forEach(function (t, i) { var on = t.getAttribute('data-k') === k; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on) t.parentNode.style.setProperty('--i', i); });
+    tabs.forEach(function (t) { var on = t.getAttribute('data-k') === k; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
     pre.textContent = code(state.slug, k);
     pre.classList.toggle('is-prose', k === 'prompt');
     panel.setAttribute('aria-labelledby', 'cb-tab-' + k);
-    $('.codebox-name', box).textContent = k === 'one' ? state.slug + '.html' : FILES[k];
     dl.hidden = k !== 'one';
     if (k === 'one') { dl.href = state.slug + '/one-file.html'; dl.setAttribute('download', state.slug + '.html'); }
     pre.scrollTop = 0;
+    place(false);
   }
+  // The thumb takes the selected tab's own position and width, since tabs are sized to their labels on a phone.
+  // The floating Copy and Download keep clear of the code's scrollbar where it takes up room (Windows).
+  function place(instant) {
+    var t = $('[aria-selected="true"]', tabList); if (!t || !box.open) return;
+    if (instant) tabList.classList.add('is-placing');
+    tabList.style.setProperty('--tx', t.offsetLeft + 'px'); tabList.style.setProperty('--tw', t.offsetWidth + 'px');
+    actions.style.right = 16 + pre.offsetWidth - pre.clientWidth + 'px';
+    if (instant) { tabList.offsetWidth; tabList.classList.remove('is-placing'); }
+  }
+  if (window.ResizeObserver) { var ro = new ResizeObserver(function () { place(true); }); tabs.concat([pre]).forEach(function (el) { ro.observe(el); }); }
   $('[data-open-code]').addEventListener('click', function (e) {
     opener = e.currentTarget;
     var it = BY[state.slug];
     $('h2', box).textContent = it.name;
-    showTab('prompt'); box.showModal(); holdWidth($('[data-copy-code]', box));
+    showTab('prompt'); box.showModal(); place(true); holdWidth($('[data-copy-code]', box));
     var sel = $('[aria-selected="true"]', box); if (sel) sel.focus();
   });
   tabs.forEach(function (t, i) {

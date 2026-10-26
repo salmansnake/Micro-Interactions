@@ -268,8 +268,7 @@
     return DATA.oneTpl.replace('__TITLE__', BY[slug].name).split('__CSS__').join(s.css).split('__HTML__').join(s.html).split('__JS__').join(s.js);
   }
   var box = $('#codebox'), pre = $('pre', box), panel = $('.codebox-panel', box), dl = $('[data-download]', box), tabs = $$('[role="tab"]', box), active = 'prompt', opener = null;
-  // Each box names the file it holds, so it's clear what Copy copies. One File can also be downloaded.
-  var FILES = { prompt: 'prompt.md', html: 'component.html', css: 'component.css', js: 'component.js' };
+  var tabList = $('[role="tablist"]', box), actions = $('.codebox-actions', box);
   var HINTS = {
     prompt: 'Paste this into an AI tool like Claude or Cursor to rebuild it in your own stack. It includes the exact Outcraft colors, type and motion.',
     html: 'The markup. Paste it where the interaction should appear on your page. It needs the CSS and JS too.',
@@ -280,20 +279,30 @@
   function showTab(k) {
     active = k;
     $('.codebox-hint', box).textContent = HINTS[k];
-    tabs.forEach(function (t, i) { var on = t.getAttribute('data-k') === k; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on) t.parentNode.style.setProperty('--i', i); });
+    tabs.forEach(function (t) { var on = t.getAttribute('data-k') === k; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
     pre.textContent = code(state.slug, k);
     pre.classList.toggle('is-prose', k === 'prompt');
     panel.setAttribute('aria-labelledby', 'cb-tab-' + k);
-    $('.codebox-name', box).textContent = k === 'one' ? state.slug + '.html' : FILES[k];
     dl.hidden = k !== 'one';
     if (k === 'one') { dl.href = state.slug + '/one-file.html'; dl.setAttribute('download', state.slug + '.html'); }
     pre.scrollTop = 0;
+    place(false);
   }
+  // The thumb takes the selected tab's own position and width, since tabs are sized to their labels on a phone.
+  // The floating Copy and Download keep clear of the code's scrollbar where it takes up room (Windows).
+  function place(instant) {
+    var t = $('[aria-selected="true"]', tabList); if (!t || !box.open) return;
+    if (instant) tabList.classList.add('is-placing');
+    tabList.style.setProperty('--tx', t.offsetLeft + 'px'); tabList.style.setProperty('--tw', t.offsetWidth + 'px');
+    actions.style.right = 16 + pre.offsetWidth - pre.clientWidth + 'px';
+    if (instant) { tabList.offsetWidth; tabList.classList.remove('is-placing'); }
+  }
+  if (window.ResizeObserver) { var ro = new ResizeObserver(function () { place(true); }); tabs.concat([pre]).forEach(function (el) { ro.observe(el); }); }
   $('[data-open-code]').addEventListener('click', function (e) {
     opener = e.currentTarget;
     var it = BY[state.slug];
     $('h2', box).textContent = it.name;
-    showTab('prompt'); box.showModal(); holdWidth($('[data-copy-code]', box));
+    showTab('prompt'); box.showModal(); place(true); holdWidth($('[data-copy-code]', box));
     var sel = $('[aria-selected="true"]', box); if (sel) sel.focus();
   });
   tabs.forEach(function (t, i) {

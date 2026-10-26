@@ -12,7 +12,7 @@ Every interaction runs live on the site and ships with a prompt that rebuilds it
 
 ## Use an interaction
 
-On the site, **View Code** opens Prompt, HTML, CSS, JS and One File tabs. Each tab's box names its file and has its own Copy button; One File also has Download. **Copy Prompt** copies the prompt. Everything you copy is self-contained: the CSS carries the exact Outcraft tokens and the Geist font it needs, so it works pasted into any page with nothing else installed.
+On the site, **View Code** opens Prompt, HTML, CSS, JS and One File tabs. Each tab has a Copy button that stays in view while you scroll the code; One File also has Download. **Copy Prompt** copies the prompt. Everything you copy is self-contained: the CSS carries the exact Outcraft tokens and the Geist font it needs, so it works pasted into any page with nothing else installed.
 
 In this repo, each folder is one interaction:
 
