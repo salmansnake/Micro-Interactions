@@ -239,8 +239,8 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       root.classList.remove('is-eager');
       root.classList.add('is-done');
       label.textContent = 'Unsubscribed';
-      // Lines break only between phrases, never inside one: each phrase's words are joined by no-break spaces
-      status.textContent = 'Done. No\u00a0survey, no\u00a0“Are\u00a0you\u00a0sure?”, no\u00a0sad\u00a0puppy. That’s\u00a0it.';
+      // The quote, "no sad puppy." and "That’s it." are kept whole with no-break spaces; the rest wraps freely
+      status.textContent = 'Done. No survey, no “Are\u00a0you\u00a0sure?”, no\u00a0sad\u00a0puppy. That’s\u00a0it.';
       undo.hidden = false;
       tx = 0; ty = 0; ts = 1; go();
     });
