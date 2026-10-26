@@ -67,7 +67,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 @keyframes ue-wag { 50% { rotate: 3deg; } }
 .ue-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .ue.is-done .ue-btn { background: var(--success); color: var(--success-foreground); text-decoration: none; font-weight: 600; }
-.ue-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ue-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
 /* Nothing to say yet, so no space: it stays a live region but leaves the layout until text arrives */
 .ue-foot:has(.ue-status:empty):has(.ue-undo[hidden]) { position: absolute; width: 1px; height: 1px; min-height: 0; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .ue-status { color: var(--ue-muted); font-size: var(--text-small); line-height: var(--leading-small); }
@@ -80,7 +80,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 }
 /* Multi-line text wraps evenly and never ends on one or two lonely words */
 .ue :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
-.ue .ue-status { flex: 1; text-wrap: wrap; } /* one paragraph up to Resubscribe; its last two words stay together */
+.ue .ue-status { flex: 1 1 17em; text-wrap: wrap; } /* one paragraph up to Resubscribe. 17em holds its first line, "Done. No survey, no “Are you sure?”,",
+   so lines get shorter as they go (10b.50); where that doesn't fit beside the button, Resubscribe moves to its own row below */
+.ue .ue-undo { margin-left: auto; } /* on its own row it stays at the right, where it sits on a wide card */
 .ue [hidden] { display: none !important; }
 
 </style>
@@ -240,7 +242,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
       root.classList.add('is-done');
       label.textContent = 'Unsubscribed';
       // Lines break only between phrases, never inside one: each phrase's words are joined by no-break spaces
-      status.textContent = 'Done. No\u00a0survey, no\u00a0“Are\u00a0you\u00a0sure?”, no\u00a0sad\u00a0puppy. That’s\u00a0it.';
+      status.textContent = 'Done. No\u00a0survey, no\u00a0“Are\u00a0you\u00a0sure?”, no\u00a0sad\u00a0puppy.\u00a0That’s\u00a0it.';
       undo.hidden = false;
       tx = 0; ty = 0; ts = 1; go();
     });
