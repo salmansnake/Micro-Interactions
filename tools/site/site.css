@@ -148,6 +148,10 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 /* Type badge and New tag are the same pill size */
 .info-meta .type-badge { height: 20px; padding: 0 8px; box-sizing: border-box; border-radius: var(--radius-full); font: 600 11px/1 var(--font-sans); letter-spacing: 0.01em; }
 .type-badge.t-useful { background: transparent; border-color: var(--border); color: var(--foreground); }
+/* Solid palette badges for types, named by color; interactions.json "typeBadges" picks one per type */
+.type-badge.t-sage { background: var(--sage); border-color: var(--sage); color: var(--on-chart); }
+.type-badge.t-olive { background: var(--olive); border-color: var(--olive); color: var(--on-chart); }
+.type-badge.t-blue { background: var(--info); border-color: var(--info); color: var(--on-color); }
 .info h1 { margin: var(--space-3) 0 0; color: var(--foreground); font: 700 var(--text-h3)/var(--leading-h3) var(--font-sans); letter-spacing: -0.02em; overflow-wrap: anywhere; }
 .info .topic { margin: 4px 0 0; color: var(--muted-foreground); font: var(--text-small)/var(--leading-small) var(--font-sans); }
 .info .summary { margin: var(--space-4) 0 0; color: var(--body); }

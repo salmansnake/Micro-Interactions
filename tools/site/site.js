@@ -29,7 +29,7 @@
       return '<span class="ui-ref">' + x + '</span>';
     });
   }
-  function typeClass(t) { return t === 'Pure Joke' ? 'oc-badge--pop' : t === 'Secretly Useful' ? 'oc-badge--ai' : 't-useful'; }
+  function typeClass(t) { return (DATA.typeBadges || {})[t] || 't-useful'; }
 
   /* ---------- mounting: only what's on screen runs ---------- */
   function mount(el, slug) {

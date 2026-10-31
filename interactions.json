@@ -5,6 +5,11 @@
     "Secretly Useful",
     "Pure Joke"
   ],
+  "typeBadges": {
+    "Useful": "t-useful",
+    "Secretly Useful": "oc-badge--ai",
+    "Pure Joke": "oc-badge--pop"
+  },
   "topics": [
     "Billing and Plans",
     "Forms and Input",

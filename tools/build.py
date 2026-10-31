@@ -68,6 +68,9 @@ def check(reg):
     items = reg['interactions']
     tokens = rd('outcraft-tokens.css')
     defined = set(re.findall(r'(--[a-zA-Z0-9-]+)\s*:', tokens)) | set(re.findall(r'(--[a-zA-Z0-9-]+)\s*:', rd('outcraft-components.css')))
+    # Every type has a badge style (RULES 4): typeBadges maps it to a class in tools/site/site.css
+    for ty in reg['types']:
+        if ty not in reg.get('typeBadges', {}): errors.append(f'type "{ty}" has no entry in "typeBadges" in interactions.json')
     nums = [it['number'] for it in items]
     for i, n in enumerate(nums, 1):
         if n != f'{i:03d}': errors.append(f'numbers must run 001, 002, … in order with no gaps; position {i} has {n}')
@@ -383,7 +386,7 @@ def build_site(reg, site):
     for it in items:
         b = bundle(it['slug'])
         src[it['slug']] = {'prompt': full_prompt(it['slug']), 'html': rd(it['slug'], 'component.html'), 'css': b['css'], 'js': rd(it['slug'], 'component.js')}
-    data = {'oneTpl': one_template(), 'types': reg['types'], 'topics': reg['topics'], 'init': {k: v for k, v in init.items()},
+    data = {'oneTpl': one_template(), 'types': reg['types'], 'typeBadges': reg.get('typeBadges', {}), 'topics': reg['topics'], 'init': {k: v for k, v in init.items()},
             'icons': {'hand': ICON['hand']}, 'interactions': [dict(it, refIcons=ref_icons(it)) if ref_icons(it) else it for it in items]}
     by = {it['slug']: it for it in items}
     newest = [it for it in items if it['new']]

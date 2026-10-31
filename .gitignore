@@ -13,6 +13,8 @@ tools/private-words.txt
 
 # Never part of the deployed site
 _archive/
+# Upcoming interactions, previewed locally and released in weekly drops
+_drafts/
 node_modules/
 .vscode/
 .idea/
