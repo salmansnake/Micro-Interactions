@@ -1,0 +1,85 @@
+/* Reply-All Megaphone — Reply All to a crowd turns the button into a megaphone and shows the crowd before it sends.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.ram {
+  --ram-bg: var(--card);
+  --ram-fg: var(--foreground);
+  --ram-muted: var(--muted-foreground);
+  --ram-sunken: var(--subtle);
+  --ram-fill: var(--muted);
+  --ram-accent: var(--primary);
+  --ram-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--ram-bg);
+  color: var(--ram-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.ram p { margin: 0; }
+.ram-mail { display: flex; flex-direction: column; gap: 8px; }
+.ram-from { display: flex; align-items: center; gap: 12px; }
+.ram-av { flex: none; display: block; width: 36px; height: 36px; border-radius: 50%; background: var(--chart-4); color: var(--on-chart); font-size: var(--text-ui); font-weight: 700; align-content: center; text-align: center; text-box: trim-both cap alphabetic; }
+.ram-who { flex: 1; min-width: 0; }
+.ram-who b { display: block; font-size: var(--text-ui); line-height: var(--leading-ui); font-weight: 600; }
+.ram-who small { display: block; margin-top: 2px; color: var(--ram-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ram-time { flex: none; align-self: flex-start; color: var(--ram-muted); font-size: var(--text-caption); line-height: var(--leading-caption); font-variant-numeric: tabular-nums; }
+.ram-subject { margin-top: 4px !important; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title-sm); font-weight: 600; }
+.ram-body { color: var(--body); font-size: var(--text-ui); line-height: var(--leading-ui); }
+
+/* The crowd: every recipient, as a dot, springing in one after another */
+.ram-crowd { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: var(--ram-sunken); animation: ram-in var(--spring-panel-duration) var(--spring-panel); }
+@keyframes ram-in { from { opacity: 0; transform: translateY(-6px); } }
+.ram-crowd-head { display: flex; align-items: center; gap: 10px; }
+.ram-horn { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--warning); color: var(--warning-foreground); animation: ram-blare 0.6s var(--ease-in-out) 2; }
+.ram-horn svg { width: 16px; height: 16px; }
+@keyframes ram-blare { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-14deg) scale(1.08); } 60% { transform: rotate(8deg); } }
+.ram-ask { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.ram-dots { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 4px; }
+.ram-dots i { aspect-ratio: 1; border-radius: 50%; background: var(--chart-1); animation: ram-pop var(--spring-pop-duration) var(--spring-pop) both; }
+.ram-dots i.is-sender { box-shadow: 0 0 0 2px var(--ram-sunken), 0 0 0 4px var(--ram-fg); }
+@keyframes ram-pop { from { transform: scale(0); } }
+.ram-pick { display: flex; gap: 8px; }
+
+.ram-to { display: flex; align-items: center; gap: 8px; animation: ram-in var(--spring-panel-duration) var(--spring-panel); }
+.ram-to-label { color: var(--ram-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.ram-chip { display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: var(--radius-full); background: var(--ram-fill); font-size: var(--text-small); font-weight: 600; white-space: nowrap; }
+.ram-to.is-all .ram-chip { background: oklch(from var(--warning) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--warning-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); }
+
+.ram-actions { display: flex; gap: 8px; }
+.ram-btn { flex: 1; min-width: 0; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 14px; border: 0; border-radius: var(--radius-md); background: var(--ram-fill); color: var(--ram-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.ram-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.ram-btn:hover { background: var(--muted-hover); }
+.ram-crowd .ram-btn { background: var(--fill-on-subtle); }
+.ram-reply, .ram-just, .ram-crowd .ram-just { background: var(--ram-accent); color: var(--ram-on-accent); }
+.ram-reply:hover, .ram-crowd .ram-just:hover { background: var(--ram-accent); }
+.ram-btn:active { transform: scale(var(--press-scale)); }
+.ram-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.ram-ic { display: inline-flex; }
+.ram-ic-horn { display: none; }
+.ram.is-blaring .ram-ic-all { display: none; }
+.ram.is-blaring .ram-ic-horn { display: inline-flex; animation: ram-blare 0.6s var(--ease-in-out); }
+.ram.is-blaring .ram-replyall { background: var(--warning); color: var(--warning-foreground); }
+
+.ram-done { display: flex; align-items: center; gap: 12px; }
+.ram .ram-status { flex: 1; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.ram-discard { flex: none; }
+/* Before a reply starts the row is empty: it stays a live region but leaves the layout (and the gap) */
+.ram-done:has(.ram-status:empty):has(.ram-discard[hidden]) { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ram-crowd, .ram-to, .ram-horn, .ram-dots i, .ram.is-blaring .ram-ic-horn { animation: none; }
+  .ram-btn { transition-duration: var(--duration-reduced); }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.ram :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.ram [hidden] { display: none !important; }

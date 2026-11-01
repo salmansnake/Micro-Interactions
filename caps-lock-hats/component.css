@@ -1,0 +1,78 @@
+/* Caps Lock Hats — type a password with Caps Lock on and every dot in the field puts on a tiny party hat.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.clh {
+  --clh-bg: var(--card);
+  --clh-fg: var(--foreground);
+  --clh-muted: var(--muted-foreground);
+  --clh-sunken: var(--subtle);
+  --clh-fill: var(--muted);
+  --clh-accent: var(--primary);
+  --clh-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--clh-bg);
+  color: var(--clh-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.clh p, .clh ul, .clh ol { margin: 0; }
+.clh ul, .clh ol { padding: 0; list-style: none; }
+.clh { gap: 14px; }
+.clh-title b { display: block; font-weight: 600; text-box: trim-start cap alphabetic; }
+.clh-title small { display: block; margin-top: 2px; color: var(--clh-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.clh-f { display: flex; flex-direction: column; gap: 6px; }
+.clh-lab { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.clh input { width: 100%; height: 44px; box-sizing: border-box; margin: 0; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius-md); background: var(--clh-bg); color: var(--clh-fg); font: inherit; font-size: var(--text-ui); }
+.clh input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* The password's own characters are invisible; drawn dots stand in for them so each can wear a hat */
+.clh-box { position: relative; display: block; }
+.clh .clh-pass { color: transparent; caret-color: transparent; letter-spacing: 4px; }
+.clh-dots { position: absolute; left: 13px; top: 0; bottom: 0; display: flex; align-items: center; gap: 6px; pointer-events: none; }
+.clh-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--clh-fg); }
+.clh-dot:last-child::after { content: ""; position: absolute; left: 13px; top: -6px; width: 1.5px; height: 20px; background: var(--clh-fg); opacity: 0; }
+.clh-pass:focus + .clh-dots .clh-dot:last-child::after { animation: clh-caret 1s steps(1) infinite; }
+@keyframes clh-caret { 50% { opacity: 1; } }
+/* The hat: a party hat, not a pencil tip. A tall striped cone, narrower than the dot so the round head shows under it,
+   tilted, with a tuft of tinsel bursting from its tip in another party color. The cone is its own layer: clipping the
+   whole hat to the triangle cut the top down to a dark point, and a plain cone as wide as the dot read as a sharpened pencil */
+.clh-hat { position: absolute; left: 50%; bottom: 6px; width: 7px; height: 12px; margin-left: -3.5px; transform: translateY(-14px) rotate(var(--clh-r, 0deg)) scale(0); transform-origin: 50% 100%; transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.clh-hat::after { content: ""; position: absolute; inset: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: repeating-linear-gradient(-55deg, var(--clh-k, var(--pink)) 0 2.5px, oklch(from var(--clh-k, var(--pink)) 0.97 calc(c * 0.3) h) 2.5px 4px); }
+/* The tinsel: light strands that rise from the tip and arc over, falling to either side like a fountain, because
+   tinsel is too light to stand up straight. Drawn as a mask and colored with a party color */
+.clh-hat::before { content: ""; position: absolute; z-index: 1; left: 50%; top: -7.9px; width: 10px; height: 8.33px; margin-left: -5px; background: var(--clh-p, var(--orange)); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round'%3E%3Cpath d='M6 9.5C5.4 5.5 2 4.5 1 8.8M6 9.5C5.7 6.2 3.8 5.2 3.2 8M6 9.5C6 6 6.4 4.2 7.4 4.6M6 9.5C6.3 6.2 8.2 5.2 8.8 8M6 9.5C6.6 5.5 10 4.5 11 8.8'/%3E%3C/svg%3E") center / 10px 8.33px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round'%3E%3Cpath d='M6 9.5C5.4 5.5 2 4.5 1 8.8M6 9.5C5.7 6.2 3.8 5.2 3.2 8M6 9.5C6 6 6.4 4.2 7.4 4.6M6 9.5C6.3 6.2 8.2 5.2 8.8 8M6 9.5C6.6 5.5 10 4.5 11 8.8'/%3E%3C/svg%3E") center / 10px 8.33px no-repeat; }
+.clh.is-caps .clh-hat { transform: translateY(0) rotate(var(--clh-r, 0deg)) scale(1); }
+.clh.is-caps .clh-box input { border-color: var(--warning-border); }
+.clh-foot { display: flex; align-items: center; gap: 8px; }
+.clh-key { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 12px; border: 0; border-radius: var(--radius-md); background: var(--clh-fill); color: var(--clh-fg); font: inherit; font-size: var(--text-small); font-weight: 600; white-space: nowrap; cursor: pointer; transition: background-color var(--duration-fast), transform var(--spring-press-duration) var(--spring-press); }
+.clh-key svg { width: 16px; height: 16px; }
+.clh-key[aria-pressed="true"] { background: var(--warning); color: var(--warning-foreground); }
+.clh-key:active { transform: scale(var(--press-scale)); }
+.clh-key:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.clh-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--clh-fill); color: var(--clh-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.clh-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.clh-btn:hover:not(:disabled) { background: var(--muted-hover); }
+.clh-btn.is-primary, .clh-btn.is-primary:hover:not(:disabled) { background: var(--clh-accent); color: var(--clh-on-accent); }
+.clh-btn:disabled { cursor: default; background: var(--clh-fill); color: var(--clh-muted); }
+.clh-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.clh-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.clh-foot .clh-btn { margin-left: auto; }
+.clh-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); text-box: trim-end cap alphabetic; }
+.clh-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .clh-hat { transition-duration: var(--duration-reduced); transition-timing-function: var(--ease-out); }
+  .clh-pass:focus + .clh-dots .clh-dot:last-child::after { animation: none; opacity: 1; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.clh :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.clh [hidden] { display: none !important; }

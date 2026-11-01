@@ -78,6 +78,7 @@
     }).join('');
   }
   search.addEventListener('input', function () { state.q = search.value; renderList(); });
+  $('.search-clear').addEventListener('click', function () { state.q = ''; search.value = ''; renderList(); search.focus(); });
   search.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { var v = visible(); if (v.length) go(v[0].slug); }
     if (e.key === 'ArrowDown') { var a = $('.item', list); if (a) { e.preventDefault(); a.focus(); } }

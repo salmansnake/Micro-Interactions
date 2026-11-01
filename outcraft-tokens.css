@@ -545,4 +545,15 @@
   --stagger-loose: 70ms;
   --frost-saturate: 160%;
   --focus-ring: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+  /* Nature: colors people already know from the world (a sky, the sun, the moon), so a scene reads at a glance.
+     The same in light and dark, because the real sky doesn't change with the screen's theme. Not for interface parts. */
+  --sky-day-top: #2F86D8;
+  --sky-day-low: #8CCBF5;
+  --sky-dusk-top: #5E62B0;
+  --sky-dusk-low: #FFA66B;
+  --sky-night-top: #0A1430;
+  --sky-night-low: #1F2C5A;
+  --sun: #FFD23F;
+  --moon: #F4EFD6;
+  --star: #FFFFFF;
 }

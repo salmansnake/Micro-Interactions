@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Address Unpack</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .adu so they never affect the rest of your page. */
+.adu {
+  --duration-fast: 140ms;
+  --duration-slower: 480ms;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --press-scale: 0.97;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-xl: 16px;
+  --spring-panel: linear(0, 0.0198, 0.069, 0.1356, 0.211, 0.2893, 0.3667, 0.4407, 0.5096, 0.5727, 0.6297, 0.6805, 0.7255, 0.765, 0.7995, 0.8294, 0.8552, 0.8774, 0.8964, 0.9127, 0.9265, 0.9382, 0.9482, 0.9566, 0.9637, 0.9696, 0.9746, 0.9788, 0.9824, 0.9853, 0.9878, 0.9899, 0.9916, 0.993, 0.9942, 0.9952, 0.996, 0.9967, 0.9973, 0.9978, 1);
+  --spring-panel-duration: 530ms;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --text-body: 15px;
+  --text-small: 13px;
+  --text-ui: 14px;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --aqua-border: #8FE0DD;
+  --ash: #646A66;
+  --black: #000000;
+  --body: var(--slate);
+  --border: var(--line);
+  --brand: var(--aqua);
+  --brand-border: var(--aqua-border);
+  --brand-foreground: #000000;
+  --canvas: #FAFAF8;
+  --card: var(--white);
+  --fill-on-subtle: color-mix(in oklab, var(--muted) 95%, var(--foreground));
+  --foreground: var(--black);
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --mist-strong: #E3E2DC;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --muted-hover: var(--mist-strong);
+  --placeholder: var(--stone);
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --slate: #4A504D;
+  --soft-ground: #F3F2EE;
+  --stone: #8A908C;
+  --subtle: var(--soft-ground);
+  --tint-c: 0.4;
+  --tint-l: 0.92;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .adu, .dark .adu {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --aqua-border: #1F5654;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --body: var(--slate);
+  --border: var(--line);
+  --brand: var(--aqua);
+  --brand-border: var(--aqua-border);
+  --brand-foreground: #000000;
+  --canvas: #0B0C0B;
+  --card: var(--white);
+  --fill-on-subtle: var(--muted);
+  --foreground: #F3F2EE;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --mist-strong: #343735;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --muted-hover: var(--mist-strong);
+  --placeholder: var(--stone);
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --slate: #C9CDCA;
+  --soft-ground: #0C0D0C;
+  --stone: #7C827E;
+  --subtle: var(--soft-ground);
+  --tint-c: 0.45;
+  --tint-l: 0.32;
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .adu {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --aqua-border: #1F5654;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --body: var(--slate);
+    --border: var(--line);
+    --brand: var(--aqua);
+    --brand-border: var(--aqua-border);
+    --brand-foreground: #000000;
+    --canvas: #0B0C0B;
+    --card: var(--white);
+    --fill-on-subtle: var(--muted);
+    --foreground: #F3F2EE;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --mist-strong: #343735;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --muted-hover: var(--mist-strong);
+    --placeholder: var(--stone);
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --slate: #C9CDCA;
+    --soft-ground: #0C0D0C;
+    --stone: #7C827E;
+    --subtle: var(--soft-ground);
+    --tint-c: 0.45;
+    --tint-l: 0.32;
+    --white: #161817;
+  }
+}
+
+/* Address Unpack — paste a whole address into one field and each piece flies into its own field.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.adu {
+  --adu-bg: var(--card);
+  --adu-fg: var(--foreground);
+  --adu-muted: var(--muted-foreground);
+  --adu-sunken: var(--subtle);
+  --adu-fill: var(--muted);
+  --adu-accent: var(--primary);
+  --adu-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--adu-bg);
+  color: var(--adu-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.adu p, .adu ul, .adu ol { margin: 0; }
+.adu ul, .adu ol { padding: 0; list-style: none; }
+.adu { position: relative; }
+.adu-title b { display: block; font-weight: 600; text-box: trim-start cap alphabetic; }
+.adu-title small { display: block; margin-top: 2px; color: var(--adu-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.adu-paste { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: var(--radius-lg); background: var(--adu-sunken); }
+.adu-lab, .adu-f span { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.adu-row { display: flex; gap: 8px; }
+.adu input { width: 100%; min-width: 0; height: 44px; box-sizing: border-box; margin: 0; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius-md); background: var(--adu-bg); color: var(--adu-fg); font: inherit; font-size: var(--text-ui); }
+.adu input::placeholder { color: var(--placeholder); }
+.adu input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+.adu-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--adu-fill); color: var(--adu-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.adu-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.adu-btn:hover:not(:disabled) { background: var(--muted-hover); }
+.adu-btn.is-primary, .adu-btn.is-primary:hover:not(:disabled) { background: var(--adu-accent); color: var(--adu-on-accent); }
+.adu-btn:disabled { cursor: default; background: var(--adu-fill); color: var(--adu-muted); }
+.adu-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.adu-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.adu-paste .adu-btn { background: var(--fill-on-subtle); }
+.adu-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.adu-f { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.adu-f[data-k="street"] { grid-column: 1 / -1; }
+.adu-f.is-filled input { animation: adu-land var(--spring-pop-duration) var(--spring-pop); border-color: var(--brand-border); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); }
+@keyframes adu-land { 30% { transform: scale(1.03); } }
+.adu-f.is-missing input { border-style: dashed; }
+/* A piece of the address in flight from the paste field to its own field */
+.adu-ghost { position: absolute; left: 0; top: 0; z-index: 2; display: inline-flex; align-items: center; height: 26px; padding: 0 8px; border-radius: var(--radius-full); background: var(--brand); color: var(--brand-foreground); font-size: var(--text-small); font-weight: 600; white-space: nowrap; pointer-events: none; transition: transform var(--spring-panel-duration) var(--spring-panel), opacity var(--duration-fast) var(--duration-slower); }
+.adu-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); text-box: trim-end cap alphabetic; }
+.adu-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .adu-ghost { display: none; }
+  .adu-f.is-filled input { animation: none; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.adu :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.adu [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="adu" data-mi="address-unpack" data-example="1100 Congress Ave, Apt 4B, Austin, TX 78701">
+  <p class="adu-title"><b>Shipping address</b><small>Paste the whole thing in one go. It sorts itself out.</small></p>
+  <div class="adu-paste">
+    <span class="adu-lab" aria-hidden="true">Paste an address</span>
+    <div class="adu-row">
+      <input class="adu-all" type="text" aria-label="Paste an address" autocomplete="off" spellcheck="false" placeholder="Street, apt, city, state, ZIP">
+      <button type="button" class="adu-btn adu-try"><span>Paste Example</span></button>
+    </div>
+  </div>
+  <div class="adu-fields">
+    <label class="adu-f" data-k="street"><span>Street</span><input type="text" autocomplete="off"></label>
+    <label class="adu-f" data-k="apt"><span>Apt or suite</span><input type="text" autocomplete="off"></label>
+    <label class="adu-f" data-k="city"><span>City</span><input type="text" autocomplete="off"></label>
+    <label class="adu-f adu-short" data-k="state"><span>State</span><input type="text" autocomplete="off"></label>
+    <label class="adu-f adu-short" data-k="zip"><span>ZIP code</span><input type="text" autocomplete="off" inputmode="numeric"></label>
+  </div>
+  <p class="adu-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Address Unpack — vanilla JS. Auto-initializes every [data-mi="address-unpack"].
+   On paste (or Paste Example), the text is split at commas and the state and ZIP are found at the end. Each piece
+   flies from where it sits in the paste field to its own field, then lands. Call window.initAddressUnpack(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var STATES = 'AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(' ');
+
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
+  // Split "street, [apt,] city, ST 12345" into its parts; anything missing stays empty
+  function parse(s) {
+    var out = { street: '', apt: '', city: '', state: '', zip: '' }, parts = s.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+    if (!parts.length) return out;
+    var last = parts[parts.length - 1], m = /^([A-Za-z]{2})\s+(\d{5}(?:-\d{4})?)$/.exec(last);
+    if (m && STATES.indexOf(m[1].toUpperCase()) >= 0) { out.state = m[1].toUpperCase(); out.zip = m[2]; parts.pop(); }
+    else if (/^\d{5}$/.test(last)) { out.zip = last; parts.pop(); }
+    out.street = parts.shift() || '';
+    if (parts.length && /^(apt|suite|ste|unit|#|floor|fl)\b/i.test(parts[0])) out.apt = parts.shift();
+    out.city = parts.join(', ');
+    return out;
+  }
+
+  function initAddressUnpack(root) {
+    if (!root || root.__miAdu) return;
+    root.__miAdu = true;
+    evenLines(root);
+    var all = root.querySelector('.adu-all'), tryBtn = root.querySelector('.adu-try'), status = root.querySelector('.adu-status');
+    var fields = {}; root.querySelectorAll('.adu-f').forEach(function (f) { fields[f.getAttribute('data-k')] = f; });
+    var example = root.getAttribute('data-example') || '';
+    var cv = document.createElement('canvas').getContext('2d');
+
+    // Where a piece of text starts inside the paste field, so its copy can take off from there
+    function offsetOf(text, i) {
+      var cs = getComputedStyle(all); cv.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      return parseFloat(cs.paddingLeft) + cv.measureText(text.slice(0, i)).width - all.scrollLeft;
+    }
+
+    function unpack(text) {
+      var p = parse(text), rb = root.getBoundingClientRect(), ib = all.getBoundingClientRect(), n = 0, missing = [];
+      Object.keys(fields).forEach(function (k, idx) {
+        var f = fields[k], input = f.querySelector('input'), v = p[k];
+        f.classList.remove('is-filled', 'is-missing'); input.value = '';
+        if (!v) { if (k !== 'apt') { f.classList.add('is-missing'); missing.push(f.querySelector('span').textContent.toLowerCase()); } return; }
+        n++;
+        var land = function () { input.value = v; f.classList.add('is-filled'); };
+        if (reduce.matches) return land();
+        var g = document.createElement('span'), at = text.indexOf(v), tb = input.getBoundingClientRect();
+        g.className = 'adu-ghost'; g.textContent = v; g.setAttribute('aria-hidden', 'true');
+        root.appendChild(g);
+        var sx = ib.left - rb.left + Math.max(0, Math.min(ib.width - 40, offsetOf(text, Math.max(0, at)))), sy = ib.top - rb.top + 9;
+        g.style.transform = 'translate(' + sx + 'px, ' + sy + 'px)';
+        void g.offsetWidth;
+        setTimeout(function () {
+          g.style.transform = 'translate(' + (tb.left - rb.left + 6) + 'px, ' + (tb.top - rb.top + 9) + 'px)';
+          g.style.opacity = '0';
+        }, idx * 70);
+        setTimeout(function () { land(); g.remove(); }, idx * 70 + 520);
+      });
+      if (!text.trim()) status.textContent = '';
+      else if (!p.zip) status.textContent = 'Couldn’t find a ZIP code. The rest is sorted; add it by hand.';
+      else status.textContent = 'Split into ' + n + (n === 1 ? ' field' : ' fields') + '.' + (missing.length ? ' Still needed: ' + missing.join(', ') + '.' : p.apt ? ' Give the apartment a quick look.' : ''); // the apartment is the likeliest wrong guess; with none found, nothing to look at
+    }
+
+    all.addEventListener('paste', function () { setTimeout(function () { unpack(all.value); }, 0); });
+    all.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); unpack(all.value); } });
+    tryBtn.addEventListener('click', function () { all.value = example; unpack(example); });
+  }
+
+  window.initAddressUnpack = initAddressUnpack;
+  function boot() { document.querySelectorAll('[data-mi="address-unpack"]').forEach(initAddressUnpack); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

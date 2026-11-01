@@ -99,8 +99,15 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 .scope { display: grid; width: 100%; box-sizing: border-box; }
 .scope button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 .search { position: relative; flex: 1; min-width: 0; }
-.search svg { position: absolute; top: 50%; left: 10px; width: 16px; height: 16px; color: var(--muted-foreground); transform: translateY(-50%); pointer-events: none; }
-.search .oc-input { width: 100%; box-sizing: border-box; padding-left: 34px; }
+.search > svg { position: absolute; top: 50%; left: 10px; width: 16px; height: 16px; color: var(--muted-foreground); transform: translateY(-50%); pointer-events: none; }
+.search .oc-input { width: 100%; box-sizing: border-box; padding-left: 34px; padding-right: 36px; }
+/* The browser's own clear cross (blue in Safari and Chrome) is hidden; a Lucide x clears the field and shows only while there is text */
+.search .oc-input::-webkit-search-cancel-button { display: none; -webkit-appearance: none; appearance: none; }
+.search-clear { position: absolute; top: 50%; right: 4px; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--muted-foreground); transform: translateY(-50%); cursor: pointer; transition: color var(--duration-fast), background-color var(--duration-fast); }
+.search-clear svg { width: 16px; height: 16px; }
+.search-clear:hover { color: var(--foreground); background: var(--accent); }
+.search-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+.search .oc-input:placeholder-shown ~ .search-clear { display: none; }
 .filter-btn { position: relative; flex: none; }
 .filter-btn svg { width: 16px; height: 16px; }
 .filter-count { position: absolute; top: -6px; right: -6px; display: grid; place-items: center; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); font: 600 11px/1 var(--font-sans); }

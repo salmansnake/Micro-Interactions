@@ -71,6 +71,9 @@ def check(reg):
     # Every type has a badge style (RULES 4): typeBadges maps it to a class in tools/site/site.css
     for ty in reg['types']:
         if ty not in reg.get('typeBadges', {}): errors.append(f'type "{ty}" has no entry in "typeBadges" in interactions.json')
+    # A search field's clear button is the Lucide x, never the browser's own blue cross (RULES 10c)
+    if 'type="search"' in rd('tools', 'build.py') and '::-webkit-search-cancel-button' not in rd('tools', 'site', 'site.css'):
+        errors.append('the site search field shows the browser\'s own clear cross; hide ::-webkit-search-cancel-button in tools/site/site.css and use a Lucide x button (RULES 10c)')
     nums = [it['number'] for it in items]
     for i, n in enumerate(nums, 1):
         if n != f'{i:03d}': errors.append(f'numbers must run 001, 002, … in order with no gaps; position {i} has {n}')
@@ -145,6 +148,8 @@ def check(reg):
         # Icons are Lucide SVG (RULES 10c): a lone text glyph like a tick or a cross sits where the font puts it, not in the center.
         if re.search(r"textContent\s*=\s*'[\u2713\u2714\u2715\u2716\u2717\u00d7]'\s*[;,)]|>\s*[\u2713\u2714\u2715\u2716\u2717\u00d7]\s*<", h + j):
             errors.append(f'{s}: a tick or cross is drawn as a text character; use the Lucide check or x icon as inline SVG (RULES 10c)')
+        if 'type="search"' in h + j and '::-webkit-search-cancel-button' not in c:
+            errors.append(f'{s}: a search field shows the browser\'s own clear cross; hide ::-webkit-search-cancel-button and use the Lucide x (RULES 10c)')
         # Locale (RULES 12b): dates, times and numbers are always US format, whatever the visitor's browser is set to.
         if re.search(r"toLocale(?:Date|Time)?String\(\s*(?:\)|\[\]|undefined)|Intl\.\w+\(\s*(?:\)|\[\]|undefined)", j):
             errors.append(f'{s}: dates or numbers are formatted in the visitor\'s locale; pass \'en-US\' (RULES 12b)')
@@ -471,7 +476,7 @@ def build_site(reg, site):
         <button type="button" role="radio" aria-checked="false" data-scope="new" tabindex="-1">New</button>
       </div>
       <div class="search-row">
-        <label class="search"><span class="sr-only">Search interactions</span>{ICON['search']}<input class="oc-input" id="mi-search" type="search" placeholder="Search" autocomplete="off" spellcheck="false"></label>
+        <label class="search"><span class="sr-only">Search interactions</span>{ICON['search']}<input class="oc-input" id="mi-search" type="search" placeholder="Search" autocomplete="off" spellcheck="false"><button type="button" class="search-clear" aria-label="Clear search">{ICON['x']}</button></label>
         <button type="button" class="oc-btn oc-btn--outline oc-btn--icon filter-btn" aria-haspopup="true" aria-expanded="false" aria-label="Filters">{ICON['filter']}<span class="filter-count" hidden>0</span></button>
       </div>
       <div class="chips"></div>

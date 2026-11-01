@@ -1,0 +1,69 @@
+/* 404 Search Party — on a missing page, cursors with flashlights sweep the dark until they find what went wrong.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.spy {
+  --spy-bg: var(--card);
+  --spy-fg: var(--foreground);
+  --spy-muted: var(--muted-foreground);
+  --spy-sunken: var(--subtle);
+  --spy-fill: var(--muted);
+  --spy-accent: var(--primary);
+  --spy-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--spy-bg);
+  color: var(--spy-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.spy p, .spy ul, .spy ol { margin: 0; }
+.spy ul, .spy ol { padding: 0; list-style: none; }
+.spy-title b { display: block; font-weight: 600; text-box: trim-start cap alphabetic; }
+.spy-title small { display: block; margin-top: 2px; color: var(--spy-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* The dark room is a scene: its colors stay the same in light and dark */
+.spy-dark { --x0: -99px; --y0: -99px; --x1: -99px; --y1: -99px; --x2: -99px; --y2: -99px; position: relative; height: 180px; overflow: hidden; border-radius: var(--radius-lg); background: color-mix(in oklab, var(--black) 88%, var(--sage)); cursor: none; touch-action: none; }
+.spy-room { position: absolute; inset: 0; background: color-mix(in oklab, var(--black) 70%, var(--sage)); }
+.spy-junk, .spy-find { position: absolute; font: 600 var(--text-small)/1 var(--font-mono); white-space: nowrap; color: color-mix(in oklab, var(--on-color) 60%, var(--sage)); }
+.spy-find { left: var(--spy-fx, 46%); top: var(--spy-fy, 40%); color: var(--aqua); font-size: var(--text-ui); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.spy.is-found .spy-find { transform: scale(1.25); }
+/* The night: a dark layer with a hole for every flashlight */
+.spy-night { position: absolute; inset: 0; background: color-mix(in oklab, var(--black) 92%, var(--sage));
+  -webkit-mask: radial-gradient(circle 44px at var(--x0) var(--y0), transparent 60%, black), radial-gradient(circle 44px at var(--x1) var(--y1), transparent 60%, black), radial-gradient(circle 44px at var(--x2) var(--y2), transparent 60%, black), radial-gradient(circle 52px at var(--xp, -99px) var(--yp, -99px), transparent 60%, black);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+  mask: radial-gradient(circle 44px at var(--x0) var(--y0), transparent 60%, black), radial-gradient(circle 44px at var(--x1) var(--y1), transparent 60%, black), radial-gradient(circle 44px at var(--x2) var(--y2), transparent 60%, black), radial-gradient(circle 52px at var(--xp, -99px) var(--yp, -99px), transparent 60%, black);
+  mask-composite: intersect; transition: opacity var(--duration-slower); }
+.spy.is-found .spy-night { opacity: 0.55; }
+.spy-cursor { position: absolute; left: 0; top: 0; width: 20px; height: 20px; color: var(--on-color); filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--black) 60%, transparent)); will-change: transform; }
+.spy-cursor svg { display: block; width: 20px; height: 20px; }
+.spy-found { display: flex; flex-direction: column; gap: 12px; animation: spy-in var(--spring-panel-duration) var(--spring-panel); }
+@keyframes spy-in { from { opacity: 0; transform: translateY(-6px); } }
+.spy-msg { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.spy-msg code { padding: 1px 4px; border-radius: var(--radius-xs); background: var(--spy-fill); font: 500 var(--text-caption)/1 var(--font-mono); }
+.spy-links { display: flex; gap: 8px; }
+.spy-links .spy-btn { flex: 1; text-decoration: none; box-sizing: border-box; }
+.spy-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--spy-fill); color: var(--spy-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.spy-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.spy-btn:hover:not(:disabled) { background: var(--muted-hover); }
+.spy-btn.is-primary, .spy-btn.is-primary:hover:not(:disabled) { background: var(--spy-accent); color: var(--spy-on-accent); }
+.spy-btn:disabled { cursor: default; background: var(--spy-fill); color: var(--spy-muted); }
+.spy-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.spy-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.spy-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); text-box: trim-end cap alphabetic; }
+.spy-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .spy-night { opacity: 0.55; }
+  .spy-found { animation: none; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.spy :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.spy [hidden] { display: none !important; }

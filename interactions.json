@@ -1014,7 +1014,7 @@
       "name": "Could've Been an Email",
       "type": "Secretly Useful",
       "topic": "Meetings and Calendar",
-      "new": true,
+      "new": false,
       "summary": "A short meeting with no agenda quietly folds itself into an envelope, and works out how many hours sending it would give back.",
       "tryit": "Wait a second. Then try {It Really Needs a Meeting}, or type an agenda.",
       "specs": [
@@ -1042,7 +1042,7 @@
       "name": "Anxious Typing Dots",
       "type": "Pure Joke",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "The typing indicator gets more nervous the longer they type. It grows, speeds up, shakes, deletes everything, and sends \"yes\".",
       "tryit": "Watch it play, then press {Replay}.",
       "specs": [
@@ -1070,7 +1070,7 @@
       "name": "Rage Click Detector",
       "type": "Secretly Useful",
       "topic": "Loading and Status",
-      "new": true,
+      "new": false,
       "summary": "Click a busy button again and again and it notices, tells you how long is really left, promises only one job started, and hands you a stress ball.",
       "tryit": "Press {Export PDF}, then click it five times fast. Squeeze the ball.",
       "specs": [
@@ -1098,7 +1098,7 @@
       "name": "AI Flip-Flop",
       "type": "Pure Joke",
       "topic": "AI",
-      "new": true,
+      "new": false,
       "summary": "Ask the assistant \"Are you sure?\" and it changes its answer, while its confidence badge shrinks, turns red and starts to sweat.",
       "tryit": "Press {Are You Sure?} until it pulls itself together.",
       "specs": [
@@ -1126,7 +1126,7 @@
       "name": "Terms Speedrun",
       "type": "Secretly Useful",
       "topic": "Forms and Input",
-      "new": true,
+      "new": false,
       "summary": "Scroll through the terms at an impossible speed and the checkbox admits what really happened, then gives you the short version.",
       "tryit": "Flick the terms to the bottom as fast as you can.",
       "specs": [
@@ -1154,7 +1154,7 @@
       "name": "LGTM (Didn't Look)",
       "type": "Pure Joke",
       "topic": "Developer Tools",
-      "new": true,
+      "new": false,
       "summary": "Approve a 2,000-line pull request seconds after opening it, and the approval stamp tells everyone what really happened.",
       "tryit": "Press {Approve} right away. Then {Undo}, scroll the whole diff and approve again.",
       "specs": [
@@ -1182,7 +1182,7 @@
       "name": "Friday Deploy Hard Hat",
       "type": "Secretly Useful",
       "topic": "Developer Tools",
-      "new": true,
+      "new": false,
       "summary": "After 4 PM on a Friday, {Deploy} puts on a hard hat and caution tape, makes you hold it for two seconds, and offers Monday instead.",
       "tryit": "Hold {Deploy} for two seconds, or let go early. Try {Tue 11 AM} for comparison.",
       "specs": [
@@ -1210,7 +1210,7 @@
       "name": "Commit Mood Ring",
       "type": "Pure Joke",
       "topic": "Developer Tools",
-      "new": true,
+      "new": false,
       "summary": "Commit messages are read as feelings. From “fix” to “pls work”, the mood ring slides from calm aqua to quiet acceptance.",
       "tryit": "Tap {fix}, {fix again}, {final fix} and {pls work} in order.",
       "specs": [
@@ -1238,7 +1238,7 @@
       "name": "Rubber Duck Gate",
       "type": "Secretly Useful",
       "topic": "Developer Tools",
-      "new": true,
+      "new": false,
       "summary": "Before you file a bug, a rubber duck asks you to explain it first. It nods along, and half the time you solve it yourself.",
       "tryit": "Press {File Bug}, then explain the problem in two sentences.",
       "specs": [
@@ -1266,7 +1266,7 @@
       "name": "final_FINAL_v3",
       "type": "Pure Joke",
       "topic": "Files and Data",
-      "new": true,
+      "new": false,
       "summary": "Every save renames the file one step further: final, final_v2, FINAL, FINAL_final_v3 (use this one)… and back to where it started.",
       "tryit": "Press {Save} over and over, or ⌘S with focus inside.",
       "specs": [
@@ -1294,7 +1294,7 @@
       "name": "Tone Thermometer",
       "type": "Secretly Useful",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "Passive-aggressive phrases drop the temperature of your message until it frosts over. One button warms it up with friendlier words.",
       "tryit": "Press {As previously mentioned} and watch the frost spread, then press {Warm It Up}.",
       "specs": [
@@ -1322,7 +1322,7 @@
       "name": "Quick Question Stopwatch",
       "type": "Pure Joke",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "Start a message with “quick question” and a stopwatch starts too, following the thread until it admits this is a meeting now.",
       "tryit": "Press {Send} and watch the thread unfold.",
       "specs": [
@@ -1350,7 +1350,7 @@
       "name": "Circle Back Boomerang",
       "type": "Secretly Useful",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "“Let’s circle back next week” becomes a boomerang. Send it and it spins away, then flies back a week later as a reminder.",
       "tryit": "Press {Send}, then {Skip Ahead a Week}.",
       "specs": [
@@ -1378,7 +1378,7 @@
       "name": "Exclamation Budget",
       "type": "Pure Joke",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "You get three exclamation marks per message. Spend them, and any more quietly turn into periods while the field shrugs.",
       "tryit": "Tap {Add “!”}, then {Add “!!!”}. Then buy {3 More for $0.99}.",
       "specs": [
@@ -1406,7 +1406,7 @@
       "name": "Attachment Shrug",
       "type": "Secretly Useful",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "Write “see the attached deck” with nothing attached and the {Send} button shrugs at you instead of sending.",
       "tryit": "Press {Send}. Then press {Attach File} and send again.",
       "specs": [
@@ -1434,7 +1434,7 @@
       "name": "Mute Mime",
       "type": "Secretly Useful",
       "topic": "Meetings and Calendar",
-      "new": true,
+      "new": false,
       "summary": "Talk while muted and your voice bounces off an invisible glass box around your tile, like a mime. Then it tells you you’re on mute.",
       "tryit": "Hold {Hold to Talk} for two seconds. Then press {Unmute} and hold again.",
       "specs": [
@@ -1462,7 +1462,7 @@
       "name": "Camera-Off Curtain",
       "type": "Pure Joke",
       "topic": "Meetings and Calendar",
-      "new": true,
+      "new": false,
       "summary": "Turning your camera off draws red velvet theater curtains across your tile. Turning it on opens the show with a spotlight.",
       "tryit": "Press {Turn Camera Off}, wait a second, then press {Turn Camera On}.",
       "specs": [
@@ -1490,7 +1490,7 @@
       "name": "Overtime Fuse",
       "type": "Secretly Useful",
       "topic": "Meetings and Calendar",
-      "new": true,
+      "new": false,
       "summary": "Once a meeting runs past its end time, the progress bar becomes a burning fuse, with a running count of person-minutes.",
       "tryit": "Drag {Move Time Forward} past 30 minutes.",
       "specs": [
@@ -1518,7 +1518,7 @@
       "name": "Line Clear",
       "type": "Secretly Useful",
       "topic": "Meetings and Calendar",
-      "new": true,
+      "new": false,
       "summary": "Accepted meetings drop into your day like falling blocks. Fill every gap and the day flashes like a cleared line, then offers to protect lunch.",
       "tryit": "Press {Accept} on all three invites, then {Protect 12:00 for Lunch}.",
       "specs": [
@@ -1546,7 +1546,7 @@
       "name": "Over-the-Shoulder Cursor",
       "type": "Pure Joke",
       "topic": "Teams and Sharing",
-      "new": true,
+      "new": false,
       "summary": "A teammate’s cursor lingering on your paragraph puts on tiny reading glasses, then leans in. Start typing and it darts away.",
       "tryit": "Wait for the glasses, then type in the first paragraph.",
       "specs": [
@@ -1574,7 +1574,7 @@
       "name": "Dusty Doc",
       "type": "Pure Joke",
       "topic": "Files and Data",
-      "new": true,
+      "new": false,
       "summary": "A document nobody has opened in years loads covered in dust, with a cobweb in the corner. Scrolling or swiping blows it all away.",
       "tryit": "Scroll the page up and down, or swipe across it fast.",
       "specs": [
@@ -1602,7 +1602,7 @@
       "name": "Autosave Appreciation",
       "type": "Secretly Useful",
       "topic": "Files and Data",
-      "new": true,
+      "new": false,
       "summary": "Press ⌘S in an app that already autosaves and it thanks you for the gesture, getting more philosophical the more you press.",
       "tryit": "Click into the notes and press ⌘S or Ctrl+S a few times.",
       "specs": [
@@ -1630,7 +1630,7 @@
       "name": "Unsubscribe Comes to You",
       "type": "Pure Joke",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "The opposite of the button that runs away. {Unsubscribe} slides toward your cursor, grows, and says {Yes, This One}. One click, done.",
       "tryit": "Move your mouse toward {Unsubscribe} and let it come to you.",
       "specs": [
@@ -1658,7 +1658,7 @@
       "name": "Dizzy Refresh",
       "type": "Secretly Useful",
       "topic": "Loading and Status",
-      "new": true,
+      "new": false,
       "summary": "Pull to refresh again and again and the spinner gets woozy, then dizzy with spinning eyes, then offers to just tell you when something arrives.",
       "tryit": "Pull the list down, or press {icon:Refresh} five times quickly.",
       "specs": [
@@ -1686,7 +1686,7 @@
       "name": "Aging Reminder",
       "type": "Secretly Useful",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "Every snooze makes the reminder visibly older: yellowed, curled, taped back up, coffee-stained. {Done} snaps it fresh again.",
       "tryit": "Press {Snooze 1 Hour} five or six times, then {Done}.",
       "specs": [
@@ -1714,7 +1714,7 @@
       "name": "Cancel, Eventually",
       "type": "Pure Joke",
       "topic": "Billing and Plans",
-      "new": true,
+      "new": false,
       "summary": "Reach for {Cancel Subscription} and it swaps places with {Keep My Plan}, so you land on Keep instead. Five times. Then it gets tired, walks back, and lets you leave.",
       "tryit": "Move your mouse onto {Cancel Subscription}. Keep chasing it.",
       "specs": [
@@ -1733,6 +1733,146 @@
         {
           "label": "Pressed",
           "value": "Soft red turns solid red"
+        }
+      ]
+    },
+    {
+      "number": "062",
+      "slug": "address-unpack",
+      "name": "Address Unpack",
+      "type": "Useful",
+      "topic": "Forms and Input",
+      "new": true,
+      "summary": "Paste a whole address into one field and it breaks apart on its own, each piece flying into its own field: street, apartment, city, state and ZIP.",
+      "tryit": "Press {Paste Example}, or paste your own address and press Enter.",
+      "specs": [
+        {
+          "label": "Split",
+          "value": "At commas, state and ZIP last"
+        },
+        {
+          "label": "Flight",
+          "value": "From the paste to its field"
+        },
+        {
+          "label": "Landing",
+          "value": "Aqua tint and a pop"
+        },
+        {
+          "label": "Missing",
+          "value": "Dashed border"
+        }
+      ]
+    },
+    {
+      "number": "063",
+      "slug": "timezone-sundial",
+      "name": "Time Zone Sundial",
+      "type": "Useful",
+      "topic": "Meetings and Calendar",
+      "new": true,
+      "summary": "Drag a meeting time and each attendee's sun or moon rises or sets where they live. Anyone who would be asleep is marked.",
+      "tryit": "Drag the time slider, then press {Find a Kind Time}.",
+      "specs": [
+        {
+          "label": "Sky",
+          "value": "Day, dusk and night"
+        },
+        {
+          "label": "Asleep",
+          "value": "Before 7 AM, from 11 PM"
+        },
+        {
+          "label": "Band",
+          "value": "Green where all are awake"
+        },
+        {
+          "label": "Pick",
+          "value": "Kindest slot, nearest first"
+        }
+      ]
+    },
+    {
+      "number": "064",
+      "slug": "reply-all-megaphone",
+      "name": "Reply-All Megaphone",
+      "type": "Secretly Useful",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "Reply All to 40 people and the button turns into a blaring megaphone, then shows the whole crowd and asks whether the one person who asked would do.",
+      "tryit": "Press {Reply All}, then {Just Alex}.",
+      "specs": [
+        {
+          "label": "Megaphone",
+          "value": "Amber, blares twice"
+        },
+        {
+          "label": "Crowd",
+          "value": "One dot per person"
+        },
+        {
+          "label": "Safe pick",
+          "value": "Just the sender, first"
+        },
+        {
+          "label": "Small groups",
+          "value": "3 or fewer just send"
+        }
+      ]
+    },
+    {
+      "number": "065",
+      "slug": "caps-lock-hats",
+      "name": "Caps Lock Hats",
+      "type": "Secretly Useful",
+      "topic": "Forms and Input",
+      "new": true,
+      "summary": "Type a password with Caps Lock on and every dot in the field puts on a tiny party hat. Impossible to miss, and it never nags.",
+      "tryit": "Turn on Caps Lock and type in the password, or press {Caps Lock}.",
+      "specs": [
+        {
+          "label": "Hats",
+          "value": "One per dot, 35ms apart"
+        },
+        {
+          "label": "Detect",
+          "value": "getModifierState"
+        },
+        {
+          "label": "Touch",
+          "value": "A Caps Lock key"
+        },
+        {
+          "label": "Field",
+          "value": "Amber border while on"
+        }
+      ]
+    },
+    {
+      "number": "066",
+      "slug": "search-party",
+      "name": "404 Search Party",
+      "type": "Pure Joke",
+      "topic": "Search and Navigation",
+      "new": true,
+      "summary": "On a missing page, cursors with flashlights sweep a dark room looking for it. One finds the clue, the typo in the address, and suggests where you meant to go.",
+      "tryit": "Move your pointer over the dark room, and wait for the search party.",
+      "specs": [
+        {
+          "label": "Searchers",
+          "value": "Three, with flashlights"
+        },
+        {
+          "label": "Yours",
+          "value": "Your pointer lights too"
+        },
+        {
+          "label": "Clue",
+          "value": "Found after 5 seconds"
+        },
+        {
+          "label": "Fix",
+          "value": "The address you meant"
         }
       ]
     }

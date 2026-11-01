@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caps Lock Hats</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
+@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .clh so they never affect the rest of your page. */
+.clh {
+  --duration-fast: 140ms;
+  --duration-reduced: 120ms;
+  --ease-out: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-small: 18px;
+  --press-scale: 0.97;
+  --radius-md: 8px;
+  --radius-xl: 16px;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --text-body: 15px;
+  --text-small: 13px;
+  --text-ui: 14px;
+  --amber-7: #e9c162;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #646A66;
+  --black: #000000;
+  --body: var(--slate);
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: var(--black);
+  --input: var(--line-strong);
+  --line: #DCDED9;
+  --line-strong: #C6C9C3;
+  --mist: #ECEBE6;
+  --mist-strong: #E3E2DC;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --muted-hover: var(--mist-strong);
+  --olive: #AA9856;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --slate: #4A504D;
+  --soft-ground: #F3F2EE;
+  --subtle: var(--soft-ground);
+  --warning: var(--amber-9);
+  --warning-border: var(--amber-7);
+  --warning-foreground: #000000;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .clh, .dark .clh {
+  --amber-7: #824e00;
+  --amber-9: #ffc53d;
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A3A8A4;
+  --black: #000000;
+  --body: var(--slate);
+  --border: var(--line);
+  --card: var(--white);
+  --foreground: #F3F2EE;
+  --input: var(--line-strong);
+  --line: #313432;
+  --line-strong: #434744;
+  --mist: #2B2E2D;
+  --mist-strong: #343735;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --muted-hover: var(--mist-strong);
+  --olive: #AA9856;
+  --orange: #FE8C5F;
+  --pink: #FFC7F6;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --slate: #C9CDCA;
+  --soft-ground: #0C0D0C;
+  --subtle: var(--soft-ground);
+  --warning: var(--amber-9);
+  --warning-border: var(--amber-7);
+  --warning-foreground: #000000;
+  --white: #161817;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .clh {
+    --amber-7: #824e00;
+    --amber-9: #ffc53d;
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A3A8A4;
+    --black: #000000;
+    --body: var(--slate);
+    --border: var(--line);
+    --card: var(--white);
+    --foreground: #F3F2EE;
+    --input: var(--line-strong);
+    --line: #313432;
+    --line-strong: #434744;
+    --mist: #2B2E2D;
+    --mist-strong: #343735;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --muted-hover: var(--mist-strong);
+    --olive: #AA9856;
+    --orange: #FE8C5F;
+    --pink: #FFC7F6;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --slate: #C9CDCA;
+    --soft-ground: #0C0D0C;
+    --subtle: var(--soft-ground);
+    --warning: var(--amber-9);
+    --warning-border: var(--amber-7);
+    --warning-foreground: #000000;
+    --white: #161817;
+  }
+}
+
+/* Caps Lock Hats — type a password with Caps Lock on and every dot in the field puts on a tiny party hat.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.clh {
+  --clh-bg: var(--card);
+  --clh-fg: var(--foreground);
+  --clh-muted: var(--muted-foreground);
+  --clh-sunken: var(--subtle);
+  --clh-fill: var(--muted);
+  --clh-accent: var(--primary);
+  --clh-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--clh-bg);
+  color: var(--clh-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.clh p, .clh ul, .clh ol { margin: 0; }
+.clh ul, .clh ol { padding: 0; list-style: none; }
+.clh { gap: 14px; }
+.clh-title b { display: block; font-weight: 600; text-box: trim-start cap alphabetic; }
+.clh-title small { display: block; margin-top: 2px; color: var(--clh-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.clh-f { display: flex; flex-direction: column; gap: 6px; }
+.clh-lab { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.clh input { width: 100%; height: 44px; box-sizing: border-box; margin: 0; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius-md); background: var(--clh-bg); color: var(--clh-fg); font: inherit; font-size: var(--text-ui); }
+.clh input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* The password's own characters are invisible; drawn dots stand in for them so each can wear a hat */
+.clh-box { position: relative; display: block; }
+.clh .clh-pass { color: transparent; caret-color: transparent; letter-spacing: 4px; }
+.clh-dots { position: absolute; left: 13px; top: 0; bottom: 0; display: flex; align-items: center; gap: 6px; pointer-events: none; }
+.clh-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--clh-fg); }
+.clh-dot:last-child::after { content: ""; position: absolute; left: 13px; top: -6px; width: 1.5px; height: 20px; background: var(--clh-fg); opacity: 0; }
+.clh-pass:focus + .clh-dots .clh-dot:last-child::after { animation: clh-caret 1s steps(1) infinite; }
+@keyframes clh-caret { 50% { opacity: 1; } }
+/* The hat: a party hat, not a pencil tip. A tall striped cone, narrower than the dot so the round head shows under it,
+   tilted, with a tuft of tinsel bursting from its tip in another party color. The cone is its own layer: clipping the
+   whole hat to the triangle cut the top down to a dark point, and a plain cone as wide as the dot read as a sharpened pencil */
+.clh-hat { position: absolute; left: 50%; bottom: 6px; width: 7px; height: 12px; margin-left: -3.5px; transform: translateY(-14px) rotate(var(--clh-r, 0deg)) scale(0); transform-origin: 50% 100%; transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.clh-hat::after { content: ""; position: absolute; inset: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: repeating-linear-gradient(-55deg, var(--clh-k, var(--pink)) 0 2.5px, oklch(from var(--clh-k, var(--pink)) 0.97 calc(c * 0.3) h) 2.5px 4px); }
+/* The tinsel: light strands that rise from the tip and arc over, falling to either side like a fountain, because
+   tinsel is too light to stand up straight. Drawn as a mask and colored with a party color */
+.clh-hat::before { content: ""; position: absolute; z-index: 1; left: 50%; top: -7.9px; width: 10px; height: 8.33px; margin-left: -5px; background: var(--clh-p, var(--orange)); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round'%3E%3Cpath d='M6 9.5C5.4 5.5 2 4.5 1 8.8M6 9.5C5.7 6.2 3.8 5.2 3.2 8M6 9.5C6 6 6.4 4.2 7.4 4.6M6 9.5C6.3 6.2 8.2 5.2 8.8 8M6 9.5C6.6 5.5 10 4.5 11 8.8'/%3E%3C/svg%3E") center / 10px 8.33px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round'%3E%3Cpath d='M6 9.5C5.4 5.5 2 4.5 1 8.8M6 9.5C5.7 6.2 3.8 5.2 3.2 8M6 9.5C6 6 6.4 4.2 7.4 4.6M6 9.5C6.3 6.2 8.2 5.2 8.8 8M6 9.5C6.6 5.5 10 4.5 11 8.8'/%3E%3C/svg%3E") center / 10px 8.33px no-repeat; }
+.clh.is-caps .clh-hat { transform: translateY(0) rotate(var(--clh-r, 0deg)) scale(1); }
+.clh.is-caps .clh-box input { border-color: var(--warning-border); }
+.clh-foot { display: flex; align-items: center; gap: 8px; }
+.clh-key { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 12px; border: 0; border-radius: var(--radius-md); background: var(--clh-fill); color: var(--clh-fg); font: inherit; font-size: var(--text-small); font-weight: 600; white-space: nowrap; cursor: pointer; transition: background-color var(--duration-fast), transform var(--spring-press-duration) var(--spring-press); }
+.clh-key svg { width: 16px; height: 16px; }
+.clh-key[aria-pressed="true"] { background: var(--warning); color: var(--warning-foreground); }
+.clh-key:active { transform: scale(var(--press-scale)); }
+.clh-key:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.clh-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--clh-fill); color: var(--clh-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.clh-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.clh-btn:hover:not(:disabled) { background: var(--muted-hover); }
+.clh-btn.is-primary, .clh-btn.is-primary:hover:not(:disabled) { background: var(--clh-accent); color: var(--clh-on-accent); }
+.clh-btn:disabled { cursor: default; background: var(--clh-fill); color: var(--clh-muted); }
+.clh-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.clh-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.clh-foot .clh-btn { margin-left: auto; }
+.clh-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); text-box: trim-end cap alphabetic; }
+.clh-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .clh-hat { transition-duration: var(--duration-reduced); transition-timing-function: var(--ease-out); }
+  .clh-pass:focus + .clh-dots .clh-dot:last-child::after { animation: none; opacity: 1; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.clh :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.clh [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="clh" data-mi="caps-lock-hats">
+  <p class="clh-title"><b>Sign in to Atlas</b><small>Try typing with Caps Lock on.</small></p>
+  <label class="clh-f"><span class="clh-lab">Email</span><input class="clh-email" type="email" value="mira@atlas.io" autocomplete="off"></label>
+  <label class="clh-f">
+    <span class="clh-lab">Password</span>
+    <span class="clh-box">
+      <input class="clh-pass" type="password" value="lunchtime" autocomplete="off" spellcheck="false">
+      <span class="clh-dots" aria-hidden="true"></span>
+    </span>
+  </label>
+  <div class="clh-foot">
+    <button type="button" class="clh-key" aria-pressed="false" aria-label="Caps Lock, for trying this on touch screens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-6a1 1 0 0 1 1-1h3.293a.707.707 0 0 0 .5-1.207l-7.086-7.086a1 1 0 0 0-1.414 0l-7.086 7.086a.707.707 0 0 0 .5 1.207H8a1 1 0 0 1 1 1z"/></svg><span>Caps Lock</span></button>
+    <button type="button" class="clh-btn is-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/></svg><span>Sign In</span></button>
+  </div>
+  <p class="clh-status" role="status" aria-live="polite"></p>
+</div>
+
+
+<script>
+/* Caps Lock Hats — vanilla JS. Auto-initializes every [data-mi="caps-lock-hats"].
+   The password field draws its own dots. When Caps Lock is on (read from the keyboard with getModifierState, or the
+   Caps Lock key button on touch screens), every dot gets a party hat, staggered, and the field says why.
+   Call window.initCapsLockHats(el) for elements added later. */
+(function () {
+  'use strict';
+  var COLORS = ['var(--pink)', 'var(--orange)', 'var(--aqua)', 'var(--sage)', 'var(--olive)'];
+  var TILTS = [-10, 6, -4, 12, -8, 3, -12, 8];
+
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
+  function initCapsLockHats(root) {
+    if (!root || root.__miClh) return;
+    root.__miClh = true;
+    evenLines(root);
+    var pass = root.querySelector('.clh-pass'), dots = root.querySelector('.clh-dots'), key = root.querySelector('.clh-key');
+    var sign = root.querySelector('.clh-btn'), status = root.querySelector('.clh-status');
+    var real = false, sim = false;
+
+    function render() {
+      var n = Math.min(pass.value.length, 24);
+      while (dots.children.length > n) dots.lastChild.remove();
+      while (dots.children.length < n) {
+        var i = dots.children.length, d = document.createElement('i'), h = document.createElement('i');
+        d.className = 'clh-dot'; h.className = 'clh-hat';
+        h.style.setProperty('--clh-k', COLORS[i % COLORS.length]);
+        h.style.setProperty('--clh-p', COLORS[(i + 2) % COLORS.length]); // the tinsel in another party color
+        h.style.setProperty('--clh-r', TILTS[i % TILTS.length] + 'deg');
+        h.style.transitionDelay = (i * 35) + 'ms';
+        d.appendChild(h); dots.appendChild(d);
+      }
+    }
+    function caps(on) {
+      var was = root.classList.contains('is-caps');
+      root.classList.toggle('is-caps', on);
+      key.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (on && !was) status.textContent = 'Caps Lock is on. Your dots are celebrating; your password won’t be.';
+      else if (!on && was) status.textContent = 'Caps Lock is off. Party’s over.';
+    }
+    function sync() { caps(real || sim); }
+
+    // The keyboard's Caps Lock is read from every key and pointer event, wherever focus is, so turning it off
+    // while Sign In or the page has focus still takes the hats off
+    function read(e) { if (e.getModifierState) { real = e.getModifierState('CapsLock'); sync(); } }
+    document.addEventListener('keydown', read);
+    document.addEventListener('keyup', read);
+    root.addEventListener('pointerdown', read);
+    pass.addEventListener('input', function () {
+      // The demo key stands in for Caps Lock on touch screens: letters typed while it's on come out capitalized
+      if (sim && !real) { var s = pass.selectionStart; pass.value = pass.value.toUpperCase(); pass.setSelectionRange(s, s); }
+      render();
+    });
+    key.addEventListener('click', function (e) {
+      read(e);
+      // The on-screen key can't switch off the keyboard's Caps Lock, so it says where to do it instead of seeming broken
+      if (real) { sim = false; sync(); status.textContent = 'Caps Lock is on at your keyboard. Press its Caps Lock key to turn it off.'; return; }
+      sim = !sim; sync(); pass.focus({ preventScroll: true });
+    });
+    sign.addEventListener('click', function () {
+      status.textContent = root.classList.contains('is-caps') ? 'Signing in would fail: Caps Lock is on. Turn it off and try again.' : 'Signed in. No hats were harmed.';
+    });
+    render();
+  }
+
+  window.initCapsLockHats = initCapsLockHats;
+  function boot() { document.querySelectorAll('[data-mi="caps-lock-hats"]').forEach(initCapsLockHats); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

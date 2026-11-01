@@ -1,0 +1,64 @@
+/* Address Unpack — paste a whole address into one field and each piece flies into its own field.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.adu {
+  --adu-bg: var(--card);
+  --adu-fg: var(--foreground);
+  --adu-muted: var(--muted-foreground);
+  --adu-sunken: var(--subtle);
+  --adu-fill: var(--muted);
+  --adu-accent: var(--primary);
+  --adu-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--adu-bg);
+  color: var(--adu-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.adu p, .adu ul, .adu ol { margin: 0; }
+.adu ul, .adu ol { padding: 0; list-style: none; }
+.adu { position: relative; }
+.adu-title b { display: block; font-weight: 600; text-box: trim-start cap alphabetic; }
+.adu-title small { display: block; margin-top: 2px; color: var(--adu-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.adu-paste { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: var(--radius-lg); background: var(--adu-sunken); }
+.adu-lab, .adu-f span { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.adu-row { display: flex; gap: 8px; }
+.adu input { width: 100%; min-width: 0; height: 44px; box-sizing: border-box; margin: 0; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius-md); background: var(--adu-bg); color: var(--adu-fg); font: inherit; font-size: var(--text-ui); }
+.adu input::placeholder { color: var(--placeholder); }
+.adu input:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+.adu-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--adu-fill); color: var(--adu-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.adu-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.adu-btn:hover:not(:disabled) { background: var(--muted-hover); }
+.adu-btn.is-primary, .adu-btn.is-primary:hover:not(:disabled) { background: var(--adu-accent); color: var(--adu-on-accent); }
+.adu-btn:disabled { cursor: default; background: var(--adu-fill); color: var(--adu-muted); }
+.adu-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.adu-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.adu-paste .adu-btn { background: var(--fill-on-subtle); }
+.adu-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.adu-f { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.adu-f[data-k="street"] { grid-column: 1 / -1; }
+.adu-f.is-filled input { animation: adu-land var(--spring-pop-duration) var(--spring-pop); border-color: var(--brand-border); background: oklch(from var(--brand) var(--tint-l) calc(c * var(--tint-c)) h); }
+@keyframes adu-land { 30% { transform: scale(1.03); } }
+.adu-f.is-missing input { border-style: dashed; }
+/* A piece of the address in flight from the paste field to its own field */
+.adu-ghost { position: absolute; left: 0; top: 0; z-index: 2; display: inline-flex; align-items: center; height: 26px; padding: 0 8px; border-radius: var(--radius-full); background: var(--brand); color: var(--brand-foreground); font-size: var(--text-small); font-weight: 600; white-space: nowrap; pointer-events: none; transition: transform var(--spring-panel-duration) var(--spring-panel), opacity var(--duration-fast) var(--duration-slower); }
+.adu-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); text-box: trim-end cap alphabetic; }
+.adu-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .adu-ghost { display: none; }
+  .adu-f.is-filled input { animation: none; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.adu :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.adu [hidden] { display: none !important; }

@@ -5,7 +5,7 @@
 
 Serious interactions for real product moments, and funny ones that shouldn't exist (some secretly should). Copy the code or the prompt. New ones drop every week.
 
-61 interactions so far (35 Useful, 14 Secretly Useful, 12 Pure Joke).
+66 interactions so far (37 Useful, 16 Secretly Useful, 13 Pure Joke).
 <!-- intro:end -->
 
 Every interaction runs live on the site and ships with a prompt that rebuilds it in any stack. Designed by Outcraft©, built on the Outcraft Design System v2.
@@ -84,32 +84,37 @@ The site's **Submit an idea** form sends to the Formspree form set as `formEndpo
 | 033 | [Due Heat](due-heat/) | Useful | Meetings and Calendar |  |
 | 034 | [Scope Chips](scope-chips/) | Useful | Search and Navigation |  |
 | 035 | [Access Ladder](access-ladder/) | Useful | Teams and Sharing |  |
-| 036 | [Could've Been an Email](could-be-email/) | Secretly Useful | Meetings and Calendar | New |
-| 037 | [Anxious Typing Dots](anxious-dots/) | Pure Joke | Messages and Email | New |
-| 038 | [Rage Click Detector](rage-click/) | Secretly Useful | Loading and Status | New |
-| 039 | [AI Flip-Flop](ai-flip-flop/) | Pure Joke | AI | New |
-| 040 | [Terms Speedrun](terms-speedrun/) | Secretly Useful | Forms and Input | New |
-| 041 | [LGTM (Didn't Look)](lgtm-stamp/) | Pure Joke | Developer Tools | New |
-| 042 | [Friday Deploy Hard Hat](friday-deploy/) | Secretly Useful | Developer Tools | New |
-| 043 | [Commit Mood Ring](commit-mood/) | Pure Joke | Developer Tools | New |
-| 044 | [Rubber Duck Gate](rubber-duck/) | Secretly Useful | Developer Tools | New |
-| 045 | [final_FINAL_v3](final-final/) | Pure Joke | Files and Data | New |
-| 046 | [Tone Thermometer](tone-thermometer/) | Secretly Useful | Messages and Email | New |
-| 047 | [Quick Question Stopwatch](quick-question/) | Pure Joke | Messages and Email | New |
-| 048 | [Circle Back Boomerang](circle-back/) | Secretly Useful | Messages and Email | New |
-| 049 | [Exclamation Budget](exclamation-budget/) | Pure Joke | Messages and Email | New |
-| 050 | [Attachment Shrug](attachment-shrug/) | Secretly Useful | Messages and Email | New |
-| 051 | [Mute Mime](mute-mime/) | Secretly Useful | Meetings and Calendar | New |
-| 052 | [Camera-Off Curtain](camera-curtain/) | Pure Joke | Meetings and Calendar | New |
-| 053 | [Overtime Fuse](overtime-fuse/) | Secretly Useful | Meetings and Calendar | New |
-| 054 | [Line Clear](line-clear/) | Secretly Useful | Meetings and Calendar | New |
-| 055 | [Over-the-Shoulder Cursor](shoulder-cursor/) | Pure Joke | Teams and Sharing | New |
-| 056 | [Dusty Doc](dusty-doc/) | Pure Joke | Files and Data | New |
-| 057 | [Autosave Appreciation](autosave-thanks/) | Secretly Useful | Files and Data | New |
-| 058 | [Unsubscribe Comes to You](unsubscribe-eager/) | Pure Joke | Messages and Email | New |
-| 059 | [Dizzy Refresh](dizzy-refresh/) | Secretly Useful | Loading and Status | New |
-| 060 | [Aging Reminder](aging-reminder/) | Secretly Useful | Messages and Email | New |
-| 061 | [Cancel, Eventually](cancel-dodge/) | Pure Joke | Billing and Plans | New |
+| 036 | [Could've Been an Email](could-be-email/) | Secretly Useful | Meetings and Calendar |  |
+| 037 | [Anxious Typing Dots](anxious-dots/) | Pure Joke | Messages and Email |  |
+| 038 | [Rage Click Detector](rage-click/) | Secretly Useful | Loading and Status |  |
+| 039 | [AI Flip-Flop](ai-flip-flop/) | Pure Joke | AI |  |
+| 040 | [Terms Speedrun](terms-speedrun/) | Secretly Useful | Forms and Input |  |
+| 041 | [LGTM (Didn't Look)](lgtm-stamp/) | Pure Joke | Developer Tools |  |
+| 042 | [Friday Deploy Hard Hat](friday-deploy/) | Secretly Useful | Developer Tools |  |
+| 043 | [Commit Mood Ring](commit-mood/) | Pure Joke | Developer Tools |  |
+| 044 | [Rubber Duck Gate](rubber-duck/) | Secretly Useful | Developer Tools |  |
+| 045 | [final_FINAL_v3](final-final/) | Pure Joke | Files and Data |  |
+| 046 | [Tone Thermometer](tone-thermometer/) | Secretly Useful | Messages and Email |  |
+| 047 | [Quick Question Stopwatch](quick-question/) | Pure Joke | Messages and Email |  |
+| 048 | [Circle Back Boomerang](circle-back/) | Secretly Useful | Messages and Email |  |
+| 049 | [Exclamation Budget](exclamation-budget/) | Pure Joke | Messages and Email |  |
+| 050 | [Attachment Shrug](attachment-shrug/) | Secretly Useful | Messages and Email |  |
+| 051 | [Mute Mime](mute-mime/) | Secretly Useful | Meetings and Calendar |  |
+| 052 | [Camera-Off Curtain](camera-curtain/) | Pure Joke | Meetings and Calendar |  |
+| 053 | [Overtime Fuse](overtime-fuse/) | Secretly Useful | Meetings and Calendar |  |
+| 054 | [Line Clear](line-clear/) | Secretly Useful | Meetings and Calendar |  |
+| 055 | [Over-the-Shoulder Cursor](shoulder-cursor/) | Pure Joke | Teams and Sharing |  |
+| 056 | [Dusty Doc](dusty-doc/) | Pure Joke | Files and Data |  |
+| 057 | [Autosave Appreciation](autosave-thanks/) | Secretly Useful | Files and Data |  |
+| 058 | [Unsubscribe Comes to You](unsubscribe-eager/) | Pure Joke | Messages and Email |  |
+| 059 | [Dizzy Refresh](dizzy-refresh/) | Secretly Useful | Loading and Status |  |
+| 060 | [Aging Reminder](aging-reminder/) | Secretly Useful | Messages and Email |  |
+| 061 | [Cancel, Eventually](cancel-dodge/) | Pure Joke | Billing and Plans |  |
+| 062 | [Address Unpack](address-unpack/) | Useful | Forms and Input | New |
+| 063 | [Time Zone Sundial](timezone-sundial/) | Useful | Meetings and Calendar | New |
+| 064 | [Reply-All Megaphone](reply-all-megaphone/) | Secretly Useful | Messages and Email | New |
+| 065 | [Caps Lock Hats](caps-lock-hats/) | Secretly Useful | Forms and Input | New |
+| 066 | [404 Search Party](search-party/) | Pure Joke | Search and Navigation | New |
 <!-- catalogue:end -->
 
 ## Credits and license
