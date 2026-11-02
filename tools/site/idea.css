@@ -1,5 +1,6 @@
 /* Submit an idea dialog. Outcraft tokens only. */
 .idea { width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); color: var(--foreground); box-shadow: var(--shadow-xl); overflow: auto; }
+:root:not([data-theme="dark"]) .idea { --background: var(--card); --focus-ring: 0 0 0 2px var(--card), 0 0 0 4px var(--ring); } /* a white card: fields and the focus ring's gap stay white, not the gray page ground */
 .idea::backdrop { background: var(--overlay); -webkit-backdrop-filter: blur(var(--blur-sm)); backdrop-filter: blur(var(--blur-sm)); }
 .idea[open] { animation: idea-in var(--spring-ui-duration) var(--spring-ui) both; }
 .idea[open]::backdrop { animation: idea-fade var(--duration-base) var(--ease-out) both; }

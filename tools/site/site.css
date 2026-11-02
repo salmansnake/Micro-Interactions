@@ -13,6 +13,10 @@ a.sr-only:focus { z-index: 60; width: auto; height: auto; margin: 0; padding: 8p
 
 /* ---------- Top bar ---------- */
 .topbar { position: sticky; top: 0; z-index: 30; height: 56px; box-sizing: border-box; border-bottom: 1px solid var(--border); background: var(--frost); -webkit-backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate)); backdrop-filter: blur(var(--blur-md)) saturate(var(--frost-saturate)); }
+/* Outline buttons on the frosted bar stay outlines in light: a ground-gray fill read as a gray chip on the near-white bar.
+   The focus ring's gap matches the bar, not the gray ground */
+:root:not([data-theme="dark"]) .topbar { --focus-ring: 0 0 0 2px var(--card), 0 0 0 4px var(--ring); }
+:root:not([data-theme="dark"]) .topbar .oc-btn--outline { --oc-btn-bg: transparent; }
 .topbar-in { display: flex; align-items: center; gap: var(--space-2); height: 100%; padding: 0 var(--gutter); }
 .brand { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--foreground); font: 600 var(--text-body)/1 var(--font-sans); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; }
 .tb-home { margin-left: var(--space-1); }
@@ -61,6 +65,10 @@ a.sr-only:focus { z-index: 60; width: auto; height: auto; margin: 0; padding: 8p
 }
 @media (prefers-reduced-motion: reduce) { .hero-hl { animation: none; background-size: 100% 100%; } }
 .hero-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2); margin-top: 28px; }
+.hero-cta .oc-btn--secondary { --oc-btn-bg: var(--fill-on-subtle); } /* on the page ground, --secondary is the ground's own gray in light */
+/* Hover on the page ground: --accent is the ground's own gray in light, so a button's hover there takes --fill-on-subtle */
+:root:not([data-theme="dark"]) :is(.hero-cta, .side, .stage-nav, .info-actions) :is(.oc-btn--outline, .oc-btn--ghost) { --oc-btn-hover: var(--fill-on-subtle); }
+:root:not([data-theme="dark"]) .hero-cta .oc-btn--secondary { --oc-btn-hover: color-mix(in oklab, var(--fill-on-subtle) 94%, var(--foreground)); } /* a step past its own gray fill */
 /* Browse: a gentle nudge every few seconds (wiggle, sheen, arrow tap) to say "start here". Still the rest of the time. */
 .hero-browse { position: relative; overflow: hidden; animation: hb-nudge 4.8s var(--ease-in-out) 1.2s infinite; }
 .hero-browse svg { width: 16px; height: 16px; animation: hb-arrow 4.8s var(--ease-in-out) 1.2s infinite; }
@@ -96,16 +104,19 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 /* Left: search, filter, list */
 .side-top { flex: none; display: grid; gap: var(--space-2); padding: var(--space-4) var(--space-4) var(--space-3); border-bottom: 1px solid var(--border); }
 .search-row { display: flex; gap: var(--space-2); }
-.scope { display: grid; width: 100%; box-sizing: border-box; }
+.scope { display: grid; width: 100%; box-sizing: border-box; background: var(--fill-on-subtle); } /* the track on the page ground: --muted would match the ground in light */
+.scope button { color: var(--muted-on-tint); } /* the muted gray drops under 4.5:1 on the darker track; the chosen tab stays --foreground */
 .scope button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 .search { position: relative; flex: 1; min-width: 0; }
 .search > svg { position: absolute; top: 50%; left: 10px; width: 16px; height: 16px; color: var(--muted-foreground); transform: translateY(-50%); pointer-events: none; }
 .search .oc-input { width: 100%; box-sizing: border-box; padding-left: 34px; padding-right: 36px; }
+:root:not([data-theme="dark"]) .search .oc-input { background: var(--card); } /* a white field on the gray ground; a ground-colored field showed its placeholder at 2.7:1 */
 /* The browser's own clear cross (blue in Safari and Chrome) is hidden; a Lucide x clears the field and shows only while there is text */
 .search .oc-input::-webkit-search-cancel-button { display: none; -webkit-appearance: none; appearance: none; }
 .search-clear { position: absolute; top: 50%; right: 4px; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--muted-foreground); transform: translateY(-50%); cursor: pointer; transition: color var(--duration-fast), background-color var(--duration-fast); }
 .search-clear svg { width: 16px; height: 16px; }
 .search-clear:hover { color: var(--foreground); background: var(--accent); }
+:root:not([data-theme="dark"]) .search-clear:hover { background: var(--muted-hover); } /* --accent is the ground's own gray in light */
 .search-clear:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
 .search .oc-input:placeholder-shown ~ .search-clear { display: none; }
 .filter-btn { position: relative; flex: none; }
@@ -135,7 +146,10 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 .list { flex: 1; min-height: 0; overflow: auto; margin: 0; padding: var(--space-2); list-style: none; overscroll-behavior: contain; }
 .item { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: var(--space-2); width: 100%; min-height: 40px; padding: 10px var(--space-2); box-sizing: border-box; border-radius: var(--radius-md); color: var(--foreground); font: 500 var(--text-ui)/var(--leading-ui) var(--font-sans); text-align: left; text-decoration: none; transition: background-color var(--duration-fast) var(--ease-out); }
 .item:hover { background: var(--hover); } /* lighter than the selected row below, so hover and selected never look the same */
-.item[aria-current="page"] { background: var(--muted); font-weight: 600; }
+/* The list sits on the page ground, which in light is the same gray as --muted: the selected row takes the step darker
+   (--fill-on-subtle, which is --muted in dark), and hover the step between the ground and it (--muted-hover) */
+.item[aria-current="page"] { background: var(--fill-on-subtle); font-weight: 600; }
+:root:not([data-theme="dark"]) .item:not([aria-current]):hover { background: var(--muted-hover); }
 .item:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
 .item .nm { min-width: 0; overflow-wrap: anywhere; }
 .tag-new { display: inline-flex; align-items: center; height: 20px; margin-top: 0; padding: 0 8px; box-sizing: border-box; border: 1px solid transparent; border-radius: var(--radius-full); background: var(--brand); color: var(--brand-foreground); font: 600 11px/1 var(--font-sans); letter-spacing: 0.01em; white-space: nowrap; }
@@ -145,6 +159,9 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 /* Center: the fixed stage */
 .center { position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column; padding: var(--space-4); box-sizing: border-box; background: var(--background); }
 .stage { position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; padding: 56px var(--space-6); box-sizing: border-box; overflow: auto; border: 1px solid var(--border); border-radius: var(--radius-xl); background: radial-gradient(circle, var(--border) 1px, transparent 1.2px) center / 16px 16px, var(--subtle); }
+/* In dark the inset gray is lighter than the card, so a stage of it made every interaction look pressed in (RULES 10a);
+   the stage takes the page ground there, as the card's own ground, and keeps its dots and border */
+[data-theme="dark"] :is(.stage, .hcard-stage) { background-color: var(--background); }
 .stage-nav { flex: none; display: flex; align-items: center; justify-content: center; gap: var(--space-2); padding-top: var(--space-3); }
 .stage-nav .oc-btn svg { width: 16px; height: 16px; }
 .prev svg { transform: rotate(180deg); }
@@ -177,8 +194,8 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 /* A little space on each side so a chip never touches the next chip or a comma */
 /* A chip is shorter than its line (text size + 4px) and the lines holding chips leave room for it, so chips on lines
    above and below each other always have about 3px between them (12c) */
-.ui-ref { display: inline-block; margin: 0 2px; padding: 1px 6px; border-radius: var(--radius-sm); background: var(--muted); color: var(--foreground); font-weight: 600; line-height: calc(1em + 2px); white-space: nowrap; }
-.try .ui-ref { background: var(--fill-on-subtle); } /* a clear gray step from the Try it box: darker in light, lighter in dark (button rule 9); white dissolved into it */
+.ui-ref { display: inline-block; margin: 0 2px; padding: 1px 6px; border-radius: var(--radius-sm); background: var(--fill-on-subtle); color: var(--foreground); font-weight: 600; line-height: calc(1em + 2px); white-space: nowrap; }
+/* .ui-ref takes --fill-on-subtle: a clear gray step from both the Try it box and the page ground (darker in light, lighter in dark; button rule 9). White dissolved into the box, and --muted is the ground's own gray in light */
 /* An icon-only control: the same icon the interaction draws, at text size, in the same chip */
 .ui-ref--icon { display: inline-flex; align-items: center; box-sizing: border-box; height: calc(1em + 4px); padding: 0 5px; vertical-align: -0.22em; } /* exactly a text chip's height */
 .ui-ref--icon svg { display: block; width: 1.05em; height: 1.05em; stroke-width: 2; }
@@ -217,6 +234,9 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 
 /* ---------- Code dialog ---------- */
 .codebox { width: min(960px, calc(100vw - 32px)); height: min(760px, calc(100dvh - 32px)); padding: 0; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); color: var(--foreground); box-shadow: var(--shadow-xl); overflow: hidden; }
+/* A dialog is a white card: there --background means the card, so fields, outline buttons and the focus ring's gap stay
+   white instead of taking the gray page ground (light; dark already steps them down from the card) */
+:root:not([data-theme="dark"]) .codebox { --background: var(--card); --focus-ring: 0 0 0 2px var(--card), 0 0 0 4px var(--ring); }
 .codebox[open] { display: flex; flex-direction: column; animation: idea-in var(--spring-ui-duration) var(--spring-ui) both; }
 .codebox::backdrop { background: var(--overlay); -webkit-backdrop-filter: blur(var(--blur-sm)); backdrop-filter: blur(var(--blur-sm)); }
 .codebox-head { flex: none; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border); }

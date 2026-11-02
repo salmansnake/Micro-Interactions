@@ -367,7 +367,8 @@ ONE_TPL = None
 def one_template():
     global ONE_TPL
     if ONE_TPL is None:
-        bg = (resolve('--subtle', 'light'), resolve('--subtle', 'dark'))
+        # the demo page is a page: the page ground, which a white card clears by 0.060 in light and 0.050 in dark
+        bg = (resolve('--background', 'light'), resolve('--background', 'dark'))
         ONE_TPL = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
                    '<title>__TITLE__</title>\n<style>\n/* Demo page only. Remove this block when pasting into your own page. */\n'
                    f'body {{ margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: {bg[0]}; }}\n'
@@ -571,7 +572,7 @@ def build_pages(reg):
 <link rel="stylesheet" href="../outcraft-tokens.css">
 <style>
 html, body {{ min-height: 100%; }}
-body {{ margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }}
+body {{ margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }}
 </style>
 <style>
 {c}
