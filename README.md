@@ -38,7 +38,7 @@ python3 tools/build.py           # check, then generate the site, every <slug>/ 
 
 The build writes `index.html`, each `<slug>/index.html`, `one-file.html` and `prompt-full.md`, and refreshes the intro and catalogue in this README, so commit those generated files with every change.
 
-The build checks tokens, not what ends up on screen. `python3 tools/contrast_check.py` renders every page in light and dark and measures text contrast and how far each fill stands from everything it touches. It needs Playwright. Before changing a token, save a baseline with `--out before.json`; afterwards, `--baseline before.json` lists only the failures the change added.
+The build checks tokens, not what ends up on screen. `python3 tools/contrast_check.py` renders every page in light and dark and measures text contrast and how far each fill stands from everything it touches. It needs Playwright. Before changing a token, save a baseline with `--out before.json`; afterwards, `--baseline before.json` lists only the failures the change added. `python3 tools/contrast_states.py --against old-tokens.css` goes further: it uses every control (hover, press, click, what the click reveals, typing) and measures each state twice on the same frozen page, with the current tokens and with the old file layered on top, so it lists exactly the pairs a token change broke, in every state.
 
 Every icon is a Lucide icon. `tools/lucide-icons.json` holds the exact Lucide drawings in use, and the build fails any icon that isn't one of them: to use a new icon, copy its drawing from [lucide.dev](https://lucide.dev/icons) into that file first.
 
