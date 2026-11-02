@@ -1744,7 +1744,7 @@
       "topic": "Forms and Input",
       "new": true,
       "summary": "Paste a whole address into one field and it breaks apart on its own, each piece flying into its own field: street, apartment, city, state and ZIP.",
-      "tryit": "Press {Paste Example}, or paste your own address and press Enter.",
+      "tryit": "Press {Paste Example}, or type your own address and press {Unpack}.",
       "specs": [
         {
           "label": "Split",

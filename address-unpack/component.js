@@ -1,5 +1,6 @@
 /* Address Unpack — vanilla JS. Auto-initializes every [data-mi="address-unpack"].
-   On paste (or Paste Example), the text is split at commas and the state and ZIP are found at the end. Each piece
+   On paste, Enter or the button, the text is split at commas and the state and ZIP are found at the end. The button
+   pastes the example while the field is empty and unpacks the field once someone has typed their own. Each piece
    flies from where it sits in the paste field to its own field, then lands. Call window.initAddressUnpack(el) for elements added later. */
 (function () {
   'use strict';
@@ -52,13 +53,17 @@
     if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
   }
 
-  // Split "street, [apt,] city, ST 12345" into its parts; anything missing stays empty
+  // Split "street, [apt,] city, ST 12345" into its parts; anything missing stays empty. The end may be "ST 12345",
+  // a lone ZIP or a lone state, with or without a comma before it ("Austin TX 78704" works too)
   function parse(s) {
     var out = { street: '', apt: '', city: '', state: '', zip: '' }, parts = s.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
     if (!parts.length) return out;
-    var last = parts[parts.length - 1], m = /^([A-Za-z]{2})\s+(\d{5}(?:-\d{4})?)$/.exec(last);
-    if (m && STATES.indexOf(m[1].toUpperCase()) >= 0) { out.state = m[1].toUpperCase(); out.zip = m[2]; parts.pop(); }
-    else if (/^\d{5}$/.test(last)) { out.zip = last; parts.pop(); }
+    var isState = function (x) { return STATES.indexOf(x.toUpperCase()) >= 0; };
+    var last = parts.pop(), m;
+    if ((m = /^(?:(.*\S)\s+)?([A-Za-z]{2})\.?\s+(\d{5}(?:-\d{4})?)$/.exec(last)) && isState(m[2])) { out.state = m[2].toUpperCase(); out.zip = m[3]; last = m[1] || ''; }
+    else if ((m = /^(?:(.*\S)\s+)?(\d{5}(?:-\d{4})?)$/.exec(last))) { out.zip = m[2]; last = m[1] || ''; }
+    else if (parts.length && (m = /^(?:(.*\S)\s+)?([A-Za-z]{2})$/.exec(last)) && isState(m[2])) { out.state = m[2].toUpperCase(); last = m[1] || ''; }
+    if (last) parts.push(last);
     out.street = parts.shift() || '';
     if (parts.length && /^(apt|suite|ste|unit|#|floor|fl)\b/i.test(parts[0])) out.apt = parts.shift();
     out.city = parts.join(', ');
@@ -85,7 +90,7 @@
       Object.keys(fields).forEach(function (k, idx) {
         var f = fields[k], input = f.querySelector('input'), v = p[k];
         f.classList.remove('is-filled', 'is-missing'); input.value = '';
-        if (!v) { if (k !== 'apt') { f.classList.add('is-missing'); missing.push(f.querySelector('span').textContent.toLowerCase()); } return; }
+        if (!v) { if (k !== 'apt') { f.classList.add('is-missing'); missing.push(f.querySelector('span').textContent.replace(/^[A-Z](?![A-Z])/, function (c) { return c.toLowerCase(); })); } return; }
         n++;
         var land = function () { input.value = v; f.classList.add('is-filled'); };
         if (reduce.matches) return land();
@@ -101,14 +106,18 @@
         }, idx * 70);
         setTimeout(function () { land(); g.remove(); }, idx * 70 + 520);
       });
+      // A missing piece stays empty and is named, so it can be added by hand
       if (!text.trim()) status.textContent = '';
-      else if (!p.zip) status.textContent = 'Couldn’t find a ZIP code. The rest is sorted; add it by hand.';
       else status.textContent = 'Split into ' + n + (n === 1 ? ' field' : ' fields') + '.' + (missing.length ? ' Still needed: ' + missing.join(', ') + '.' : p.apt ? ' Give the apartment a quick look.' : ''); // the apartment is the likeliest wrong guess; with none found, nothing to look at
     }
 
-    all.addEventListener('paste', function () { setTimeout(function () { unpack(all.value); }, 0); });
+    // The button unpacks what was typed; with the field empty it pastes the example
+    function own() { var v = all.value.trim(); return !!v && v !== example; }
+    function label() { tryBtn.classList.toggle('is-own', own()); }
+    all.addEventListener('input', label);
+    all.addEventListener('paste', function () { setTimeout(function () { label(); unpack(all.value); }, 0); });
     all.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); unpack(all.value); } });
-    tryBtn.addEventListener('click', function () { all.value = example; unpack(example); });
+    tryBtn.addEventListener('click', function () { if (!own()) all.value = example; label(); unpack(all.value); });
   }
 
   window.initAddressUnpack = initAddressUnpack;

@@ -48,6 +48,11 @@
 .adu-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
 .adu-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .adu-paste .adu-btn { background: var(--fill-on-subtle); }
+/* The button names what it will do: Paste Example while the field is empty (or holds the example), Unpack once
+   someone types their own address. Both labels share one cell, so the button keeps one width and nothing shifts */
+.adu-try { display: inline-grid; place-items: center; }
+.adu-try .adu-say { grid-area: 1 / 1; }
+.adu-try:not(.is-own) [data-say="own"], .adu-try.is-own [data-say="example"] { visibility: hidden; }
 .adu-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
 .adu-f { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .adu-f[data-k="street"] { grid-column: 1 / -1; }
