@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../outcraft-tokens.css">
 <style>
 html, body { min-height: 100%; }
-body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
 </style>
 <style>
 /* Coin Drop — switching to yearly throws the savings into each plan as coins.
@@ -92,10 +92,11 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .cd-toggle button[aria-checked="true"] { font-weight: 600; }
 .cd-toggle button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .cd-pct { padding: 1px 6px; border-radius: var(--radius-full); background: var(--cd-success-soft); color: oklch(from var(--cd-success-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-size: var(--text-caption); font-weight: 600; transition: background-color var(--duration-base); }
-/* On the gray track (Monthly selected) the pale green tint washes out, so it steps up; on the white thumb and in dark mode it stays the standard soft green */
+/* On the gray track (Monthly selected) the pale green tint washes out, so it steps up; on the white thumb it stays the standard soft green.
+   In dark the track is lighter than the soft green, so there it takes the fixed tint lightness, a clear step up from the track */
 .cd[data-period="monthly"] .cd-pct { background: color-mix(in srgb, var(--success) 14%, var(--cd-track)); }
-:root[data-theme="dark"] .cd[data-period="monthly"] .cd-pct { background: var(--cd-success-soft); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cd[data-period="monthly"] .cd-pct { background: var(--cd-success-soft); } }
+:root[data-theme="dark"] .cd[data-period="monthly"] .cd-pct { background: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cd[data-period="monthly"] .cd-pct { background: oklch(from var(--success) var(--tint-l) calc(c * var(--tint-c)) h); } }
 /* Plans */
 .cd-plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(156px, 1fr)); gap: 12px; width: 100%; }
 .cd-plan {

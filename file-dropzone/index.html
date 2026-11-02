@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../outcraft-tokens.css">
 <style>
 html, body { min-height: 100%; }
-body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
 </style>
 <style>
 /* File-Aware Dropzone — knows what you are dropping and previews it the way that file wants.
@@ -45,6 +45,10 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the file icon on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fd { --fd-sunken: var(--background); } }
+:root[data-theme="dark"] .fd { --fd-sunken: var(--background); }
 .fd[data-kind="csv"] { --fd-tone: var(--success); --fd-on-tone: var(--success-foreground); }
 .fd[data-kind="image"] { --fd-tone: var(--chart-6); --fd-on-tone: var(--on-chart-strong); }
 .fd[data-kind="pdf"] { --fd-tone: var(--danger); --fd-on-tone: var(--danger-foreground); }

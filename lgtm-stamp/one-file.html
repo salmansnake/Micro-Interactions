@@ -6,8 +6,8 @@
 <title>LGTM (Didn&#x27;t Look)</title>
 <style>
 /* Demo page only. Remove this block when pasting into your own page. */
-body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F7F7F7; }
-@media (prefers-color-scheme: dark) { body { background: #1F1F1F; } }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #EBEBEB; }
+@media (prefers-color-scheme: dark) { body { background: #0C0C0C; } }
 </style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
@@ -37,8 +37,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
   --ash: #686868;
+  --background: var(--canvas);
   --black: #000000;
   --border: var(--line);
+  --canvas: #EBEBEB;
   --card: var(--white);
   --danger: #ce2c31;
   --danger-text: #ca2b30;
@@ -51,7 +53,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --primary: var(--black);
   --red-11: #ce2c31;
   --ring: var(--aqua-700);
-  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04), 0 1px 3px rgba(17, 17, 17, 0.07);
   --soft-ground: #F7F7F7;
   --subtle: var(--soft-ground);
   --success: var(--green-11);
@@ -68,8 +70,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --aqua: #79EEEC;
   --aqua-700: #79EEEC;
   --ash: #A6A6A6;
+  --background: var(--canvas);
   --black: #000000;
   --border: var(--line);
+  --canvas: #0C0C0C;
   --card: var(--white);
   --danger: #d4373c;
   --danger-text: var(--red-11);
@@ -99,8 +103,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --aqua: #79EEEC;
     --aqua-700: #79EEEC;
     --ash: #A6A6A6;
+    --background: var(--canvas);
     --black: #000000;
     --border: var(--line);
+    --canvas: #0C0C0C;
     --card: var(--white);
     --danger: #d4373c;
     --danger-text: var(--red-11);
@@ -158,6 +164,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the file names on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lg { --lg-sunken: var(--background); } }
+:root[data-theme="dark"] .lg { --lg-sunken: var(--background); }
 .lg p { margin: 0; }
 .lg.is-honest { --lg-ink: var(--lg-green); }
 .lg-head { display: flex; align-items: center; gap: 12px; }

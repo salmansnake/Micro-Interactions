@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../outcraft-tokens.css">
 <style>
 html, body { min-height: 100%; }
-body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
 </style>
 <style>
 /* Blast Radius — previews what a delete removes and what stays.
@@ -51,6 +51,10 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the panels on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .br { --br-page: var(--background); } }
+:root[data-theme="dark"] .br { --br-page: var(--background); }
 
 /* Sidebar */
 .br-side {

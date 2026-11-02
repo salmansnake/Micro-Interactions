@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../outcraft-tokens.css">
 <style>
 html, body { min-height: 100%; }
-body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
 </style>
 <style>
 /* Frosted Peek — a locked feature you can wipe a window into before you pay.
@@ -64,9 +64,9 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   height: 200px;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  /* A soft neutral inset, just visible against the card in both themes: the inset gray mixed 40% toward the card.
+  /* A soft neutral inset, just visible against the card in both themes: the inset gray.
      The chart's own line and area carry the color (10b.41) */
-  background: color-mix(in oklab, var(--fp-sunken) 60%, var(--fp-bg));
+  background: var(--fp-sunken);
   cursor: ew-resize;
   touch-action: pan-y;
   outline: none;
@@ -78,7 +78,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
 .fp-svg .fp-grid { stroke: var(--fp-line); stroke-width: 1; vector-effect: non-scaling-stroke; }
 /* The area under the line is a soft Aqua: the highlight tint (L 0.88 light, 0.32 dark) moved 15% toward the chart box,
    a clear step from the box and quieter than the line */
-.fp-svg .fp-area { fill: color-mix(in oklab, oklch(from var(--brand) var(--tint-mark-l) calc(c * var(--tint-c)) h) 85%, color-mix(in oklab, var(--fp-sunken) 60%, var(--fp-bg))); }
+.fp-svg .fp-area { fill: color-mix(in oklab, oklch(from var(--brand) var(--tint-mark-l) calc(c * var(--tint-c)) h) 85%, var(--fp-sunken)); }
 .fp-svg .fp-line { fill: none; stroke: var(--brand-strong); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .fp-months { position: absolute; left: 0; right: 0; bottom: 4px; display: flex; color: var(--fp-muted); font-size: calc(var(--text-caption) - 1px); line-height: 13px; }
 .fp-months span { flex: 1; text-align: center; }

@@ -6,8 +6,8 @@
 <title>File-Aware Dropzone</title>
 <style>
 /* Demo page only. Remove this block when pasting into your own page. */
-body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F7F7F7; }
-@media (prefers-color-scheme: dark) { body { background: #1F1F1F; } }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #EBEBEB; }
+@media (prefers-color-scheme: dark) { body { background: #0C0C0C; } }
 </style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
@@ -50,6 +50,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
   --ash: #686868;
+  --background: var(--canvas);
   --black: #000000;
   --border: var(--line);
   --brand: var(--aqua);
@@ -75,10 +76,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --red-11: #ce2c31;
   --ring: var(--aqua-700);
   --sage: #99AD88;
-  --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14);
-  --shadow-md: 0 2px 4px -1px rgba(17, 17, 16, 0.05), 0 6px 14px -3px rgba(17, 17, 16, 0.09);
-  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
-  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
+  --shadow-lg: 0 4px 8px -2px rgba(17, 17, 17, 0.06), 0 16px 32px -8px rgba(17, 17, 17, 0.14);
+  --shadow-md: 0 2px 4px -1px rgba(17, 17, 17, 0.05), 0 6px 14px -3px rgba(17, 17, 17, 0.09);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04), 0 1px 3px rgba(17, 17, 17, 0.07);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 17, 0.05);
   --soft-ground: #F7F7F7;
   --subtle: var(--soft-ground);
   --success: var(--green-11);
@@ -93,6 +94,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --aqua: #79EEEC;
   --aqua-700: #79EEEC;
   --ash: #A6A6A6;
+  --background: var(--canvas);
   --black: #000000;
   --border: var(--line);
   --brand: var(--aqua);
@@ -136,6 +138,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --aqua: #79EEEC;
     --aqua-700: #79EEEC;
     --ash: #A6A6A6;
+    --background: var(--canvas);
     --black: #000000;
     --border: var(--line);
     --brand: var(--aqua);
@@ -206,6 +209,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the file icon on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fd { --fd-sunken: var(--background); } }
+:root[data-theme="dark"] .fd { --fd-sunken: var(--background); }
 .fd[data-kind="csv"] { --fd-tone: var(--success); --fd-on-tone: var(--success-foreground); }
 .fd[data-kind="image"] { --fd-tone: var(--chart-6); --fd-on-tone: var(--on-chart-strong); }
 .fd[data-kind="pdf"] { --fd-tone: var(--danger); --fd-on-tone: var(--danger-foreground); }

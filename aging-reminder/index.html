@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../outcraft-tokens.css">
 <style>
 html, body { min-height: 100%; }
-body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
 </style>
 <style>
 /* Aging Reminder — every snooze makes the reminder visibly older: yellowed, curled, taped, stained.
@@ -21,7 +21,7 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   --ar-fg: var(--foreground);
   --ar-muted: var(--muted-foreground);
   --ar-line: var(--border);
-  --ar-sunken: var(--subtle);
+  --ar-sunken: var(--background); /* the stage holds a card, so it is the page ground: the card, fresh or aged, stays clear of it in both themes (the inset gray was within 0.009 of the aged card) */
   --ar-fill: var(--muted);
   --ar-accent: var(--primary);
   --ar-on-accent: var(--primary-foreground);

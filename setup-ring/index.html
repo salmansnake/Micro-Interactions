@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../outcraft-tokens.css">
 <style>
 html, body { min-height: 100%; }
-body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--subtle); color: var(--body); font-family: var(--font-sans); }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
 </style>
 <style>
 /* Setup Ring — finishing an onboarding step flies its check into a ring that fills one segment at a time.
@@ -43,6 +43,10 @@ body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; b
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the Done buttons on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .su { --su-sunken: var(--background); } }
+:root[data-theme="dark"] .su { --su-sunken: var(--background); }
 .su-head { display: flex; align-items: center; gap: 16px; }
 /* The ring is drawn 4px inside its box; the negative margin lets the drawn edge, not the box, sit on the padding (10b.39) */
 .su-ring { position: relative; flex: none; width: 72px; height: 72px; margin: -4px 0; }
