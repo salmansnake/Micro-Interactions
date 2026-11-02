@@ -38,6 +38,8 @@ python3 tools/build.py           # check, then generate the site, every <slug>/ 
 
 The build writes `index.html`, each `<slug>/index.html`, `one-file.html` and `prompt-full.md`, and refreshes the intro and catalogue in this README, so commit those generated files with every change.
 
+The build checks tokens, not what ends up on screen. `python3 tools/contrast_check.py` renders every page in light and dark and measures text contrast and how far each fill stands from everything it touches. It needs Playwright. Before changing a token, save a baseline with `--out before.json`; afterwards, `--baseline before.json` lists only the failures the change added.
+
 Every icon is a Lucide icon. `tools/lucide-icons.json` holds the exact Lucide drawings in use, and the build fails any icon that isn't one of them: to use a new icon, copy its drawing from [lucide.dev](https://lucide.dev/icons) into that file first.
 
 Deploy the repository as a static site (entry point `index.html`, no build command). On Vercel, import the repo and keep the defaults.
