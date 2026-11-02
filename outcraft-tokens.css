@@ -156,11 +156,11 @@
   --inverse: var(--primary); /* the strongest neutral fill: black in light, off-white in dark (not Aqua). Copied states, a hint that must stand out. */
   --inverse-foreground: var(--primary-foreground); /* text or icon on --inverse: white in light, dark in dark */
   --fill-on-tint: color-mix(in srgb, var(--raised) 65%, transparent); /* secondary button sitting on a tinted panel: a lighter step of the panel's own color in both themes (a white wash here, a text-color wash in dark), never solid white, plain gray or a stroke */
-  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
-  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
-  --shadow-md: 0 2px 4px -1px rgba(17, 17, 16, 0.05), 0 6px 14px -3px rgba(17, 17, 16, 0.09);
-  --shadow-lg: 0 4px 8px -2px rgba(17, 17, 16, 0.06), 0 16px 32px -8px rgba(17, 17, 16, 0.14);
-  --shadow-xl: 0 8px 16px -4px rgba(17, 17, 16, 0.08), 0 28px 56px -12px rgba(17, 17, 16, 0.22);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 17, 0.05);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04), 0 1px 3px rgba(17, 17, 17, 0.07);
+  --shadow-md: 0 2px 4px -1px rgba(17, 17, 17, 0.05), 0 6px 14px -3px rgba(17, 17, 17, 0.09);
+  --shadow-lg: 0 4px 8px -2px rgba(17, 17, 17, 0.06), 0 16px 32px -8px rgba(17, 17, 17, 0.14);
+  --shadow-xl: 0 8px 16px -4px rgba(17, 17, 17, 0.08), 0 28px 56px -12px rgba(17, 17, 17, 0.22);
 }
 [data-theme="dark"], .dark {
   color-scheme: dark;
@@ -302,8 +302,8 @@
   --chart-8: var(--sage-700);
   --on-chart: #000000;
   --on-chart-strong: #000000;
-  --frost: rgba(21, 23, 22, 0.74);
-  --frost-border: rgba(243, 242, 238, 0.1);
+  --frost: rgba(23, 23, 23, 0.74);
+  --frost-border: rgba(242, 242, 242, 0.1);
   --overlay: rgba(0, 0, 0, 0.6);
   --on-color: #ffffff;
   --tint-l: 0.32; /* dark grounds: a fixed step up from the card, the same for every color */
@@ -458,8 +458,8 @@
     --chart-8: var(--sage-700);
     --on-chart: #000000;
     --on-chart-strong: #000000;
-    --frost: rgba(21, 23, 22, 0.74);
-    --frost-border: rgba(243, 242, 238, 0.1);
+    --frost: rgba(23, 23, 23, 0.74);
+    --frost-border: rgba(242, 242, 242, 0.1);
     --overlay: rgba(0, 0, 0, 0.6);
     --on-color: #ffffff;
     --tint-l: 0.32;
