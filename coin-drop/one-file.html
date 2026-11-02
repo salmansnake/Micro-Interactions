@@ -6,8 +6,8 @@
 <title>Coin Drop</title>
 <style>
 /* Demo page only. Remove this block when pasting into your own page. */
-body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
-@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F7F7F7; }
+@media (prefers-color-scheme: dark) { body { background: #1F1F1F; } }
 </style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
@@ -39,7 +39,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --tracking-title: -0.015em;
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
-  --ash: #646A66;
+  --ash: #686868;
   --black: #000000;
   --border: var(--line);
   --card: var(--white);
@@ -47,7 +47,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --green-11: #218358;
   --green-3: #e6f6eb;
   --lift: #FFFFFF;
-  --line: #DCDED9;
+  --line: #DDDDDD;
   --muted-foreground: var(--ash);
   --olive: #AA9856;
   --olive-700: #6F6228;
@@ -57,7 +57,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --ring: var(--aqua-700);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
   --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.05);
-  --soft-ground: #F3F2EE;
+  --soft-ground: #F7F7F7;
   --subtle: var(--soft-ground);
   --success: var(--green-11);
   --success-subtle: var(--green-3);
@@ -70,15 +70,15 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 [data-theme="dark"] .cd, .dark .cd {
   --aqua: #79EEEC;
   --aqua-700: #79EEEC;
-  --ash: #A3A8A4;
+  --ash: #A6A6A6;
   --black: #000000;
   --border: var(--line);
   --card: var(--white);
-  --foreground: #F3F2EE;
+  --foreground: #F2F2F2;
   --green-11: #3dd68c;
   --green-3: #132d21;
-  --lift: #3F4341;
-  --line: #313432;
+  --lift: #424242;
+  --line: #333333;
   --muted-foreground: var(--ash);
   --olive: #AA9856;
   --olive-700: #CBBB7E;
@@ -88,28 +88,28 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --ring: var(--aqua);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --soft-ground: #0C0D0C;
+  --soft-ground: #1F1F1F;
   --subtle: var(--soft-ground);
   --success: #218358;
   --success-subtle: var(--green-3);
   --success-text: var(--green-11);
   --tint-ink-l: 1;
   --tint-ink-min: 0.75;
-  --white: #161817;
+  --white: #171717;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not(.light) .cd {
     --aqua: #79EEEC;
     --aqua-700: #79EEEC;
-    --ash: #A3A8A4;
+    --ash: #A6A6A6;
     --black: #000000;
     --border: var(--line);
     --card: var(--white);
-    --foreground: #F3F2EE;
+    --foreground: #F2F2F2;
     --green-11: #3dd68c;
     --green-3: #132d21;
-    --lift: #3F4341;
-    --line: #313432;
+    --lift: #424242;
+    --line: #333333;
     --muted-foreground: var(--ash);
     --olive: #AA9856;
     --olive-700: #CBBB7E;
@@ -119,14 +119,14 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --ring: var(--aqua);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --soft-ground: #0C0D0C;
+    --soft-ground: #1F1F1F;
     --subtle: var(--soft-ground);
     --success: #218358;
     --success-subtle: var(--green-3);
     --success-text: var(--green-11);
     --tint-ink-l: 1;
     --tint-ink-min: 0.75;
-    --white: #161817;
+    --white: #171717;
   }
 }
 

@@ -14,7 +14,7 @@ Only show it for files untouched for a long time. Reduced motion: dust settles b
 APPEARANCE (Outcraft Design System)
 - Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
 - Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
-- Color: warm grounds (Canvas #FAFAF8 page, Soft ground #F3F2EE behind white cards), Black #000 headlines, Slate #4A504D body text, Line #DCDED9 borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps. A colored panel, chip or soft fill is a tint of its color at a fixed lightness (OKLCH L 0.92 in light, 0.32 in dark, keeping 40% / 45% of its chroma), so pale Aqua and strong red separate from the card equally; never outlined. Colored text on a tint is held between OKLCH L 0.48 (a cap in light) and 0.75 (a floor in dark), so it reads in both themes, and gray secondary text on it uses the body gray. A soft red button (Decline, Delete, Cancel) is red at 16% in light and 30% in dark with deep red text (#AC2529 in light, #FF9592 in dark), never outlined; it centers its label.
+- Color: neutral grounds (Canvas #EBEBEB page, Soft ground #F7F7F7 behind white cards), Black #000 headlines, Slate #4E4E4E body text, Line #DDDDDD borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps. A colored panel, chip or soft fill is a tint of its color at a fixed lightness (OKLCH L 0.92 in light, 0.32 in dark, keeping 40% / 45% of its chroma), so pale Aqua and strong red separate from the card equally; never outlined. Colored text on a tint is held between OKLCH L 0.48 (a cap in light) and 0.75 (a floor in dark), so it reads in both themes, and gray secondary text on it uses the body gray. A soft red button (Decline, Delete, Cancel) is red at 16% in light and 30% in dark with deep red text (#AC2529 in light, #FF9592 in dark), never outlined; it centers its label.
 - Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float. Text that wraps to two or three lines reads as one paragraph whose lines are close in length, with the first line the longest (narrow the text block until that holds; never a long line with one or two words below it). A row with a title and a detail line under it sets each line at its own size and line height (detail 13/18 or 12/16, not the body's 22px), 2px apart, with equal space above and below (at least 8px), so the text never presses against a divider. A card's padding is measured to what you see: text at the top edge trims to its capitals (text-box: trim-start cap alphabetic) and text at the bottom edge to its baseline (text-box: trim-end cap alphabetic), so the space above matches the space below. Components hug their content: a status line, footer or message that is empty takes no space, and the card grows when text appears. Icons are Lucide with round line ends and joins; every tick, cross, plus, minus and chevron is the Lucide check, x, plus, minus or chevron icon, never a typed character or a shape drawn with CSS borders. A letter, initials or a number in a tile, avatar or count badge is centered on its capital height, not its line box (display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic), at a size whose capitals leave equal space above and below: 14px bold in tiles from 26 to 40px.
 - Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
 - Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
@@ -28,24 +28,24 @@ The component with speck count and the age threshold as inputs, the demo, and sh
 OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables on the component root)
 --aqua: #79EEEC
 --aqua-700: #0B7573  (dark: #79EEEC)
---ash: #646A66  (dark: #A3A8A4)
+--ash: #686868  (dark: #A6A6A6)
 --black: #000000
---border: #DCDED9  (dark: #313432)
+--border: #DDDDDD  (dark: #333333)
 --brand-strong: #0B7573  (dark: #79EEEC)
---card: #FFFFFF  (dark: #161817)
+--card: #FFFFFF  (dark: #171717)
 --duration-reduced: 120ms
 --duration-slower: 480ms
 --ease-in: cubic-bezier(0.5, 0, 0.78, 0.24)
 --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
---foreground: #000000  (dark: #F3F2EE)
+--foreground: #000000  (dark: #F2F2F2)
 --leading-body: 22px
 --leading-small: 18px
---line: #DCDED9  (dark: #313432)
---mist: #ECEBE6  (dark: #2B2E2D)
---muted: #ECEBE6  (dark: #2B2E2D)
---muted-foreground: #646A66  (dark: #A3A8A4)
+--line: #DDDDDD  (dark: #333333)
+--mist: #EBEBEB  (dark: #2D2D2D)
+--muted: #EBEBEB  (dark: #2D2D2D)
+--muted-foreground: #686868  (dark: #A6A6A6)
 --olive: #AA9856
---paper: #F3F1EA  (dark: #0D0E0C)
+--paper: #E2E2E2  (dark: #0E0E0E)
 --primary: #000000  (dark: #79EEEC)
 --radius-lg: 12px
 --radius-md: 8px
@@ -53,10 +53,10 @@ OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables 
 --radius-xl: 16px
 --ring: #0B7573  (dark: #79EEEC)
 --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07)  (dark: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3))
---soft-ground: #F3F2EE  (dark: #0C0D0C)
---stone: #8A908C  (dark: #7C827E)
---subtle: #F3F2EE  (dark: #0C0D0C)
+--soft-ground: #F7F7F7  (dark: #1F1F1F)
+--stone: #8E8E8E  (dark: #808080)
+--subtle: #F7F7F7  (dark: #1F1F1F)
 --text-body: 15px
 --text-small: 13px
---white: #FFFFFF  (dark: #161817)
+--white: #FFFFFF  (dark: #171717)
 Fonts: Geist and Geist Mono from Google Fonts (fallback system-ui).

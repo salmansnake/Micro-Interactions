@@ -6,8 +6,8 @@
 <title>Reply-All Megaphone</title>
 <style>
 /* Demo page only. Remove this block when pasting into your own page. */
-body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F3F2EE; }
-@media (prefers-color-scheme: dark) { body { background: #0C0D0C; } }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #F7F7F7; }
+@media (prefers-color-scheme: dark) { body { background: #1F1F1F; } }
 </style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
@@ -44,7 +44,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --amber-9: #ffc53d;
   --aqua: #79EEEC;
   --aqua-700: #0B7573;
-  --ash: #646A66;
+  --ash: #686868;
   --black: #000000;
   --body: var(--slate);
   --border: var(--line);
@@ -56,9 +56,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-5: var(--olive);
   --fill-on-subtle: color-mix(in oklab, var(--muted) 95%, var(--foreground));
   --foreground: var(--black);
-  --line: #DCDED9;
-  --mist: #ECEBE6;
-  --mist-strong: #E3E2DC;
+  --line: #DDDDDD;
+  --mist: #EBEBEB;
+  --mist-strong: #E2E2E2;
   --muted: var(--mist);
   --muted-foreground: var(--ash);
   --muted-hover: var(--mist-strong);
@@ -71,8 +71,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --ring: var(--aqua-700);
   --sage: #99AD88;
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.04), 0 1px 3px rgba(17, 17, 16, 0.07);
-  --slate: #4A504D;
-  --soft-ground: #F3F2EE;
+  --slate: #4E4E4E;
+  --soft-ground: #F7F7F7;
   --subtle: var(--soft-ground);
   --tint-c: 0.4;
   --tint-ink-l: 0.48;
@@ -89,7 +89,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --amber-9: #ffc53d;
   --aqua: #79EEEC;
   --aqua-700: #79EEEC;
-  --ash: #A3A8A4;
+  --ash: #A6A6A6;
   --black: #000000;
   --body: var(--slate);
   --border: var(--line);
@@ -100,10 +100,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --chart-4: var(--sage);
   --chart-5: var(--olive);
   --fill-on-subtle: var(--muted);
-  --foreground: #F3F2EE;
-  --line: #313432;
-  --mist: #2B2E2D;
-  --mist-strong: #343735;
+  --foreground: #F2F2F2;
+  --line: #333333;
+  --mist: #2D2D2D;
+  --mist-strong: #363636;
   --muted: var(--mist);
   --muted-foreground: var(--ash);
   --muted-hover: var(--mist-strong);
@@ -116,8 +116,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --ring: var(--aqua);
   --sage: #99AD88;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
-  --slate: #C9CDCA;
-  --soft-ground: #0C0D0C;
+  --slate: #CCCCCC;
+  --soft-ground: #1F1F1F;
   --subtle: var(--soft-ground);
   --tint-c: 0.45;
   --tint-ink-l: 1;
@@ -126,7 +126,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   --warning: var(--amber-9);
   --warning-foreground: #000000;
   --warning-text: var(--amber-11);
-  --white: #161817;
+  --white: #171717;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not(.light) .ram {
@@ -134,7 +134,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --amber-9: #ffc53d;
     --aqua: #79EEEC;
     --aqua-700: #79EEEC;
-    --ash: #A3A8A4;
+    --ash: #A6A6A6;
     --black: #000000;
     --body: var(--slate);
     --border: var(--line);
@@ -145,10 +145,10 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --chart-4: var(--sage);
     --chart-5: var(--olive);
     --fill-on-subtle: var(--muted);
-    --foreground: #F3F2EE;
-    --line: #313432;
-    --mist: #2B2E2D;
-    --mist-strong: #343735;
+    --foreground: #F2F2F2;
+    --line: #333333;
+    --mist: #2D2D2D;
+    --mist-strong: #363636;
     --muted: var(--mist);
     --muted-foreground: var(--ash);
     --muted-hover: var(--mist-strong);
@@ -161,8 +161,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --ring: var(--aqua);
     --sage: #99AD88;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
-    --slate: #C9CDCA;
-    --soft-ground: #0C0D0C;
+    --slate: #CCCCCC;
+    --soft-ground: #1F1F1F;
     --subtle: var(--soft-ground);
     --tint-c: 0.45;
     --tint-ink-l: 1;
@@ -171,7 +171,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     --warning: var(--amber-9);
     --warning-foreground: #000000;
     --warning-text: var(--amber-11);
-    --white: #161817;
+    --white: #171717;
   }
 }
 
