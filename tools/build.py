@@ -74,6 +74,12 @@ def check(reg):
     # A search field's clear button is the Lucide x, never the browser's own blue cross (RULES 10c)
     if 'type="search"' in rd('tools', 'build.py') and '::-webkit-search-cancel-button' not in rd('tools', 'site', 'site.css'):
         errors.append('the site search field shows the browser\'s own clear cross; hide ::-webkit-search-cancel-button in tools/site/site.css and use a Lucide x button (RULES 10c)')
+    # Dark values are written twice: the build reads [data-theme="dark"], system-dark visitors get the @media copy. They must match (RULES 10a)
+    i2, i3 = tokens.index('@media (prefers-color-scheme: dark)'), tokens.rindex(':root {')
+    sys_dark = {n: ' '.join(v.split()) for n, v in re.findall(r'(--[a-zA-Z0-9-]+)\s*:\s*([^;]+);', re.sub(r'/\*.*?\*/', '', tokens[i2:i3], flags=re.S))}
+    for n in sorted(set(sys_dark) | set(_blocks(tokens)['dark'])):
+        a, b = _blocks(tokens)['dark'].get(n), sys_dark.get(n)
+        if a != b: errors.append(f'outcraft-tokens.css: {n} is {a or "missing"} in [data-theme="dark"] but {b or "missing"} in @media (prefers-color-scheme: dark); edit both dark blocks (RULES 10a)')
     nums = [it['number'] for it in items]
     for i, n in enumerate(nums, 1):
         if n != f'{i:03d}': errors.append(f'numbers must run 001, 002, … in order with no gaps; position {i} has {n}')
