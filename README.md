@@ -126,4 +126,4 @@ The site's **Submit an idea** form sends to the Formspree form set as `formEndpo
 - Status colors: Radix Colors (MIT).
 - Patterns inspired by shadcn/ui (MIT). All code is original.
 
-Released under the MIT license.
+Released under the MIT license; see [LICENSE](LICENSE).

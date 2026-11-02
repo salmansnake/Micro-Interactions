@@ -14,6 +14,12 @@ FILES = ('component.html', 'component.css', 'component.js', 'prompt.md')
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
          '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">')
 
+# The shared start of every prompt's Color line, and the warm neutrals the one neutral ramp retired
+COLOR_LINE = ('- Color: neutral grounds (Canvas #EBEBEB page, White #FFFFFF cards on it, Soft ground #F7F7F7 for insets inside a card; '
+              'in dark the inset sits a step lighter than the card, so a panel that holds white cards, tiles or buttons takes the page ground there '
+              'and they stay raised), Black #000 headlines, Slate #4E4E4E body text, Line #DDDDDD borders.')
+OLD_NEUTRALS = re.compile(r'#(?:FAFAF8|F3F1EA|F3F2EE|DCDED9|8A908C|4A504D|ECEBE6|E3E2DC|C6C9C3|646A66|0B0C0B|0D0E0C|0C0D0C|161817|313432|7C827E|C9CDCA|2B2E2D|343735|3F4341|434744|A3A8A4)\b|warm grounds', re.I)
+
 def rd(*p): return open(os.path.join(ROOT, *p), encoding='utf-8').read()
 def esc(s): return html.escape(str(s), quote=True)
 def js_json(o): return json.dumps(o, ensure_ascii=False).replace('</', '<\\/')
@@ -80,6 +86,8 @@ def check(reg):
     for n in sorted(set(sys_dark) | set(_blocks(tokens)['dark'])):
         a, b = _blocks(tokens)['dark'].get(n), sys_dark.get(n)
         if a != b: errors.append(f'outcraft-tokens.css: {n} is {a or "missing"} in [data-theme="dark"] but {b or "missing"} in @media (prefers-color-scheme: dark); edit both dark blocks (RULES 10a)')
+    # The footer says the code is MIT licensed; the LICENSE file is what makes that true (RULES 12)
+    if not os.path.isfile(os.path.join(ROOT, 'LICENSE')): errors.append('LICENSE is missing; the site footer says the code is MIT licensed (RULES 12)')
     nums = [it['number'] for it in items]
     for i, n in enumerate(nums, 1):
         if n != f'{i:03d}': errors.append(f'numbers must run 001, 002, … in order with no gaps; position {i} has {n}')
@@ -114,8 +122,12 @@ def check(reg):
             roots[cls] = s
             if f'.{cls} [hidden]' not in c: warns.append(f'{s}: add ".{cls} [hidden] {{ display: none !important; }}" at the end of component.css')
         if len(re.findall(r'window\.(init\w+)\s*=', j)) != 1: errors.append(f'{s}: component.js needs exactly one window.initXxx = … export')
+        # Every prompt carries the current shared Color line, and nothing carries the retired warm neutrals (RULES 10)
+        color = re.search(r'^- Color: .*$', pr, re.M)
+        if not color or not color.group(0).startswith(COLOR_LINE): errors.append(f'{s}/prompt.md: the "- Color:" line must start "{COLOR_LINE}" (RULES 10, one neutral ramp)')
         for fname, txt in (('component.html', h), ('component.css', c), ('component.js', j), ('prompt.md', pr)):
             if banned.search(txt): errors.append(f'{s}/{fname}: old MI-/NA- codes or batch/volume names are not allowed')
+            for v in OLD_NEUTRALS.findall(txt): errors.append(f'{s}/{fname}: {v} is a retired warm neutral; use the tokens (RULES 10, one neutral ramp)')
             for w in locale.findall(txt):
                 errors.append(f'{s}/{fname}: "{w}" breaks the locale or name rules (RULES 12a, 12b)')
             # Copied code must stand alone: no mention of files, tools or notes the person won't have (RULES 8a).
@@ -470,7 +482,7 @@ def build_site(reg, site):
   </section>
   <section class="hero-cards" aria-label="Try a few">{hero_cards}</section>
   <footer class="home-foot">
-    <p>Free to use under the MIT license · Type: Geist · Icons: Lucide · Built by <a href="{esc(site['linkedinUrl'])}" target="_blank" rel="noopener noreferrer">{esc(site['authorName'])}</a> at <a href="{esc(site['agencyUrl'])}" target="_blank" rel="noopener noreferrer">{esc(site['agencyName'])}</a>.</p>
+    <p>Free to use (MIT) · Type: Geist · Icons: Lucide · Built by <a href="{esc(site['linkedinUrl'])}" target="_blank" rel="noopener noreferrer">{esc(site['authorName'])}</a> at <a href="{esc(site['agencyUrl'])}" target="_blank" rel="noopener noreferrer">{esc(site['agencyName'])}</a>.</p>
   </footer>
 </main>
 
