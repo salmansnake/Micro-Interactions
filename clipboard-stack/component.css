@@ -28,6 +28,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the Copy buttons on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cs { --cs-sunken: var(--background); } }
+:root[data-theme="dark"] .cs { --cs-sunken: var(--background); }
 .cs-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .cs-title { margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .cs-dock-wrap { position: relative; }

@@ -27,6 +27,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the Done buttons on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .su { --su-sunken: var(--background); } }
+:root[data-theme="dark"] .su { --su-sunken: var(--background); }
 .su-head { display: flex; align-items: center; gap: 16px; }
 /* The ring is drawn 4px inside its box; the negative margin lets the drawn edge, not the box, sit on the padding (10b.39) */
 .su-ring { position: relative; flex: none; width: 72px; height: 72px; margin: -4px 0; }

@@ -35,6 +35,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the panels on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .br { --br-page: var(--background); } }
+:root[data-theme="dark"] .br { --br-page: var(--background); }
 
 /* Sidebar */
 .br-side {

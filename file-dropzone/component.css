@@ -29,6 +29,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the file icon on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fd { --fd-sunken: var(--background); } }
+:root[data-theme="dark"] .fd { --fd-sunken: var(--background); }
 .fd[data-kind="csv"] { --fd-tone: var(--success); --fd-on-tone: var(--success-foreground); }
 .fd[data-kind="image"] { --fd-tone: var(--chart-6); --fd-on-tone: var(--on-chart-strong); }
 .fd[data-kind="pdf"] { --fd-tone: var(--danger); --fd-on-tone: var(--danger-foreground); }

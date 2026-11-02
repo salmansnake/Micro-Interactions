@@ -30,6 +30,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the file names on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lg { --lg-sunken: var(--background); } }
+:root[data-theme="dark"] .lg { --lg-sunken: var(--background); }
 .lg p { margin: 0; }
 .lg.is-honest { --lg-ink: var(--lg-green); }
 .lg-head { display: flex; align-items: center; gap: 12px; }

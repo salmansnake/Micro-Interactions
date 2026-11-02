@@ -26,6 +26,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the message list on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dz { --dz-sunken: var(--background); } }
+:root[data-theme="dark"] .dz { --dz-sunken: var(--background); }
 .dz p { margin: 0; }
 .dz-head { display: flex; align-items: center; justify-content: space-between; }
 .dz-title { font-size: var(--text-h3); line-height: var(--leading-h3); font-weight: 700; letter-spacing: var(--tracking-title); }

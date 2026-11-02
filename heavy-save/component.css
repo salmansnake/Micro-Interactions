@@ -29,6 +29,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the settings list on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hs { --hs-page: var(--background); } }
+:root[data-theme="dark"] .hs { --hs-page: var(--background); }
 .hs-header { margin: 0; padding: 0 16px; color: var(--hs-muted); font-size: var(--text-body); line-height: var(--leading-body); font-weight: 600; letter-spacing: normal; }
 .hs-list { overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--border); background: var(--hs-bg); }
 .hs-row {

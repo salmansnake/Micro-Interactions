@@ -29,6 +29,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the Archive buttons on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ad { --ad-sunken: var(--background); } }
+:root[data-theme="dark"] .ad { --ad-sunken: var(--background); }
 /* Top of the card: trimmed to the capitals, so the padding above reads the same as the padding below (10b.39) */
 .ad-title { text-box: trim-start cap alphabetic; margin: 0; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; letter-spacing: var(--tracking-title); }
 .ad-list, .ad-archived { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; border-radius: var(--radius-lg); background: var(--ad-sunken); }

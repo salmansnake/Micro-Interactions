@@ -25,6 +25,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, so the field and Paste Example on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .adu { --adu-sunken: var(--background); } }
+:root[data-theme="dark"] .adu { --adu-sunken: var(--background); }
 .adu p, .adu ul, .adu ol { margin: 0; }
 .adu ul, .adu ol { padding: 0; list-style: none; }
 .adu { position: relative; }

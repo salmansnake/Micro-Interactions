@@ -5,7 +5,7 @@
   --ar-fg: var(--foreground);
   --ar-muted: var(--muted-foreground);
   --ar-line: var(--border);
-  --ar-sunken: var(--subtle);
+  --ar-sunken: var(--background); /* the stage holds a card, so it is the page ground: the card, fresh or aged, stays clear of it in both themes (the inset gray was within 0.009 of the aged card) */
   --ar-fill: var(--muted);
   --ar-accent: var(--primary);
   --ar-on-accent: var(--primary-foreground);

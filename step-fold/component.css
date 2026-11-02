@@ -27,6 +27,10 @@
   -webkit-font-smoothing: antialiased;
   perspective: 900px;
 }
+/* Dark: the inset gray is lighter than the card, so the plan tiles on it would look pressed in; the panel takes the page ground
+   there, so what is raised in light stays raised (RULES 10a) */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fo { --fo-sunken: var(--background); } }
+:root[data-theme="dark"] .fo { --fo-sunken: var(--background); }
 .fo-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 0; }
 .fo-chips:empty { display: none; }
 .fo-chip {

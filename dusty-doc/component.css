@@ -25,6 +25,10 @@
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
+/* Dark: the inset gray is lighter than the card, and the dusty text is faded on purpose; on it the text fell under 4.5:1,
+   so the page takes the page ground there */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dd { --dd-sunken: var(--background); } }
+:root[data-theme="dark"] .dd { --dd-sunken: var(--background); }
 .dd p { margin: 0; }
 .dd-meta { display: flex; align-items: center; gap: 12px; }
 .dd-icon { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--brand-strong) 14%, transparent); color: var(--brand-strong); filter: grayscale(calc(var(--dd-age) * 0.8)); transition: filter var(--duration-slower); }
