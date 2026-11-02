@@ -1,6 +1,9 @@
 /* Outcraft Design System v2 — tokens.
    Colors: the Outcraft palette. Fonts: Geist and Geist Mono (SIL OFL). Designed by Outcraft©.
-   Light by default; dark via [data-theme="dark"], .dark, or the OS setting (unless data-theme="light" / .light). */
+   Light by default; dark via [data-theme="dark"], .dark, or the OS setting (unless data-theme="light" / .light).
+   Neutrals are Outcraft's one neutral ramp: pure grays, no warm or green cast. A quiet fill (--mist) is the same
+   value as the page ground (--canvas): it is calibrated against a white card, so on the ground use --fill-on-subtle
+   or put the control on a card. */
 :root, [data-theme="light"], .light {
   color-scheme: light;
   --aqua: #79EEEC;
@@ -18,18 +21,18 @@
   --olive: #AA9856;
   --olive-100: #F1EEE0;
   --olive-700: #6F6228;
-  --canvas: #FAFAF8;
-  --paper: #F3F1EA;
-  --soft-ground: #F3F2EE;
+  --canvas: #EBEBEB;
+  --paper: #E2E2E2;
+  --soft-ground: #F7F7F7;
   --white: #FFFFFF;
-  --line: #DCDED9;
-  --stone: #8A908C;
-  --slate: #4A504D;
-  --mist: #ECEBE6;
-  --mist-strong: #E3E2DC;
+  --line: #DDDDDD;
+  --stone: #8E8E8E;
+  --slate: #4E4E4E;
+  --mist: #EBEBEB;
+  --mist-strong: #E2E2E2;
   --lift: #FFFFFF;
-  --line-strong: #C6C9C3;
-  --ash: #646A66;
+  --line-strong: #C8C8C8;
+  --ash: #686868;
   --aqua-hover: #5FE3E0;
   --aqua-border: #8FE0DD;
   --red-3: #feebec;
@@ -60,7 +63,7 @@
   --muted: var(--mist);
   --muted-hover: var(--mist-strong);
   --raised: var(--lift); /* a surface sitting on a muted track: segmented thumbs, switch knobs, slider thumbs. White in light; lighter than the track in dark, never darker. */
-  --fill-on-subtle: color-mix(in oklab, var(--muted) 95%, var(--foreground)); /* a gray button or control on a gray inset panel (--subtle): a clear gray step darker than the panel in light (L 0.89 on 0.96). Not --muted (only 0.02 apart) and not white (it matches the card around the panel and looks see-through). Lighter than the panel in dark. Also the track of a segmented control on a gray panel, and tags on one. Gray text on it uses --muted-on-tint. */
+  --fill-on-subtle: color-mix(in oklab, var(--muted) 95%, var(--foreground)); /* a gray button or control on a gray inset panel (--subtle): a clear gray step darker than the panel in light (L 0.89 on 0.97). Not --muted (only 0.02 apart) and not white (it matches the card around the panel and looks see-through). Lighter than the panel in dark. Also the track of a segmented control on a gray panel, and tags on one. Gray text on it uses --muted-on-tint. */
   --sheet: var(--white); /* a blank sheet of paper drawn as an object (queued changes, copied slips, archived papers): white in both themes */
   --muted-foreground: var(--ash);
   --placeholder: var(--stone);
@@ -165,8 +168,10 @@
      Dark grounds compress perceived difference, so fills and surfaces step about
      1.5x the light-mode lightness gap (OKLCH L), as shadcn/ui's dark muted
      (about 2x the gap) does. Card to fill
-     (--mist): 0.061 light, 0.091 dark. Card to inset (--soft-ground): 0.039 light,
-     0.048 dark (insets stay gentle). Lines stay at about 1.1x because thin edges already read clearly. */
+     (--mist): 0.060 light, 0.093 dark. Card to inset (--soft-ground): 0.024 light,
+     0.035 dark (insets stay gentle; in dark the inset sits above the card, which is how
+     depth reads there, and clears the page ground by 0.085). Lines stay at about 1.1x
+     because thin edges already read clearly. */
   --aqua: #79EEEC;
   --aqua-100: #0E2E2D;
   --aqua-700: #79EEEC;
@@ -182,18 +187,18 @@
   --olive: #AA9856;
   --olive-100: #2C2816;
   --olive-700: #CBBB7E;
-  --canvas: #0B0C0B;
-  --paper: #0D0E0C;
-  --soft-ground: #0C0D0C;
-  --white: #161817;
-  --line: #313432;
-  --stone: #7C827E;
-  --slate: #C9CDCA;
-  --mist: #2B2E2D;
-  --mist-strong: #343735;
-  --lift: #3F4341;
-  --line-strong: #434744;
-  --ash: #A3A8A4;
+  --canvas: #0C0C0C;
+  --paper: #0E0E0E;
+  --soft-ground: #1F1F1F;
+  --white: #171717;
+  --line: #333333;
+  --stone: #808080;
+  --slate: #CCCCCC;
+  --mist: #2D2D2D;
+  --mist-strong: #363636;
+  --lift: #424242;
+  --line-strong: #464646;
+  --ash: #A6A6A6;
   --aqua-hover: #9AF3F1;
   --aqua-border: #1F5654;
   --red-3: #3b1219;
@@ -213,30 +218,30 @@
   --blue-9: #0090ff;
   --blue-11: #70b8ff;
   --background: var(--canvas);
-  --foreground: #F3F2EE;
+  --foreground: #F2F2F2;
   --body: var(--slate);
   --card: var(--white);
-  --card-foreground: #F3F2EE;
+  --card-foreground: #F2F2F2;
   --popover: var(--white);
-  --popover-foreground: #F3F2EE;
+  --popover-foreground: #F2F2F2;
   --subtle: var(--soft-ground);
   --band: var(--paper);
   --muted: var(--mist);
   --muted-hover: var(--mist-strong);
   --raised: var(--lift);
   --fill-on-subtle: var(--muted); /* dark: the gray fill is already a clear step lighter than the inset; not --raised, which is the thumb color on a track */
-  --sheet: #F3F2EE; /* dark: paper stays white (the canvas white), so a stack of pages still reads as paper */
+  --sheet: #F2F2F2; /* dark: paper stays white (the canvas white), so a stack of pages still reads as paper */
   --muted-foreground: var(--ash);
   --placeholder: var(--stone);
   --accent: var(--mist);
-  --accent-foreground: #F3F2EE;
+  --accent-foreground: #F2F2F2;
   --border: var(--line);
   --border-strong: var(--line-strong);
   --input: var(--line-strong);
   --primary: var(--aqua);
   --primary-foreground: #000000;
   --secondary: var(--mist);
-  --secondary-foreground: #F3F2EE;
+  --secondary-foreground: #F2F2F2;
   --ring: var(--aqua);
   --brand: var(--aqua);
   --brand-hover: var(--aqua-hover);
@@ -303,7 +308,7 @@
   --on-color: #ffffff;
   --tint-l: 0.32; /* dark grounds: a fixed step up from the card, the same for every color */
   --tint-c: 0.45;
-  --tint-inset-l: 0.15; /* dark: below the card, like --subtle, so the box still reads as an inset */
+  --tint-inset-l: 0.15; /* dark: below the card, so the box still reads as an inset */
   --tint-mark-l: 0.32;
   --tint-ink-l: 1; /* dark: no cap */
   --tint-ink-min: 0.75; /* dark: a floor, so a dark color (green, Aqua 700) is lifted enough to read on the dark tint */
@@ -338,18 +343,18 @@
     --olive: #AA9856;
     --olive-100: #2C2816;
     --olive-700: #CBBB7E;
-    --canvas: #0B0C0B;
-    --paper: #0D0E0C;
-    --soft-ground: #0C0D0C;
-    --white: #161817;
-    --line: #313432;
-    --stone: #7C827E;
-    --slate: #C9CDCA;
-    --mist: #2B2E2D;
-    --mist-strong: #343735;
-    --lift: #3F4341;
-    --line-strong: #434744;
-    --ash: #A3A8A4;
+    --canvas: #0C0C0C;
+    --paper: #0E0E0E;
+    --soft-ground: #1F1F1F;
+    --white: #171717;
+    --line: #333333;
+    --stone: #808080;
+    --slate: #CCCCCC;
+    --mist: #2D2D2D;
+    --mist-strong: #363636;
+    --lift: #424242;
+    --line-strong: #464646;
+    --ash: #A6A6A6;
     --aqua-hover: #9AF3F1;
     --aqua-border: #1F5654;
     --red-3: #3b1219;
@@ -369,30 +374,30 @@
     --blue-9: #0090ff;
     --blue-11: #70b8ff;
     --background: var(--canvas);
-    --foreground: #F3F2EE;
+    --foreground: #F2F2F2;
     --body: var(--slate);
     --card: var(--white);
-    --card-foreground: #F3F2EE;
+    --card-foreground: #F2F2F2;
     --popover: var(--white);
-    --popover-foreground: #F3F2EE;
+    --popover-foreground: #F2F2F2;
     --subtle: var(--soft-ground);
     --band: var(--paper);
     --muted: var(--mist);
     --muted-hover: var(--mist-strong);
     --raised: var(--lift);
     --fill-on-subtle: var(--muted);
-    --sheet: #F3F2EE; /* dark: paper stays white (the canvas white), so a stack of pages still reads as paper */
+    --sheet: #F2F2F2; /* dark: paper stays white (the canvas white), so a stack of pages still reads as paper */
     --muted-foreground: var(--ash);
     --placeholder: var(--stone);
     --accent: var(--mist);
-    --accent-foreground: #F3F2EE;
+    --accent-foreground: #F2F2F2;
     --border: var(--line);
     --border-strong: var(--line-strong);
     --input: var(--line-strong);
     --primary: var(--aqua);
     --primary-foreground: #000000;
     --secondary: var(--mist);
-    --secondary-foreground: #F3F2EE;
+    --secondary-foreground: #F2F2F2;
     --ring: var(--aqua);
     --brand: var(--aqua);
     --brand-hover: var(--aqua-hover);
