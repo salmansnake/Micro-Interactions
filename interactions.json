@@ -1808,7 +1808,7 @@
         },
         {
           "label": "Crowd",
-          "value": "One dot per person"
+          "value": "One dot per person, up to 60"
         },
         {
           "label": "Safe pick",

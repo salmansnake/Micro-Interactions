@@ -48,6 +48,8 @@
 .ram-dots i { aspect-ratio: 1; border-radius: 50%; background: var(--chart-1); animation: ram-pop var(--spring-pop-duration) var(--spring-pop) both; }
 .ram-dots i.is-sender { box-shadow: 0 0 0 2px var(--ram-sunken), 0 0 0 4px var(--ram-fg); }
 @keyframes ram-pop { from { transform: scale(0); } }
+/* The count of the people past the dots belongs to the dots: 6px under them, the full panel gap before the buttons (10b.6a) */
+.ram .ram-more { margin-top: -6px; color: var(--ram-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .ram-pick { display: flex; gap: 8px; }
 
 .ram-to { display: flex; align-items: center; gap: 8px; animation: ram-in var(--spring-panel-duration) var(--spring-panel); }

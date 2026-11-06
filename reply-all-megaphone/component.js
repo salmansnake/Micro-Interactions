@@ -57,24 +57,28 @@
     root.__miRam = true;
     evenLines(root);
     var people = Math.max(2, Number(root.getAttribute('data-people')) || 40); // never 1: a reply-all needs a crowd
+    var count = people.toLocaleString('en-US'), others = (people - 1).toLocaleString('en-US');
+    var MAX_DOTS = 60; // three rows: past this the crowd is a count, so a list of thousands can't stretch the card
     var sender = root.getAttribute('data-sender') || 'Alex Rivera', first = sender.split(' ')[0];
     var crowd = root.querySelector('.ram-crowd'), dots = root.querySelector('.ram-dots'), ask = root.querySelector('.ram-ask');
+    var more = root.querySelector('.ram-more'), group = root.querySelector('.ram-who small');
     var actions = root.querySelector('.ram-actions'), to = root.querySelector('.ram-to'), chip = root.querySelector('.ram-chip');
     var status = root.querySelector('.ram-status');
     var reply = root.querySelector('.ram-reply'), all = root.querySelector('.ram-replyall');
     var just = root.querySelector('.ram-just'), yes = root.querySelector('.ram-all'), discard = root.querySelector('.ram-discard');
     var timer = 0;
 
-    ask.textContent = 'Reply to all ' + people + ' people? Only ' + first + ' asked.'; // never 1: people is at least 2
-    just.textContent = 'Just ' + first; yes.textContent = 'Yes, All ' + people;
+    group.textContent = 'to All Company · ' + count + ' people'; // never 1: people is at least 2
+    ask.textContent = 'Reply to all ' + count + ' people? Only ' + first + ' asked.'; // never 1: people is at least 2
+    just.textContent = 'Just ' + first; yes.textContent = 'Yes, All ' + count;
 
     function writeTo(everyone) {
       crowd.hidden = true; actions.hidden = true;
       to.hidden = false; to.classList.toggle('is-all', everyone);
-      chip.textContent = everyone ? 'All Company (' + people + ')' : sender;
+      chip.textContent = everyone ? 'All Company (' + count + ')' : sender;
       discard.hidden = false;
-      status.textContent = everyone ? 'Replying to all ' + people + '. Bold. Very bold.'
-        : 'Replying to ' + first + ' only. ' + (people - 1) + (people - 1 === 1 ? ' inbox thanks' : ' inboxes thank') + ' you.';
+      status.textContent = everyone ? 'Replying to all ' + count + '. Bold. Very bold.'
+        : 'Replying to ' + first + ' only. ' + others + (people - 1 === 1 ? ' inbox thanks' : ' inboxes thank') + ' you.';
       discard.focus({ preventScroll: true });
     }
 
@@ -86,9 +90,11 @@
       timer = setTimeout(function () {
         root.classList.remove('is-blaring');
         actions.hidden = true;
-        // One dot per person, the sender ringed; they spring in fast, so the crowd's size lands all at once
+        // One dot per person up to MAX_DOTS, the sender ringed; they spring in fast, so the crowd's size lands all at once
         dots.innerHTML = '';
-        for (var i = 0; i < people; i++) {
+        more.hidden = people <= MAX_DOTS;
+        more.textContent = more.hidden ? '' : 'and ' + (people - MAX_DOTS).toLocaleString('en-US') + ' more';
+        for (var i = 0; i < Math.min(people, MAX_DOTS); i++) {
           var d = document.createElement('i');
           if (i === 0) d.className = 'is-sender';
           d.style.background = COLORS[(i * 7) % 5];

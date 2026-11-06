@@ -225,6 +225,8 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .ram-dots i { aspect-ratio: 1; border-radius: 50%; background: var(--chart-1); animation: ram-pop var(--spring-pop-duration) var(--spring-pop) both; }
 .ram-dots i.is-sender { box-shadow: 0 0 0 2px var(--ram-sunken), 0 0 0 4px var(--ram-fg); }
 @keyframes ram-pop { from { transform: scale(0); } }
+/* The count of the people past the dots belongs to the dots: 6px under them, the full panel gap before the buttons (10b.6a) */
+.ram .ram-more { margin-top: -6px; color: var(--ram-muted); font-size: var(--text-small); line-height: var(--leading-small); }
 .ram-pick { display: flex; gap: 8px; }
 
 .ram-to { display: flex; align-items: center; gap: 8px; animation: ram-in var(--spring-panel-duration) var(--spring-panel); }
@@ -278,6 +280,7 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
   <div class="ram-crowd" hidden>
     <div class="ram-crowd-head"><span class="ram-horn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14"/><path d="M8 6v8"/></svg></span><p class="ram-ask">Reply to all 40 people? Only Alex asked.</p></div>
     <div class="ram-dots" aria-hidden="true"></div>
+    <p class="ram-more" aria-hidden="true" hidden></p>
     <div class="ram-pick">
       <button type="button" class="ram-btn ram-just">Just Alex</button>
       <button type="button" class="ram-btn ram-all">Yes, All 40</button>
@@ -358,24 +361,28 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
     root.__miRam = true;
     evenLines(root);
     var people = Math.max(2, Number(root.getAttribute('data-people')) || 40); // never 1: a reply-all needs a crowd
+    var count = people.toLocaleString('en-US'), others = (people - 1).toLocaleString('en-US');
+    var MAX_DOTS = 60; // three rows: past this the crowd is a count, so a list of thousands can't stretch the card
     var sender = root.getAttribute('data-sender') || 'Alex Rivera', first = sender.split(' ')[0];
     var crowd = root.querySelector('.ram-crowd'), dots = root.querySelector('.ram-dots'), ask = root.querySelector('.ram-ask');
+    var more = root.querySelector('.ram-more'), group = root.querySelector('.ram-who small');
     var actions = root.querySelector('.ram-actions'), to = root.querySelector('.ram-to'), chip = root.querySelector('.ram-chip');
     var status = root.querySelector('.ram-status');
     var reply = root.querySelector('.ram-reply'), all = root.querySelector('.ram-replyall');
     var just = root.querySelector('.ram-just'), yes = root.querySelector('.ram-all'), discard = root.querySelector('.ram-discard');
     var timer = 0;
 
-    ask.textContent = 'Reply to all ' + people + ' people? Only ' + first + ' asked.'; // never 1: people is at least 2
-    just.textContent = 'Just ' + first; yes.textContent = 'Yes, All ' + people;
+    group.textContent = 'to All Company · ' + count + ' people'; // never 1: people is at least 2
+    ask.textContent = 'Reply to all ' + count + ' people? Only ' + first + ' asked.'; // never 1: people is at least 2
+    just.textContent = 'Just ' + first; yes.textContent = 'Yes, All ' + count;
 
     function writeTo(everyone) {
       crowd.hidden = true; actions.hidden = true;
       to.hidden = false; to.classList.toggle('is-all', everyone);
-      chip.textContent = everyone ? 'All Company (' + people + ')' : sender;
+      chip.textContent = everyone ? 'All Company (' + count + ')' : sender;
       discard.hidden = false;
-      status.textContent = everyone ? 'Replying to all ' + people + '. Bold. Very bold.'
-        : 'Replying to ' + first + ' only. ' + (people - 1) + (people - 1 === 1 ? ' inbox thanks' : ' inboxes thank') + ' you.';
+      status.textContent = everyone ? 'Replying to all ' + count + '. Bold. Very bold.'
+        : 'Replying to ' + first + ' only. ' + others + (people - 1 === 1 ? ' inbox thanks' : ' inboxes thank') + ' you.';
       discard.focus({ preventScroll: true });
     }
 
@@ -387,9 +394,11 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
       timer = setTimeout(function () {
         root.classList.remove('is-blaring');
         actions.hidden = true;
-        // One dot per person, the sender ringed; they spring in fast, so the crowd's size lands all at once
+        // One dot per person up to MAX_DOTS, the sender ringed; they spring in fast, so the crowd's size lands all at once
         dots.innerHTML = '';
-        for (var i = 0; i < people; i++) {
+        more.hidden = people <= MAX_DOTS;
+        more.textContent = more.hidden ? '' : 'and ' + (people - MAX_DOTS).toLocaleString('en-US') + ' more';
+        for (var i = 0; i < Math.min(people, MAX_DOTS); i++) {
           var d = document.createElement('i');
           if (i === 0) d.className = 'is-sender';
           d.style.background = COLORS[(i * 7) % 5];
