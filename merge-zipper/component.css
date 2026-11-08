@@ -1,0 +1,95 @@
+/* Merge Zipper — two versions zip together line by line; the zipper snags on a conflict until you pick a side.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.mz {
+  --mz-bg: var(--card);
+  --mz-fg: var(--foreground);
+  --mz-muted: var(--muted-foreground);
+  --mz-sunken: var(--subtle);
+  --mz-fill: var(--muted);
+  --mz-accent: var(--primary);
+  --mz-on-accent: var(--primary-foreground);
+  --mz-yours: var(--info);
+  --mz-theirs: var(--orange);
+  --mz-row: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--mz-bg);
+  color: var(--mz-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.mz p { margin: 0; }
+.mz-head { display: flex; align-items: center; gap: 12px; }
+.mz-tile { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--mz-fill); }
+.mz-tile svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.mz-title { min-width: 0; }
+.mz-title b { display: block; font-weight: 600; }
+.mz-title small { display: block; margin-top: 2px; color: var(--mz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The code: two columns with the zipper's teeth between them */
+.mz-code { padding: 12px 12px 8px; border-radius: var(--radius-lg); background: var(--mz-sunken); }
+.mz-cols { display: grid; grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr); padding-bottom: 6px; color: var(--mz-muted); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 600; }
+.mz-cols span:last-child { grid-column: 3; text-align: right; }
+.mz-rows { position: relative; }
+.mz-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr); align-items: center; height: var(--mz-row); font: 400 var(--text-caption)/var(--mz-row) var(--font-mono); white-space: nowrap; }
+.mz-l, .mz-r { overflow: hidden; text-overflow: ellipsis; transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-base); }
+.mz-r { text-align: right; }
+.mz-m { position: absolute; left: 50%; top: 50%; padding: 0 8px; border-radius: var(--radius-sm); line-height: 22px; transform: translate(-50%, -50%) scale(0.9); opacity: 0; transition: transform var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-base); }
+/* Teeth: two staggered rows that slide together as the pull passes */
+.mz-teeth { position: relative; align-self: stretch; }
+.mz-teeth::before, .mz-teeth::after { content: ""; position: absolute; top: 0; bottom: 0; width: 7px; background: repeating-linear-gradient(to bottom, var(--border-strong) 0 4px, transparent 4px 7px); transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mz-teeth::before { left: 2px; }
+.mz-teeth::after { right: 2px; background-position: 0 3.5px; }
+.mz-row.is-zipped .mz-teeth::before { transform: translateX(3px); }
+.mz-row.is-zipped .mz-teeth::after { transform: translateX(-3px); }
+.mz-row.is-zipped .mz-l { transform: translateX(24px); opacity: 0; }
+.mz-row.is-zipped .mz-r { transform: translateX(-24px); opacity: 0; }
+.mz-row.is-zipped .mz-teeth { opacity: 0; transition: opacity var(--duration-slow) var(--duration-fast); }
+.mz-row.is-zipped .mz-m { transform: translate(-50%, -50%); opacity: 1; }
+/* The conflict: each side tinted in its own color */
+.mz-row.is-conflict .mz-l, .mz-row.is-conflict .mz-r { padding: 0 6px; border-radius: var(--radius-sm); line-height: 22px; }
+.mz-row.is-conflict .mz-l, .mz-m.is-l { background: oklch(from var(--mz-yours) var(--tint-l) calc(c * var(--tint-c)) h); }
+.mz-row.is-conflict .mz-r, .mz-m.is-r { background: oklch(from var(--mz-theirs) var(--tint-l) calc(c * var(--tint-c)) h); }
+.mz-pull { position: absolute; left: 50%; top: 0; width: 14px; height: 22px; margin-left: -7px; border-radius: var(--radius-xs); background: var(--mz-accent); box-shadow: var(--shadow-sm); transform: translateY(-14px); transition: transform var(--duration-base) var(--ease-out), opacity var(--duration-base); }
+/* Once everything is zipped the pull has done its job and steps out of the way of the last line */
+.mz.is-merged .mz-pull { opacity: 0; }
+.mz-pull::after { content: ""; position: absolute; left: 4px; right: 4px; bottom: 4px; height: 7px; border-radius: 2px; background: var(--mz-sunken); }
+.mz.is-snagged .mz-pull { animation: mz-snag 0.5s var(--ease-in-out); }
+@keyframes mz-snag { 20%, 60% { translate: -3px 0; } 40%, 80% { translate: 3px 0; } }
+
+.mz-pick { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: var(--mz-sunken); animation: mz-in var(--spring-panel-duration) var(--spring-panel); }
+@keyframes mz-in { from { opacity: 0; transform: translateY(-6px); } }
+.mz-pick-msg { font-size: var(--text-small); line-height: var(--leading-small); text-box: trim-start cap alphabetic; }
+/* Side by side and equal while both fit; on the narrowest phones each takes its own full-width row */
+.mz-pick-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.mz-keep { flex: 1 1 120px; min-width: 0; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 12px; border: 0; border-radius: var(--radius-md); background: var(--fill-on-subtle); color: var(--mz-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.mz-dot { width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; }
+.mz-dot.is-l { background: var(--mz-yours); }
+.mz-dot.is-r { background: var(--mz-theirs); }
+
+.mz-foot { display: flex; align-items: center; gap: 12px; }
+.mz .mz-status { flex: 1; min-width: 0; margin-right: auto; color: var(--mz-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.mz-btn { flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--mz-accent); color: var(--mz-on-accent); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.mz-btn.is-secondary { background: var(--mz-fill); color: var(--mz-fg); }
+.mz-btn:disabled { cursor: default; background: var(--mz-fill); color: var(--mz-muted); }
+.mz-btn:not(:disabled):active, .mz-keep:active { transform: scale(var(--press-scale)); }
+.mz-btn:focus-visible, .mz-keep:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mz-l, .mz-r, .mz-m, .mz-teeth::before, .mz-teeth::after, .mz-pull { transition-duration: var(--duration-reduced); }
+  .mz-row.is-zipped .mz-l, .mz-row.is-zipped .mz-r { transform: none; }
+  .mz.is-snagged .mz-pull, .mz-pick { animation: none; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.mz :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.mz [hidden] { display: none !important; }

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peel Sticker · Micro Interactions</title>
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="../icons/outcraft-icon-180x180-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Peel Sticker — peel a sticker back to reveal a license key. It folds over as you pull and flies off once it's past halfway.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.pst {
+  --pst-bg: var(--card);
+  --pst-fg: var(--foreground);
+  --pst-muted: var(--muted-foreground);
+  --pst-sunken: var(--subtle);
+  --pst-fill: var(--muted);
+  --pst-peel: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--pst-bg);
+  color: var(--pst-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.pst p { margin: 0; }
+.pst-title b { display: block; font-weight: 600; text-box: trim-start cap alphabetic; }
+.pst-title small { display: block; margin-top: 2px; color: var(--pst-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+.pst-slot { position: relative; display: grid; place-items: center; height: 80px; border-radius: var(--radius-lg); background: var(--pst-sunken); }
+.pst-key { font: 600 var(--text-body-lg)/var(--leading-body-lg) var(--font-mono); letter-spacing: 0.04em; white-space: nowrap; }
+.pst.is-peeled .pst-key { animation: pst-shine var(--spring-pop-duration) var(--spring-pop); }
+@keyframes pst-shine { from { transform: scale(0.96); opacity: 0.6; } }
+
+/* The sticker: Aqua on the front in both themes (it's a printed sticker), paper white on the back.
+   Peeling by --pst-peel pulls the right edge back over itself: the front is cut at the fold, the back flap lies on top. */
+.pst-sticker { position: absolute; inset: 8px; padding: 0; border: 0; background: transparent; cursor: grab; touch-action: none; }
+.pst-sticker:focus-visible { outline: none; }
+.pst-sticker:focus-visible .pst-face { box-shadow: 0 0 0 2px var(--pst-sunken), 0 0 0 4px var(--ring); }
+.pst-face { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: var(--radius-md); background: repeating-linear-gradient(135deg, var(--aqua) 0 10px, color-mix(in oklab, var(--aqua) 88%, var(--black)) 10px 20px); color: var(--black); font-size: var(--text-ui); font-weight: 700; clip-path: inset(0 calc(var(--pst-peel) / 2) 0 0 round var(--radius-md)); box-shadow: var(--shadow-xs); }
+.pst-ic { display: inline-flex; }
+.pst-ic svg { width: 16px; height: 16px; }
+.pst-flap { position: absolute; top: 0; bottom: 0; right: 0; width: calc(var(--pst-peel) / 2); border-radius: var(--radius-md) 0 0 var(--radius-md); background: linear-gradient(to right, var(--sheet) 0%, color-mix(in oklab, var(--sheet) 88%, var(--black)) 100%); box-shadow: -3px 0 6px color-mix(in srgb, var(--black) 18%, transparent); transform: translateX(calc(var(--pst-peel) / -2)); opacity: 0; }
+.pst.is-peeling .pst-flap { opacity: 1; }
+.pst.is-springing .pst-face, .pst.is-springing .pst-flap { transition: clip-path var(--spring-ui-duration) var(--spring-ui), width var(--spring-ui-duration) var(--spring-ui), transform var(--spring-ui-duration) var(--spring-ui); }
+.pst.is-gone .pst-sticker { pointer-events: none; animation: pst-fly 0.6s var(--ease-in) forwards; }
+@keyframes pst-fly { to { transform: translate(-60px, -90px) rotate(-28deg) scale(0.8); opacity: 0; } }
+
+.pst-foot { display: flex; align-items: center; gap: 12px; }
+.pst .pst-status { flex: 1; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.pst-copy { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--primary); color: var(--primary-foreground); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; animation: pst-in var(--spring-pop-duration) var(--spring-pop); }
+@keyframes pst-in { from { transform: scale(0.8); opacity: 0; } }
+.pst-copy svg { width: 16px; height: 16px; margin-right: 8px; }
+.pst-cic, .pst-cdone { display: inline-flex; }
+.pst-cdone { display: none; }
+.pst-copy.is-done .pst-cic { display: none; }
+.pst-copy.is-done .pst-cdone { display: inline-flex; }
+.pst-copy.is-done .pst-cdone svg { translate: 0 calc(16px / 48); }
+.pst-copy:not(.is-done):active { transform: scale(var(--press-scale)); }
+.pst-copy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pst.is-gone .pst-sticker { animation-duration: var(--duration-reduced); animation-name: pst-fade; }
+  @keyframes pst-fade { to { opacity: 0; } }
+  .pst.is-peeled .pst-key, .pst-copy { animation: none; }
+  .pst.is-springing .pst-face, .pst.is-springing .pst-flap { transition-duration: var(--duration-reduced); transition-timing-function: var(--ease-out); }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.pst :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.pst [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Peel Sticker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="pst" data-mi="peel-sticker" data-key="ATLS-7Q2M-K9XD-44PB">
+  <p class="pst-title"><b>Atlas Pro is yours</b><small>Your license key is under the sticker.</small></p>
+  <div class="pst-slot">
+    <p class="pst-key" aria-hidden="true">ATLS-7Q2M-K9XD-44PB</p>
+    <button type="button" class="pst-sticker" aria-label="Peel off the sticker to show your license key">
+      <span class="pst-face"><span class="pst-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5"/></svg></span><span class="pst-word">Peel to reveal</span></span>
+      <span class="pst-flap" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div class="pst-foot">
+    <p class="pst-status" role="status" aria-live="polite">Drag the sticker from its right edge, or press it.</p>
+    <button type="button" class="pst-copy" hidden><span class="pst-cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></span><span class="pst-cdone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="pst-clabel">Copy Key</span></button>
+  </div>
+</div>
+</div>
+<script>
+/* Peel Sticker — vanilla JS. Auto-initializes every [data-mi="peel-sticker"].
+   Dragging left pulls the sticker's right edge back over itself (--pst-peel is how far the edge has moved). Past 55% of
+   its width it comes off and flies away; short of that it springs back flat. A press (or Enter) peels it in one go.
+   Call window.initPeelSticker(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
+  function initPeelSticker(root) {
+    if (!root || root.__miPst) return;
+    root.__miPst = true;
+    evenLines(root);
+    var sticker = root.querySelector('.pst-sticker'), key = root.querySelector('.pst-key'), status = root.querySelector('.pst-status');
+    var copy = root.querySelector('.pst-copy'), copyLabel = root.querySelector('.pst-clabel');
+    var code = root.getAttribute('data-key') || key.textContent;
+    var down = false, moved = false, start = 0, peel = 0, gone = false, timer = 0;
+    key.textContent = code;
+
+    function set(px) { peel = px; root.style.setProperty('--pst-peel', px.toFixed(1) + 'px'); root.classList.toggle('is-peeling', px > 0.5); }
+    function off() {
+      gone = true; root.classList.add('is-gone', 'is-peeled');
+      // Once it's off, the sticker leaves the tab order at once and the page when it has flown away
+      sticker.tabIndex = -1; sticker.setAttribute('aria-hidden', 'true');
+      sticker.addEventListener('animationend', function () { sticker.hidden = true; }, { once: true });
+      key.removeAttribute('aria-hidden');
+      status.textContent = 'Peeled clean. The key is yours.';
+      copy.hidden = false; copy.focus({ preventScroll: true });
+    }
+    function springBack() {
+      root.classList.add('is-springing'); set(0);
+      setTimeout(function () { root.classList.remove('is-springing'); }, 480);
+    }
+
+    sticker.addEventListener('pointerdown', function (e) {
+      if (gone) return;
+      down = true; moved = false; start = e.clientX; sticker.setPointerCapture(e.pointerId);
+    });
+    sticker.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      var dx = start - e.clientX;
+      if (!moved && Math.abs(dx) < 3) return;
+      moved = true;
+      set(Math.max(0, Math.min(sticker.clientWidth * 1.4, dx)));
+    });
+    function up() {
+      if (!down) return;
+      down = false;
+      if (!moved) return;
+      if (peel > sticker.clientWidth * 0.55) off(); else springBack();
+    }
+    sticker.addEventListener('pointerup', up);
+    sticker.addEventListener('pointercancel', function () { down = false; springBack(); });
+    // A press, or the keyboard: peel it in one smooth pull
+    sticker.addEventListener('click', function () {
+      if (gone || moved) { moved = false; return; }
+      if (reduce.matches) return off();
+      var W = sticker.clientWidth, t0 = performance.now();
+      (function pull(now) {
+        var t = Math.min(1, (now - t0) / 520), e = t * t * (3 - 2 * t);
+        set(e * W * 0.8);
+        if (t < 1) requestAnimationFrame(pull); else off();
+      })(t0);
+    });
+
+    copy.addEventListener('click', function () {
+      try { if (navigator.clipboard) navigator.clipboard.writeText(code).catch(function () {}); } catch (e) {}
+      copy.classList.add('is-done'); copyLabel.textContent = 'Copied';
+      clearTimeout(timer);
+      timer = setTimeout(function () { copy.classList.remove('is-done'); copyLabel.textContent = 'Copy Key'; }, 1500);
+    });
+    // Copy keeps its width when it says Copied (button rule: confirmations never move)
+    function sizeCopy() {
+      var was = copy.hidden; copy.hidden = false; copy.style.minWidth = '';
+      var w = copy.getBoundingClientRect().width; copyLabel.textContent = 'Copied';
+      copy.classList.add('is-done'); w = Math.max(w, copy.getBoundingClientRect().width);
+      copy.classList.remove('is-done'); copyLabel.textContent = 'Copy Key';
+      copy.style.minWidth = Math.ceil(w) + 'px'; copy.hidden = was;
+    }
+    sizeCopy();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeCopy);
+  }
+
+  window.initPeelSticker = initPeelSticker;
+  function boot() { document.querySelectorAll('[data-mi="peel-sticker"]').forEach(initPeelSticker); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initPeelSticker"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

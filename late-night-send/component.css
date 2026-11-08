@@ -1,0 +1,80 @@
+/* Late-Night Send — after hours, Send yawns and offers to deliver the message in the morning instead.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.lns {
+  --lns-bg: var(--card);
+  --lns-fg: var(--foreground);
+  --lns-muted: var(--muted-foreground);
+  --lns-sunken: var(--subtle);
+  --lns-fill: var(--muted);
+  --lns-accent: var(--primary);
+  --lns-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--lns-bg);
+  color: var(--lns-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.lns p { margin: 0; }
+/* On the narrowest phones the switch drops under its label rather than squeezing it onto two lines */
+.lns-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.lns-label { white-space: nowrap; color: var(--lns-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* Segmented control: the track always shows, the thumb is raised */
+.lns-seg { position: relative; display: grid; grid-template-columns: 1fr 1fr; height: 40px; padding: 3px; box-sizing: border-box; border-radius: var(--radius-md); background: var(--lns-sunken); }
+.lns-thumb { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: var(--radius-sm); background: var(--raised); box-shadow: var(--shadow-xs); transform: translateX(var(--lns-x, 100%)); transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.lns-seg button { position: relative; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--lns-muted); font: inherit; font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; cursor: pointer; }
+.lns-seg button[aria-checked="true"] { color: var(--lns-fg); }
+.lns-seg button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.lns-compose { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: var(--lns-sunken); }
+.lns-to { display: flex; gap: 8px; font-size: var(--text-small); line-height: var(--leading-small); text-box: trim-start cap alphabetic; }
+.lns-to span { color: var(--lns-muted); }
+.lns-to b { font-weight: 600; }
+.lns-text { color: var(--body); font-size: var(--text-ui); line-height: var(--leading-ui); }
+
+.lns-ask { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; animation: lns-in var(--spring-panel-duration) var(--spring-panel); }
+@keyframes lns-in { from { opacity: 0; transform: translateY(-6px); } }
+.lns-moon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--inverse); color: var(--inverse-foreground); }
+.lns-moon svg { width: 16px; height: 16px; }
+.lns-ask-msg { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+/* Side by side and equal while both keep their padding; stacked full width on the narrowest phones */
+.lns-ask-btns { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+.lns-ask-btns .lns-btn { flex: 1 1 150px; min-width: 0; }
+
+.lns-foot { display: flex; align-items: center; gap: 12px; }
+.lns .lns-status { flex: 1; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.lns-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.lns-btn { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--lns-fill); color: var(--lns-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.lns-btn:hover { background: var(--muted-hover); }
+.lns-later, .lns-send { background: var(--lns-accent); color: var(--lns-on-accent); }
+.lns-later:hover, .lns-send:hover { background: var(--lns-accent); }
+.lns-send { flex: none; margin-left: auto; }
+.lns-send.is-secondary, .lns-send.is-secondary:hover { background: var(--lns-fill); color: var(--lns-fg); }
+.lns-send svg { width: 16px; height: 16px; margin-right: 8px; }
+.lns-send:disabled { cursor: default; background: var(--lns-fill); color: var(--lns-muted); }
+.lns-zz { display: none; }
+.lns.is-night .lns-send:not(.is-secondary) .lns-zz { display: inline-flex; }
+.lns.is-night .lns-send:not(.is-secondary) > svg, .lns-send.is-secondary svg { display: none; }
+/* The yawn: a slow stretch and a sigh, once when night falls and again on hover */
+.lns.is-night .lns-send.is-yawning { animation: lns-yawn 1.4s var(--ease-in-out); }
+@keyframes lns-yawn { 0%, 100% { transform: none; } 35% { transform: scale(1.06, 0.88); } 60% { transform: scale(0.97, 1.08); } }
+.lns-btn:active { transform: scale(var(--press-scale)); }
+.lns-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lns-thumb, .lns-btn { transition-duration: var(--duration-reduced); }
+  .lns-ask, .lns.is-night .lns-send.is-yawning { animation: none; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.lns :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.lns [hidden] { display: none !important; }

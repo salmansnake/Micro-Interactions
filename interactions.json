@@ -3,12 +3,14 @@
   "types": [
     "Useful",
     "Secretly Useful",
-    "Pure Joke"
+    "Pure Joke",
+    "Satisfying"
   ],
   "typeBadges": {
     "Useful": "t-useful",
     "Secretly Useful": "oc-badge--ai",
-    "Pure Joke": "oc-badge--pop"
+    "Pure Joke": "oc-badge--pop",
+    "Satisfying": "t-sage"
   },
   "topics": [
     "Billing and Plans",
@@ -1742,7 +1744,7 @@
       "name": "Address Unpack",
       "type": "Useful",
       "topic": "Forms and Input",
-      "new": true,
+      "new": false,
       "summary": "Paste a whole address into one field and it breaks apart on its own, each piece flying into its own field: street, apartment, city, state and ZIP.",
       "tryit": "Press {Paste Example}, or type your own address and press {Unpack}.",
       "specs": [
@@ -1770,7 +1772,7 @@
       "name": "Time Zone Sundial",
       "type": "Useful",
       "topic": "Meetings and Calendar",
-      "new": true,
+      "new": false,
       "summary": "Drag a meeting time and each attendee's sun or moon rises or sets where they live. Anyone who would be asleep is marked.",
       "tryit": "Drag the time slider, then press {Find a Kind Time}.",
       "specs": [
@@ -1798,7 +1800,7 @@
       "name": "Reply-All Megaphone",
       "type": "Secretly Useful",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "Reply All to 40 people and the button turns into a blaring megaphone, then shows the whole crowd and asks whether the one person who asked would do.",
       "tryit": "Press {Reply All}, then {Just Alex}.",
       "specs": [
@@ -1826,7 +1828,7 @@
       "name": "Caps Lock Hats",
       "type": "Secretly Useful",
       "topic": "Forms and Input",
-      "new": true,
+      "new": false,
       "summary": "Type a password with Caps Lock on and every dot in the field puts on a tiny party hat. Impossible to miss, and it never nags.",
       "tryit": "Turn on Caps Lock and type in the password, or press {Caps Lock}.",
       "specs": [
@@ -1854,7 +1856,7 @@
       "name": "404 Search Party",
       "type": "Pure Joke",
       "topic": "Search and Navigation",
-      "new": true,
+      "new": false,
       "summary": "On a missing page, cursors with flashlights sweep a dark room looking for it. One finds the clue, the typo in the address, and suggests where you meant to go.",
       "tryit": "Move your pointer over the dark room, and wait for the search party.",
       "specs": [
@@ -1873,6 +1875,202 @@
         {
           "label": "Fix",
           "value": "The address you meant"
+        }
+      ]
+    },
+    {
+      "number": "067",
+      "slug": "bubble-wrap",
+      "name": "Bubble Wrap Loader",
+      "type": "Satisfying",
+      "topic": "Loading and Status",
+      "new": true,
+      "summary": "While an upload runs, there's a sheet of bubble wrap to pop. Press one, or drag across a row. It doesn't make the upload faster, and it says so.",
+      "tryit": "Drag across the bubbles, then press {New Sheet}.",
+      "specs": [
+        {
+          "label": "Pop",
+          "value": "Squash, burst, flat"
+        },
+        {
+          "label": "Drag",
+          "value": "Pops every bubble you cross"
+        },
+        {
+          "label": "Keys",
+          "value": "Arrows, then Space"
+        },
+        {
+          "label": "Upload",
+          "value": "Runs on its own"
+        }
+      ]
+    },
+    {
+      "number": "068",
+      "slug": "rubber-toggle",
+      "name": "Rubber Toggle",
+      "type": "Satisfying",
+      "topic": "Forms and Input",
+      "new": true,
+      "summary": "Switches whose knobs feel like rubber. Pull a knob past the end and it stretches instead of moving, then snaps back with a wobble.",
+      "tryit": "Drag the Mentions knob to the right, past the end, and let go.",
+      "specs": [
+        {
+          "label": "Stretch",
+          "value": "Up to 1.5×, with resistance"
+        },
+        {
+          "label": "Snap",
+          "value": "Pop spring, 680ms"
+        },
+        {
+          "label": "Tap",
+          "value": "Squishes as it flips"
+        },
+        {
+          "label": "Role",
+          "value": "Switch, keyboard too"
+        }
+      ]
+    },
+    {
+      "number": "069",
+      "slug": "peel-sticker",
+      "name": "Peel Sticker",
+      "type": "Satisfying",
+      "topic": "Billing and Plans",
+      "new": true,
+      "summary": "Your license key is hidden under a sticker. Pull its edge and it folds back over itself; pull past halfway and it comes off and flies away.",
+      "tryit": "Drag the sticker from its right edge to the left, then press {Copy Key}.",
+      "specs": [
+        {
+          "label": "Fold",
+          "value": "Halfway along your pull"
+        },
+        {
+          "label": "Release",
+          "value": "Off past 55%"
+        },
+        {
+          "label": "Back",
+          "value": "Springs flat if short"
+        },
+        {
+          "label": "Press",
+          "value": "Peels in one pull"
+        }
+      ]
+    },
+    {
+      "number": "070",
+      "slug": "domino-delete",
+      "name": "Domino Delete",
+      "type": "Satisfying",
+      "topic": "Files and Data",
+      "new": true,
+      "summary": "Delete several items at once and they topple one into the next like dominoes, left to right, then the ones left slide together to close the gap.",
+      "tryit": "Pick a few photos, press {Delete}, then {Undo}.",
+      "specs": [
+        {
+          "label": "Topple",
+          "value": "78° over the bottom edge"
+        },
+        {
+          "label": "Beat",
+          "value": "90ms apart"
+        },
+        {
+          "label": "Gap",
+          "value": "Survivors slide in"
+        },
+        {
+          "label": "Undo",
+          "value": "Stands them back up"
+        }
+      ]
+    },
+    {
+      "number": "071",
+      "slug": "merge-zipper",
+      "name": "Merge Zipper",
+      "type": "Useful",
+      "topic": "Developer Tools",
+      "new": true,
+      "summary": "Two versions of a file zip together line by line. The zipper snags on a line both sides changed and waits until you keep one.",
+      "tryit": "Press {Merge}, then pick {Keep Yours} or {Keep Theirs} when it snags.",
+      "specs": [
+        {
+          "label": "Zip",
+          "value": "One row every 200ms"
+        },
+        {
+          "label": "Snag",
+          "value": "Shakes on a conflict"
+        },
+        {
+          "label": "Sides",
+          "value": "Blue yours, Orange theirs"
+        },
+        {
+          "label": "Undo",
+          "value": "Unzip, bottom up"
+        }
+      ]
+    },
+    {
+      "number": "072",
+      "slug": "late-night-send",
+      "name": "Late-Night Send",
+      "type": "Secretly Useful",
+      "topic": "Messages and Email",
+      "new": true,
+      "summary": "Late at night {Send} gets sleepy: its icon turns into a moon, it yawns, and it offers to deliver your message at 9:00 AM instead.",
+      "tryit": "Press {Send} at 11:48 PM, then switch to 2:00 PM and press it again.",
+      "specs": [
+        {
+          "label": "Night",
+          "value": "Moon icon and a yawn"
+        },
+        {
+          "label": "Offer",
+          "value": "Send at 9:00 AM"
+        },
+        {
+          "label": "Day",
+          "value": "Sends straight away"
+        },
+        {
+          "label": "Undo",
+          "value": "Every send"
+        }
+      ]
+    },
+    {
+      "number": "073",
+      "slug": "tired-hand",
+      "name": "Tired Hand",
+      "type": "Pure Joke",
+      "topic": "Meetings and Calendar",
+      "new": true,
+      "summary": "A raised hand that nobody notices gets tired. It droops, switches arms, leans, props itself up on a stick, then waves wildly.",
+      "tryit": "Press {Raise Hand} and wait about ten seconds.",
+      "specs": [
+        {
+          "label": "Minute",
+          "value": "Every 2 seconds"
+        },
+        {
+          "label": "Droop",
+          "value": "18°, then 38°"
+        },
+        {
+          "label": "Stick",
+          "value": "At 4 minutes"
+        },
+        {
+          "label": "Noticed",
+          "value": "After 5 minutes"
         }
       ]
     }

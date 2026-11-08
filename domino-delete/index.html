@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domino Delete · Micro Interactions</title>
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="../icons/outcraft-icon-180x180-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Domino Delete — delete several items at once and they topple one into the next like dominoes, then the gap closes.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.dmd {
+  --dmd-bg: var(--card);
+  --dmd-fg: var(--foreground);
+  --dmd-muted: var(--muted-foreground);
+  --dmd-sunken: var(--subtle);
+  --dmd-fill: var(--muted);
+  --dmd-accent: var(--primary);
+  --dmd-on-accent: var(--primary-foreground);
+  --dmd-frame: var(--card);
+  --dmd-sun-l: 0.99;
+  --dmd-step: -1;
+  --dmd-sky: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--dmd-bg);
+  color: var(--dmd-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.dmd p, .dmd ul, .dmd ol { margin: 0; }
+.dmd ul, .dmd ol { padding: 0; list-style: none; }
+.dmd-title b { display: block; font-weight: 600; text-box: trim-start cap alphabetic; }
+.dmd-title small { display: block; margin-top: 2px; color: var(--dmd-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* The photos stand in a row like dominoes on a gray shelf */
+.dmd-row { display: flex; align-items: flex-end; gap: 6px; height: 132px; padding: 0 12px 14px; box-sizing: border-box; border-radius: var(--radius-lg); background: var(--dmd-sunken); }
+/* Every tile is a print: a white frame with a little photo in it and its number on the strip below. It keeps a
+   seventh of the shelf, so the ones left keep their size when others are gone */
+.dmd-tile { --dmd-k: var(--aqua); position: relative; flex: 0 0 calc((100% - 36px) / 7); min-width: 0; display: flex; flex-direction: column; height: 96px; padding: 3px 3px 0; box-sizing: border-box; border: 0; border-radius: var(--radius-md); background: var(--dmd-frame); color: var(--dmd-muted); box-shadow: var(--shadow-sm); cursor: pointer; transform-origin: 100% 100%; transition: transform var(--spring-ui-duration) var(--spring-ui), box-shadow var(--duration-fast); }
+/* The photo: hills, sea or mountains in the tile's color, a pale sky and a sun, the hills a step darker each layer
+   nearer. In dark the sky is deep, the hills a step lighter each layer nearer (dusk) and the sun a bright moon */
+.dmd-pic { flex: 1; overflow: hidden; border-radius: calc(var(--radius-md) - 3px); background: oklch(from var(--dmd-k) calc(var(--tint-l) + var(--dmd-sky)) calc(c * var(--tint-c)) h); }
+.dmd-pic svg { display: block; width: 100%; height: 100%; }
+.dmd-pic .s { fill: oklch(from var(--dmd-k) var(--dmd-sun-l) calc(c * 0.35) h); }
+.dmd-pic .m { fill: oklch(from var(--dmd-k) calc(var(--tint-l) + var(--dmd-sky) + var(--dmd-step) * 0.08) calc(c * 0.6) h); }
+.dmd-pic .f { fill: oklch(from var(--dmd-k) calc(var(--tint-l) + var(--dmd-sky) + var(--dmd-step) * 0.17) calc(c * 0.8) h); }
+/* The blurry ones really are: picking them is the job */
+.dmd-tile.is-blurry .dmd-pic svg { filter: blur(1.6px); transform: scale(1.1); }
+.dmd-tile b { display: block; height: 16px; font: 600 10px/16px var(--font-mono); text-align: center; }
+/* Picked: it lifts, takes a ring in the primary color and a check pops in at the photo's bottom right corner,
+   inside the print, so it never reaches into the gap or the next print's ring */
+.dmd-tile[aria-pressed="true"] { transform: translateY(-8px); box-shadow: 0 0 0 2px var(--dmd-accent), var(--shadow-md); }
+.dmd-check { position: absolute; right: 6px; bottom: 19px; display: grid; place-items: center; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--dmd-accent); color: var(--dmd-on-accent); box-shadow: 0 0 0 1.5px var(--dmd-frame); opacity: 0; transform: scale(0.4); transition: transform var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-fast); }
+.dmd-check svg { width: 10px; height: 10px; }
+.dmd-tile[aria-pressed="true"] .dmd-check { opacity: 1; transform: none; }
+/* Outside the picked ring, so focus never hides it */
+.dmd-tile:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+/* Toppling: rotate over the bottom right edge, each one a beat after the one before */
+.dmd-tile.is-falling { transform: rotate(78deg) translate(4px, 0); opacity: 0; transition: transform 0.42s var(--ease-in), opacity var(--duration-fast) 0.32s; }
+.dmd-tile.is-falling .dmd-check { opacity: 0; }
+/* A photo that stays gets knocked by the one falling into it, then rocks back */
+.dmd-tile.is-knocked { animation: dmd-knock var(--duration-slower) var(--ease-out); }
+@keyframes dmd-knock { 30% { transform: rotate(6deg); } 65% { transform: rotate(-1.5deg); } }
+.dmd-tile.is-gone { display: none; }
+.dmd-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--dmd-fill); color: var(--dmd-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.dmd-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.dmd-btn:hover:not(:disabled) { background: var(--muted-hover); }
+.dmd-btn.is-primary, .dmd-btn.is-primary:hover:not(:disabled) { background: var(--dmd-accent); color: var(--dmd-on-accent); }
+.dmd-btn:disabled { cursor: default; background: var(--dmd-fill); color: var(--dmd-muted); }
+.dmd-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.dmd-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.dmd-foot { display: flex; align-items: center; gap: 12px; }
+.dmd-foot > button:first-of-type { margin-left: auto; }
+.dmd .dmd-status { flex: 1; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+/* An empty status stays a live region but leaves the layout until text arrives */
+.dmd-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* In dark the shelf takes the page ground and the prints a lighter gray frame, so they stand out from it with no
+   shadow to help; the sky lifts 0.06 so every photo stands clear of its frame; the scene turns to dusk */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dmd { --dmd-sunken: var(--background); --dmd-frame: var(--muted); --dmd-sky: 0.06; --dmd-sun-l: 0.86; --dmd-step: 1; } }
+:root[data-theme="dark"] .dmd { --dmd-sunken: var(--background); --dmd-frame: var(--muted); --dmd-sky: 0.06; --dmd-sun-l: 0.86; --dmd-step: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dmd-tile, .dmd-check { transition-duration: var(--duration-reduced); }
+  .dmd-tile.is-falling { transform: none; transition: opacity var(--duration-reduced); }
+  .dmd-tile.is-knocked { animation: none; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.dmd :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.dmd [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Domino Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="dmd" data-mi="domino-delete">
+  <p class="dmd-title"><b>Camera roll</b><small>Pick the blurry ones, then delete them all at once.</small></p>
+  <div class="dmd-row" role="group" aria-label="Photos"></div>
+  <div class="dmd-foot">
+    <p class="dmd-status" role="status" aria-live="polite"></p>
+    <button type="button" class="dmd-btn dmd-undo" hidden><span>Undo</span></button>
+    <button type="button" class="dmd-btn is-primary dmd-del" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span>Delete</span></button>
+  </div>
+</div>
+</div>
+<script>
+/* Domino Delete — vanilla JS. Auto-initializes every [data-mi="domino-delete"].
+   Tap photos to pick them (they lift). Delete topples the picked ones left to right, 90ms apart, each falling over
+   its bottom right edge into the next; then the rest slide together (measured before and after, then eased).
+   A photo that stays rocks when the one falling into it lands. Undo stands them all back up. Call window.initDominoDelete(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var PHOTOS = [['IMG_2041', 'var(--aqua)', true], ['IMG_2042', 'var(--pink)', false], ['IMG_2043', 'var(--sage)', true], ['IMG_2044', 'var(--orange)', true], ['IMG_2045', 'var(--olive)', false], ['IMG_2046', 'var(--aqua)', true], ['IMG_2047', 'var(--pink)', false]];
+  // Three little photos (hills, sea, mountains), each a sun (.s) over a far (.m) and a near (.f) layer, colored in CSS
+  var SCENES = [
+    '<circle class="s" cx="27" cy="17" r="6"/><path class="m" d="M0 40Q12 28 24 36T40 32V60H0Z"/><path class="f" d="M0 49Q16 39 40 47V60H0Z"/>',
+    '<circle class="s" cx="20" cy="30" r="7"/><path class="m" d="M0 36H40V60H0Z"/><path class="f" d="M0 49Q10 45 20 49T40 49V60H0Z"/>',
+    '<circle class="s" cx="12" cy="16" r="5"/><path class="m" d="M0 42L12 25L21 36L30 27L40 38V60H0Z"/><path class="f" d="M0 50L14 40L26 50L40 44V60H0Z"/>'
+  ];
+  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+  // A button keeps one width whatever it says: as wide as its widest label (el is the label inside it)
+  function keepWidth(btn, el, labels) {
+    function size() {
+      var keep = el.textContent, w = 0; btn.style.minWidth = '';
+      labels.forEach(function (s) { el.textContent = s; w = Math.max(w, btn.getBoundingClientRect().width); });
+      el.textContent = keep; btn.style.minWidth = Math.ceil(w) + 'px';
+    }
+    size();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(size);
+  }
+
+  function initDominoDelete(root) {
+    if (!root || root.__miDmd) return;
+    root.__miDmd = true;
+    evenLines(root);
+    var row = root.querySelector('.dmd-row'), del = root.querySelector('.dmd-del'), delLabel = del.querySelector('span');
+    var undo = root.querySelector('.dmd-undo'), status = root.querySelector('.dmd-status'), last = [];
+
+    PHOTOS.forEach(function (p, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'dmd-tile' + (p[2] ? ' is-blurry' : ''); b.setAttribute('aria-pressed', p[2] ? 'true' : 'false');
+      b.setAttribute('aria-label', p[0] + (p[2] ? ', blurry' : ''));
+      b.style.setProperty('--dmd-k', p[1]);
+      b.innerHTML = '<span class="dmd-pic"><svg viewBox="0 0 40 60" preserveAspectRatio="xMidYMax slice" aria-hidden="true">' + SCENES[i % 3] + '</svg></span><b></b><span class="dmd-check">' + CHECK + '</span>';
+      b.querySelector('b').textContent = p[0].slice(-2);
+      b.addEventListener('animationend', function () { b.classList.remove('is-knocked'); });
+      b.addEventListener('click', function () { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); render(); });
+      row.appendChild(b);
+    });
+    function picked() { return Array.prototype.filter.call(row.children, function (b) { return !b.classList.contains('is-gone') && b.getAttribute('aria-pressed') === 'true'; }); }
+    function render() {
+      var n = picked().length;
+      del.disabled = !n; delLabel.textContent = n ? 'Delete ' + n : 'Delete';
+    }
+    // Slide the survivors into the gap: remember where they were, let them move, then ease from there
+    function closeGap(before) {
+      Array.prototype.forEach.call(row.children, function (b) {
+        if (b.classList.contains('is-gone') || reduce.matches) return;
+        var dx = before.get(b) - b.getBoundingClientRect().left;
+        if (!dx) return;
+        b.style.transition = 'none'; b.style.transform = 'translateX(' + dx + 'px)';
+        void b.offsetWidth; b.style.transition = ''; b.style.transform = '';
+      });
+    }
+    del.addEventListener('click', function () {
+      var p = picked(); if (!p.length) return;
+      del.disabled = true; last = p;
+      p.forEach(function (b, i) {
+        setTimeout(function () { b.classList.add('is-falling'); }, reduce.matches ? 0 : i * 90);
+        // The photo it falls into, if that one stays, takes the hit as it lands
+        var next = b.nextElementSibling;
+        while (next && next.classList.contains('is-gone')) next = next.nextElementSibling;
+        if (next && p.indexOf(next) < 0 && !reduce.matches) setTimeout(function () { next.classList.add('is-knocked'); }, i * 90 + 200);
+      });
+      setTimeout(function () {
+        var before = new Map(); Array.prototype.forEach.call(row.children, function (b) { before.set(b, b.getBoundingClientRect().left); });
+        p.forEach(function (b) { b.classList.add('is-gone'); b.classList.remove('is-falling'); b.setAttribute('aria-pressed', 'false'); });
+        closeGap(before);
+        undo.hidden = false;
+        status.textContent = 'Toppled ' + p.length + (p.length === 1 ? ' photo' : ' photos') + '.';
+        render(); undo.focus({ preventScroll: true });
+      }, reduce.matches ? 140 : p.length * 90 + 440);
+    });
+    undo.addEventListener('click', function () {
+      var before = new Map(); Array.prototype.forEach.call(row.children, function (b) { before.set(b, b.getBoundingClientRect().left); });
+      last.forEach(function (b) { b.classList.remove('is-gone'); b.setAttribute('aria-pressed', 'true'); });
+      closeGap(before);
+      undo.hidden = true; status.textContent = 'Stood them all back up.'; render(); del.focus({ preventScroll: true });
+    });
+    render();
+    keepWidth(del, delLabel, ['Delete', 'Delete 7']);
+  }
+
+  window.initDominoDelete = initDominoDelete;
+  function boot() { document.querySelectorAll('[data-mi="domino-delete"]').forEach(initDominoDelete); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initDominoDelete"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

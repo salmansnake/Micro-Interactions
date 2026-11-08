@@ -1,0 +1,71 @@
+/* Peel Sticker — peel a sticker back to reveal a license key. It folds over as you pull and flies off once it's past halfway.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.pst {
+  --pst-bg: var(--card);
+  --pst-fg: var(--foreground);
+  --pst-muted: var(--muted-foreground);
+  --pst-sunken: var(--subtle);
+  --pst-fill: var(--muted);
+  --pst-peel: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--pst-bg);
+  color: var(--pst-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.pst p { margin: 0; }
+.pst-title b { display: block; font-weight: 600; text-box: trim-start cap alphabetic; }
+.pst-title small { display: block; margin-top: 2px; color: var(--pst-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+.pst-slot { position: relative; display: grid; place-items: center; height: 80px; border-radius: var(--radius-lg); background: var(--pst-sunken); }
+.pst-key { font: 600 var(--text-body-lg)/var(--leading-body-lg) var(--font-mono); letter-spacing: 0.04em; white-space: nowrap; }
+.pst.is-peeled .pst-key { animation: pst-shine var(--spring-pop-duration) var(--spring-pop); }
+@keyframes pst-shine { from { transform: scale(0.96); opacity: 0.6; } }
+
+/* The sticker: Aqua on the front in both themes (it's a printed sticker), paper white on the back.
+   Peeling by --pst-peel pulls the right edge back over itself: the front is cut at the fold, the back flap lies on top. */
+.pst-sticker { position: absolute; inset: 8px; padding: 0; border: 0; background: transparent; cursor: grab; touch-action: none; }
+.pst-sticker:focus-visible { outline: none; }
+.pst-sticker:focus-visible .pst-face { box-shadow: 0 0 0 2px var(--pst-sunken), 0 0 0 4px var(--ring); }
+.pst-face { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: var(--radius-md); background: repeating-linear-gradient(135deg, var(--aqua) 0 10px, color-mix(in oklab, var(--aqua) 88%, var(--black)) 10px 20px); color: var(--black); font-size: var(--text-ui); font-weight: 700; clip-path: inset(0 calc(var(--pst-peel) / 2) 0 0 round var(--radius-md)); box-shadow: var(--shadow-xs); }
+.pst-ic { display: inline-flex; }
+.pst-ic svg { width: 16px; height: 16px; }
+.pst-flap { position: absolute; top: 0; bottom: 0; right: 0; width: calc(var(--pst-peel) / 2); border-radius: var(--radius-md) 0 0 var(--radius-md); background: linear-gradient(to right, var(--sheet) 0%, color-mix(in oklab, var(--sheet) 88%, var(--black)) 100%); box-shadow: -3px 0 6px color-mix(in srgb, var(--black) 18%, transparent); transform: translateX(calc(var(--pst-peel) / -2)); opacity: 0; }
+.pst.is-peeling .pst-flap { opacity: 1; }
+.pst.is-springing .pst-face, .pst.is-springing .pst-flap { transition: clip-path var(--spring-ui-duration) var(--spring-ui), width var(--spring-ui-duration) var(--spring-ui), transform var(--spring-ui-duration) var(--spring-ui); }
+.pst.is-gone .pst-sticker { pointer-events: none; animation: pst-fly 0.6s var(--ease-in) forwards; }
+@keyframes pst-fly { to { transform: translate(-60px, -90px) rotate(-28deg) scale(0.8); opacity: 0; } }
+
+.pst-foot { display: flex; align-items: center; gap: 12px; }
+.pst .pst-status { flex: 1; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.pst-copy { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--primary); color: var(--primary-foreground); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; animation: pst-in var(--spring-pop-duration) var(--spring-pop); }
+@keyframes pst-in { from { transform: scale(0.8); opacity: 0; } }
+.pst-copy svg { width: 16px; height: 16px; margin-right: 8px; }
+.pst-cic, .pst-cdone { display: inline-flex; }
+.pst-cdone { display: none; }
+.pst-copy.is-done .pst-cic { display: none; }
+.pst-copy.is-done .pst-cdone { display: inline-flex; }
+.pst-copy.is-done .pst-cdone svg { translate: 0 calc(16px / 48); }
+.pst-copy:not(.is-done):active { transform: scale(var(--press-scale)); }
+.pst-copy:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pst.is-gone .pst-sticker { animation-duration: var(--duration-reduced); animation-name: pst-fade; }
+  @keyframes pst-fade { to { opacity: 0; } }
+  .pst.is-peeled .pst-key, .pst-copy { animation: none; }
+  .pst.is-springing .pst-face, .pst.is-springing .pst-flap { transition-duration: var(--duration-reduced); transition-timing-function: var(--ease-out); }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.pst :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.pst [hidden] { display: none !important; }

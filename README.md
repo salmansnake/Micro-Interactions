@@ -3,9 +3,9 @@
 <!-- intro:start -->
 **Micro interactions for the moments products get wrong.**
 
-Serious interactions for real product moments, and funny ones that shouldn't exist (some secretly should). Copy the code or the prompt. New ones drop every week.
+Serious interactions for real product moments, funny ones that shouldn't exist (some secretly should), and a few that are just satisfying. Copy the code or the prompt. New ones drop every week.
 
-66 interactions so far (37 Useful, 16 Secretly Useful, 13 Pure Joke).
+73 interactions so far (38 Useful, 17 Secretly Useful, 14 Pure Joke, 4 Satisfying).
 <!-- intro:end -->
 
 Every interaction runs live on the site and ships with a prompt that rebuilds it in any stack. Designed by Outcraft©, built on the Outcraft Design System v2.
@@ -112,11 +112,18 @@ The site's **Submit an idea** form sends to the Formspree form set as `formEndpo
 | 059 | [Dizzy Refresh](dizzy-refresh/) | Secretly Useful | Loading and Status |  |
 | 060 | [Aging Reminder](aging-reminder/) | Secretly Useful | Messages and Email |  |
 | 061 | [Cancel, Eventually](cancel-dodge/) | Pure Joke | Billing and Plans |  |
-| 062 | [Address Unpack](address-unpack/) | Useful | Forms and Input | New |
-| 063 | [Time Zone Sundial](timezone-sundial/) | Useful | Meetings and Calendar | New |
-| 064 | [Reply-All Megaphone](reply-all-megaphone/) | Secretly Useful | Messages and Email | New |
-| 065 | [Caps Lock Hats](caps-lock-hats/) | Secretly Useful | Forms and Input | New |
-| 066 | [404 Search Party](search-party/) | Pure Joke | Search and Navigation | New |
+| 062 | [Address Unpack](address-unpack/) | Useful | Forms and Input |  |
+| 063 | [Time Zone Sundial](timezone-sundial/) | Useful | Meetings and Calendar |  |
+| 064 | [Reply-All Megaphone](reply-all-megaphone/) | Secretly Useful | Messages and Email |  |
+| 065 | [Caps Lock Hats](caps-lock-hats/) | Secretly Useful | Forms and Input |  |
+| 066 | [404 Search Party](search-party/) | Pure Joke | Search and Navigation |  |
+| 067 | [Bubble Wrap Loader](bubble-wrap/) | Satisfying | Loading and Status | New |
+| 068 | [Rubber Toggle](rubber-toggle/) | Satisfying | Forms and Input | New |
+| 069 | [Peel Sticker](peel-sticker/) | Satisfying | Billing and Plans | New |
+| 070 | [Domino Delete](domino-delete/) | Satisfying | Files and Data | New |
+| 071 | [Merge Zipper](merge-zipper/) | Useful | Developer Tools | New |
+| 072 | [Late-Night Send](late-night-send/) | Secretly Useful | Messages and Email | New |
+| 073 | [Tired Hand](tired-hand/) | Pure Joke | Meetings and Calendar | New |
 <!-- catalogue:end -->
 
 ## Credits and license

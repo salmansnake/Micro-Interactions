@@ -1,0 +1,85 @@
+Build a "Domino Delete" in [YOUR STACK — e.g. React + Tailwind, Vue, or plain HTML/CSS/JS].
+
+WHAT IT DOES
+Pick several photos and delete them at once: they topple one into the next like dominoes, left to right, and then the ones left slide together to close the gap.
+
+BEHAVIOR
+1. A card: "Camera roll" (15px semibold) with "Pick the blurry ones, then delete them all at once." (13/18 gray).
+2. A 132px gray shelf (12px corners; in dark it takes the page ground and the prints' frames take the gray fill, so they stand clearly off it with no shadow to help) with seven photo prints standing in a row along its bottom (6px apart, 14px from the bottom, each a seventh of the shelf, so they keep their size when some are gone): 96px tall, 8px corners, a frame (3px at the sides and top) in the card color (the gray fill in dark) with a small shadow, the last two digits of its name in 10px mono gray on the 16px strip below the photo. The photo (corners concentric with the frame: its 8px less the 3px frame) is a little scene drawn in SVG in one palette color (Aqua, Pink, Sage, Orange, Olive in turn): hills, sea or mountains in turn, each a sun over a far and a near layer. The sky is the color's tint at the fixed tint lightness (0.06 lighter in dark, so every photo stands clear of its gray frame); the far layer steps 0.08 OKLCH lightness from it and the near one 0.17 (darker in light, lighter in dark, so the dark scene keeps its color at dusk); the sun is near white in light and a bright moon (L 0.86) in dark. The four "blurry" photos really are: their scene is blurred 1.6px (scaled 1.1 so the edges stay full).
+3. Tapping a tile picks it (a toggle button, aria-pressed): it lifts 8px, gets a 2px ring in the primary color (black in light, Aqua in dark, never the near-white text color) and a 16px check badge pops in at the photo's bottom right corner, 3px in from the photo's edges and inside the print, so it never reaches the gap or the next print's ring (primary fill, a 10px Lucide `check` in the primary text color, a 1.5px ring in the frame color, on the delight spring). Four start picked (the "blurry" ones). Its focus outline sits 4px out, outside the picked ring.
+4. The footer: the status (no space until it has text), a gray "Undo" (hidden until there's something to undo) and a primary "Delete 4" (Lucide `trash-2`; the count follows the picks; "Delete" and disabled with none). It keeps the width of its widest label.
+5. Delete: the picked tiles topple left to right, 90ms apart: each rotates 78° over its bottom right edge (420ms, easing in, like falling) and fades at the end; its check fades as it goes. A photo it falls into that stays takes the hit 200ms in: it rocks right 6° over its bottom right edge, back past upright to -1.5° and settles (480ms). Then they're removed and the tiles that stay slide into the gap: measure their positions before and after, and ease each from its old place (the controls spring). Status: "Toppled 4 photos." ("1 photo" for one). Undo appears, focused.
+6. Undo stands them back up in their places, picked, the others sliding apart the same way: "Stood them all back up."
+7. The status is a polite live region.
+Reduced motion: tiles fade out (120ms) without toppling; nothing slides or rocks.
+
+APPEARANCE (Outcraft Design System)
+- Use the Outcraft Design System tokens listed under OUTCRAFT TOKENS at the end of this prompt, defined as CSS variables on the component's root element (light values by default, dark values when the page is in dark mode). Never hardcode colors, fonts, radii, shadows or timings anywhere else.
+- Type: Geist for interface text (controls 14/20, body 15/22, small 13/18, caption 12/16; headings tighten as they grow), Geist Mono for code, keys and numbers that change. Fallback: system-ui.
+- Color: neutral grounds (Canvas #EBEBEB page, White #FFFFFF cards on it, Soft ground #F7F7F7 for insets inside a card; in dark the inset sits a step lighter than the card, so a panel that holds white cards, tiles or buttons takes the page ground there and they stay raised), Black #000 headlines, Slate #4E4E4E body text, Line #DDDDDD borders. Primary buttons are Black (Aqua #79EEEC with black text in dark mode). Aqua is the signature: highlights, brand buttons, selected states on Aqua 100 #CFF8F6; Aqua 700 #0B7573 for links, focus rings and progress on light grounds. Status uses the universal colors (Radix Red, Green, Amber, Blue): red #CE2C31 for errors, green #218358 for success, amber #FFC53D (black text) for warnings, blue #0D74CE for info, each with a soft tint and darker text. Orange #FE8C5F is the AI pill; Pink #FFC7F6 marks accent badges and steps. A colored panel, chip or soft fill is a tint of its color at a fixed lightness (OKLCH L 0.92 in light, 0.32 in dark, keeping 40% / 45% of its chroma), so pale Aqua and strong red separate from the card equally; never outlined. Colored text on a tint is held between OKLCH L 0.48 (a cap in light) and 0.75 (a floor in dark), so it reads in both themes, and gray secondary text on it uses the body gray. A soft red button (Decline, Delete, Cancel) is red at 16% in light and 30% in dark with deep red text (#AC2529 in light, #FF9592 in dark), never outlined; it centers its label.
+- Shape: 8px radius for buttons and inputs, 12px for cards, 16px for large surfaces; pills only for badges, switches and floating bars; concentric corners. 1px borders; soft layered shadows only for things that float. Text that wraps to two or three lines reads as one paragraph whose lines are close in length, with the first line the longest (narrow the text block until that holds; never a long line with one or two words below it). A row with a title and a detail line under it sets each line at its own size and line height (detail 13/18 or 12/16, not the body's 22px), 2px apart, with equal space above and below (at least 8px), so the text never presses against a divider. A card's padding is measured to what you see: text at the top edge trims to its capitals (text-box: trim-start cap alphabetic) and text at the bottom edge to its baseline (text-box: trim-end cap alphabetic), so the space above matches the space below. Components hug their content: a status line, footer or message that is empty takes no space, and the card grows when text appears. Icons are Lucide with round line ends and joins; every tick, cross, plus, minus and chevron is the Lucide check, x, plus, minus or chevron icon, never a typed character or a shape drawn with CSS borders. A letter, initials or a number in a tile, avatar or count badge is centered on its capital height, not its line box (display: block; align-content: center; text-align: center; text-box: trim-both cap alphabetic), at a size whose capitals leave equal space above and below: 14px bold in tiles from 26 to 40px.
+- Motion: our springs. Press feedback --spring-press (310ms) scaling to 0.97, controls --spring-ui (460ms, slight overshoot), panels --spring-panel (530ms, no bounce), delight --spring-pop (680ms). Animate transform and opacity only. Reduce Motion: 120ms fades.
+- Floating surfaces use Frost: a translucent fill, 16px backdrop blur, 160% saturation, a 1px border and a large soft shadow.
+- Accessibility: a 2px focus ring in the ring color with a 2px offset, 44px touch targets, text at 4.5:1, polite live regions for status lines.
+- Copy: title-case button labels, sentence-case body text, no emoji. Every count uses the singular for one ("1 file", "1 second", "1 person"), including counts set by data attributes.
+- This one: little palette-colored scenes in light frames on a plain gray shelf; the primary color marks what is picked.
+
+DELIVER
+The component with the items as input, an onDelete callback with the deleted items, the demo, and short usage notes.
+
+OUTCRAFT TOKENS (exact values this component uses; define them as CSS variables on the component root)
+--aqua: #79EEEC
+--aqua-700: #0B7573  (dark: #79EEEC)
+--ash: #686868  (dark: #A6A6A6)
+--background: #EBEBEB  (dark: #0C0C0C)
+--black: #000000
+--body: #4E4E4E  (dark: #CCCCCC)
+--border: #DDDDDD  (dark: #333333)
+--canvas: #EBEBEB  (dark: #0C0C0C)
+--card: #FFFFFF  (dark: #171717)
+--duration-fast: 140ms
+--duration-reduced: 120ms
+--duration-slower: 480ms
+--ease-in: cubic-bezier(0.5, 0, 0.78, 0.24)
+--ease-out: cubic-bezier(0.22, 0.9, 0.24, 1)
+--font-mono: "Geist Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace
+--font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+--foreground: #000000  (dark: #F2F2F2)
+--leading-body: 22px
+--leading-small: 18px
+--line: #DDDDDD  (dark: #333333)
+--mist: #EBEBEB  (dark: #2D2D2D)
+--mist-strong: #E2E2E2  (dark: #363636)
+--muted: #EBEBEB  (dark: #2D2D2D)
+--muted-foreground: #686868  (dark: #A6A6A6)
+--muted-hover: #E2E2E2  (dark: #363636)
+--olive: #AA9856
+--orange: #FE8C5F
+--pink: #FFC7F6
+--press-scale: 0.97
+--primary: #000000  (dark: #79EEEC)
+--primary-foreground: #ffffff  (dark: #000000)
+--radius-full: 9999px
+--radius-lg: 12px
+--radius-md: 8px
+--radius-xl: 16px
+--ring: #0B7573  (dark: #79EEEC)
+--sage: #99AD88
+--shadow-md: 0 2px 4px -1px rgba(17, 17, 17, 0.05), 0 6px 14px -3px rgba(17, 17, 17, 0.09)  (dark: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45))
+--shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04), 0 1px 3px rgba(17, 17, 17, 0.07)  (dark: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3))
+--slate: #4E4E4E  (dark: #CCCCCC)
+--soft-ground: #F7F7F7  (dark: #1F1F1F)
+--spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1)
+--spring-pop-duration: 680ms
+--spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1)
+--spring-press-duration: 310ms
+--spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1)
+--spring-ui-duration: 460ms
+--subtle: #F7F7F7  (dark: #1F1F1F)
+--text-body: 15px
+--text-small: 13px
+--text-ui: 14px
+--tint-c: 0.4  (dark: 0.45)
+--tint-l: 0.92  (dark: 0.32)
+--white: #FFFFFF  (dark: #171717)
+Fonts: Geist and Geist Mono from Google Fonts (fallback system-ui).

@@ -1,0 +1,68 @@
+/* Tired Hand — a raised hand nobody notices gets tired: it droops, switches arms, then props itself up on a stick.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.tdh {
+  --tdh-bg: var(--card);
+  --tdh-fg: var(--foreground);
+  --tdh-muted: var(--muted-foreground);
+  --tdh-fill: var(--muted);
+  --tdh-accent: var(--primary);
+  --tdh-on-accent: var(--primary-foreground);
+  /* The video tiles stand in for camera pictures, so their colors stay the same in light and dark */
+  --tdh-tile: color-mix(in oklab, var(--black) 78%, var(--sage));
+  --tdh-tilt: 0deg;
+  --tdh-flip: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--tdh-bg);
+  color: var(--tdh-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.tdh p { margin: 0; }
+.tdh-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.tdh-tile { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 11; overflow: hidden; border-radius: var(--radius-md); background: var(--tdh-tile); }
+.tdh-tile.is-speaking { box-shadow: inset 0 0 0 2px var(--aqua); }
+.tdh-av { display: block; width: 40px; height: 40px; border-radius: 50%; background: var(--aqua); color: var(--black); font-size: var(--text-ui); font-weight: 700; align-content: center; text-align: center; text-box: trim-both cap alphabetic; }
+.tdh-tile:nth-child(2) .tdh-av { background: var(--pink); }
+.tdh-tile:nth-child(3) .tdh-av { background: var(--orange); }
+.tdh-you .tdh-av { width: 40px; background: var(--sage); font-size: 11px; }
+.tdh-name { position: absolute; left: 6px; bottom: 6px; display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 62%, transparent); color: var(--on-color); font-size: var(--text-caption); line-height: 1; font-weight: 500; white-space: nowrap; }
+
+/* The hand: an Amber badge that tires over time (tilt), switches arms (flip), then rests on a stick */
+.tdh-hand { position: absolute; right: 8px; top: 8px; display: block; width: 32px; height: 32px; transform: scale(0); transform-origin: 50% 100%; transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.tdh.is-up .tdh-hand { transform: scale(1); }
+.tdh-palm { position: relative; z-index: 1; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--amber-9); color: var(--black); transform: scaleX(var(--tdh-flip)) rotate(var(--tdh-tilt)); transform-origin: 50% 90%; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.tdh-palm svg { width: 18px; height: 18px; }
+.tdh-stick { position: absolute; left: 50%; top: 26px; width: 4px; height: 0; margin-left: -2px; border-radius: var(--radius-full); background: var(--olive); transition: height var(--duration-slow) var(--ease-out); }
+.tdh.is-propped .tdh-stick { height: 22px; }
+.tdh.is-waving .tdh-palm { animation: tdh-wave 0.35s var(--ease-in-out) infinite alternate; }
+@keyframes tdh-wave { from { transform: scaleX(var(--tdh-flip)) rotate(-24deg); } to { transform: scaleX(var(--tdh-flip)) rotate(24deg); } }
+.tdh-clock { position: absolute; right: 8px; bottom: 6px; display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 62%, transparent); color: var(--on-color); font: 500 var(--text-caption)/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+
+.tdh-foot { display: flex; align-items: center; gap: 12px; }
+.tdh .tdh-status { flex: 1; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+/* A short sentence in the status wraps as one piece: "Noticed after 5 minutes." never splits */
+.tdh-whole { display: inline-block; }
+.tdh-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--tdh-accent); color: var(--tdh-on-accent); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.tdh-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.tdh-btn.is-secondary { background: var(--tdh-fill); color: var(--tdh-fg); }
+.tdh-btn:active { transform: scale(var(--press-scale)); }
+.tdh-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tdh-hand, .tdh-palm, .tdh-stick { transition-duration: var(--duration-reduced); }
+  .tdh.is-waving .tdh-palm { animation: none; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.tdh :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.tdh [hidden] { display: none !important; }

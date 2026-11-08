@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Late-Night Send · Micro Interactions</title>
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="../icons/outcraft-icon-180x180-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Late-Night Send — after hours, Send yawns and offers to deliver the message in the morning instead.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.lns {
+  --lns-bg: var(--card);
+  --lns-fg: var(--foreground);
+  --lns-muted: var(--muted-foreground);
+  --lns-sunken: var(--subtle);
+  --lns-fill: var(--muted);
+  --lns-accent: var(--primary);
+  --lns-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--lns-bg);
+  color: var(--lns-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.lns p { margin: 0; }
+/* On the narrowest phones the switch drops under its label rather than squeezing it onto two lines */
+.lns-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.lns-label { white-space: nowrap; color: var(--lns-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+/* Segmented control: the track always shows, the thumb is raised */
+.lns-seg { position: relative; display: grid; grid-template-columns: 1fr 1fr; height: 40px; padding: 3px; box-sizing: border-box; border-radius: var(--radius-md); background: var(--lns-sunken); }
+.lns-thumb { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: var(--radius-sm); background: var(--raised); box-shadow: var(--shadow-xs); transform: translateX(var(--lns-x, 100%)); transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.lns-seg button { position: relative; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--lns-muted); font: inherit; font-size: var(--text-small); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; cursor: pointer; }
+.lns-seg button[aria-checked="true"] { color: var(--lns-fg); }
+.lns-seg button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.lns-compose { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: var(--lns-sunken); }
+.lns-to { display: flex; gap: 8px; font-size: var(--text-small); line-height: var(--leading-small); text-box: trim-start cap alphabetic; }
+.lns-to span { color: var(--lns-muted); }
+.lns-to b { font-weight: 600; }
+.lns-text { color: var(--body); font-size: var(--text-ui); line-height: var(--leading-ui); }
+
+.lns-ask { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; animation: lns-in var(--spring-panel-duration) var(--spring-panel); }
+@keyframes lns-in { from { opacity: 0; transform: translateY(-6px); } }
+.lns-moon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--inverse); color: var(--inverse-foreground); }
+.lns-moon svg { width: 16px; height: 16px; }
+.lns-ask-msg { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+/* Side by side and equal while both keep their padding; stacked full width on the narrowest phones */
+.lns-ask-btns { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+.lns-ask-btns .lns-btn { flex: 1 1 150px; min-width: 0; }
+
+.lns-foot { display: flex; align-items: center; gap: 12px; }
+.lns .lns-status { flex: 1; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.lns-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.lns-btn { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--lns-fill); color: var(--lns-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.lns-btn:hover { background: var(--muted-hover); }
+.lns-later, .lns-send { background: var(--lns-accent); color: var(--lns-on-accent); }
+.lns-later:hover, .lns-send:hover { background: var(--lns-accent); }
+.lns-send { flex: none; margin-left: auto; }
+.lns-send.is-secondary, .lns-send.is-secondary:hover { background: var(--lns-fill); color: var(--lns-fg); }
+.lns-send svg { width: 16px; height: 16px; margin-right: 8px; }
+.lns-send:disabled { cursor: default; background: var(--lns-fill); color: var(--lns-muted); }
+.lns-zz { display: none; }
+.lns.is-night .lns-send:not(.is-secondary) .lns-zz { display: inline-flex; }
+.lns.is-night .lns-send:not(.is-secondary) > svg, .lns-send.is-secondary svg { display: none; }
+/* The yawn: a slow stretch and a sigh, once when night falls and again on hover */
+.lns.is-night .lns-send.is-yawning { animation: lns-yawn 1.4s var(--ease-in-out); }
+@keyframes lns-yawn { 0%, 100% { transform: none; } 35% { transform: scale(1.06, 0.88); } 60% { transform: scale(0.97, 1.08); } }
+.lns-btn:active { transform: scale(var(--press-scale)); }
+.lns-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lns-thumb, .lns-btn { transition-duration: var(--duration-reduced); }
+  .lns-ask, .lns.is-night .lns-send.is-yawning { animation: none; }
+}
+/* Multi-line text wraps evenly and never ends on one or two lonely words */
+.lns :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) { text-wrap: balance; }
+.lns [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Late-Night Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="lns" data-mi="late-night-send" data-to="Sam Rivera" data-morning="9:00 AM">
+  <div class="lns-top">
+    <span class="lns-label">Pretend it’s</span>
+    <div class="lns-seg" role="radiogroup" aria-label="Time of day">
+      <span class="lns-thumb" aria-hidden="true"></span>
+      <button type="button" role="radio" aria-checked="false" data-time="day">2:00 PM</button>
+      <button type="button" role="radio" aria-checked="true" data-time="night">11:48 PM</button>
+    </div>
+  </div>
+  <div class="lns-compose">
+    <p class="lns-to"><span>To</span><b>Sam Rivera</b></p>
+    <p class="lns-text">Quick thought on the pricing page: what if the yearly plan came first? No rush on this.</p>
+  </div>
+  <div class="lns-ask" hidden>
+    <span class="lns-moon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+    <p class="lns-ask-msg">It’s 11:48 PM for Sam too. Send it at 9:00 AM instead?</p>
+    <div class="lns-ask-btns">
+      <button type="button" class="lns-btn lns-later">Send at 9:00 AM</button>
+      <button type="button" class="lns-btn lns-now">Send Now</button>
+    </div>
+  </div>
+  <div class="lns-foot">
+    <p class="lns-status" role="status" aria-live="polite"></p>
+    <button type="button" class="lns-btn lns-send"><span class="lns-zz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg><span class="lns-send-label">Send</span></button>
+  </div>
+</div>
+</div>
+<script>
+/* Late-Night Send — vanilla JS. Auto-initializes every [data-mi="late-night-send"].
+   The segmented control stands in for the clock. At night, Send swaps its icon for a moon, yawns, and asks to deliver
+   at data-morning instead. Call window.initLateNightSend(el) for elements added later. */
+(function () {
+  'use strict';
+
+  // Even line breaks: text that wraps to two or three lines is narrowed until its lines are close in length,
+  // with the first line the longest, so no line runs long while the next holds a word or two.
+  function evenLines(root) {
+    var SEL = 'p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4';
+    function widths(el) {
+      var range = document.createRange(), rows = [];
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (b) {
+        if (!b.width) return;
+        var row = rows.filter(function (x) { return Math.abs(x.t - b.top) < b.height / 2; })[0];
+        if (row) { row.l = Math.min(row.l, b.left); row.r = Math.max(row.r, b.right); } else rows.push({ t: b.top, l: b.left, r: b.right });
+      });
+      return rows.sort(function (a, b) { return a.t - b.t; }).map(function (x) { return x.r - x.l; });
+    }
+    function fit(el) {
+      el.style.maxWidth = ''; el.style.textWrap = '';
+      // A filled box marked data-fill spans the card from edge to edge, and its text fills it
+      if (el.hasAttribute('data-fill')) return;
+      var cs = getComputedStyle(el), full = el.getBoundingClientRect().width;
+      if (!full || cs.whiteSpace === 'nowrap' || /flex|grid/.test(cs.display)) return;
+      if (Array.prototype.some.call(el.children, function (c) { return !/^inline/.test(getComputedStyle(c).display); })) return;
+      el.style.textWrap = 'wrap';
+      var n = widths(el).length, lo = 0, hi = full, w, L;
+      if (n < 2 || n > 3) { el.style.textWrap = ''; return; }
+      while (hi - lo > 1) { w = (lo + hi) / 2; el.style.maxWidth = w + 'px'; if (widths(el).length > n) lo = w; else hi = w; }
+      var best = 0, gap = Infinity;
+      for (w = Math.ceil(hi); w <= full; w += 2) {
+        el.style.maxWidth = w + 'px'; L = widths(el);
+        // Each line no longer than the one above (within 10%, which reads as equal). Keep the most even width,
+        // and prefer the first line longer: a last line longer than the first costs three times its overhang
+        var score = Math.max.apply(null, L) - Math.min.apply(null, L) + Math.max(0, L[n - 1] - L[0]) * 3;
+        if (L.length === n && L.every(function (x, i) { return !i || x <= L[i - 1] * 1.1 + 1; }) && score < gap) { gap = score; best = w; }
+      }
+      if (!best) { el.style.maxWidth = ''; el.style.textWrap = ''; return; }
+      el.style.maxWidth = best + 'px';
+      if (cs.textAlign === 'center' && cs.display === 'block') { el.style.marginLeft = 'auto'; el.style.marginRight = 'auto'; }
+    }
+    var queued = false, lastW = 0;
+    function run() { queued = false; Array.prototype.forEach.call(root.querySelectorAll(SEL), fit); }
+    function later() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+    later();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; later(); } }).observe(root);
+    if (window.MutationObserver) new MutationObserver(later).observe(root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  }
+
+  function initLateNightSend(root) {
+    if (!root || root.__miLns) return;
+    root.__miLns = true;
+    evenLines(root);
+    var to = (root.getAttribute('data-to') || 'Sam Rivera').split(' ')[0], morning = root.getAttribute('data-morning') || '9:00 AM';
+    var segs = root.querySelectorAll('.lns-seg button'), ask = root.querySelector('.lns-ask'), askMsg = root.querySelector('.lns-ask-msg');
+    var later = root.querySelector('.lns-later'), now = root.querySelector('.lns-now');
+    var send = root.querySelector('.lns-send'), label = root.querySelector('.lns-send-label'), status = root.querySelector('.lns-status');
+    var night = true, sent = false;
+
+    function clock() { return root.querySelector('.lns-seg button[aria-checked="true"]').textContent; }
+    function yawn() {
+      if (!night || sent) return;
+      send.classList.remove('is-yawning'); void send.offsetWidth; send.classList.add('is-yawning');
+    }
+    send.addEventListener('animationend', function () { send.classList.remove('is-yawning'); });
+
+    function setTime(n) {
+      night = n;
+      segs.forEach(function (b) { var on = (b.getAttribute('data-time') === 'night') === n; b.setAttribute('aria-checked', on); b.tabIndex = on ? 0 : -1; });
+      root.style.setProperty('--lns-x', n ? '100%' : '0%');
+      root.classList.toggle('is-night', n);
+      askMsg.textContent = 'It’s ' + clock() + ' for ' + to + ' too. Send it at ' + morning + ' instead?';
+      later.textContent = 'Send at ' + morning;
+      if (!sent) { ask.hidden = true; send.disabled = false; status.textContent = ''; }
+      yawn();
+    }
+    segs.forEach(function (b) {
+      b.addEventListener('click', function () { setTime(b.getAttribute('data-time') === 'night'); });
+      b.addEventListener('keydown', function (e) {
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].indexOf(e.key) < 0) return;
+        e.preventDefault(); setTime(!night); root.querySelector('.lns-seg button[aria-checked="true"]').focus();
+      });
+    });
+
+    function done(text) {
+      sent = true; ask.hidden = true; send.disabled = false;
+      send.classList.add('is-secondary'); label.textContent = 'Undo';
+      status.textContent = text;
+      send.focus({ preventScroll: true });
+    }
+
+    send.addEventListener('pointerenter', yawn);
+    send.addEventListener('click', function () {
+      if (sent) {
+        sent = false; send.classList.remove('is-secondary'); label.textContent = 'Send'; status.textContent = '';
+        return;
+      }
+      if (!night) return done('Sent at ' + clock() + '. A perfectly normal time.');
+      ask.hidden = false; send.disabled = true;
+      later.focus({ preventScroll: true });
+    });
+    later.addEventListener('click', function () { done('Scheduled for ' + morning + ' tomorrow. ' + to + '’s evening stays quiet.'); });
+    now.addEventListener('click', function () { done('Sent at ' + clock() + '. ' + to + '’s phone just lit up the room.'); });
+
+    // Send keeps one width whether it says Send (with an icon) or Undo
+    function sizeBtn() {
+      var keep = label.textContent, cls = send.className, w = 0;
+      send.style.minWidth = '';
+      ['Send', 'Undo'].forEach(function (s) { label.textContent = s; w = Math.max(w, send.getBoundingClientRect().width); });
+      label.textContent = keep; send.className = cls; send.style.minWidth = Math.ceil(w) + 'px';
+    }
+    sizeBtn();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeBtn);
+    setTime(true);
+  }
+
+  window.initLateNightSend = initLateNightSend;
+  function boot() { document.querySelectorAll('[data-mi="late-night-send"]').forEach(initLateNightSend); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initLateNightSend"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>
