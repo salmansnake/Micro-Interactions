@@ -80,6 +80,11 @@ def check(reg):
     # A search field's clear button is the Lucide x, never the browser's own blue cross (RULES 10c)
     if 'type="search"' in rd('tools', 'build.py') and '::-webkit-search-cancel-button' not in rd('tools', 'site', 'site.css'):
         errors.append('the site search field shows the browser\'s own clear cross; hide ::-webkit-search-cancel-button in tools/site/site.css and use a Lucide x button (RULES 10c)')
+    # The hero highlight is never split across lines: it moves down whole, so it must fit the narrowest screen (RULES 10b.64)
+    _hl = re.search(r'\.hero-hl \{[^}]*\}', rd('tools', 'site', 'site.css'))
+    if not _hl or 'white-space: nowrap' not in _hl.group(0): errors.append('.hero-hl in tools/site/site.css must keep white-space: nowrap, so the highlight never splits across lines (RULES 10b.64)')
+    for _p in re.findall(r'\[\[(.+?)\]\]', json.loads(rd('site.json'))['intro']):
+        if len(_p) > 32: errors.append(f'the highlighted "{_p}" in site.json is {len(_p)} characters; keep it to 32 or fewer so it fits one line at 320px (RULES 10b.64)')
     # Dark values are written twice: the build reads [data-theme="dark"], system-dark visitors get the @media copy. They must match (RULES 10a)
     i2, i3 = tokens.index('@media (prefers-color-scheme: dark)'), tokens.rindex(':root {')
     sys_dark = {n: ' '.join(v.split()) for n, v in re.findall(r'(--[a-zA-Z0-9-]+)\s*:\s*([^;]+);', re.sub(r'/\*.*?\*/', '', tokens[i2:i3], flags=re.S))}
@@ -417,8 +422,10 @@ def build_site(reg, site):
     pill_it = newest[-1] if newest else items[-1]
     alpha = sorted(items, key=lambda it: it['name'].casefold())
     first = alpha[0]['slug']
-    # [[…]] in the intro becomes the animated highlight
-    intro_html = re.sub(r'\[\[(.+?)\]\]', r'<mark class="hero-hl">\1</mark>', esc(site['intro']))
+    # [[…]] in the intro becomes the animated highlight. The sentence before it wraps whole too (RULES 10b.64),
+    # so when the highlight moves down a line it never takes a stray word ("prompt.") with it.
+    intro_html = re.sub(r'([^.!?\s][^.!?]*[.!?]) (?=\[\[)', r'<span class="hero-whole">\1</span> ', esc(site['intro']))
+    intro_html = re.sub(r'\[\[(.+?)\]\]', r'<mark class="hero-hl">\1</mark>', intro_html)
     n_new = sum(1 for it in items if it['new'])
     # Hero pill: opens the explorer with the New toggle on. Hidden when nothing is New.
     pill = (f'<a class="hero-pill" href="#/new"><span class="dot" aria-hidden="true"></span>Explore {n_new} New Interaction{"s" if n_new != 1 else ""}{ICON["arrow"]}</a>'

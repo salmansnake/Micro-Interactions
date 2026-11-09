@@ -820,8 +820,9 @@ a.sr-only:focus { z-index: 60; width: auto; height: auto; margin: 0; padding: 8p
 .hero h1 { max-width: 920px; margin: 20px 0 0; color: var(--foreground); font: 600 var(--text-display)/var(--leading-display) var(--font-sans); letter-spacing: var(--tracking-display); text-wrap: balance; }
 .hero p { max-width: 640px; margin: 16px 0 0; color: var(--muted-foreground); font: 400 var(--text-body-lg)/var(--leading-body-lg) var(--font-sans); text-wrap: pretty; }
 /* The weekly line: an Aqua highlighter sweeps on from the first word to the last, holds, then wipes off the same way, on a loop.
-   Uses background-size (not transform) so it follows the text across line breaks. */
-.hero-hl { padding: 1px 4px; margin: 0 -2px; border-radius: var(--radius-xs); color: var(--foreground); background: linear-gradient(var(--hl), var(--hl)) left center / 0% 100% no-repeat; -webkit-box-decoration-break: clone; box-decoration-break: clone; animation: hero-hl 7s var(--ease-in-out) 0.8s infinite; --hl: var(--brand); }
+   The phrase never breaks: if it doesn't fit after the sentence before it, it moves to the next line whole (RULES 10b.64). */
+.hero-hl { padding: 1px 4px; margin: 0 -2px; border-radius: var(--radius-xs); color: var(--foreground); background: linear-gradient(var(--hl), var(--hl)) left center / 0% 100% no-repeat; white-space: nowrap; animation: hero-hl 7s var(--ease-in-out) 0.8s infinite; --hl: var(--brand); }
+.hero-whole { display: inline-block; } /* the sentence before the highlight, kept whole so no word of it rides down beside the highlight */
 [data-theme="dark"] .hero-hl { --hl: color-mix(in srgb, var(--brand) 38%, transparent); }
 @keyframes hero-hl {
   0% { background-size: 0% 100%; background-position: left center; }
@@ -8489,7 +8490,7 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
   <section class="hero" id="main">
     <a class="hero-pill" href="#/new"><span class="dot" aria-hidden="true"></span>Explore 7 New Interactions<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
     <h1>Micro interactions for the moments products get wrong.</h1>
-    <p>Serious interactions for real product moments, funny ones that shouldn&#x27;t exist (some secretly should), and a few that are just satisfying. Copy the code or the prompt. <mark class="hero-hl">New ones drop every week.</mark></p>
+    <p>Serious interactions for real product moments, funny ones that shouldn&#x27;t exist (some secretly should), and a few that are just satisfying. <span class="hero-whole">Copy the code or the prompt.</span> <mark class="hero-hl">New ones drop every week.</mark></p>
     <div class="hero-cta">
       <a class="oc-btn hero-browse" href="#/all">Browse 73 Interactions<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
       <button type="button" class="oc-btn oc-btn--secondary" data-idea-open>Submit an Idea</button>
