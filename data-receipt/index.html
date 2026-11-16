@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Receipt · Micro Interactions</title>
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="../icons/outcraft-icon-180x180-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Data Receipt — before an app connects, it prints a receipt of exactly what it will read, write and never touch.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.drc {
+  --drc-bg: var(--card);
+  --drc-fg: var(--foreground);
+  --drc-muted: var(--muted-foreground);
+  --drc-sunken: var(--subtle);
+  --drc-fill: var(--muted);
+  --drc-accent: var(--primary);
+  --drc-on-accent: var(--primary-foreground);
+  /* The receipt is paper, so its text uses fixed colors. In light it is the soft neutral gray, a step off the white card,
+     and its slot a step darker again (card, slot, paper read as three even steps); in dark the paper is the plain paper
+     white and the slot sits between the inset and the fill, already far apart */
+  --drc-paper: var(--subtle);
+  --drc-slot: var(--muted-hover);
+  --drc-ink: color-mix(in srgb, var(--black) 88%, var(--drc-paper));
+  --drc-faint: color-mix(in srgb, var(--black) 58%, var(--drc-paper));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--drc-bg);
+  color: var(--drc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.drc p, .drc ul { margin: 0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .drc { --drc-paper: var(--sheet); --drc-slot: color-mix(in oklab, var(--drc-sunken) 50%, var(--drc-fill)); } }
+:root[data-theme="dark"] .drc { --drc-paper: var(--sheet); --drc-slot: color-mix(in oklab, var(--drc-sunken) 50%, var(--drc-fill)); }
+.drc-head { display: flex; align-items: center; gap: 12px; }
+.drc-tile { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--drc-fill); }
+.drc-tile svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.drc-title b { display: block; font-weight: 600; }
+.drc-title small { display: block; margin-top: 2px; color: var(--drc-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The slot the receipt prints out of, and the receipt: paper with a torn zigzag bottom */
+.drc-slot { position: relative; overflow: hidden; padding: 0 14px 14px; border-radius: var(--radius-lg); background: var(--drc-slot); box-shadow: inset 0 6px 0 -2px var(--border-strong); }
+.drc-paper { position: relative; padding: 16px 16px 22px; background: var(--drc-paper); color: var(--drc-ink); font-family: var(--font-mono); box-shadow: var(--shadow-sm); --drc-teeth: linear-gradient(black, black) top / 100% calc(100% - 6px) no-repeat, conic-gradient(from -45deg at 50% 100%, black 90deg, transparent 0) bottom / 12px 6px repeat-x; -webkit-mask: var(--drc-teeth); mask: var(--drc-teeth); animation: drc-print 0.9s steps(9) both; }
+@keyframes drc-print { from { transform: translateY(-100%); } }
+.drc-hd { padding-bottom: 10px; border-bottom: 1px dashed var(--drc-faint); color: var(--drc-faint); font-size: var(--text-caption); line-height: var(--leading-caption); text-align: center; text-transform: uppercase; letter-spacing: 0.12em; }
+.drc-lines { display: flex; flex-direction: column; padding: 6px 0; list-style: none; }
+.drc-lines li { display: grid; grid-template-columns: 40px minmax(0, 1fr) var(--drc-act, auto); align-items: center; gap: 8px; min-height: 32px; padding: 4px 0; box-sizing: border-box; font-size: var(--text-caption); line-height: var(--leading-caption); animation: drc-line var(--duration-base) var(--ease-out) both; }
+.drc-lines li:nth-child(2) { animation-delay: 120ms; }
+.drc-lines li:nth-child(3) { animation-delay: 240ms; }
+.drc-lines li:nth-child(4) { animation-delay: 360ms; }
+.drc-lines li:nth-child(5) { animation-delay: 480ms; }
+@keyframes drc-line { from { opacity: 0; } }
+.drc-k { font-weight: 600; }
+/* On a narrow receipt the kind sits above the line it names, so the text keeps room beside the action column */
+.drc-paper { container-type: inline-size; }
+@container (max-width: 240px) {
+  .drc-lines li { grid-template-columns: minmax(0, 1fr) var(--drc-act, auto); grid-template-areas: "k a" "t a"; row-gap: 0; }
+  .drc-k { grid-area: k; }
+  .drc-t { grid-area: t; }
+  .drc-lines li > :last-child:not(.drc-t) { grid-area: a; }
+}
+.drc-t { font-family: var(--font-sans); font-size: var(--text-small); line-height: var(--leading-small); }
+.drc-req { color: var(--drc-faint); text-align: center; }
+.drc-lines li.is-never .drc-k { color: color-mix(in oklab, var(--success) 82%, var(--black)); }
+.drc-lines li.is-off .drc-k, .drc-lines li.is-off .drc-t { color: var(--drc-faint); text-decoration: line-through; text-decoration-thickness: var(--mark-thickness); }
+.drc-toggle { width: 100%; height: 32px; padding: 0 10px; border: 0; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 7%, var(--drc-paper)); color: var(--drc-ink); font: 500 var(--text-caption)/1 var(--font-sans); white-space: nowrap; cursor: pointer; }
+.drc-toggle:hover { background: color-mix(in srgb, var(--black) 12%, var(--drc-paper)); }
+.drc-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.drc-toggle:disabled { cursor: default; opacity: 0.5; }
+.drc-total { display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px dashed var(--drc-faint); font-size: var(--text-small); line-height: var(--leading-small); }
+.drc-total b { font-weight: 600; }
+.drc-stamp { position: absolute; right: 18px; bottom: 64px; padding: 4px 10px; border-radius: var(--radius-sm); box-shadow: inset 0 0 0 2px var(--success); color: var(--success); font: 700 var(--text-small)/1.2 var(--font-sans); text-transform: uppercase; letter-spacing: 0.08em; transform: rotate(-8deg) scale(1.6); opacity: 0; pointer-events: none; transition: transform var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-fast); }
+.drc.is-connected .drc-stamp { transform: rotate(-8deg); opacity: 0.9; }
+
+.drc-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.drc .drc-status { flex: 1 1 170px; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.drc-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.drc-btn { flex: none; margin-left: auto; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--drc-accent); color: var(--drc-on-accent); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.drc-btn.is-secondary { background: var(--drc-fill); color: var(--drc-fg); }
+.drc-btn:active { transform: scale(var(--press-scale)); }
+.drc-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drc-paper, .drc-lines li { animation: none; }
+  .drc-stamp { transition-duration: var(--duration-reduced); }
+}
+.drc [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Data Receipt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="drc" data-mi="data-receipt">
+  <div class="drc-head">
+    <span class="drc-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></span>
+    <p class="drc-title"><b>Connect Calendar to Atlas</b><small>Here’s everything Atlas could do with it.</small></p>
+  </div>
+  <div class="drc-slot">
+    <div class="drc-paper">
+      <p class="drc-hd" aria-hidden="true">Access receipt</p>
+      <ul class="drc-lines">
+        <li><span class="drc-k">Read</span><span class="drc-t">Event titles and&nbsp;times</span><span class="drc-req">Needed</span></li>
+        <li data-optional><span class="drc-k">Read</span><span class="drc-t">Who’s invited to each&nbsp;event</span><button type="button" class="drc-toggle" aria-pressed="false" aria-label="Remove: read who’s invited">Remove</button></li>
+        <li data-optional><span class="drc-k">Write</span><span class="drc-t">Events you create in&nbsp;Atlas</span><button type="button" class="drc-toggle" aria-pressed="false" aria-label="Remove: write events you create in Atlas">Remove</button></li>
+        <li class="is-never"><span class="drc-k">Never</span><span class="drc-t">Your email&nbsp;inbox</span></li>
+        <li class="is-never"><span class="drc-k">Never</span><span class="drc-t">Events marked&nbsp;private</span></li>
+      </ul>
+      <p class="drc-total"><span>Total</span><b class="drc-count">3 permissions</b></p>
+      <span class="drc-stamp" aria-hidden="true">Connected</span>
+    </div>
+  </div>
+  <div class="drc-foot">
+    <p class="drc-status" role="status" aria-live="polite"></p>
+    <button type="button" class="drc-btn"><span class="drc-label">Connect with 3</span></button>
+  </div>
+</div>
+</div>
+<script>
+/* Data Receipt — vanilla JS. Auto-initializes every [data-mi="data-receipt"].
+   The receipt lists what the app can read and write, plus what it will never touch. Optional lines can be removed
+   (struck through) before connecting; the total and the button follow. Connecting stamps it; Disconnect undoes it.
+   Call window.initDataReceipt(el) for elements added later. */
+(function () {
+  'use strict';
+
+  function initDataReceipt(root) {
+    if (!root || root.__miDrc) return;
+    root.__miDrc = true;
+    var lines = Array.prototype.slice.call(root.querySelectorAll('.drc-lines li:not(.is-never)'));
+    var toggles = root.querySelectorAll('.drc-toggle'), countEl = root.querySelector('.drc-count');
+    var btn = root.querySelector('.drc-btn'), label = root.querySelector('.drc-label'), status = root.querySelector('.drc-status');
+    var connected = false;
+
+    // The action column is as wide as its widest label, "Add Back", so Remove, Add Back and Needed share one center
+    function sizeActions() {
+      var t = toggles[0], keep = t.textContent;
+      root.style.removeProperty('--drc-act');
+      t.style.width = 'auto'; t.textContent = 'Add Back';
+      var w = Math.ceil(t.getBoundingClientRect().width);
+      t.textContent = keep; t.style.width = '';
+      if (w) root.style.setProperty('--drc-act', w + 'px');
+    }
+    sizeActions();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeActions);
+
+    function n() { return lines.filter(function (li) { return !li.classList.contains('is-off'); }).length; }
+    function perms(k) { return k + (k === 1 ? ' permission' : ' permissions'); }
+    function render() {
+      var k = n();
+      countEl.textContent = perms(k);
+      label.textContent = connected ? 'Disconnect' : 'Connect with ' + k;
+    }
+    toggles.forEach(function (t) {
+      t.addEventListener('click', function () {
+        if (connected) return;
+        var li = t.closest('li'), off = !li.classList.contains('is-off');
+        li.classList.toggle('is-off', off);
+        t.setAttribute('aria-pressed', off ? 'true' : 'false');
+        t.textContent = off ? 'Add Back' : 'Remove';
+        t.setAttribute('aria-label', (off ? 'Add back: ' : 'Remove: ') + li.querySelector('.drc-k').textContent.toLowerCase() + ' ' + li.querySelector('.drc-t').textContent.charAt(0).toLowerCase() + li.querySelector('.drc-t').textContent.slice(1));
+        render();
+      });
+    });
+    btn.addEventListener('click', function () {
+      connected = !connected;
+      root.classList.toggle('is-connected', connected);
+      btn.classList.toggle('is-secondary', connected);
+      toggles.forEach(function (t) { t.disabled = connected; });
+      render();
+      status.textContent = connected ? 'Connected with ' + perms(n()) + '. Change them any time in Settings.' : 'Disconnected. Atlas can’t see your calendar now.';
+    });
+
+    // The button keeps one width whatever it says
+    function sizeBtn() {
+      var keep = label.textContent, w = 0; btn.style.minWidth = '';
+      ['Connect with 3', 'Disconnect'].forEach(function (s) { label.textContent = s; w = Math.max(w, btn.getBoundingClientRect().width); });
+      label.textContent = keep; btn.style.minWidth = Math.ceil(w) + 'px';
+    }
+    render();
+    sizeBtn();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeBtn);
+  }
+
+  window.initDataReceipt = initDataReceipt;
+  function boot() { document.querySelectorAll('[data-mi="data-receipt"]').forEach(initDataReceipt); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initDataReceipt"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

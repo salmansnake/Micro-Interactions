@@ -1,0 +1,68 @@
+/* Existential Captcha — tick "I'm not a robot" and the checkbox stops to wonder whether it is one.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.exc {
+  --exc-bg: var(--card);
+  --exc-fg: var(--foreground);
+  --exc-muted: var(--muted-foreground);
+  --exc-sunken: var(--subtle);
+  --exc-fill: var(--muted);
+  --exc-accent: var(--primary);
+  --exc-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--exc-bg);
+  color: var(--exc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.exc p, .exc ol { margin: 0; }
+.exc-box { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--exc-sunken); }
+.exc-check { position: relative; flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin: -8px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.exc-check::before { content: ""; position: absolute; inset: 8px; border-radius: var(--radius-xs); background: var(--exc-bg); box-shadow: inset 0 0 0 2px var(--border-strong); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.exc-check:focus-visible { outline: none; }
+.exc-check:focus-visible::before { box-shadow: inset 0 0 0 2px var(--border-strong), 0 0 0 2px var(--exc-sunken), 0 0 0 4px var(--ring); }
+.exc-check[aria-checked="true"]::before { background: var(--success); color: var(--success-foreground); box-shadow: none; }
+.exc-check[aria-disabled="true"] { cursor: default; }
+.exc-spin { position: absolute; width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--exc-fill); opacity: 0; }
+.exc-spin::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--exc-fg); }
+.exc.is-thinking .exc-spin { opacity: 1; animation: exc-spin 0.9s linear infinite; }
+@keyframes exc-spin { to { transform: rotate(1turn); } }
+.exc-tick { position: relative; display: grid; place-items: center; color: var(--success-foreground); transform: scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.exc-tick svg { width: 16px; height: 16px; translate: 0 calc(16px / 48); }
+.exc-check[aria-checked="true"] .exc-tick { transform: scale(1); }
+.exc-label { flex: 1; min-width: 0; font-weight: 500; }
+.exc-mark { flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--exc-muted); }
+.exc-mark svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.exc-mark small { font-size: 10px; line-height: 12px; font-weight: 500; white-space: nowrap; }
+
+/* Its thoughts, one at a time */
+.exc-thoughts { display: flex; flex-direction: column; gap: 6px; padding: 0 0 0 14px; list-style: none; box-shadow: inset 2px 0 0 var(--border); }
+.exc-thoughts:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.exc-thoughts li { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); animation: exc-in var(--spring-panel-duration) var(--spring-panel); }
+.exc.is-settled .exc-thoughts li { color: var(--exc-muted); }
+@keyframes exc-in { from { opacity: 0; transform: translateY(-4px); } }
+.exc-pick { display: flex; gap: 8px; animation: exc-in var(--spring-panel-duration) var(--spring-panel); }
+.exc-btn { flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: var(--radius-md); background: var(--exc-fill); color: var(--exc-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.exc-btn:hover { background: var(--muted-hover); }
+.exc-sure, .exc-sure:hover { background: var(--exc-accent); color: var(--exc-on-accent); }
+.exc-btn:active { transform: scale(var(--press-scale)); }
+.exc-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.exc-status { color: var(--exc-fg); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; text-box: trim-end cap alphabetic; }
+.exc-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .exc.is-thinking .exc-spin { animation-duration: 3s; }
+  .exc-tick { transition-duration: var(--duration-reduced); }
+  .exc-thoughts li, .exc-pick { animation: none; }
+}
+.exc [hidden] { display: none !important; }

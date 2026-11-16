@@ -1,0 +1,72 @@
+/* Source Receipts — an AI answer where every sentence shows where it came from, and the ones with no source say "My guess".
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.srr {
+  --srr-bg: var(--card);
+  --srr-fg: var(--foreground);
+  --srr-muted: var(--muted-foreground);
+  --srr-sunken: var(--subtle);
+  --srr-fill: var(--muted);
+  --srr-accent: var(--primary);
+  --srr-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--srr-bg);
+  color: var(--srr-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.srr p, .srr ul, .srr ol { margin: 0; }
+.srr ul, .srr ol { padding: 0; list-style: none; }
+.srr-q { align-self: flex-end; max-width: 82%; padding: 9px 14px; border-radius: var(--radius-xl); border-bottom-right-radius: var(--radius-xs); background: var(--srr-accent); color: var(--srr-on-accent); font-size: var(--text-ui); line-height: var(--leading-ui); }
+.srr-answer { display: flex; gap: 10px; }
+.srr-ai { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ai); color: var(--ai-foreground); }
+.srr-ai svg { width: 14px; height: 14px; }
+.srr-text { font-size: var(--text-ui); line-height: 24px; text-wrap: pretty; }
+.srr-s { border-radius: var(--radius-xs); transition: background-color var(--duration-base), opacity var(--duration-base); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.srr-s.is-lit { background: oklch(from var(--info) var(--tint-mark-l) calc(c * var(--tint-c)) h); }
+/* A sentence with no source keeps a dotted amber underline: a mark, so it reads as "unsure" at a glance */
+.srr-s.is-guess { text-decoration: underline dotted; text-decoration-thickness: var(--mark-thickness); text-underline-offset: var(--mark-offset); text-decoration-color: oklch(from var(--mark-ink) var(--mark-l-strong) c h); }
+.srr.is-strict .srr-s.is-guess { opacity: 0.35; text-decoration-line: line-through; }
+/* The chip is small in the text, but its tap area reaches 44px tall */
+.srr-chip::after { content: ""; position: absolute; inset: -13px -4px; }
+.srr-chip { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: 14px; height: 14px; margin: 2px 2px 0 4px; padding: 0 3px; border: 0; border-radius: var(--radius-full); background: var(--srr-fill); color: var(--srr-fg); font: 600 9px/1 var(--font-sans); vertical-align: text-top; cursor: pointer; transition: background-color var(--duration-fast); }
+.srr-chip:hover, .srr-chip[aria-expanded="true"] { background: var(--info); color: var(--on-color); }
+.srr-chip.is-guess { background: oklch(from var(--warning) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--warning-text) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); }
+.srr-chip.is-guess:hover { background: var(--warning); color: var(--warning-foreground); }
+.srr-chip:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.srr-sources { display: flex; flex-direction: column; gap: 6px; }
+.srr-sources li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-md); background: var(--srr-sunken); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.srr-sources li.is-lit { background: oklch(from var(--info) var(--tint-l) calc(c * var(--tint-c)) h); }
+.srr-sources i { flex: none; display: block; width: 22px; height: 22px; border-radius: 50%; background: var(--fill-on-subtle); font: 700 11px/1 var(--font-sans); font-style: normal; align-content: center; text-align: center; text-box: trim-both cap alphabetic; }
+.srr-sources li.is-lit i { background: var(--info); color: var(--on-color); }
+.srr-sources p { min-width: 0; }
+.srr-sources b { display: block; font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; }
+.srr-sources small { display: block; margin-top: 2px; color: var(--muted-on-tint); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.srr-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--srr-fill); color: var(--srr-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.srr-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.srr-btn:hover:not(:disabled) { background: var(--muted-hover); }
+.srr-btn.is-primary, .srr-btn.is-primary:hover:not(:disabled) { background: var(--srr-accent); color: var(--srr-on-accent); }
+.srr-btn:disabled { cursor: default; background: var(--srr-fill); color: var(--srr-muted); }
+.srr-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.srr-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.srr-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.srr-foot > button:first-of-type { margin-left: auto; }
+.srr .srr-status { flex: 1 1 170px; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+/* An empty status stays a live region but leaves the layout until text arrives */
+.srr-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .srr-s, .srr-sources li, .srr-chip { transition-duration: var(--duration-reduced); }
+}
+.srr [hidden] { display: none !important; }
+.srr .srr-text { text-wrap: pretty; }

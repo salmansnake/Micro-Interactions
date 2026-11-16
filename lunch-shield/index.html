@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lunch Shield · Micro Interactions</title>
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="../icons/outcraft-icon-180x180-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Lunch Shield — a meeting booked over lunch meets a sandwich bouncer who asks if it's worth it.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.lsh {
+  --lsh-bg: var(--card);
+  --lsh-fg: var(--foreground);
+  --lsh-muted: var(--muted-foreground);
+  --lsh-sunken: var(--subtle);
+  --lsh-fill: var(--muted);
+  --lsh-accent: var(--primary);
+  --lsh-on-accent: var(--primary-foreground);
+  --lsh-slot: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--lsh-bg);
+  color: var(--lsh-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.lsh p { margin: 0; }
+.lsh-invite { display: flex; align-items: center; gap: 12px; }
+.lsh-inv { flex: 1; min-width: 0; }
+.lsh-inv b { display: block; font-weight: 600; }
+.lsh-inv small { display: block; margin-top: 2px; color: var(--lsh-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The day: three hours in 30-minute slots; events sit by --at (start slot) and --len (slots) */
+.lsh-day { position: relative; height: calc(var(--lsh-slot) * 6); padding: 0; border-radius: var(--radius-lg); background: var(--lsh-sunken); overflow: hidden; }
+.lsh-hour { position: absolute; left: 10px; top: calc(var(--lsh-slot) * var(--at) + 6px); color: var(--lsh-muted); font-size: var(--text-caption); line-height: var(--leading-caption); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.lsh-hour::after { content: ""; position: absolute; left: 46px; top: -6px; width: 400px; height: 1px; background: var(--border); }
+.lsh-hour[style*="--at: 0"]::after { display: none; }
+/* A calendar block keeps its text at the top: its height is its duration */
+.lsh-ev { position: absolute; left: 56px; right: 8px; top: calc(var(--lsh-slot) * var(--at) + 2px); height: calc(var(--lsh-slot) * var(--len) - 4px); box-sizing: border-box; padding: 5px 10px; border-radius: var(--radius-sm); overflow: hidden; transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-slow); }
+.lsh-ev b { display: block; overflow: hidden; font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.lsh-ev small { display: block; margin-top: 2px; font-size: var(--text-caption); line-height: var(--leading-caption); }
+.lsh-standup { background: var(--fill-on-subtle); }
+.lsh-lunch { background: oklch(from var(--sage) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--sage-700) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); }
+.lsh-lunch b { color: var(--lsh-fg); }
+.lsh-new { z-index: 2; background: var(--brand); color: var(--brand-foreground); box-shadow: var(--shadow-md); }
+.lsh-new.is-dropping { animation: lsh-drop var(--spring-panel-duration) var(--spring-panel); }
+@keyframes lsh-drop { from { transform: translateY(-40px); opacity: 0; } }
+.lsh-new.is-stopped { transform: translateY(-30px); animation: lsh-wobble 0.45s var(--ease-in-out); }
+@keyframes lsh-wobble { 25% { rotate: -2deg; } 75% { rotate: 2deg; } }
+.lsh-new.is-moved { transform: translateY(calc(var(--lsh-slot) * 2)); }
+/* Over lunch, the two share the slot side by side, and lunch fades */
+.lsh.is-over .lsh-new { right: calc(50% - 24px); }
+.lsh.is-over .lsh-lunch { left: calc(50% + 28px); opacity: 0.55; }
+/* The bouncer: a sandwich that steps out in front of lunch */
+.lsh-guard { position: absolute; z-index: 3; right: 16px; top: calc(var(--lsh-slot) * 2 + 10px); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--sage); color: var(--on-chart); box-shadow: var(--shadow-md); transform: scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.lsh-guard svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.lsh.is-guarding .lsh-guard { transform: scale(1); }
+.lsh.is-guarding .lsh-guard svg { animation: lsh-halt 0.5s var(--ease-in-out) 0.3s 2; }
+@keyframes lsh-halt { 50% { transform: translateY(-4px) rotate(-8deg); } }
+.lsh.is-over .lsh-guard { transform: scale(0.75) rotate(-20deg); opacity: 0.6; }
+
+.lsh-ask { display: flex; flex-direction: column; gap: 12px; animation: lsh-in var(--spring-panel-duration) var(--spring-panel); }
+@keyframes lsh-in { from { opacity: 0; transform: translateY(-6px); } }
+.lsh-ask-msg { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.lsh-ask-btns { display: flex; gap: 8px; }
+.lsh-ask-btns .lsh-btn { flex: 1; min-width: 0; }
+.lsh-btn { flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--lsh-fill); color: var(--lsh-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.lsh-btn:hover { background: var(--muted-hover); }
+.lsh-accept, .lsh-move, .lsh-accept:hover, .lsh-move:hover { background: var(--lsh-accent); color: var(--lsh-on-accent); }
+.lsh-accept.is-secondary, .lsh-accept.is-secondary:hover { background: var(--lsh-fill); color: var(--lsh-fg); }
+.lsh-accept:disabled { cursor: default; background: var(--lsh-fill); color: var(--lsh-muted); }
+.lsh-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.lsh-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* The bottom block always has one line of text over its buttons, like the question, so the card keeps one height:
+   the invite over Accept, the question over its two answers, the outcome over Undo. The main action sits at the right */
+.lsh-foot { display: flex; flex-direction: column; gap: 12px; }
+.lsh-foot > .lsh-btn { align-self: flex-end; }
+.lsh .lsh-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.lsh-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lsh-ev, .lsh-guard { transition-duration: var(--duration-reduced); }
+  .lsh-new.is-dropping, .lsh-new.is-stopped, .lsh.is-guarding .lsh-guard svg, .lsh-ask { animation: none; }
+}
+.lsh [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Lunch Shield"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="lsh" data-mi="lunch-shield">
+  <div class="lsh-invite">
+    <p class="lsh-inv"><b>Vendor sync</b><small>Jordan Lee · 30&nbsp;min · Thu, Nov&nbsp;5</small></p>
+  </div>
+  <div class="lsh-day">
+    <span class="lsh-hour" style="--at: 0">11 AM</span>
+    <span class="lsh-hour" style="--at: 2">12 PM</span>
+    <span class="lsh-hour" style="--at: 4">1 PM</span>
+    <div class="lsh-ev lsh-standup" style="--at: 0; --len: 1"><b>Standup</b></div>
+    <div class="lsh-ev lsh-lunch" style="--at: 2; --len: 2"><b>Lunch</b><small>12:00 – 1:00 PM</small></div>
+    <div class="lsh-ev lsh-new" style="--at: 2; --len: 1" hidden><b>Vendor sync</b></div>
+    <span class="lsh-guard" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.37 11.223 8.372-6.777a2 2 0 0 1 2.516 0l8.371 6.777"/><path d="M21 15a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5.25"/><path d="M3 15a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h9"/><path d="m6.67 15 6.13 4.6a2 2 0 0 0 2.8-.4l3.15-4.2"/><rect width="20" height="4" x="2" y="11" rx="1"/></svg></span>
+  </div>
+  <div class="lsh-ask" hidden>
+    <p class="lsh-ask-msg">That’s lunch. Is Vendor sync worth a&nbsp;sandwich?</p>
+    <div class="lsh-ask-btns">
+      <button type="button" class="lsh-btn lsh-move">Move to 1:00 PM</button>
+      <button type="button" class="lsh-btn lsh-eat">Eat Later</button>
+    </div>
+  </div>
+  <div class="lsh-foot">
+    <p class="lsh-status" role="status" aria-live="polite"></p>
+    <button type="button" class="lsh-btn lsh-accept">Accept 12:00 PM</button>
+  </div>
+</div>
+</div>
+<script>
+/* Lunch Shield — vanilla JS. Auto-initializes every [data-mi="lunch-shield"].
+   Accepting the invite drops the meeting toward lunch; a sandwich steps out and stops it a little above the slot,
+   then asks: move it to the first free slot after lunch, or book over lunch anyway.
+   Call window.initLunchShield(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function initLunchShield(root) {
+    if (!root || root.__miLsh) return;
+    root.__miLsh = true;
+    var accept = root.querySelector('.lsh-accept'), ev = root.querySelector('.lsh-new'), ask = root.querySelector('.lsh-ask');
+    var move = root.querySelector('.lsh-move'), eat = root.querySelector('.lsh-eat'), status = root.querySelector('.lsh-status'), foot = root.querySelector('.lsh-foot');
+    var name = ev.textContent.trim(), state = 'idle', timer = 0, msg = root.querySelector('.lsh-ask-msg');
+    var INVITE = 'Jordan Lee invited you for 12:00\u00a0PM.';
+    var DONE = ['Booked ' + name + ' at 1:00 PM. Lunch\u00a0survives.', 'Booked over lunch. The sandwich will wait. It always\u00a0does.'];
+
+    // Every text line in the bottom block gets the height of the tallest one at the current width,
+    // so the card keeps one height before, during and after the question
+    function reserve() {
+      var cs = getComputedStyle(root), w = root.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), h = 0;
+      var probe = status.cloneNode(false);
+      probe.removeAttribute('role'); probe.removeAttribute('aria-live'); probe.setAttribute('aria-hidden', 'true');
+      probe.style.cssText = 'position: absolute; visibility: hidden; left: 0; top: 0; min-height: 0; width: ' + w + 'px';
+      root.appendChild(probe);
+      [INVITE].concat(DONE).forEach(function (t) { probe.textContent = t; h = Math.max(h, probe.getBoundingClientRect().height); });
+      probe.style.fontWeight = '500'; probe.textContent = msg.textContent; h = Math.max(h, probe.getBoundingClientRect().height);
+      root.removeChild(probe);
+      status.style.minHeight = msg.style.minHeight = Math.ceil(h) + 'px';
+    }
+
+    function reset() {
+      clearTimeout(timer); state = 'idle';
+      root.classList.remove('is-guarding', 'is-over');
+      ev.hidden = true; ev.className = 'lsh-ev lsh-new';
+      ask.hidden = true; foot.hidden = false; status.textContent = INVITE;
+      accept.textContent = 'Accept 12:00 PM'; accept.classList.remove('is-secondary'); accept.disabled = false;
+    }
+
+    function settle(text) {
+      state = 'done'; ask.hidden = true; foot.hidden = false; status.textContent = text;
+      accept.textContent = 'Undo'; accept.classList.add('is-secondary'); accept.disabled = false;
+      accept.focus({ preventScroll: true });
+    }
+
+    accept.addEventListener('click', function () {
+      if (state === 'done') { reset(); return; }
+      if (state !== 'idle') return;
+      state = 'asking'; accept.disabled = true;
+      ev.hidden = false; ev.classList.add('is-dropping');
+      // The sandwich steps out just before the meeting lands, and holds it above lunch
+      timer = setTimeout(function () {
+        root.classList.add('is-guarding');
+        ev.classList.remove('is-dropping'); ev.classList.add('is-stopped');
+        ask.hidden = false; foot.hidden = true;
+        move.focus({ preventScroll: true });
+      }, reduce.matches ? 0 : 380);
+    });
+    move.addEventListener('click', function () {
+      ev.classList.remove('is-stopped'); ev.classList.add('is-moved');
+      settle(DONE[0]);
+    });
+    eat.addEventListener('click', function () {
+      ev.classList.remove('is-stopped');
+      root.classList.add('is-over');
+      settle(DONE[1]);
+    });
+    // Accept keeps its width when it turns into Undo
+    function sizeBtn() { accept.style.minWidth = ''; accept.style.minWidth = Math.ceil(accept.getBoundingClientRect().width) + 'px'; }
+    reset();
+    sizeBtn();
+    reserve();
+    var lastW = 0;
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; reserve(); } }).observe(root);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (state === 'idle') sizeBtn(); reserve(); });
+  }
+
+  window.initLunchShield = initLunchShield;
+  function boot() { document.querySelectorAll('[data-mi="lunch-shield"]').forEach(initLunchShield); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initLunchShield"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

@@ -3,16 +3,18 @@
 <!-- intro:start -->
 **Micro interactions for the moments products get wrong.**
 
-Serious interactions for real product moments, funny ones that shouldn't exist (some secretly should), and a few that are just satisfying. Copy the code or the prompt. New ones drop every week.
+Serious interactions for real product moments, funny ones that shouldn't exist (some secretly should), and a few that are just satisfying or refreshingly honest. Copy the code or the prompt. New ones drop every week.
 
-73 interactions so far (38 Useful, 17 Secretly Useful, 14 Pure Joke, 4 Satisfying).
+80 interactions so far (39 Useful, 18 Secretly Useful, 15 Pure Joke, 4 Satisfying, 4 Honest).
 <!-- intro:end -->
 
 Every interaction runs live on the site and ships with a prompt that rebuilds it in any stack. Designed by Outcraft©, built on the Outcraft Design System v2.
 
 ## Use an interaction
 
-On the site, **View Code** opens Prompt, HTML, CSS, JS and One File tabs. Each tab has a Copy button that stays in view while you scroll the code; One File also has Download. **Copy Prompt** copies the prompt. Everything you copy is self-contained: the CSS carries the exact Outcraft tokens and the Geist font it needs, so it works pasted into any page with nothing else installed.
+On the site, each interaction's panel says what it does, how to try it, its specs, and a Not for line: the situation where it's the wrong choice, and why.
+
+**View Code** opens Prompt, HTML, CSS, JS and One File tabs. Each tab has a Copy button that stays in view while you scroll the code; One File also has Download. **Copy Prompt** copies the prompt. Everything you copy is self-contained: the CSS carries the exact Outcraft tokens and the Geist font it needs, so it works pasted into any page with nothing else installed.
 
 In this repo, each folder is one interaction:
 
@@ -117,13 +119,20 @@ The site's **Submit an idea** form sends to the Formspree form set as `formEndpo
 | 064 | [Reply-All Megaphone](reply-all-megaphone/) | Secretly Useful | Messages and Email |  |
 | 065 | [Caps Lock Hats](caps-lock-hats/) | Secretly Useful | Forms and Input |  |
 | 066 | [404 Search Party](search-party/) | Pure Joke | Search and Navigation |  |
-| 067 | [Bubble Wrap Loader](bubble-wrap/) | Satisfying | Loading and Status | New |
-| 068 | [Rubber Toggle](rubber-toggle/) | Satisfying | Forms and Input | New |
-| 069 | [Peel Sticker](peel-sticker/) | Satisfying | Billing and Plans | New |
-| 070 | [Domino Delete](domino-delete/) | Satisfying | Files and Data | New |
-| 071 | [Merge Zipper](merge-zipper/) | Useful | Developer Tools | New |
-| 072 | [Late-Night Send](late-night-send/) | Secretly Useful | Messages and Email | New |
-| 073 | [Tired Hand](tired-hand/) | Pure Joke | Meetings and Calendar | New |
+| 067 | [Bubble Wrap Loader](bubble-wrap/) | Satisfying | Loading and Status |  |
+| 068 | [Rubber Toggle](rubber-toggle/) | Satisfying | Forms and Input |  |
+| 069 | [Peel Sticker](peel-sticker/) | Satisfying | Billing and Plans |  |
+| 070 | [Domino Delete](domino-delete/) | Satisfying | Files and Data |  |
+| 071 | [Merge Zipper](merge-zipper/) | Useful | Developer Tools |  |
+| 072 | [Late-Night Send](late-night-send/) | Secretly Useful | Messages and Email |  |
+| 073 | [Tired Hand](tired-hand/) | Pure Joke | Meetings and Calendar |  |
+| 074 | [Real Price](real-price/) | Honest | Billing and Plans | New |
+| 075 | [Source Receipts](source-receipts/) | Honest | AI | New |
+| 076 | [Data Receipt](data-receipt/) | Honest | Teams and Sharing | New |
+| 077 | [Real ETA](real-eta/) | Honest | Loading and Status | New |
+| 078 | [Heading Trail](heading-trail/) | Useful | Search and Navigation | New |
+| 079 | [Lunch Shield](lunch-shield/) | Secretly Useful | Meetings and Calendar | New |
+| 080 | [Existential Captcha](existential-captcha/) | Pure Joke | Forms and Input | New |
 <!-- catalogue:end -->
 
 ## Credits and license

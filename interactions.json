@@ -4,13 +4,15 @@
     "Useful",
     "Secretly Useful",
     "Pure Joke",
-    "Satisfying"
+    "Satisfying",
+    "Honest"
   ],
   "typeBadges": {
     "Useful": "t-useful",
     "Secretly Useful": "oc-badge--ai",
     "Pure Joke": "oc-badge--pop",
-    "Satisfying": "t-sage"
+    "Satisfying": "t-sage",
+    "Honest": "t-olive"
   },
   "topics": [
     "Billing and Plans",
@@ -1950,7 +1952,7 @@
       "name": "Bubble Wrap Loader",
       "type": "Satisfying",
       "topic": "Loading and Status",
-      "new": true,
+      "new": false,
       "summary": "While an upload runs, there's a sheet of bubble wrap to pop. Press one, or drag across a row. It doesn't make the upload faster, and it says so.",
       "tryit": "Drag across the bubbles, then press {New Sheet}.",
       "specs": [
@@ -1979,7 +1981,7 @@
       "name": "Rubber Toggle",
       "type": "Satisfying",
       "topic": "Forms and Input",
-      "new": true,
+      "new": false,
       "summary": "Switches whose knobs feel like rubber. Pull a knob past the end and it stretches instead of moving, then snaps back with a wobble.",
       "tryit": "Drag the Mentions knob to the right, past the end, and let go.",
       "specs": [
@@ -2008,7 +2010,7 @@
       "name": "Peel Sticker",
       "type": "Satisfying",
       "topic": "Billing and Plans",
-      "new": true,
+      "new": false,
       "summary": "Your license key is hidden under a sticker. Pull its edge and it folds back over itself; pull past halfway and it comes off and flies away.",
       "tryit": "Drag the sticker from its right edge to the left, then press {Copy Key}.",
       "specs": [
@@ -2037,7 +2039,7 @@
       "name": "Domino Delete",
       "type": "Satisfying",
       "topic": "Files and Data",
-      "new": true,
+      "new": false,
       "summary": "Delete several items at once and they topple one into the next like dominoes, left to right, then the ones left slide together to close the gap.",
       "tryit": "Pick a few photos, press {Delete}, then {Undo}.",
       "specs": [
@@ -2066,7 +2068,7 @@
       "name": "Merge Zipper",
       "type": "Useful",
       "topic": "Developer Tools",
-      "new": true,
+      "new": false,
       "summary": "Two versions of a file zip together line by line. The zipper snags on a line both sides changed and waits until you keep one.",
       "tryit": "Press {Merge}, then pick {Keep Yours} or {Keep Theirs} when it snags.",
       "specs": [
@@ -2095,7 +2097,7 @@
       "name": "Late-Night Send",
       "type": "Secretly Useful",
       "topic": "Messages and Email",
-      "new": true,
+      "new": false,
       "summary": "Late at night {Send} gets sleepy: its icon turns into a moon, it yawns, and it offers to deliver your message at 9:00 AM instead.",
       "tryit": "Press {Send} at 11:48 PM, then switch to 2:00 PM and press it again.",
       "specs": [
@@ -2124,7 +2126,7 @@
       "name": "Tired Hand",
       "type": "Pure Joke",
       "topic": "Meetings and Calendar",
-      "new": true,
+      "new": false,
       "summary": "A raised hand that nobody notices gets tired. It droops, switches arms, leans, props itself up on a stick, then waves wildly.",
       "tryit": "Press {Raise Hand} and wait about ten seconds.",
       "specs": [
@@ -2146,6 +2148,209 @@
         }
       ],
       "notfor": "Real meeting tools. A raised hand nobody saw is only funny when it isn't happening to you."
+    },
+    {
+      "number": "074",
+      "slug": "real-price",
+      "name": "Real Price",
+      "type": "Honest",
+      "topic": "Billing and Plans",
+      "new": true,
+      "summary": "A checkout that shows every fee from the first screen, hanging under the price as tags, and unticks the extras that were ticked for you.",
+      "tryit": "Watch the extras untick themselves, then press {Pay $192.00}.",
+      "specs": [
+        {
+          "label": "Price",
+          "value": "Fees included up front"
+        },
+        {
+          "label": "Extras",
+          "value": "Untick themselves"
+        },
+        {
+          "label": "Total",
+          "value": "Same on the button"
+        },
+        {
+          "label": "Pay",
+          "value": "Exactly what it said"
+        }
+      ],
+      "notfor": "Prices with no extra fees. With nothing hanging under the price, there's nothing to show."
+    },
+    {
+      "number": "075",
+      "slug": "source-receipts",
+      "name": "Source Receipts",
+      "type": "Honest",
+      "topic": "AI",
+      "new": true,
+      "summary": "An AI answer where every sentence shows where it came from. Point at a source and both light up. A sentence with nothing behind it is marked “My guess”, in plain sight.",
+      "tryit": "Point at {1} and {2}, press {My guess}, then {Hide Guesses}.",
+      "specs": [
+        {
+          "label": "Chips",
+          "value": "A source, or My guess"
+        },
+        {
+          "label": "Light",
+          "value": "Sentence and source together"
+        },
+        {
+          "label": "Guess",
+          "value": "Dotted amber underline"
+        },
+        {
+          "label": "Strict",
+          "value": "Strike out guesses"
+        }
+      ],
+      "notfor": "Answers that are pure opinion or a joke. With nothing to cite, every line becomes a guess."
+    },
+    {
+      "number": "076",
+      "slug": "data-receipt",
+      "name": "Data Receipt",
+      "type": "Honest",
+      "topic": "Teams and Sharing",
+      "new": true,
+      "summary": "Before an app connects, it prints a receipt of exactly what it will read, what it will write and what it will never touch. Strike off what you don't want.",
+      "tryit": "Press {Remove} on a line, then {Add Back}, then {Connect with 3}.",
+      "specs": [
+        {
+          "label": "Print",
+          "value": "Slides out of a slot"
+        },
+        {
+          "label": "Never",
+          "value": "Listed in green"
+        },
+        {
+          "label": "Remove",
+          "value": "Strikes the line through"
+        },
+        {
+          "label": "Stamp",
+          "value": "Connected, pop spring"
+        }
+      ],
+      "notfor": "Apps that read nothing personal. A receipt with one line looks like a formality."
+    },
+    {
+      "number": "077",
+      "slug": "real-eta",
+      "name": "Real ETA",
+      "type": "Honest",
+      "topic": "Loading and Status",
+      "new": true,
+      "summary": "Delivery shown as an honest range: a bar for each day, as tall as the chance it arrives then. As the package moves, the range narrows until it's “Today, 2–4 PM”.",
+      "tryit": "Press {Move Time Forward} until it's out for delivery.",
+      "specs": [
+        {
+          "label": "Bars",
+          "value": "Chance for each day"
+        },
+        {
+          "label": "Headline",
+          "value": "The most likely day"
+        },
+        {
+          "label": "Odds",
+          "value": "80% by which day"
+        },
+        {
+          "label": "Narrows",
+          "value": "At every step"
+        }
+      ],
+      "notfor": "Deliveries that already have an exact time. A range would show more doubt than there is."
+    },
+    {
+      "number": "078",
+      "slug": "heading-trail",
+      "name": "Heading Trail",
+      "type": "Useful",
+      "topic": "Search and Navigation",
+      "new": true,
+      "summary": "Headings you scroll past fly up into a trail above the page. Click any step to jump back to that section.",
+      "tryit": "Scroll the plan to the bottom, then press {Pricing} in the trail.",
+      "specs": [
+        {
+          "label": "Passed",
+          "value": "8px above the top"
+        },
+        {
+          "label": "Flight",
+          "value": "Panel spring, 17 to 13px"
+        },
+        {
+          "label": "Current",
+          "value": "The newest step"
+        },
+        {
+          "label": "Back",
+          "value": "Steps leave as you return"
+        }
+      ],
+      "notfor": "Short pages with two or three headings. The trail stays almost empty."
+    },
+    {
+      "number": "079",
+      "slug": "lunch-shield",
+      "name": "Lunch Shield",
+      "type": "Secretly Useful",
+      "topic": "Meetings and Calendar",
+      "new": true,
+      "summary": "Accept a meeting that lands on your lunch and a sandwich steps out like a bouncer, holding it just above the slot and asking if it's worth it.",
+      "tryit": "Press {Accept 12:00 PM}, then {Move to 1:00 PM} or {Eat Later}.",
+      "specs": [
+        {
+          "label": "Bouncer",
+          "value": "A Sage sandwich"
+        },
+        {
+          "label": "Hold",
+          "value": "Just above lunch"
+        },
+        {
+          "label": "Move",
+          "value": "First free slot after"
+        },
+        {
+          "label": "Over lunch",
+          "value": "Side by side, lunch fades"
+        }
+      ],
+      "notfor": "People without a set lunch. Guarding a slot they don't keep just gets in the way."
+    },
+    {
+      "number": "080",
+      "slug": "existential-captcha",
+      "name": "Existential Captcha",
+      "type": "Pure Joke",
+      "topic": "Forms and Input",
+      "new": true,
+      "summary": "Tick “I’m not a robot” and the checkbox stops to wonder. How would it know? Are any of us really not robots? Then it asks if you're sure.",
+      "tryit": "Tick the box, wait for its thoughts, then press {Let Me Think}.",
+      "specs": [
+        {
+          "label": "Thoughts",
+          "value": "Four, 900ms apart"
+        },
+        {
+          "label": "Sure",
+          "value": "Verified. Probably."
+        },
+        {
+          "label": "Think",
+          "value": "It checks itself anyway"
+        },
+        {
+          "label": "Once",
+          "value": "Then it stays checked"
+        }
+      ],
+      "notfor": "Real sign-up forms. A checkbox that doubts itself confuses people who just want in."
     }
   ]
 }

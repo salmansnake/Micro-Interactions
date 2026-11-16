@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heading Trail · Micro Interactions</title>
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="../icons/outcraft-icon-180x180-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Heading Trail — headings you scroll past fly up into a sticky trail you can click to jump back.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.htr {
+  --htr-bg: var(--card);
+  --htr-fg: var(--foreground);
+  --htr-muted: var(--muted-foreground);
+  --htr-sunken: var(--subtle);
+  --htr-fill: var(--muted);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  contain: inline-size;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--htr-bg);
+  color: var(--htr-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.htr p, .htr h3, .htr ol { margin: 0; }
+
+/* The trail: the document, then every section you have passed; it scrolls sideways when it runs out of room */
+.htr-trail { display: flex; align-items: center; gap: 2px; min-width: 0; margin: -4px -4px 0; padding: 4px; overflow-x: auto; scrollbar-width: none; }
+.htr-trail::-webkit-scrollbar { display: none; }
+.htr-trail.is-scrolled { -webkit-mask-image: linear-gradient(to right, transparent, black 32px); mask-image: linear-gradient(to right, transparent, black 32px); }
+.htr-crumbs { display: flex; align-items: center; gap: 2px; padding: 0; list-style: none; }
+.htr-crumbs li { display: flex; align-items: center; gap: 2px; animation: htr-in var(--duration-base) var(--ease-out); }
+.htr-crumbs li.is-out { opacity: 0; transition: opacity var(--duration-fast); }
+.htr-crumbs li > svg { flex: none; width: 14px; height: 14px; color: var(--htr-muted); }
+@keyframes htr-in { from { opacity: 0; } }
+.htr-top, .htr-crumb { flex: none; display: inline-flex; align-items: center; height: 36px; padding: 0 12px; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--htr-fg); font: inherit; font-size: var(--text-small); font-weight: 500; white-space: nowrap; cursor: pointer; transition: background-color var(--duration-fast), transform var(--spring-press-duration) var(--spring-press); }
+.htr-top { padding-left: 10px; font-weight: 600; }
+.htr-top svg { width: 16px; height: 16px; margin-right: 6px; }
+.htr-top:hover, .htr-crumb:hover { background: var(--hover); }
+.htr-crumb[aria-current="location"] { background: var(--htr-fill); }
+.htr-crumb.is-landing { visibility: hidden; }
+.htr-top:active, .htr-crumb:active { transform: scale(var(--press-scale)); }
+.htr-top:focus-visible, .htr-crumb:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.htr-scroll { position: relative; height: 248px; overflow-y: auto; padding: 16px 16px 0; border-radius: var(--radius-lg); background: var(--htr-sunken); overscroll-behavior: contain; scroll-behavior: smooth; }
+.htr-scroll:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.htr-scroll h3 { margin-top: 20px; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title-sm); font-weight: 600; }
+.htr-scroll h3:first-child { margin-top: 0; text-box: trim-start cap alphabetic; }
+.htr-scroll p { margin-top: 8px; color: var(--body); font-size: var(--text-ui); line-height: var(--leading-ui); text-wrap: pretty; }
+.htr-scroll p:last-child { padding-bottom: 16px; }
+
+/* The heading in flight from the page to its place in the trail */
+.htr-ghost { position: absolute; left: 0; top: 0; z-index: 3; margin: 0; color: var(--htr-fg); font-size: var(--text-title-sm); line-height: var(--leading-title-sm); letter-spacing: var(--tracking-title-sm); font-weight: 600; white-space: nowrap; pointer-events: none; transform-origin: 0 0; transition: transform var(--spring-panel-duration) var(--spring-panel); }
+
+@media (prefers-reduced-motion: reduce) {
+  .htr-scroll { scroll-behavior: auto; }
+  .htr-ghost { display: none; }
+  .htr-crumbs li { animation-duration: var(--duration-reduced); }
+}
+.htr [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Heading Trail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="htr" data-mi="heading-trail">
+  <nav class="htr-trail" aria-label="Sections you have scrolled past">
+    <button type="button" class="htr-top" aria-label="Back to the top of Launch plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>Launch plan</button>
+    <ol class="htr-crumbs"></ol>
+  </nav>
+  <div class="htr-scroll" tabindex="0" role="region" aria-label="Launch plan">
+    <h3>Overview</h3>
+    <p>Atlas 2.0 ships on November 17 to every team on the Pro plan. This plan covers the price, the rollout and what could go wrong.</p>
+    <p>Mira owns the launch. Questions go to the launch channel, not to her inbox.</p>
+    <h3>Pricing</h3>
+    <p>Pro stays at $24 per seat each month. Teams of 10 or more seats can switch to the yearly price of $20 per seat.</p>
+    <p>Nobody pays more on launch day. Existing plans keep their price until their next renewal.</p>
+    <h3>Rollout</h3>
+    <p>Week one is our own teams in Austin and London. Week two adds 10% of Pro workspaces, then everyone in week three.</p>
+    <p>Each step waits for two quiet days on the error dashboard before the next one starts.</p>
+    <h3>Risks</h3>
+    <p>Imports may run slowly for workspaces with more than 50,000 files. Sam is adding a progress screen for those.</p>
+    <p>If sign-in errors double, we pause the rollout and tell admins within an hour.</p>
+    <h3>Open questions</h3>
+    <p>Do we email every admin before launch, or show a banner in the app first? Priya will decide by Friday.</p>
+    <p>That’s the whole plan. Scroll back up and the sections leave the trail again.</p>
+  </div>
+</div>
+</div>
+<script>
+/* Heading Trail — vanilla JS. Auto-initializes every [data-mi="heading-trail"].
+   A heading counts as passed once it scrolls above the top of the page area. Passed headings fly up into the trail
+   as buttons; clicking one scrolls back to it, and the sections after it leave the trail as they come back into view.
+   Call window.initHeadingTrail(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>';
+
+  function initHeadingTrail(root) {
+    if (!root || root.__miHtr) return;
+    root.__miHtr = true;
+    var scroll = root.querySelector('.htr-scroll'), trail = root.querySelector('.htr-trail'), crumbs = root.querySelector('.htr-crumbs');
+    var top = root.querySelector('.htr-top');
+    var heads = Array.prototype.slice.call(scroll.querySelectorAll('h3'));
+    var shown = [];
+
+    function passed() {
+      var y = scroll.scrollTop + 8;
+      return heads.filter(function (h) { return h.offsetTop < y; });
+    }
+
+    function fly(h, btn) {
+      if (reduce.matches) return;
+      var rb = root.getBoundingClientRect(), from = h.getBoundingClientRect(), to = btn.getBoundingClientRect();
+      var g = document.createElement('p');
+      g.className = 'htr-ghost'; g.textContent = h.textContent; g.setAttribute('aria-hidden', 'true');
+      root.appendChild(g);
+      // Start where the heading is (clamped to the top of the page area, which it has just crossed), end on the button's label
+      var sy = Math.max(from.top, scroll.getBoundingClientRect().top) - rb.top, sx = from.left - rb.left;
+      var scale = 13 / 17, ex = to.left - rb.left + 12, ey = to.top - rb.top + (to.height - 24 * scale) / 2;
+      g.style.transform = 'translate(' + sx + 'px, ' + sy + 'px)';
+      btn.classList.add('is-landing');
+      void g.offsetWidth;
+      g.style.transform = 'translate(' + ex + 'px, ' + ey + 'px) scale(' + scale + ')';
+      var end = function () { g.remove(); btn.classList.remove('is-landing'); };
+      g.addEventListener('transitionend', end, { once: true });
+      setTimeout(end, 700);
+    }
+
+    function render() {
+      var now = passed();
+      // Leave: headings back in view
+      while (shown.length > now.length) {
+        var gone = shown.pop(), li = gone.li;
+        li.classList.add('is-out');
+        setTimeout(function (el) { return function () { el.remove(); }; }(li), 140);
+      }
+      // Arrive: newly passed headings, each with a button that jumps back to it
+      now.forEach(function (h, i) {
+        if (shown[i]) return;
+        var li = document.createElement('li'), b = document.createElement('button');
+        b.type = 'button'; b.className = 'htr-crumb'; b.textContent = h.textContent;
+        b.addEventListener('click', function () { scroll.scrollTop = h.offsetTop - 4; });
+        li.innerHTML = CHEVRON; li.appendChild(b); crumbs.appendChild(li);
+        shown.push({ h: h, li: li, b: b });
+        trail.scrollLeft = trail.scrollWidth;
+        fly(h, b);
+      });
+      shown.forEach(function (s, i) { if (i === shown.length - 1) s.b.setAttribute('aria-current', 'location'); else s.b.removeAttribute('aria-current'); });
+      trail.scrollLeft = trail.scrollWidth;
+      trail.classList.toggle('is-scrolled', trail.scrollLeft > 0);
+    }
+
+    var queued = false;
+    scroll.addEventListener('scroll', function () { if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; render(); }); } }, { passive: true });
+    trail.addEventListener('scroll', function () { trail.classList.toggle('is-scrolled', trail.scrollLeft > 0); }, { passive: true });
+    top.addEventListener('click', function () { scroll.scrollTop = 0; });
+    render();
+  }
+
+  window.initHeadingTrail = initHeadingTrail;
+  function boot() { document.querySelectorAll('[data-mi="heading-trail"]').forEach(initHeadingTrail); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initHeadingTrail"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

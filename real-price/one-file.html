@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real Price</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #EBEBEB; }
+@media (prefers-color-scheme: dark) { body { background: #0C0C0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .rpr so they never affect the rest of your page. */
+.rpr {
+  --duration-base: 200ms;
+  --duration-reduced: 120ms;
+  --font-mono: "Geist Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-h3: 32px;
+  --leading-small: 18px;
+  --leading-ui: 20px;
+  --press-scale: 0.97;
+  --press-scale-sm: 0.94;
+  --radius-full: 9999px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --spring-panel: linear(0, 0.0198, 0.069, 0.1356, 0.211, 0.2893, 0.3667, 0.4407, 0.5096, 0.5727, 0.6297, 0.6805, 0.7255, 0.765, 0.7995, 0.8294, 0.8552, 0.8774, 0.8964, 0.9127, 0.9265, 0.9382, 0.9482, 0.9566, 0.9637, 0.9696, 0.9746, 0.9788, 0.9824, 0.9853, 0.9878, 0.9899, 0.9916, 0.993, 0.9942, 0.9952, 0.996, 0.9967, 0.9973, 0.9978, 1);
+  --spring-panel-duration: 530ms;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-h3: 24px;
+  --text-small: 13px;
+  --text-ui: 14px;
+  --tracking-title: -0.015em;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #686868;
+  --black: #000000;
+  --body: var(--slate);
+  --border: var(--line);
+  --border-strong: var(--line-strong);
+  --card: var(--white);
+  --fill-on-subtle: color-mix(in oklab, var(--muted) 95%, var(--foreground));
+  --foreground: var(--black);
+  --lift: #FFFFFF;
+  --line: #DDDDDD;
+  --line-strong: #C8C8C8;
+  --mist: #EBEBEB;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --muted-on-tint: var(--body);
+  --olive: #AA9856;
+  --olive-700: #6F6228;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --raised: var(--lift);
+  --ring: var(--aqua-700);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04), 0 1px 3px rgba(17, 17, 17, 0.07);
+  --shadow-xs: 0 1px 2px rgba(17, 17, 17, 0.05);
+  --slate: #4E4E4E;
+  --soft-ground: #F7F7F7;
+  --subtle: var(--soft-ground);
+  --tint-c: 0.4;
+  --tint-ink-l: 0.48;
+  --tint-ink-min: 0;
+  --tint-l: 0.92;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .rpr, .dark .rpr {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A6A6A6;
+  --black: #000000;
+  --body: var(--slate);
+  --border: var(--line);
+  --border-strong: var(--line-strong);
+  --card: var(--white);
+  --fill-on-subtle: var(--muted);
+  --foreground: #F2F2F2;
+  --lift: #424242;
+  --line: #333333;
+  --line-strong: #464646;
+  --mist: #2D2D2D;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --muted-on-tint: var(--muted-foreground);
+  --olive: #AA9856;
+  --olive-700: #CBBB7E;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --raised: var(--lift);
+  --ring: var(--aqua);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --slate: #CCCCCC;
+  --soft-ground: #1F1F1F;
+  --subtle: var(--soft-ground);
+  --tint-c: 0.45;
+  --tint-ink-l: 1;
+  --tint-ink-min: 0.75;
+  --tint-l: 0.32;
+  --white: #171717;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .rpr {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A6A6A6;
+    --black: #000000;
+    --body: var(--slate);
+    --border: var(--line);
+    --border-strong: var(--line-strong);
+    --card: var(--white);
+    --fill-on-subtle: var(--muted);
+    --foreground: #F2F2F2;
+    --lift: #424242;
+    --line: #333333;
+    --line-strong: #464646;
+    --mist: #2D2D2D;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --muted-on-tint: var(--muted-foreground);
+    --olive: #AA9856;
+    --olive-700: #CBBB7E;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --raised: var(--lift);
+    --ring: var(--aqua);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --slate: #CCCCCC;
+    --soft-ground: #1F1F1F;
+    --subtle: var(--soft-ground);
+    --tint-c: 0.45;
+    --tint-ink-l: 1;
+    --tint-ink-min: 0.75;
+    --tint-l: 0.32;
+    --white: #171717;
+  }
+}
+
+/* Real Price — a checkout that shows every fee from the first screen and unticks the extras that were ticked for you.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.rpr {
+  --rpr-bg: var(--card);
+  --rpr-fg: var(--foreground);
+  --rpr-muted: var(--muted-foreground);
+  --rpr-sunken: var(--subtle);
+  --rpr-fill: var(--muted);
+  --rpr-accent: var(--primary);
+  --rpr-on-accent: var(--primary-foreground);
+  --rpr-honest: var(--olive);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--rpr-bg);
+  color: var(--rpr-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.rpr p, .rpr ul { margin: 0; }
+.rpr-head { display: flex; align-items: center; gap: 12px; }
+.rpr-tile { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--rpr-fill); }
+.rpr-tile svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.rpr-title b { display: block; font-weight: 600; }
+.rpr-title small { display: block; margin-top: 2px; color: var(--rpr-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The price, with what's in it hanging underneath as tags */
+.rpr-price { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: var(--rpr-sunken); }
+.rpr-each { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; text-box: trim-start cap alphabetic; }
+.rpr-each-num { font: 600 var(--text-h3)/var(--leading-h3) var(--font-sans); letter-spacing: var(--tracking-title); font-variant-numeric: tabular-nums; }
+.rpr-each span { color: var(--muted-on-tint); font-size: var(--text-small); line-height: var(--leading-small); }
+.rpr-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; list-style: none; }
+.rpr-tags li { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: var(--radius-full); background: var(--fill-on-subtle); color: var(--muted-on-tint); font-size: var(--text-caption); font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; animation: rpr-hang var(--spring-pop-duration) var(--spring-pop) both; transform-origin: 50% 0; }
+.rpr-tags li:nth-child(2) { animation-delay: 80ms; }
+.rpr-tags li:nth-child(3) { animation-delay: 160ms; }
+@keyframes rpr-hang { from { transform: translateY(-6px) rotate(-4deg); opacity: 0; } }
+
+.rpr-qty { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.rpr-qty-label { font-size: var(--text-ui); font-weight: 600; }
+.rpr-step { display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: var(--radius-full); background: var(--rpr-fill); }
+.rpr-step button { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: var(--raised); color: var(--rpr-fg); box-shadow: var(--shadow-xs); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.rpr-step button svg { width: 16px; height: 16px; }
+.rpr-step button:disabled { cursor: default; background: transparent; box-shadow: none; color: var(--rpr-muted); }
+.rpr-step button:not(:disabled):active { transform: scale(var(--press-scale-sm)); }
+.rpr-step button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.rpr-n { min-width: 24px; font: 600 var(--text-ui)/1 var(--font-mono); text-align: center; font-variant-numeric: tabular-nums; }
+
+/* Extras: a checkbox each; the ones that came ticked untick themselves and say so */
+.rpr-addons { display: flex; flex-direction: column; padding: 0; list-style: none; }
+.rpr-addons li { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 12px; padding: 8px 0; }
+.rpr-addons li + li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+.rpr-box { position: relative; display: grid; place-items: center; width: 44px; height: 44px; margin: -8px -10px -8px -12px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.rpr-box::before { content: ""; position: absolute; inset: 11px; border-radius: var(--radius-xs); background: var(--rpr-bg); box-shadow: inset 0 0 0 2px var(--border-strong); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.rpr-box svg { position: relative; width: 14px; height: 14px; color: var(--rpr-on-accent); translate: 0 calc(14px / 48); transform: scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.rpr-box[aria-checked="true"]::before { background: var(--rpr-accent); box-shadow: none; }
+.rpr-box[aria-checked="true"] svg { transform: scale(1); }
+.rpr-box:focus-visible { outline: none; }
+.rpr-box:focus-visible::before { box-shadow: inset 0 0 0 2px var(--border-strong), 0 0 0 2px var(--rpr-bg), 0 0 0 4px var(--ring); }
+.rpr-addon b { display: block; font-size: var(--text-ui); line-height: var(--leading-ui); font-weight: 600; }
+.rpr-addon small { display: block; margin-top: 2px; color: var(--rpr-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+.rpr-note { grid-column: 2; justify-self: start; margin-top: 6px !important; padding: 3px 8px; border-radius: var(--radius-sm); background: oklch(from var(--rpr-honest) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--olive-700) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 500; animation: rpr-note var(--spring-panel-duration) var(--spring-panel); }
+@keyframes rpr-note { from { opacity: 0; transform: translateY(-4px); } }
+
+.rpr-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.rpr .rpr-status { flex: 1 1 170px; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.rpr-pay { flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--rpr-accent); color: var(--rpr-on-accent); font: inherit; font-size: var(--text-ui); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.rpr-pay:disabled { cursor: default; background: var(--rpr-fill); color: var(--rpr-fg); }
+.rpr-pay:not(:disabled):active { transform: scale(var(--press-scale)); }
+.rpr-pay:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rpr-tags li, .rpr-note { animation: none; }
+  .rpr-box svg { transition-duration: var(--duration-reduced); }
+}
+.rpr [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="rpr" data-mi="real-price" data-base="80" data-fees="12,4">
+  <div class="rpr-head">
+    <span class="rpr-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg></span>
+    <p class="rpr-title"><b>Nova Live · Austin</b><small>Sat, Nov 21 · 8:00 PM</small></p>
+  </div>
+  <div class="rpr-price">
+    <p class="rpr-each"><b class="rpr-each-num">$96.00</b><span>each, fees included</span></p>
+    <ul class="rpr-tags" aria-label="What's in the price">
+      <li>Ticket $80.00</li><li>Service $12.00</li><li>Venue $4.00</li>
+    </ul>
+  </div>
+  <div class="rpr-qty">
+    <span class="rpr-qty-label">Tickets</span>
+    <div class="rpr-step">
+      <button type="button" class="rpr-minus" aria-label="One fewer ticket"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+      <output class="rpr-n" aria-live="polite">2</output>
+      <button type="button" class="rpr-plus" aria-label="One more ticket"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
+    </div>
+  </div>
+  <ul class="rpr-addons">
+    <li data-price="9.99"><button type="button" class="rpr-box" role="checkbox" aria-checked="true" aria-label="Ticket insurance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></button><p class="rpr-addon"><b>Ticket insurance</b><small>$9.99 for the order</small></p><p class="rpr-note" hidden>We unticked this. Tick it if you want it.</p></li>
+    <li data-price="25"><button type="button" class="rpr-box" role="checkbox" aria-checked="true" aria-label="Parking pass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></button><p class="rpr-addon"><b>Parking pass</b><small>$25.00 for the order</small></p><p class="rpr-note" hidden>We unticked this too.</p></li>
+  </ul>
+  <div class="rpr-foot">
+    <p class="rpr-status" role="status" aria-live="polite">This is the whole price. Nothing gets added at the next step.</p>
+    <button type="button" class="rpr-pay"><span class="rpr-pay-label">Pay $192.00</span></button>
+  </div>
+</div>
+
+
+<script>
+/* Real Price — vanilla JS. Auto-initializes every [data-mi="real-price"].
+   The headline price already includes every fee (data-base plus data-fees, each shown as a tag). Extras that arrive
+   pre-ticked untick themselves a moment after load and say so. The total is the same in the button and at payment.
+   Call window.initRealPrice(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function money(n) { return n.toLocaleString('en-US', { style: 'currency', currency: 'USD' }); }
+
+  function initRealPrice(root) {
+    if (!root || root.__miRpr) return;
+    root.__miRpr = true;
+    var base = Number(root.getAttribute('data-base')) || 80;
+    var fees = (root.getAttribute('data-fees') || '').split(',').map(Number).filter(function (x) { return x > 0; });
+    var each = base + fees.reduce(function (a, b) { return a + b; }, 0);
+    var nEl = root.querySelector('.rpr-n'), minus = root.querySelector('.rpr-minus'), plus = root.querySelector('.rpr-plus');
+    var pay = root.querySelector('.rpr-pay'), payLabel = root.querySelector('.rpr-pay-label'), status = root.querySelector('.rpr-status');
+    var eachEl = root.querySelector('.rpr-each-num'), start = status.textContent;
+    var addons = Array.prototype.map.call(root.querySelectorAll('.rpr-addons li'), function (li) {
+      return { li: li, price: Number(li.getAttribute('data-price')), box: li.querySelector('.rpr-box'), note: li.querySelector('.rpr-note') };
+    });
+    var n = Number(nEl.textContent) || 2, paid = false;
+    eachEl.textContent = money(each);
+
+    function total() { return each * n + addons.reduce(function (s, a) { return s + (a.box.getAttribute('aria-checked') === 'true' ? a.price : 0); }, 0); }
+    function render() {
+      nEl.textContent = n;
+      minus.disabled = paid || n <= 1; plus.disabled = paid || n >= 6;
+      payLabel.textContent = paid ? 'Paid ' + money(total()) : 'Pay ' + money(total());
+    }
+
+    minus.addEventListener('click', function () { if (n > 1) { n--; render(); } });
+    plus.addEventListener('click', function () { if (n < 6) { n++; render(); } });
+    addons.forEach(function (a) {
+      a.box.addEventListener('click', function () {
+        if (paid) return;
+        a.box.setAttribute('aria-checked', a.box.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+        a.note.hidden = true; render();
+      });
+    });
+    pay.addEventListener('click', function () {
+      if (paid) return;
+      paid = true; pay.disabled = true;
+      addons.forEach(function (a) { a.box.setAttribute('aria-disabled', 'true'); });
+      render();
+      status.textContent = 'Paid ' + money(total()) + '. Exactly what it\u00a0said.';
+    });
+
+    // The pay button keeps one width as the total changes: as wide as the largest total it can show
+    function sizePay() {
+      var keep = n, w = 0; pay.style.minWidth = '';
+      addons.forEach(function (a) { a.was = a.box.getAttribute('aria-checked'); a.box.setAttribute('aria-checked', 'true'); });
+      n = 6; payLabel.textContent = 'Paid ' + money(total()); w = pay.getBoundingClientRect().width;
+      addons.forEach(function (a) { a.box.setAttribute('aria-checked', a.was); });
+      n = keep; pay.style.minWidth = Math.ceil(w) + 'px'; render();
+    }
+    sizePay();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizePay);
+    render();
+    status.textContent = start;
+
+    // Untick what was ticked for you, one at a time, and say so
+    addons.forEach(function (a, i) {
+      if (a.box.getAttribute('aria-checked') !== 'true') return;
+      setTimeout(function () {
+        if (paid || !root.isConnected) return;
+        a.box.setAttribute('aria-checked', 'false'); a.note.hidden = false; render();
+      }, (reduce.matches ? 200 : 900) + i * 500);
+    });
+  }
+
+  window.initRealPrice = initRealPrice;
+  function boot() { document.querySelectorAll('[data-mi="real-price"]').forEach(initRealPrice); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

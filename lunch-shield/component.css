@@ -1,0 +1,87 @@
+/* Lunch Shield — a meeting booked over lunch meets a sandwich bouncer who asks if it's worth it.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.lsh {
+  --lsh-bg: var(--card);
+  --lsh-fg: var(--foreground);
+  --lsh-muted: var(--muted-foreground);
+  --lsh-sunken: var(--subtle);
+  --lsh-fill: var(--muted);
+  --lsh-accent: var(--primary);
+  --lsh-on-accent: var(--primary-foreground);
+  --lsh-slot: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--lsh-bg);
+  color: var(--lsh-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.lsh p { margin: 0; }
+.lsh-invite { display: flex; align-items: center; gap: 12px; }
+.lsh-inv { flex: 1; min-width: 0; }
+.lsh-inv b { display: block; font-weight: 600; }
+.lsh-inv small { display: block; margin-top: 2px; color: var(--lsh-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The day: three hours in 30-minute slots; events sit by --at (start slot) and --len (slots) */
+.lsh-day { position: relative; height: calc(var(--lsh-slot) * 6); padding: 0; border-radius: var(--radius-lg); background: var(--lsh-sunken); overflow: hidden; }
+.lsh-hour { position: absolute; left: 10px; top: calc(var(--lsh-slot) * var(--at) + 6px); color: var(--lsh-muted); font-size: var(--text-caption); line-height: var(--leading-caption); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.lsh-hour::after { content: ""; position: absolute; left: 46px; top: -6px; width: 400px; height: 1px; background: var(--border); }
+.lsh-hour[style*="--at: 0"]::after { display: none; }
+/* A calendar block keeps its text at the top: its height is its duration */
+.lsh-ev { position: absolute; left: 56px; right: 8px; top: calc(var(--lsh-slot) * var(--at) + 2px); height: calc(var(--lsh-slot) * var(--len) - 4px); box-sizing: border-box; padding: 5px 10px; border-radius: var(--radius-sm); overflow: hidden; transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-slow); }
+.lsh-ev b { display: block; overflow: hidden; font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.lsh-ev small { display: block; margin-top: 2px; font-size: var(--text-caption); line-height: var(--leading-caption); }
+.lsh-standup { background: var(--fill-on-subtle); }
+.lsh-lunch { background: oklch(from var(--sage) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--sage-700) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); }
+.lsh-lunch b { color: var(--lsh-fg); }
+.lsh-new { z-index: 2; background: var(--brand); color: var(--brand-foreground); box-shadow: var(--shadow-md); }
+.lsh-new.is-dropping { animation: lsh-drop var(--spring-panel-duration) var(--spring-panel); }
+@keyframes lsh-drop { from { transform: translateY(-40px); opacity: 0; } }
+.lsh-new.is-stopped { transform: translateY(-30px); animation: lsh-wobble 0.45s var(--ease-in-out); }
+@keyframes lsh-wobble { 25% { rotate: -2deg; } 75% { rotate: 2deg; } }
+.lsh-new.is-moved { transform: translateY(calc(var(--lsh-slot) * 2)); }
+/* Over lunch, the two share the slot side by side, and lunch fades */
+.lsh.is-over .lsh-new { right: calc(50% - 24px); }
+.lsh.is-over .lsh-lunch { left: calc(50% + 28px); opacity: 0.55; }
+/* The bouncer: a sandwich that steps out in front of lunch */
+.lsh-guard { position: absolute; z-index: 3; right: 16px; top: calc(var(--lsh-slot) * 2 + 10px); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--sage); color: var(--on-chart); box-shadow: var(--shadow-md); transform: scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.lsh-guard svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.lsh.is-guarding .lsh-guard { transform: scale(1); }
+.lsh.is-guarding .lsh-guard svg { animation: lsh-halt 0.5s var(--ease-in-out) 0.3s 2; }
+@keyframes lsh-halt { 50% { transform: translateY(-4px) rotate(-8deg); } }
+.lsh.is-over .lsh-guard { transform: scale(0.75) rotate(-20deg); opacity: 0.6; }
+
+.lsh-ask { display: flex; flex-direction: column; gap: 12px; animation: lsh-in var(--spring-panel-duration) var(--spring-panel); }
+@keyframes lsh-in { from { opacity: 0; transform: translateY(-6px); } }
+.lsh-ask-msg { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.lsh-ask-btns { display: flex; gap: 8px; }
+.lsh-ask-btns .lsh-btn { flex: 1; min-width: 0; }
+.lsh-btn { flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--lsh-fill); color: var(--lsh-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.lsh-btn:hover { background: var(--muted-hover); }
+.lsh-accept, .lsh-move, .lsh-accept:hover, .lsh-move:hover { background: var(--lsh-accent); color: var(--lsh-on-accent); }
+.lsh-accept.is-secondary, .lsh-accept.is-secondary:hover { background: var(--lsh-fill); color: var(--lsh-fg); }
+.lsh-accept:disabled { cursor: default; background: var(--lsh-fill); color: var(--lsh-muted); }
+.lsh-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.lsh-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* The bottom block always has one line of text over its buttons, like the question, so the card keeps one height:
+   the invite over Accept, the question over its two answers, the outcome over Undo. The main action sits at the right */
+.lsh-foot { display: flex; flex-direction: column; gap: 12px; }
+.lsh-foot > .lsh-btn { align-self: flex-end; }
+.lsh .lsh-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.lsh-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lsh-ev, .lsh-guard { transition-duration: var(--duration-reduced); }
+  .lsh-new.is-dropping, .lsh-new.is-stopped, .lsh.is-guarding .lsh-guard svg, .lsh-ask { animation: none; }
+}
+.lsh [hidden] { display: none !important; }

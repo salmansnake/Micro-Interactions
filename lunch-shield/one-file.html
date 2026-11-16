@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lunch Shield</title>
+<style>
+/* Demo page only. Remove this block when pasting into your own page. */
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; box-sizing: border-box; background: #EBEBEB; }
+@media (prefers-color-scheme: dark) { body { background: #0C0C0C; } }
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* Outcraft Design System v2: the tokens this component uses, scoped to .lsh so they never affect the rest of your page. */
+.lsh {
+  --duration-fast: 140ms;
+  --duration-reduced: 120ms;
+  --duration-slow: 320ms;
+  --ease-in-out: cubic-bezier(0.62, 0, 0.32, 1);
+  --font-sans: "Geist", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --leading-body: 22px;
+  --leading-caption: 16px;
+  --leading-small: 18px;
+  --press-scale: 0.97;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xl: 16px;
+  --spring-panel: linear(0, 0.0198, 0.069, 0.1356, 0.211, 0.2893, 0.3667, 0.4407, 0.5096, 0.5727, 0.6297, 0.6805, 0.7255, 0.765, 0.7995, 0.8294, 0.8552, 0.8774, 0.8964, 0.9127, 0.9265, 0.9382, 0.9482, 0.9566, 0.9637, 0.9696, 0.9746, 0.9788, 0.9824, 0.9853, 0.9878, 0.9899, 0.9916, 0.993, 0.9942, 0.9952, 0.996, 0.9967, 0.9973, 0.9978, 1);
+  --spring-panel-duration: 530ms;
+  --spring-pop: linear(0, 0.0413, 0.1464, 0.2895, 0.4487, 0.6073, 0.7529, 0.8776, 0.9776, 1.0517, 1.1013, 1.1292, 1.1394, 1.1357, 1.1225, 1.1033, 1.0813, 1.059, 1.0382, 1.0202, 1.0055, 0.9945, 0.9869, 0.9825, 0.9807, 0.9808, 0.9825, 0.985, 0.9881, 0.9912, 0.9941, 0.9967, 0.9989, 1.0005, 1.0017, 1.0024, 1.0027, 1.0027, 1.0025, 1.0022, 1);
+  --spring-pop-duration: 680ms;
+  --spring-press: linear(0, 0.0189, 0.0676, 0.1361, 0.2164, 0.3025, 0.3896, 0.4743, 0.5543, 0.628, 0.6945, 0.7535, 0.8049, 0.849, 0.8863, 0.9172, 0.9425, 0.9629, 0.9789, 0.9912, 1.0004, 1.0071, 1.0116, 1.0145, 1.016, 1.0166, 1.0164, 1.0156, 1.0146, 1.0133, 1.0118, 1.0104, 1.009, 1.0076, 1.0064, 1.0053, 1.0043, 1.0034, 1.0026, 1.002, 1);
+  --spring-press-duration: 310ms;
+  --spring-ui: linear(0, 0.0237, 0.0849, 0.1704, 0.2697, 0.3746, 0.4788, 0.5777, 0.6685, 0.7491, 0.8189, 0.8776, 0.9257, 0.9639, 0.9931, 1.0147, 1.0296, 1.0391, 1.0442, 1.046, 1.0451, 1.0425, 1.0387, 1.0342, 1.0294, 1.0246, 1.02, 1.0158, 1.012, 1.0087, 1.0059, 1.0037, 1.0019, 1.0005, 0.9994, 0.9987, 0.9982, 0.998, 0.9979, 0.9979, 1);
+  --spring-ui-duration: 460ms;
+  --text-body: 15px;
+  --text-caption: 12px;
+  --text-small: 13px;
+  --text-ui: 14px;
+  --aqua: #79EEEC;
+  --aqua-700: #0B7573;
+  --ash: #686868;
+  --black: #000000;
+  --body: var(--slate);
+  --border: var(--line);
+  --brand: var(--aqua);
+  --brand-foreground: #000000;
+  --card: var(--white);
+  --fill-on-subtle: color-mix(in oklab, var(--muted) 95%, var(--foreground));
+  --foreground: var(--black);
+  --line: #DDDDDD;
+  --mist: #EBEBEB;
+  --mist-strong: #E2E2E2;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --muted-hover: var(--mist-strong);
+  --on-chart: #000000;
+  --primary: var(--black);
+  --primary-foreground: #ffffff;
+  --ring: var(--aqua-700);
+  --sage: #99AD88;
+  --sage-700: #4F6340;
+  --shadow-md: 0 2px 4px -1px rgba(17, 17, 17, 0.05), 0 6px 14px -3px rgba(17, 17, 17, 0.09);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04), 0 1px 3px rgba(17, 17, 17, 0.07);
+  --slate: #4E4E4E;
+  --soft-ground: #F7F7F7;
+  --subtle: var(--soft-ground);
+  --tint-c: 0.4;
+  --tint-ink-l: 0.48;
+  --tint-ink-min: 0;
+  --tint-l: 0.92;
+  --white: #FFFFFF;
+}
+/* Dark mode: follows data-theme="dark" (or class "dark") on any ancestor, or the system setting. */
+[data-theme="dark"] .lsh, .dark .lsh {
+  --aqua: #79EEEC;
+  --aqua-700: #79EEEC;
+  --ash: #A6A6A6;
+  --black: #000000;
+  --body: var(--slate);
+  --border: var(--line);
+  --brand: var(--aqua);
+  --brand-foreground: #000000;
+  --card: var(--white);
+  --fill-on-subtle: var(--muted);
+  --foreground: #F2F2F2;
+  --line: #333333;
+  --mist: #2D2D2D;
+  --mist-strong: #363636;
+  --muted: var(--mist);
+  --muted-foreground: var(--ash);
+  --muted-hover: var(--mist-strong);
+  --on-chart: #000000;
+  --primary: var(--aqua);
+  --primary-foreground: #000000;
+  --ring: var(--aqua);
+  --sage: #99AD88;
+  --sage-700: #B4C5A4;
+  --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --slate: #CCCCCC;
+  --soft-ground: #1F1F1F;
+  --subtle: var(--soft-ground);
+  --tint-c: 0.45;
+  --tint-ink-l: 1;
+  --tint-ink-min: 0.75;
+  --tint-l: 0.32;
+  --white: #171717;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) .lsh {
+    --aqua: #79EEEC;
+    --aqua-700: #79EEEC;
+    --ash: #A6A6A6;
+    --black: #000000;
+    --body: var(--slate);
+    --border: var(--line);
+    --brand: var(--aqua);
+    --brand-foreground: #000000;
+    --card: var(--white);
+    --fill-on-subtle: var(--muted);
+    --foreground: #F2F2F2;
+    --line: #333333;
+    --mist: #2D2D2D;
+    --mist-strong: #363636;
+    --muted: var(--mist);
+    --muted-foreground: var(--ash);
+    --muted-hover: var(--mist-strong);
+    --on-chart: #000000;
+    --primary: var(--aqua);
+    --primary-foreground: #000000;
+    --ring: var(--aqua);
+    --sage: #99AD88;
+    --sage-700: #B4C5A4;
+    --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.45), 0 6px 14px -3px rgba(0, 0, 0, 0.45);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --slate: #CCCCCC;
+    --soft-ground: #1F1F1F;
+    --subtle: var(--soft-ground);
+    --tint-c: 0.45;
+    --tint-ink-l: 1;
+    --tint-ink-min: 0.75;
+    --tint-l: 0.32;
+    --white: #171717;
+  }
+}
+
+/* Lunch Shield — a meeting booked over lunch meets a sandwich bouncer who asks if it's worth it.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.lsh {
+  --lsh-bg: var(--card);
+  --lsh-fg: var(--foreground);
+  --lsh-muted: var(--muted-foreground);
+  --lsh-sunken: var(--subtle);
+  --lsh-fill: var(--muted);
+  --lsh-accent: var(--primary);
+  --lsh-on-accent: var(--primary-foreground);
+  --lsh-slot: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--lsh-bg);
+  color: var(--lsh-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.lsh p { margin: 0; }
+.lsh-invite { display: flex; align-items: center; gap: 12px; }
+.lsh-inv { flex: 1; min-width: 0; }
+.lsh-inv b { display: block; font-weight: 600; }
+.lsh-inv small { display: block; margin-top: 2px; color: var(--lsh-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The day: three hours in 30-minute slots; events sit by --at (start slot) and --len (slots) */
+.lsh-day { position: relative; height: calc(var(--lsh-slot) * 6); padding: 0; border-radius: var(--radius-lg); background: var(--lsh-sunken); overflow: hidden; }
+.lsh-hour { position: absolute; left: 10px; top: calc(var(--lsh-slot) * var(--at) + 6px); color: var(--lsh-muted); font-size: var(--text-caption); line-height: var(--leading-caption); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.lsh-hour::after { content: ""; position: absolute; left: 46px; top: -6px; width: 400px; height: 1px; background: var(--border); }
+.lsh-hour[style*="--at: 0"]::after { display: none; }
+/* A calendar block keeps its text at the top: its height is its duration */
+.lsh-ev { position: absolute; left: 56px; right: 8px; top: calc(var(--lsh-slot) * var(--at) + 2px); height: calc(var(--lsh-slot) * var(--len) - 4px); box-sizing: border-box; padding: 5px 10px; border-radius: var(--radius-sm); overflow: hidden; transition: transform var(--spring-ui-duration) var(--spring-ui), opacity var(--duration-slow); }
+.lsh-ev b { display: block; overflow: hidden; font-size: var(--text-small); line-height: var(--leading-small); font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.lsh-ev small { display: block; margin-top: 2px; font-size: var(--text-caption); line-height: var(--leading-caption); }
+.lsh-standup { background: var(--fill-on-subtle); }
+.lsh-lunch { background: oklch(from var(--sage) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--sage-700) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); }
+.lsh-lunch b { color: var(--lsh-fg); }
+.lsh-new { z-index: 2; background: var(--brand); color: var(--brand-foreground); box-shadow: var(--shadow-md); }
+.lsh-new.is-dropping { animation: lsh-drop var(--spring-panel-duration) var(--spring-panel); }
+@keyframes lsh-drop { from { transform: translateY(-40px); opacity: 0; } }
+.lsh-new.is-stopped { transform: translateY(-30px); animation: lsh-wobble 0.45s var(--ease-in-out); }
+@keyframes lsh-wobble { 25% { rotate: -2deg; } 75% { rotate: 2deg; } }
+.lsh-new.is-moved { transform: translateY(calc(var(--lsh-slot) * 2)); }
+/* Over lunch, the two share the slot side by side, and lunch fades */
+.lsh.is-over .lsh-new { right: calc(50% - 24px); }
+.lsh.is-over .lsh-lunch { left: calc(50% + 28px); opacity: 0.55; }
+/* The bouncer: a sandwich that steps out in front of lunch */
+.lsh-guard { position: absolute; z-index: 3; right: 16px; top: calc(var(--lsh-slot) * 2 + 10px); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--sage); color: var(--on-chart); box-shadow: var(--shadow-md); transform: scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.lsh-guard svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.lsh.is-guarding .lsh-guard { transform: scale(1); }
+.lsh.is-guarding .lsh-guard svg { animation: lsh-halt 0.5s var(--ease-in-out) 0.3s 2; }
+@keyframes lsh-halt { 50% { transform: translateY(-4px) rotate(-8deg); } }
+.lsh.is-over .lsh-guard { transform: scale(0.75) rotate(-20deg); opacity: 0.6; }
+
+.lsh-ask { display: flex; flex-direction: column; gap: 12px; animation: lsh-in var(--spring-panel-duration) var(--spring-panel); }
+@keyframes lsh-in { from { opacity: 0; transform: translateY(-6px); } }
+.lsh-ask-msg { font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; }
+.lsh-ask-btns { display: flex; gap: 8px; }
+.lsh-ask-btns .lsh-btn { flex: 1; min-width: 0; }
+.lsh-btn { flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--lsh-fill); color: var(--lsh-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.lsh-btn:hover { background: var(--muted-hover); }
+.lsh-accept, .lsh-move, .lsh-accept:hover, .lsh-move:hover { background: var(--lsh-accent); color: var(--lsh-on-accent); }
+.lsh-accept.is-secondary, .lsh-accept.is-secondary:hover { background: var(--lsh-fill); color: var(--lsh-fg); }
+.lsh-accept:disabled { cursor: default; background: var(--lsh-fill); color: var(--lsh-muted); }
+.lsh-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.lsh-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+/* The bottom block always has one line of text over its buttons, like the question, so the card keeps one height:
+   the invite over Accept, the question over its two answers, the outcome over Undo. The main action sits at the right */
+.lsh-foot { display: flex; flex-direction: column; gap: 12px; }
+.lsh-foot > .lsh-btn { align-self: flex-end; }
+.lsh .lsh-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.lsh-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lsh-ev, .lsh-guard { transition-duration: var(--duration-reduced); }
+  .lsh-new.is-dropping, .lsh-new.is-stopped, .lsh.is-guarding .lsh-guard svg, .lsh-ask { animation: none; }
+}
+.lsh [hidden] { display: none !important; }
+
+</style>
+</head>
+<body>
+
+<div class="lsh" data-mi="lunch-shield">
+  <div class="lsh-invite">
+    <p class="lsh-inv"><b>Vendor sync</b><small>Jordan Lee · 30&nbsp;min · Thu, Nov&nbsp;5</small></p>
+  </div>
+  <div class="lsh-day">
+    <span class="lsh-hour" style="--at: 0">11 AM</span>
+    <span class="lsh-hour" style="--at: 2">12 PM</span>
+    <span class="lsh-hour" style="--at: 4">1 PM</span>
+    <div class="lsh-ev lsh-standup" style="--at: 0; --len: 1"><b>Standup</b></div>
+    <div class="lsh-ev lsh-lunch" style="--at: 2; --len: 2"><b>Lunch</b><small>12:00 – 1:00 PM</small></div>
+    <div class="lsh-ev lsh-new" style="--at: 2; --len: 1" hidden><b>Vendor sync</b></div>
+    <span class="lsh-guard" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2.37 11.223 8.372-6.777a2 2 0 0 1 2.516 0l8.371 6.777"/><path d="M21 15a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5.25"/><path d="M3 15a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h9"/><path d="m6.67 15 6.13 4.6a2 2 0 0 0 2.8-.4l3.15-4.2"/><rect width="20" height="4" x="2" y="11" rx="1"/></svg></span>
+  </div>
+  <div class="lsh-ask" hidden>
+    <p class="lsh-ask-msg">That’s lunch. Is Vendor sync worth a&nbsp;sandwich?</p>
+    <div class="lsh-ask-btns">
+      <button type="button" class="lsh-btn lsh-move">Move to 1:00 PM</button>
+      <button type="button" class="lsh-btn lsh-eat">Eat Later</button>
+    </div>
+  </div>
+  <div class="lsh-foot">
+    <p class="lsh-status" role="status" aria-live="polite"></p>
+    <button type="button" class="lsh-btn lsh-accept">Accept 12:00 PM</button>
+  </div>
+</div>
+
+
+<script>
+/* Lunch Shield — vanilla JS. Auto-initializes every [data-mi="lunch-shield"].
+   Accepting the invite drops the meeting toward lunch; a sandwich steps out and stops it a little above the slot,
+   then asks: move it to the first free slot after lunch, or book over lunch anyway.
+   Call window.initLunchShield(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function initLunchShield(root) {
+    if (!root || root.__miLsh) return;
+    root.__miLsh = true;
+    var accept = root.querySelector('.lsh-accept'), ev = root.querySelector('.lsh-new'), ask = root.querySelector('.lsh-ask');
+    var move = root.querySelector('.lsh-move'), eat = root.querySelector('.lsh-eat'), status = root.querySelector('.lsh-status'), foot = root.querySelector('.lsh-foot');
+    var name = ev.textContent.trim(), state = 'idle', timer = 0, msg = root.querySelector('.lsh-ask-msg');
+    var INVITE = 'Jordan Lee invited you for 12:00\u00a0PM.';
+    var DONE = ['Booked ' + name + ' at 1:00 PM. Lunch\u00a0survives.', 'Booked over lunch. The sandwich will wait. It always\u00a0does.'];
+
+    // Every text line in the bottom block gets the height of the tallest one at the current width,
+    // so the card keeps one height before, during and after the question
+    function reserve() {
+      var cs = getComputedStyle(root), w = root.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), h = 0;
+      var probe = status.cloneNode(false);
+      probe.removeAttribute('role'); probe.removeAttribute('aria-live'); probe.setAttribute('aria-hidden', 'true');
+      probe.style.cssText = 'position: absolute; visibility: hidden; left: 0; top: 0; min-height: 0; width: ' + w + 'px';
+      root.appendChild(probe);
+      [INVITE].concat(DONE).forEach(function (t) { probe.textContent = t; h = Math.max(h, probe.getBoundingClientRect().height); });
+      probe.style.fontWeight = '500'; probe.textContent = msg.textContent; h = Math.max(h, probe.getBoundingClientRect().height);
+      root.removeChild(probe);
+      status.style.minHeight = msg.style.minHeight = Math.ceil(h) + 'px';
+    }
+
+    function reset() {
+      clearTimeout(timer); state = 'idle';
+      root.classList.remove('is-guarding', 'is-over');
+      ev.hidden = true; ev.className = 'lsh-ev lsh-new';
+      ask.hidden = true; foot.hidden = false; status.textContent = INVITE;
+      accept.textContent = 'Accept 12:00 PM'; accept.classList.remove('is-secondary'); accept.disabled = false;
+    }
+
+    function settle(text) {
+      state = 'done'; ask.hidden = true; foot.hidden = false; status.textContent = text;
+      accept.textContent = 'Undo'; accept.classList.add('is-secondary'); accept.disabled = false;
+      accept.focus({ preventScroll: true });
+    }
+
+    accept.addEventListener('click', function () {
+      if (state === 'done') { reset(); return; }
+      if (state !== 'idle') return;
+      state = 'asking'; accept.disabled = true;
+      ev.hidden = false; ev.classList.add('is-dropping');
+      // The sandwich steps out just before the meeting lands, and holds it above lunch
+      timer = setTimeout(function () {
+        root.classList.add('is-guarding');
+        ev.classList.remove('is-dropping'); ev.classList.add('is-stopped');
+        ask.hidden = false; foot.hidden = true;
+        move.focus({ preventScroll: true });
+      }, reduce.matches ? 0 : 380);
+    });
+    move.addEventListener('click', function () {
+      ev.classList.remove('is-stopped'); ev.classList.add('is-moved');
+      settle(DONE[0]);
+    });
+    eat.addEventListener('click', function () {
+      ev.classList.remove('is-stopped');
+      root.classList.add('is-over');
+      settle(DONE[1]);
+    });
+    // Accept keeps its width when it turns into Undo
+    function sizeBtn() { accept.style.minWidth = ''; accept.style.minWidth = Math.ceil(accept.getBoundingClientRect().width) + 'px'; }
+    reset();
+    sizeBtn();
+    reserve();
+    var lastW = 0;
+    if (window.ResizeObserver) new ResizeObserver(function () { var w = root.getBoundingClientRect().width; if (Math.abs(w - lastW) > 0.5) { lastW = w; reserve(); } }).observe(root);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (state === 'idle') sizeBtn(); reserve(); });
+  }
+
+  window.initLunchShield = initLunchShield;
+  function boot() { document.querySelectorAll('[data-mi="lunch-shield"]').forEach(initLunchShield); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+/* Real Price — a checkout that shows every fee from the first screen and unticks the extras that were ticked for you.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.rpr {
+  --rpr-bg: var(--card);
+  --rpr-fg: var(--foreground);
+  --rpr-muted: var(--muted-foreground);
+  --rpr-sunken: var(--subtle);
+  --rpr-fill: var(--muted);
+  --rpr-accent: var(--primary);
+  --rpr-on-accent: var(--primary-foreground);
+  --rpr-honest: var(--olive);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--rpr-bg);
+  color: var(--rpr-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.rpr p, .rpr ul { margin: 0; }
+.rpr-head { display: flex; align-items: center; gap: 12px; }
+.rpr-tile { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--rpr-fill); }
+.rpr-tile svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.rpr-title b { display: block; font-weight: 600; }
+.rpr-title small { display: block; margin-top: 2px; color: var(--rpr-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The price, with what's in it hanging underneath as tags */
+.rpr-price { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; border-radius: var(--radius-lg); background: var(--rpr-sunken); }
+.rpr-each { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; text-box: trim-start cap alphabetic; }
+.rpr-each-num { font: 600 var(--text-h3)/var(--leading-h3) var(--font-sans); letter-spacing: var(--tracking-title); font-variant-numeric: tabular-nums; }
+.rpr-each span { color: var(--muted-on-tint); font-size: var(--text-small); line-height: var(--leading-small); }
+.rpr-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; list-style: none; }
+.rpr-tags li { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: var(--radius-full); background: var(--fill-on-subtle); color: var(--muted-on-tint); font-size: var(--text-caption); font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; animation: rpr-hang var(--spring-pop-duration) var(--spring-pop) both; transform-origin: 50% 0; }
+.rpr-tags li:nth-child(2) { animation-delay: 80ms; }
+.rpr-tags li:nth-child(3) { animation-delay: 160ms; }
+@keyframes rpr-hang { from { transform: translateY(-6px) rotate(-4deg); opacity: 0; } }
+
+.rpr-qty { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.rpr-qty-label { font-size: var(--text-ui); font-weight: 600; }
+.rpr-step { display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: var(--radius-full); background: var(--rpr-fill); }
+.rpr-step button { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: var(--raised); color: var(--rpr-fg); box-shadow: var(--shadow-xs); cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.rpr-step button svg { width: 16px; height: 16px; }
+.rpr-step button:disabled { cursor: default; background: transparent; box-shadow: none; color: var(--rpr-muted); }
+.rpr-step button:not(:disabled):active { transform: scale(var(--press-scale-sm)); }
+.rpr-step button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.rpr-n { min-width: 24px; font: 600 var(--text-ui)/1 var(--font-mono); text-align: center; font-variant-numeric: tabular-nums; }
+
+/* Extras: a checkbox each; the ones that came ticked untick themselves and say so */
+.rpr-addons { display: flex; flex-direction: column; padding: 0; list-style: none; }
+.rpr-addons li { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 12px; padding: 8px 0; }
+.rpr-addons li + li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+.rpr-box { position: relative; display: grid; place-items: center; width: 44px; height: 44px; margin: -8px -10px -8px -12px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.rpr-box::before { content: ""; position: absolute; inset: 11px; border-radius: var(--radius-xs); background: var(--rpr-bg); box-shadow: inset 0 0 0 2px var(--border-strong); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.rpr-box svg { position: relative; width: 14px; height: 14px; color: var(--rpr-on-accent); translate: 0 calc(14px / 48); transform: scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.rpr-box[aria-checked="true"]::before { background: var(--rpr-accent); box-shadow: none; }
+.rpr-box[aria-checked="true"] svg { transform: scale(1); }
+.rpr-box:focus-visible { outline: none; }
+.rpr-box:focus-visible::before { box-shadow: inset 0 0 0 2px var(--border-strong), 0 0 0 2px var(--rpr-bg), 0 0 0 4px var(--ring); }
+.rpr-addon b { display: block; font-size: var(--text-ui); line-height: var(--leading-ui); font-weight: 600; }
+.rpr-addon small { display: block; margin-top: 2px; color: var(--rpr-muted); font-size: var(--text-small); line-height: var(--leading-small); font-variant-numeric: tabular-nums; }
+.rpr-note { grid-column: 2; justify-self: start; margin-top: 6px !important; padding: 3px 8px; border-radius: var(--radius-sm); background: oklch(from var(--rpr-honest) var(--tint-l) calc(c * var(--tint-c)) h); color: oklch(from var(--olive-700) clamp(var(--tint-ink-min), l, var(--tint-ink-l)) c h); font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: 500; animation: rpr-note var(--spring-panel-duration) var(--spring-panel); }
+@keyframes rpr-note { from { opacity: 0; transform: translateY(-4px); } }
+
+.rpr-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.rpr .rpr-status { flex: 1 1 170px; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.rpr-pay { flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--rpr-accent); color: var(--rpr-on-accent); font: inherit; font-size: var(--text-ui); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.rpr-pay:disabled { cursor: default; background: var(--rpr-fill); color: var(--rpr-fg); }
+.rpr-pay:not(:disabled):active { transform: scale(var(--press-scale)); }
+.rpr-pay:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rpr-tags li, .rpr-note { animation: none; }
+  .rpr-box svg { transition-duration: var(--duration-reduced); }
+}
+.rpr [hidden] { display: none !important; }

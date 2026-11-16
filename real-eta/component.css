@@ -1,0 +1,73 @@
+/* Real ETA — delivery shown as an honest range that narrows as the package gets closer, instead of a promise that slips.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.eta {
+  --eta-bg: var(--card);
+  --eta-fg: var(--foreground);
+  --eta-muted: var(--muted-foreground);
+  --eta-sunken: var(--subtle);
+  --eta-fill: var(--muted);
+  --eta-accent: var(--primary);
+  --eta-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--eta-bg);
+  color: var(--eta-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.eta p, .eta ul, .eta ol { margin: 0; }
+.eta ul, .eta ol { padding: 0; list-style: none; }
+.eta-title { min-width: 0; }
+.eta-title b { display: block; font-weight: 600; }
+.eta-title small { display: block; margin-top: 2px; color: var(--eta-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.eta-tile { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--eta-fill); color: var(--eta-fg); }
+.eta-tile svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.eta-head { display: flex; align-items: center; gap: 12px; }
+.eta-head .eta-title b { text-box: trim-start cap alphabetic; }
+/* The chart box: a soft neutral inset; one bar per day, its height the chance of arriving that day */
+.eta-chart { display: flex; flex-direction: column; gap: 12px; padding: 14px 14px 10px; border-radius: var(--radius-lg); background: var(--subtle); }
+.eta-big b { display: block; font-size: var(--text-title-sm); line-height: var(--leading-title-sm); font-weight: 600; text-box: trim-start cap alphabetic; }
+.eta-big small { display: block; margin-top: 2px; color: var(--eta-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+.eta-days { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: end; gap: 8px; height: 112px; }
+.eta-day { display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+.eta-bar { width: 100%; height: 72px; border-radius: var(--radius-sm) var(--radius-sm) 2px 2px; background: oklch(from var(--aqua) var(--tint-mark-l) calc(c * var(--tint-c)) h); transform-origin: 50% 100%; transform: scaleY(var(--p, 0)); transition: transform var(--spring-panel-duration) var(--spring-panel), background-color var(--duration-base); }
+.eta-day.is-top .eta-bar { background: var(--brand-strong); }
+.eta-pct { color: var(--eta-muted); font: 500 11px/14px var(--font-mono); font-variant-numeric: tabular-nums; }
+.eta-day.is-top .eta-pct { color: var(--eta-fg); font-weight: 600; }
+.eta-lab { color: var(--eta-muted); font-size: var(--text-caption); line-height: var(--leading-caption); white-space: nowrap; }
+.eta-day.is-top .eta-lab { color: var(--eta-fg); font-weight: 600; }
+/* Steps: dots on a rail, filled up to where the package is */
+.eta-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.eta-steps li { position: relative; padding-top: 16px; color: var(--eta-muted); font-size: var(--text-caption); line-height: var(--leading-caption); text-align: center; }
+.eta-steps li::before { content: ""; position: absolute; top: 0; left: 50%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: var(--eta-bg); box-shadow: inset 0 0 0 2px var(--border-strong); z-index: 1; }
+.eta-steps li + li::after { content: ""; position: absolute; top: 4px; right: 50%; width: 100%; height: 2px; background: var(--border-strong); }
+.eta-steps li.is-done { color: var(--eta-fg); font-weight: 600; }
+.eta-steps li.is-done::before { background: var(--brand-strong); box-shadow: none; }
+.eta-steps li.is-done::after { background: var(--brand-strong); }
+.eta-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--eta-fill); color: var(--eta-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.eta-btn svg { width: 16px; height: 16px; margin-right: 8px; }
+.eta-btn:hover:not(:disabled) { background: var(--muted-hover); }
+.eta-btn.is-primary, .eta-btn.is-primary:hover:not(:disabled) { background: var(--eta-accent); color: var(--eta-on-accent); }
+.eta-btn:disabled { cursor: default; background: var(--eta-fill); color: var(--eta-muted); }
+.eta-btn:not(:disabled):active { transform: scale(var(--press-scale)); }
+.eta-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.eta-foot { display: flex; justify-content: flex-end; }
+/* The status has its own full-width line; the script keeps it as tall as the longest message, so the card never changes height */
+.eta .eta-status { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+/* An empty status stays a live region but leaves the layout until text arrives */
+.eta-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .eta-bar { transition-duration: var(--duration-reduced); }
+}
+.eta [hidden] { display: none !important; }

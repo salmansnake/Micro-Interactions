@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Existential Captcha · Micro Interactions</title>
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="../icons/outcraft-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="../icons/outcraft-icon-180x180-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../outcraft-tokens.css">
+<style>
+html, body { min-height: 100%; }
+body { margin: 0; display: grid; place-items: center; padding: 64px 16px 48px; box-sizing: border-box; background: var(--background); color: var(--body); font-family: var(--font-sans); }
+</style>
+<style>
+/* Existential Captcha — tick "I'm not a robot" and the checkbox stops to wonder whether it is one.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.exc {
+  --exc-bg: var(--card);
+  --exc-fg: var(--foreground);
+  --exc-muted: var(--muted-foreground);
+  --exc-sunken: var(--subtle);
+  --exc-fill: var(--muted);
+  --exc-accent: var(--primary);
+  --exc-on-accent: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--exc-bg);
+  color: var(--exc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.exc p, .exc ol { margin: 0; }
+.exc-box { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--exc-sunken); }
+.exc-check { position: relative; flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin: -8px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.exc-check::before { content: ""; position: absolute; inset: 8px; border-radius: var(--radius-xs); background: var(--exc-bg); box-shadow: inset 0 0 0 2px var(--border-strong); transition: background-color var(--duration-base), box-shadow var(--duration-base); }
+.exc-check:focus-visible { outline: none; }
+.exc-check:focus-visible::before { box-shadow: inset 0 0 0 2px var(--border-strong), 0 0 0 2px var(--exc-sunken), 0 0 0 4px var(--ring); }
+.exc-check[aria-checked="true"]::before { background: var(--success); color: var(--success-foreground); box-shadow: none; }
+.exc-check[aria-disabled="true"] { cursor: default; }
+.exc-spin { position: absolute; width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--exc-fill); opacity: 0; }
+.exc-spin::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--exc-fg); }
+.exc.is-thinking .exc-spin { opacity: 1; animation: exc-spin 0.9s linear infinite; }
+@keyframes exc-spin { to { transform: rotate(1turn); } }
+.exc-tick { position: relative; display: grid; place-items: center; color: var(--success-foreground); transform: scale(0); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.exc-tick svg { width: 16px; height: 16px; translate: 0 calc(16px / 48); }
+.exc-check[aria-checked="true"] .exc-tick { transform: scale(1); }
+.exc-label { flex: 1; min-width: 0; font-weight: 500; }
+.exc-mark { flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--exc-muted); }
+.exc-mark svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.exc-mark small { font-size: 10px; line-height: 12px; font-weight: 500; white-space: nowrap; }
+
+/* Its thoughts, one at a time */
+.exc-thoughts { display: flex; flex-direction: column; gap: 6px; padding: 0 0 0 14px; list-style: none; box-shadow: inset 2px 0 0 var(--border); }
+.exc-thoughts:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.exc-thoughts li { color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); animation: exc-in var(--spring-panel-duration) var(--spring-panel); }
+.exc.is-settled .exc-thoughts li { color: var(--exc-muted); }
+@keyframes exc-in { from { opacity: 0; transform: translateY(-4px); } }
+.exc-pick { display: flex; gap: 8px; animation: exc-in var(--spring-panel-duration) var(--spring-panel); }
+.exc-btn { flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: var(--radius-md); background: var(--exc-fill); color: var(--exc-fg); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press), background-color var(--duration-fast); }
+.exc-btn:hover { background: var(--muted-hover); }
+.exc-sure, .exc-sure:hover { background: var(--exc-accent); color: var(--exc-on-accent); }
+.exc-btn:active { transform: scale(var(--press-scale)); }
+.exc-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.exc-status { color: var(--exc-fg); font-size: var(--text-small); line-height: var(--leading-small); font-weight: 500; text-box: trim-end cap alphabetic; }
+.exc-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .exc.is-thinking .exc-spin { animation-duration: 3s; }
+  .exc-tick { transition-duration: var(--duration-reduced); }
+  .exc-thoughts li, .exc-pick { animation: none; }
+}
+.exc [hidden] { display: none !important; }
+
+</style>
+<style>
+/* Reset: a small icon button in the corner of every demo; a "Reset" pill slides out on hover or focus */
+.mi-host { display: contents; }
+.mi-reset { position: absolute; top: 12px; right: 12px; z-index: 5; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); box-shadow: var(--shadow-xs); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+.mi-reset svg { width: 16px; height: 16px; transition: transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover, .mi-reset:focus-visible { color: var(--foreground); border-color: var(--border-strong); }
+.mi-reset:hover svg { transform: rotate(-45deg); }
+.mi-reset.is-spin svg { transform: rotate(-360deg); transition: transform var(--spring-pop-duration) var(--spring-pop); }
+.mi-reset:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mi-reset-tip { position: absolute; top: 50%; right: calc(100% + 6px); padding: 4px 10px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font: 500 var(--text-caption)/var(--leading-caption) var(--font-sans); white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(6px, -50%) scale(0.96); transform-origin: right center; transition: opacity var(--duration-fast) var(--ease-out), transform var(--spring-ui-duration) var(--spring-ui); }
+.mi-reset:hover .mi-reset-tip, .mi-reset:focus-visible .mi-reset-tip { opacity: 1; transform: translate(0, -50%) scale(1); }
+.mi-reset--page { position: fixed; top: 16px; right: 16px; }
+@media (hover: none) { .mi-reset-tip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mi-reset svg, .mi-reset.is-spin svg, .mi-reset-tip { transition: opacity var(--duration-reduced) var(--ease-out); transform: none; } .mi-reset-tip { transform: translate(0, -50%); } }
+.mi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<button type="button" class="mi-reset mi-reset--page" data-mi-reset aria-label="Reset Existential Captcha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="mi-reset-tip" aria-hidden="true">Reset</span></button>
+<div class="mi-host"><div class="exc" data-mi="existential-captcha">
+  <div class="exc-box">
+    <button type="button" class="exc-check" role="checkbox" aria-checked="false" aria-label="I’m not a robot">
+      <span class="exc-spin" aria-hidden="true"></span>
+      <span class="exc-tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
+    </button>
+    <p class="exc-label">I’m not a&nbsp;robot</p>
+    <span class="exc-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg><small>Human check</small></span>
+  </div>
+  <ol class="exc-thoughts" aria-live="polite"></ol>
+  <div class="exc-pick" hidden>
+    <button type="button" class="exc-btn exc-sure">I’m Sure</button>
+    <button type="button" class="exc-btn exc-think">Let Me Think</button>
+  </div>
+  <p class="exc-status" role="status" aria-live="polite"></p>
+</div>
+</div>
+<script>
+/* Existential Captcha — vanilla JS. Auto-initializes every [data-mi="existential-captcha"].
+   Ticking the box starts a spinner and a run of second thoughts, one every 900ms, then asks whether you're sure.
+   Either answer ends with a tick; after that the box stays checked. Call window.initExistentialCaptcha(el) for elements added later. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var THOUGHTS = ['Hmm. How would I know, though?', 'I did pass a test like this last week.', 'Do robots dream? I had a dream once.', 'Are any of us really not robots?'];
+
+  function initExistentialCaptcha(root) {
+    if (!root || root.__miExc) return;
+    root.__miExc = true;
+    var check = root.querySelector('.exc-check'), list = root.querySelector('.exc-thoughts'), pick = root.querySelector('.exc-pick');
+    var sure = root.querySelector('.exc-sure'), think = root.querySelector('.exc-think'), status = root.querySelector('.exc-status');
+    var state = 'idle', timers = [];
+
+    function later(fn, ms) { timers.push(setTimeout(fn, reduce.matches ? Math.min(ms, 300) : ms)); }
+    function verify(text) {
+      state = 'done'; pick.hidden = true;
+      root.classList.remove('is-thinking'); root.classList.add('is-settled');
+      check.setAttribute('aria-checked', 'true'); check.setAttribute('aria-disabled', 'true');
+      status.textContent = text;
+      check.focus({ preventScroll: true });
+    }
+
+    check.addEventListener('click', function () {
+      if (state !== 'idle') return;
+      state = 'thinking';
+      root.classList.add('is-thinking');
+      THOUGHTS.forEach(function (t, i) {
+        later(function () { var li = document.createElement('li'); li.textContent = t; list.appendChild(li); }, 900 + i * 900);
+      });
+      later(function () { pick.hidden = false; sure.focus({ preventScroll: true }); }, 900 + THOUGHTS.length * 900);
+    });
+    sure.addEventListener('click', function () { verify('Verified. Probably.'); });
+    think.addEventListener('click', function () {
+      pick.hidden = true;
+      status.textContent = 'Take your time. I’ll be here. I’m always\u00a0here.';
+      later(function () { verify('Verified anyway. We’re in this together.'); }, 2400);
+    });
+  }
+
+  window.initExistentialCaptcha = initExistentialCaptcha;
+  function boot() { document.querySelectorAll('[data-mi="existential-captcha"]').forEach(initExistentialCaptcha); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+<script>
+(function () {
+  var host = document.querySelector('.mi-host'), orig = host.innerHTML, fn = window["initExistentialCaptcha"];
+  document.querySelector('[data-mi-reset]').addEventListener('click', function (e) {
+    host.innerHTML = orig;
+    host.querySelectorAll('[data-mi]').forEach(function (el) { if (typeof fn === 'function') fn(el); });
+    var b = e.currentTarget; b.classList.remove('is-spin'); void b.offsetWidth; b.classList.add('is-spin');
+    setTimeout(function () { b.classList.remove('is-spin'); }, 700);
+  });
+})();
+</script>
+</body>
+</html>

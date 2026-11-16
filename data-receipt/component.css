@@ -1,0 +1,90 @@
+/* Data Receipt — before an app connects, it prints a receipt of exactly what it will read, write and never touch.
+   Outcraft Design System v2. Every value is an Outcraft token. */
+.drc {
+  --drc-bg: var(--card);
+  --drc-fg: var(--foreground);
+  --drc-muted: var(--muted-foreground);
+  --drc-sunken: var(--subtle);
+  --drc-fill: var(--muted);
+  --drc-accent: var(--primary);
+  --drc-on-accent: var(--primary-foreground);
+  /* The receipt is paper, so its text uses fixed colors. In light it is the soft neutral gray, a step off the white card,
+     and its slot a step darker again (card, slot, paper read as three even steps); in dark the paper is the plain paper
+     white and the slot sits between the inset and the fill, already far apart */
+  --drc-paper: var(--subtle);
+  --drc-slot: var(--muted-hover);
+  --drc-ink: color-mix(in srgb, var(--black) 88%, var(--drc-paper));
+  --drc-faint: color-mix(in srgb, var(--black) 58%, var(--drc-paper));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: var(--drc-bg);
+  color: var(--drc-fg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: 400 var(--text-body)/var(--leading-body) var(--font-sans);
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.drc p, .drc ul { margin: 0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .drc { --drc-paper: var(--sheet); --drc-slot: color-mix(in oklab, var(--drc-sunken) 50%, var(--drc-fill)); } }
+:root[data-theme="dark"] .drc { --drc-paper: var(--sheet); --drc-slot: color-mix(in oklab, var(--drc-sunken) 50%, var(--drc-fill)); }
+.drc-head { display: flex; align-items: center; gap: 12px; }
+.drc-tile { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--drc-fill); }
+.drc-tile svg { width: 20px; height: 20px; stroke-width: 1.75; }
+.drc-title b { display: block; font-weight: 600; }
+.drc-title small { display: block; margin-top: 2px; color: var(--drc-muted); font-size: var(--text-small); line-height: var(--leading-small); }
+
+/* The slot the receipt prints out of, and the receipt: paper with a torn zigzag bottom */
+.drc-slot { position: relative; overflow: hidden; padding: 0 14px 14px; border-radius: var(--radius-lg); background: var(--drc-slot); box-shadow: inset 0 6px 0 -2px var(--border-strong); }
+.drc-paper { position: relative; padding: 16px 16px 22px; background: var(--drc-paper); color: var(--drc-ink); font-family: var(--font-mono); box-shadow: var(--shadow-sm); --drc-teeth: linear-gradient(black, black) top / 100% calc(100% - 6px) no-repeat, conic-gradient(from -45deg at 50% 100%, black 90deg, transparent 0) bottom / 12px 6px repeat-x; -webkit-mask: var(--drc-teeth); mask: var(--drc-teeth); animation: drc-print 0.9s steps(9) both; }
+@keyframes drc-print { from { transform: translateY(-100%); } }
+.drc-hd { padding-bottom: 10px; border-bottom: 1px dashed var(--drc-faint); color: var(--drc-faint); font-size: var(--text-caption); line-height: var(--leading-caption); text-align: center; text-transform: uppercase; letter-spacing: 0.12em; }
+.drc-lines { display: flex; flex-direction: column; padding: 6px 0; list-style: none; }
+.drc-lines li { display: grid; grid-template-columns: 40px minmax(0, 1fr) var(--drc-act, auto); align-items: center; gap: 8px; min-height: 32px; padding: 4px 0; box-sizing: border-box; font-size: var(--text-caption); line-height: var(--leading-caption); animation: drc-line var(--duration-base) var(--ease-out) both; }
+.drc-lines li:nth-child(2) { animation-delay: 120ms; }
+.drc-lines li:nth-child(3) { animation-delay: 240ms; }
+.drc-lines li:nth-child(4) { animation-delay: 360ms; }
+.drc-lines li:nth-child(5) { animation-delay: 480ms; }
+@keyframes drc-line { from { opacity: 0; } }
+.drc-k { font-weight: 600; }
+/* On a narrow receipt the kind sits above the line it names, so the text keeps room beside the action column */
+.drc-paper { container-type: inline-size; }
+@container (max-width: 240px) {
+  .drc-lines li { grid-template-columns: minmax(0, 1fr) var(--drc-act, auto); grid-template-areas: "k a" "t a"; row-gap: 0; }
+  .drc-k { grid-area: k; }
+  .drc-t { grid-area: t; }
+  .drc-lines li > :last-child:not(.drc-t) { grid-area: a; }
+}
+.drc-t { font-family: var(--font-sans); font-size: var(--text-small); line-height: var(--leading-small); }
+.drc-req { color: var(--drc-faint); text-align: center; }
+.drc-lines li.is-never .drc-k { color: color-mix(in oklab, var(--success) 82%, var(--black)); }
+.drc-lines li.is-off .drc-k, .drc-lines li.is-off .drc-t { color: var(--drc-faint); text-decoration: line-through; text-decoration-thickness: var(--mark-thickness); }
+.drc-toggle { width: 100%; height: 32px; padding: 0 10px; border: 0; border-radius: var(--radius-full); background: color-mix(in srgb, var(--black) 7%, var(--drc-paper)); color: var(--drc-ink); font: 500 var(--text-caption)/1 var(--font-sans); white-space: nowrap; cursor: pointer; }
+.drc-toggle:hover { background: color-mix(in srgb, var(--black) 12%, var(--drc-paper)); }
+.drc-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.drc-toggle:disabled { cursor: default; opacity: 0.5; }
+.drc-total { display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px dashed var(--drc-faint); font-size: var(--text-small); line-height: var(--leading-small); }
+.drc-total b { font-weight: 600; }
+.drc-stamp { position: absolute; right: 18px; bottom: 64px; padding: 4px 10px; border-radius: var(--radius-sm); box-shadow: inset 0 0 0 2px var(--success); color: var(--success); font: 700 var(--text-small)/1.2 var(--font-sans); text-transform: uppercase; letter-spacing: 0.08em; transform: rotate(-8deg) scale(1.6); opacity: 0; pointer-events: none; transition: transform var(--spring-pop-duration) var(--spring-pop), opacity var(--duration-fast); }
+.drc.is-connected .drc-stamp { transform: rotate(-8deg); opacity: 0.9; }
+
+.drc-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.drc .drc-status { flex: 1 1 170px; min-width: 0; margin-right: auto; color: var(--body); font-size: var(--text-small); line-height: var(--leading-small); }
+.drc-status:empty { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.drc-btn { flex: none; margin-left: auto; height: 44px; padding: 0 16px; border: 0; border-radius: var(--radius-md); background: var(--drc-accent); color: var(--drc-on-accent); font: inherit; font-size: var(--text-ui); font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--spring-press-duration) var(--spring-press); }
+.drc-btn.is-secondary { background: var(--drc-fill); color: var(--drc-fg); }
+.drc-btn:active { transform: scale(var(--press-scale)); }
+.drc-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drc-paper, .drc-lines li { animation: none; }
+  .drc-stamp { transition-duration: var(--duration-reduced); }
+}
+.drc [hidden] { display: none !important; }
