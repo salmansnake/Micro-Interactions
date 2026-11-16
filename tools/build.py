@@ -111,6 +111,14 @@ def check(reg):
         s = it['slug']
         for k in ('number', 'slug', 'name', 'type', 'topic', 'new', 'summary', 'tryit', 'specs'):
             if k not in it: errors.append(f'{s}: missing "{k}"')
+        # Not for (RULES 12f): one honest line on where this interaction is the wrong choice, and why. Every interaction has one.
+        _nf = it.get('notfor')
+        if not isinstance(_nf, str) or not _nf.strip(): errors.append(f'{s}: missing "notfor", the one line on where not to use it (RULES 12f)')
+        else:
+            if len(_nf) > 120: errors.append(f'{s}: "notfor" is {len(_nf)} characters; keep it to one line of 120 or fewer (RULES 12f)')
+            if not _nf.rstrip().endswith(('.', '.”')): errors.append(f'{s}: "notfor" must end with a period (RULES 12f)')
+            if '{' in _nf or '}' in _nf: errors.append(f'{s}: "notfor" names a situation, not a control, so it takes no {{braces}} (RULES 12f)')
+            if _nf.lower().startswith(('not for', "don't", 'do not', 'avoid')): errors.append(f'{s}: "notfor" repeats its label; start with the situation itself (RULES 12f)')
         if it.get('type') not in reg['types']: errors.append(f'{s}: type "{it.get("type")}" is not one of {reg["types"]}')
         if it.get('topic') not in reg['topics']: errors.append(f'{s}: topic "{it.get("topic")}" is not in the topic list')
         d = os.path.join(ROOT, s)
@@ -196,23 +204,16 @@ def check(reg):
         # No hard-coded colors hidden inside an SVG data URI (RULES 10): draw the shape through a mask and color it with a token.
         if re.search(r"data:image/svg\+xml[^)]*%23[0-9a-fA-F]{3,8}", c):
             errors.append(f'{s}: an SVG data URI in component.css has a hard-coded color; use it as a mask and color it with a token (RULES 10)')
-        # Even line breaks (RULES 10b.29d): every interaction balances its multi-line text.
-        if m and not re.search(r'\.' + re.escape(m[0][1]) + r' :is\(p, li[^)]*\) \{ text-wrap: balance; \}', c):
-            errors.append(f'{s}: add ".{m[0][1]} :is(p, li, dd, dt, small, label, figcaption, h1, h2, h3, h4) {{ text-wrap: balance; }}" so text never ends on one or two lonely words (RULES 10b.29d)')
-        # A sentence first in a row pushed to the right keeps its place (RULES 10b.47): evenLines narrows it, and
-        # justify-content: flex-end would then slide it away from the left padding unless it has margin-right: auto.
+        # Text wraps the standard way (RULES 10b.29d): no balancing helper or fallback is required. An interaction
+        # that still carries the older evenLines helper (the released ones) keeps the two safety checks that go with it.
         cc = re.sub(r'/\*.*?\*/', '', c, flags=re.S)
-        for row in {k for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', cc) if re.search(r'justify-content\s*:\s*(flex-)?end\b', body) for k in re.findall(r'\.([\w-]+)\s*$', sel.split(',')[-1].strip())}:
-            mrow = re.search(r'<(\w+)[^>]*\bclass="(?:[^"]*\s)?' + re.escape(row) + r'(?:\s[^"]*)?"[^>]*>\s*<(p|small|label|h[1-4])\b[^>]*\bclass="([\w-]+)', h)
-            # Scoped under the root (.xx .name) so a reset like ".xx p { margin: 0 }" can't cancel it
-            if mrow and not re.search(r'(\.[\w-]+\s+\.' + re.escape(mrow.group(3)) + r'\s*\{[^}]*(margin-right\s*:\s*auto|margin-inline-end\s*:\s*auto)|\.' + re.escape(mrow.group(3)) + r'\s*\{[^}]*white-space\s*:\s*nowrap)', cc):
-                errors.append(f'{s}: .{mrow.group(3)} starts the right-aligned row .{row}; give it margin-right: auto, scoped under the root (.xx .name), so it stays at the left padding when its lines are evened (RULES 10b.47)')
-        # Full-width filled boxes (RULES 10b.46): text marked data-fill must be skipped by the helper and fill its box.
-        if 'data-fill' in h + j and "hasAttribute('data-fill')" not in j:
-            errors.append(f'{s}: data-fill is used but the evenLines helper does not skip it; add "if (el.hasAttribute(\'data-fill\')) return;" (RULES 10b.46)')
-        # Even line breaks (RULES 10b.29d): the evenLines helper is present and called at init.
-        if 'function evenLines(' not in j or not re.search(r'evenLines\((root|form)\);', j):
-            errors.append(f'{s}: component.js needs the evenLines helper, called right after the init guard (RULES 10b.29d)')
+        if 'function evenLines(' in j:
+            for row in {k for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', cc) if re.search(r'justify-content\s*:\s*(flex-)?end\b', body) for k in re.findall(r'\.([\w-]+)\s*$', sel.split(',')[-1].strip())}:
+                mrow = re.search(r'<(\w+)[^>]*\bclass="(?:[^"]*\s)?' + re.escape(row) + r'(?:\s[^"]*)?"[^>]*>\s*<(p|small|label|h[1-4])\b[^>]*\bclass="([\w-]+)', h)
+                if mrow and not re.search(r'(\.[\w-]+\s+\.' + re.escape(mrow.group(3)) + r'\s*\{[^}]*(margin-right\s*:\s*auto|margin-inline-end\s*:\s*auto)|\.' + re.escape(mrow.group(3)) + r'\s*\{[^}]*white-space\s*:\s*nowrap)', cc):
+                    errors.append(f'{s}: .{mrow.group(3)} starts the right-aligned row .{row}; give it margin-right: auto, scoped under the root (.xx .name), so it stays at the left padding when its lines are evened (RULES 10b.47)')
+            if 'data-fill' in h + j and "hasAttribute('data-fill')" not in j:
+                errors.append(f'{s}: data-fill is used but the evenLines helper does not skip it; add "if (el.hasAttribute(\'data-fill\')) return;" (RULES 10b.46)')
         btn_cls = {k for cl in re.findall(r'<button[^>]*\bclass="([^"]+)"', h + j) for k in cl.split()}
         for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', c):
             sel1 = sel.strip().splitlines()[-1]
@@ -291,7 +292,7 @@ def check(reg):
                     continue
                 if not _lab.isdigit() and _lab.replace(' n', '') not in _src:  # exact, capitals included; plain numbers (calendar days) are generated, not written
                     errors.append(f'{_slug}: "{{{_lab}}}" names something that is not on screen in this interaction (RULES 12c)')
-        for k in ('name', 'summary', 'tryit'):
+        for k in ('name', 'summary', 'tryit', 'notfor'):
             for w in locale.findall(str(it.get(k, ''))): errors.append(f'{it["slug"]}: "{w}" in {k} breaks the locale rules')
         for sp in it.get('specs', []):
             for w in locale.findall(json.dumps(sp)): errors.append(f'{it["slug"]}: "{w}" in specs breaks the locale rules')

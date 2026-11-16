@@ -141,6 +141,15 @@
 
   /* ---------- info panel ---------- */
   var HAND = DATA.icons.hand;
+  // Not for (RULES 12f): the situation, then the reason. The reason wraps as one piece (rule 10b.60),
+  // so a line never ends on a stray word from the next sentence ("…full address. One / pointer…").
+  // Each sentence also keeps its last two words together (rule 10b.46), so no line holds one word.
+  function notFor(s) {
+    var keep = function (x) { return esc(x).replace(/ (\S+)$/, '\u00a0$1'); };
+    var i = s.indexOf('. ');
+    if (i < 0) return keep(s);
+    return keep(s.slice(0, i + 1)) + ' <span class="spec-not-why">' + keep(s.slice(i + 2)) + '</span>';
+  }
   function renderInfo(it) {
     info.innerHTML =
       '<div class="info-meta"><span class="oc-badge type-badge ' + typeClass(it.type) + '">' + esc(it.type) + '</span>' +
@@ -148,7 +157,8 @@
       '<h1>' + esc(it.name) + '</h1><p class="topic">' + esc(it.topic) + '</p>' +
       '<p class="summary">' + rich(it.summary, it.refIcons) + '</p>' +
       '<div class="try">' + HAND + '<p><b>Try it</b>' + rich(it.tryit, it.refIcons) + '</p></div>' +
-      '<dl class="spec">' + it.specs.map(function (s) { return '<dt>' + esc(s.label) + '</dt><dd>' + rich(s.value, it.refIcons) + '</dd>'; }).join('') + '</dl>';
+      '<dl class="spec">' + it.specs.map(function (s) { return '<dt>' + esc(s.label) + '</dt><dd>' + rich(s.value, it.refIcons) + '</dd>'; }).join('') +
+      (it.notfor ? '<dt class="spec-not">Not for</dt><dd class="spec-not">' + notFor(it.notfor) + '</dd>' : '') + '</dl>';
   }
 
   /* ---------- routing ---------- */

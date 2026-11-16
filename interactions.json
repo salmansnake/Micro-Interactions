@@ -56,7 +56,8 @@
           "label": "Recovery",
           "value": "Undo in a Frost banner"
         }
-      ]
+      ],
+      "notfor": "A delete with nothing tied to it, like one note. There's nothing to mark, so a plain confirm is faster."
     },
     {
       "number": "002",
@@ -84,7 +85,8 @@
           "label": "Release",
           "value": "7px spring overshoot"
         }
-      ]
+      ],
+      "notfor": "Apps that already autosave. There's never an unsaved change, so the button never moves."
     },
     {
       "number": "003",
@@ -112,7 +114,8 @@
           "label": "Fix",
           "value": "One tap when unambiguous"
         }
-      ]
+      ],
+      "notfor": "Fields that can be wrong in several places at once, like a full address. One pointer can't explain them all."
     },
     {
       "number": "004",
@@ -140,7 +143,8 @@
           "label": "Reverse",
           "value": "Coins fly back on Monthly"
         }
-      ]
+      ],
+      "notfor": "Plans with no yearly discount. With no savings to drop, the coins have nothing to say."
     },
     {
       "number": "005",
@@ -168,7 +172,8 @@
           "label": "Safety",
           "value": "Ignores typing elsewhere"
         }
-      ]
+      ],
+      "notfor": "Touch-first apps. Phones and tablets have no keyboard to hold, so the shortcuts never appear."
     },
     {
       "number": "006",
@@ -196,7 +201,8 @@
           "label": "Trim",
           "value": "Excess falls, last letter first"
         }
-      ]
+      ],
+      "notfor": "Fields with a hard limit, like a username. Stop the typing there instead of letting it spill."
     },
     {
       "number": "007",
@@ -224,7 +230,8 @@
           "label": "Unlock",
           "value": "Frost wipes away in one spring"
         }
-      ]
+      ],
+      "notfor": "Anything private, like other people's data. The peek shows real numbers to people who haven't paid."
     },
     {
       "number": "008",
@@ -252,7 +259,8 @@
           "label": "Return",
           "value": "Bump and pop when a credit is back"
         }
-      ]
+      ],
+      "notfor": "Credits that refill once a month. A timer that barely moves for weeks looks broken."
     },
     {
       "number": "009",
@@ -280,7 +288,8 @@
           "label": "PDF",
           "value": "Pages fan out, page count read"
         }
-      ]
+      ],
+      "notfor": "Forms that take one kind of file. With a single type, a plain upload button says enough."
     },
     {
       "number": "010",
@@ -308,7 +317,8 @@
           "label": "Your Caret",
           "value": "Never moves when they type"
         }
-      ]
+      ],
+      "notfor": "Fields only one person ever edits. Without a teammate, there's no cursor to wait for."
     },
     {
       "number": "011",
@@ -336,7 +346,8 @@
           "label": "Failure",
           "value": "Inline {Retry}, rest unaffected"
         }
-      ]
+      ],
+      "notfor": "Pages that load in under half a second. The shimmer would flash and vanish before anyone reads it."
     },
     {
       "number": "012",
@@ -364,7 +375,8 @@
           "label": "Results",
           "value": "Follow once the morph ends"
         }
-      ]
+      ],
+      "notfor": "Searches where the odd spelling might be on purpose, like a product code. Morphing it hides the real query."
     },
     {
       "number": "013",
@@ -392,7 +404,8 @@
           "label": "Recopy",
           "value": "One click from the list"
         }
-      ]
+      ],
+      "notfor": "Copying passwords or keys. A visible stack leaves secrets on screen."
     },
     {
       "number": "014",
@@ -420,7 +433,8 @@
           "label": "Create",
           "value": "Tiles gather, first item arrives"
         }
-      ]
+      ],
+      "notfor": "Empty screens with more than one way to start. The tiles can only lean toward one button."
     },
     {
       "number": "015",
@@ -448,7 +462,8 @@
           "label": "Lock",
           "value": "Signed-out screen at zero"
         }
-      ]
+      ],
+      "notfor": "Forms with unsaved typing. Fading color is too quiet when a timeout would lose someone's work."
     },
     {
       "number": "016",
@@ -476,7 +491,8 @@
           "label": "Lock",
           "value": "Shackle closes at four of four"
         }
-      ]
+      ],
+      "notfor": "Passkeys or one-time codes. There are no rules to meet, so no bolts slide."
     },
     {
       "number": "017",
@@ -504,7 +520,8 @@
           "label": "Avatars",
           "value": "6 shown, then +n"
         }
-      ]
+      ],
+      "notfor": "Plans with one flat price per seat. Without tiers there is nothing to celebrate."
     },
     {
       "number": "018",
@@ -532,7 +549,8 @@
           "label": "Keyboard",
           "value": "Arrows step, Enter snoozes"
         }
-      ]
+      ],
+      "notfor": "Alerts that need action now, like a failed payment. Snoozing those should take a decision, not a flick."
     },
     {
       "number": "019",
@@ -560,7 +578,8 @@
           "label": "Finish",
           "value": "Green badge, list folds away"
         }
-      ]
+      ],
+      "notfor": "Setups of one or two steps. A ring with two segments fills before anyone notices it."
     },
     {
       "number": "020",
@@ -588,7 +607,8 @@
           "label": "Keyboard",
           "value": "Arrows by day and week"
         }
-      ]
+      ],
+      "notfor": "Single dates, like a birthday. With no range to stretch, a plain date picker is faster."
     },
     {
       "number": "021",
@@ -616,7 +636,8 @@
           "label": "Confirm",
           "value": "Clock turns into a green check"
         }
-      ]
+      ],
+      "notfor": "Changes that can't wait, like payments. Queuing them offline promises what the server may refuse."
     },
     {
       "number": "022",
@@ -644,7 +665,8 @@
           "label": "Back",
           "value": "Click the pill to expand"
         }
-      ]
+      ],
+      "notfor": "Jobs that take a few seconds. The sheet would shrink to a pill just as it finishes."
     },
     {
       "number": "023",
@@ -672,7 +694,8 @@
           "label": "Toggle",
           "value": "Hide or show all marks"
         }
-      ]
+      ],
+      "notfor": "Text the AI is sure of. With nothing underlined, the feature looks missing."
     },
     {
       "number": "024",
@@ -700,7 +723,8 @@
           "label": "Status",
           "value": "Sent and needs-attention counts"
         }
-      ]
+      ],
+      "notfor": "Inviting one person. One plane flying off is slower than a plain Sent."
     },
     {
       "number": "025",
@@ -728,7 +752,8 @@
           "label": "Sort",
           "value": "Rows reorder with FLIP"
         }
-      ]
+      ],
+      "notfor": "Commands that can't be undone, like delete. Previewing those live would already be doing them."
     },
     {
       "number": "026",
@@ -756,7 +781,8 @@
           "label": "Budget",
           "value": "Spent so far plus this prompt"
         }
-      ]
+      ],
+      "notfor": "Flat-price plans. If a prompt costs nothing extra, the meter only adds worry."
     },
     {
       "number": "027",
@@ -784,7 +810,8 @@
           "label": "Undo",
           "value": "6 seconds to lift it off"
         }
-      ]
+      ],
+      "notfor": "Approvals that happen many times a day. The stamp is for decisions, not routine ticks."
     },
     {
       "number": "028",
@@ -812,7 +839,8 @@
           "label": "Keyboard",
           "value": "Arrows, Space, ⌘A, Escape"
         }
-      ]
+      ],
+      "notfor": "Lists in one column. Checkboxes and Shift-click are faster than drawing a loop."
     },
     {
       "number": "029",
@@ -840,7 +868,8 @@
           "label": "Restore",
           "value": "Flies back into the list"
         }
-      ]
+      ],
+      "notfor": "Archiving hundreds at once. A drawer that fills in one go shows nothing useful."
     },
     {
       "number": "030",
@@ -868,7 +897,8 @@
           "label": "Fade",
           "value": "Trails clear after 2.6s"
         }
-      ]
+      ],
+      "notfor": "Tables with thousands of rows. The trails turn into noise and the motion gets slow."
     },
     {
       "number": "031",
@@ -896,7 +926,8 @@
           "label": "Finish",
           "value": "Total and billing summary"
         }
-      ]
+      ],
+      "notfor": "Forms of one or two steps. Folding so little adds motion without saving space."
     },
     {
       "number": "032",
@@ -924,7 +955,8 @@
           "label": "Restore",
           "value": "Adds a version, keeps history"
         }
-      ]
+      ],
+      "notfor": "Documents with one author and a few edits. There's no history worth scrubbing."
     },
     {
       "number": "033",
@@ -952,7 +984,8 @@
           "label": "Live",
           "value": "Updates every 30 seconds"
         }
-      ]
+      ],
+      "notfor": "Lists where everything is due soon. When every item glows red, the heat says nothing."
     },
     {
       "number": "034",
@@ -980,7 +1013,8 @@
           "label": "Results",
           "value": "Filter live as chips change"
         }
-      ]
+      ],
+      "notfor": "Search for people who've never used filters. Typed syntax like from: is for power users."
     },
     {
       "number": "035",
@@ -1008,7 +1042,8 @@
           "label": "Keyboard",
           "value": "Arrow keys climb"
         }
-      ]
+      ],
+      "notfor": "Sharing with only two choices, on or off. A ladder with two rungs is just a switch."
     },
     {
       "number": "036",
@@ -1036,7 +1071,8 @@
           "label": "Escape",
           "value": "Type an agenda to unfold"
         }
-      ]
+      ],
+      "notfor": "Meetings that need to happen, like a hard conversation. Folding those into an email would be wrong."
     },
     {
       "number": "037",
@@ -1064,7 +1100,8 @@
           "label": "Ending",
           "value": "4 minutes, 3 letters"
         }
-      ]
+      ],
+      "notfor": "Support chats or anything serious. Nervous dots read as mocking the person writing."
     },
     {
       "number": "038",
@@ -1092,7 +1129,8 @@
           "label": "Honesty",
           "value": "Real time left, every click"
         }
-      ]
+      ],
+      "notfor": "Buttons that finish fast. If the job is done in a second, nobody has time to rage."
     },
     {
       "number": "039",
@@ -1120,7 +1158,8 @@
           "label": "Ending",
           "value": "Back to 100%, no apology"
         }
-      ]
+      ],
+      "notfor": "Real AI answers people rely on. A joke about wavering confidence undercuts the product."
     },
     {
       "number": "040",
@@ -1148,7 +1187,8 @@
           "label": "Summary",
           "value": "Three lines that matter"
         }
-      ]
+      ],
+      "notfor": "Terms someone must truly agree to, like medical consent. Make those easy to read instead."
     },
     {
       "number": "041",
@@ -1176,7 +1216,8 @@
           "label": "Stamp",
           "value": "Slams in, rotated −9°"
         }
-      ]
+      ],
+      "notfor": "Real review tools without the team's blessing. Calling out a colleague in public stings."
     },
     {
       "number": "042",
@@ -1204,7 +1245,8 @@
           "label": "Escape",
           "value": "Schedule for Monday 10 AM"
         }
-      ]
+      ],
+      "notfor": "Teams that ship safely any day. Blocking Friday there only adds a step."
     },
     {
       "number": "043",
@@ -1232,7 +1274,8 @@
           "label": "Care",
           "value": "A break at Bargaining"
         }
-      ]
+      ],
+      "notfor": "Shared repos with people who'd feel judged. Reading commits as moods is a joke for your own projects."
     },
     {
       "number": "044",
@@ -1260,7 +1303,8 @@
           "label": "Joy",
           "value": "A backflip when you solve it"
         }
-      ]
+      ],
+      "notfor": "Bug reports from customers. Asking them to explain it to a duck first feels like a brush-off."
     },
     {
       "number": "045",
@@ -1288,7 +1332,8 @@
           "label": "Shortcut",
           "value": "⌘S or Ctrl+S"
         }
-      ]
+      ],
+      "notfor": "Real file naming. It's a joke about version chaos, so never let it name a file someone keeps."
     },
     {
       "number": "046",
@@ -1316,7 +1361,8 @@
           "label": "Thaw",
           "value": "Swaps every phrase at once"
         }
-      ]
+      ],
+      "notfor": "Messages where firmness matters, like a final notice. Warming every sharp word blurs the point."
     },
     {
       "number": "047",
@@ -1344,7 +1390,8 @@
           "label": "Ending",
           "value": "{Turn It Into a Call}"
         }
-      ]
+      ],
+      "notfor": "Chat apps people use for real work. A stopwatch on every question feels like surveillance."
     },
     {
       "number": "048",
@@ -1372,7 +1419,8 @@
           "label": "Return",
           "value": "Lands as a reminder card"
         }
-      ]
+      ],
+      "notfor": "Follow-ups with a hard date. A boomerang a week out is too loose for a deadline."
     },
     {
       "number": "049",
@@ -1400,7 +1448,8 @@
           "label": "Shop",
           "value": "3 more for $0.99, once (pretend charge)"
         }
-      ]
+      ],
+      "notfor": "Fields where tone is someone else's call, like customer replies. It's a joke about your own habits."
     },
     {
       "number": "050",
@@ -1428,7 +1477,8 @@
           "label": "Choice",
           "value": "{Attach File} or {Send Anyway}"
         }
-      ]
+      ],
+      "notfor": "Messages that mention files only in passing. A wrong shrug on every “attached” gets ignored fast."
     },
     {
       "number": "051",
@@ -1456,7 +1506,8 @@
           "label": "Live",
           "value": "Rings turn green and escape"
         }
-      ]
+      ],
+      "notfor": "Webinars where most people stay muted on purpose. The glass box would bounce all the time."
     },
     {
       "number": "052",
@@ -1484,7 +1535,8 @@
           "label": "Billing",
           "value": "“And now, presenting…”"
         }
-      ]
+      ],
+      "notfor": "Formal calls, like interviews. Velvet curtains turn switching the camera off into a show."
     },
     {
       "number": "053",
@@ -1512,7 +1564,8 @@
           "label": "Nudge",
           "value": "{End Meeting for All} pulses at 5 min"
         }
-      ]
+      ],
+      "notfor": "Open-ended sessions, like office hours. With no planned end, there's nothing to burn."
     },
     {
       "number": "054",
@@ -1540,7 +1593,8 @@
           "label": "Lunch",
           "value": "Pushes the 12:00 meeting out"
         }
-      ]
+      ],
+      "notfor": "Calendars that are mostly empty. The game only lands when a day really fills up."
     },
     {
       "number": "055",
@@ -1568,7 +1622,8 @@
           "label": "Return",
           "value": "Wanders back after 4 seconds"
         }
-      ]
+      ],
+      "notfor": "Tools that hide cursors for privacy. The joke needs a cursor everyone can see."
     },
     {
       "number": "056",
@@ -1596,7 +1651,8 @@
           "label": "Web",
           "value": "Falls off below 45% dust"
         }
-      ]
+      ],
+      "notfor": "Documents people open daily. The dust only works on files nobody has touched in years."
     },
     {
       "number": "057",
@@ -1624,7 +1680,8 @@
           "label": "Count",
           "value": "×n from the second press"
         }
-      ]
+      ],
+      "notfor": "Apps that don't autosave. There, ⌘S has to save, not say thanks."
     },
     {
       "number": "058",
@@ -1652,7 +1709,8 @@
           "label": "Exit",
           "value": "One click, no survey"
         }
-      ]
+      ],
+      "notfor": "Anything except leaving. A button that rushes to the cursor is only kind when it's the way out."
     },
     {
       "number": "059",
@@ -1680,7 +1738,8 @@
           "label": "Offer",
           "value": "Notify me instead"
         }
-      ]
+      ],
+      "notfor": "Feeds that update on their own. If refreshing is never needed, nobody pulls enough to get dizzy."
     },
     {
       "number": "060",
@@ -1708,7 +1767,8 @@
           "label": "Done",
           "value": "Springs flat and fresh"
         }
-      ]
+      ],
+      "notfor": "Reminders tied to a date, like a bill. The due date matters more than how worn it looks."
     },
     {
       "number": "061",
@@ -1736,7 +1796,8 @@
           "label": "Pressed",
           "value": "Soft red turns solid red"
         }
-      ]
+      ],
+      "notfor": "A real cancel flow. It's a joke about dark patterns, so shipping it would be one."
     },
     {
       "number": "062",
@@ -1764,7 +1825,8 @@
           "label": "Missing",
           "value": "Dashed border"
         }
-      ]
+      ],
+      "notfor": "Addresses outside the US. It expects a US street, city, state and ZIP."
     },
     {
       "number": "063",
@@ -1792,7 +1854,8 @@
           "label": "Pick",
           "value": "Kindest slot, nearest first"
         }
-      ]
+      ],
+      "notfor": "Teams in one time zone. Every sun rises together, so there's nothing to see."
     },
     {
       "number": "064",
@@ -1820,7 +1883,8 @@
           "label": "Small groups",
           "value": "3 or fewer just send"
         }
-      ]
+      ],
+      "notfor": "Small groups, like five people. Reply All is normal there, and the megaphone just nags."
     },
     {
       "number": "065",
@@ -1848,7 +1912,8 @@
           "label": "Field",
           "value": "Amber border while on"
         }
-      ]
+      ],
+      "notfor": "Fields that aren't passwords. Visible text already shows the capitals."
     },
     {
       "number": "066",
@@ -1876,7 +1941,8 @@
           "label": "Fix",
           "value": "The address you meant"
         }
-      ]
+      ],
+      "notfor": "Pages that are gone for good. The search party suggests the page can still be found."
     },
     {
       "number": "067",
@@ -1904,7 +1970,8 @@
           "label": "Upload",
           "value": "Runs on its own"
         }
-      ]
+      ],
+      "notfor": "Waits of a second or two. The upload ends before anyone pops a bubble."
     },
     {
       "number": "068",
@@ -1932,7 +1999,8 @@
           "label": "Role",
           "value": "Switch, keyboard too"
         }
-      ]
+      ],
+      "notfor": "Settings that must feel exact, like security switches. A stretchy knob can feel unsure."
     },
     {
       "number": "069",
@@ -1960,7 +2028,8 @@
           "label": "Press",
           "value": "Peels in one pull"
         }
-      ]
+      ],
+      "notfor": "Codes people need again and again. Peeling the sticker on every visit gets old."
     },
     {
       "number": "070",
@@ -1988,7 +2057,8 @@
           "label": "Undo",
           "value": "Stands them back up"
         }
-      ]
+      ],
+      "notfor": "Deleting one item, or hundreds. One can't topple, and hundreds take too long to fall."
     },
     {
       "number": "071",
@@ -2016,7 +2086,8 @@
           "label": "Undo",
           "value": "Unzip, bottom up"
         }
-      ]
+      ],
+      "notfor": "Merges with no conflicts. A plain diff is faster when nothing snags."
     },
     {
       "number": "072",
@@ -2044,7 +2115,8 @@
           "label": "Undo",
           "value": "Every send"
         }
-      ]
+      ],
+      "notfor": "Urgent messages, like an outage. Offering 9:00 AM delays the one thing that can't wait."
     },
     {
       "number": "073",
@@ -2072,7 +2144,8 @@
           "label": "Noticed",
           "value": "After 5 minutes"
         }
-      ]
+      ],
+      "notfor": "Real meeting tools. A raised hand nobody saw is only funny when it isn't happening to you."
     }
   ]
 }

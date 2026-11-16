@@ -191,6 +191,10 @@ html.is-explore, html.is-explore body { height: 100%; overflow: hidden; }
 .spec dd:has(.ui-ref) { line-height: var(--leading-ui); }
 .spec dt { color: var(--muted-foreground); }
 .spec dd { margin: 0; color: var(--foreground); }
+/* Not for (RULES 12f): the last row, a step further down so it reads as advice, not one more spec */
+.spec .spec-not { margin-top: var(--space-2); }
+.spec dd.spec-not { text-wrap: pretty; }
+.spec-not-why { display: inline-block; }
 /* A label from the interaction (a button, option or message) named in the text: a small chip, so "Hold {Hold to Talk}" never reads as a typo */
 /* A little space on each side so a chip never touches the next chip or a comma */
 /* A chip is shorter than its line (text size + 4px) and the lines holding chips leave room for it, so chips on lines
